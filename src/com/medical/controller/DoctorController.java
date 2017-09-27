@@ -549,25 +549,19 @@ public class DoctorController {
 	}
 */
 	// 获取病人头像
-	/*@RequestMapping(value = "/getuserpix", method = RequestMethod.POST)
+	@RequestMapping(value = "/getuserpix", method = RequestMethod.POST)
 	public Map<String, Object> getPix(@RequestBody Map<String, Integer> params) throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();
 		//病情id
 		Integer id = params.get("id");
 		if (id!=null) {
 			map.put("state", "1"); //请求成功
-			//map.put("data", result.get("data"));
-			
-			 * "2" 头像为空
-			 * "3"id 对应的记录为空
-			 * "4"操作异常
-			 * map.put("state", result.get("state"));
-			 * 
+			System.out.println("2222");
 		} else {
 			map.put("state", "7");
 		}
 		return map;
-	}*/
+	}
 	//获取科室
 	@RequestMapping(value = "/getdept", method = RequestMethod.GET)
 	public Map<String, Object> getDept() throws Exception {
