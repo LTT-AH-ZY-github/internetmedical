@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.HospitaldeptMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Hospitaldept" >
+    <id column="hospDeptId" property="hospdeptid" jdbcType="INTEGER" />
+    <result column="hospDeptName" property="hospdeptname" jdbcType="VARCHAR" />
+    <result column="hospDeptAbs" property="hospdeptabs" jdbcType="VARCHAR" />
+    <result column="hospDeptFatherId" property="hospdeptfatherid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    hospDeptId, hospDeptName, hospDeptAbs, hospDeptFatherId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HospitaldeptExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hospitaldept
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from hospitaldept
+    where hospDeptId = #{hospdeptid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from hospitaldept
+    where hospDeptId = #{hospdeptid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.HospitaldeptExample" >
+    delete from hospitaldept
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Hospitaldept" >
+    insert into hospitaldept (hospDeptId, hospDeptName, hospDeptAbs, 
+      hospDeptFatherId)
+    values (#{hospdeptid,jdbcType=INTEGER}, #{hospdeptname,jdbcType=VARCHAR}, #{hospdeptabs,jdbcType=VARCHAR}, 
+      #{hospdeptfatherid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Hospitaldept" >
+    insert into hospitaldept
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hospdeptid != null" >
+        hospDeptId,
+      </if>
+      <if test="hospdeptname != null" >
+        hospDeptName,
+      </if>
+      <if test="hospdeptabs != null" >
+        hospDeptAbs,
+      </if>
+      <if test="hospdeptfatherid != null" >
+        hospDeptFatherId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hospdeptid != null" >
+        #{hospdeptid,jdbcType=INTEGER},
+      </if>
+      <if test="hospdeptname != null" >
+        #{hospdeptname,jdbcType=VARCHAR},
+      </if>
+      <if test="hospdeptabs != null" >
+        #{hospdeptabs,jdbcType=VARCHAR},
+      </if>
+      <if test="hospdeptfatherid != null" >
+        #{hospdeptfatherid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.HospitaldeptExample" resultType="java.lang.Integer" >
+    select count(*) from hospitaldept
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update hospitaldept
+    <set >
+      <if test="record.hospdeptid != null" >
+        hospDeptId = #{record.hospdeptid,jdbcType=INTEGER},
+      </if>
+      <if test="record.hospdeptname != null" >
+        hospDeptName = #{record.hospdeptname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hospdeptabs != null" >
+        hospDeptAbs = #{record.hospdeptabs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hospdeptfatherid != null" >
+        hospDeptFatherId = #{record.hospdeptfatherid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update hospitaldept
+    set hospDeptId = #{record.hospdeptid,jdbcType=INTEGER},
+      hospDeptName = #{record.hospdeptname,jdbcType=VARCHAR},
+      hospDeptAbs = #{record.hospdeptabs,jdbcType=VARCHAR},
+      hospDeptFatherId = #{record.hospdeptfatherid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Hospitaldept" >
+    update hospitaldept
+    <set >
+      <if test="hospdeptname != null" >
+        hospDeptName = #{hospdeptname,jdbcType=VARCHAR},
+      </if>
+      <if test="hospdeptabs != null" >
+        hospDeptAbs = #{hospdeptabs,jdbcType=VARCHAR},
+      </if>
+      <if test="hospdeptfatherid != null" >
+        hospDeptFatherId = #{hospdeptfatherid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where hospDeptId = #{hospdeptid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Hospitaldept" >
+    update hospitaldept
+    set hospDeptName = #{hospdeptname,jdbcType=VARCHAR},
+      hospDeptAbs = #{hospdeptabs,jdbcType=VARCHAR},
+      hospDeptFatherId = #{hospdeptfatherid,jdbcType=INTEGER}
+    where hospDeptId = #{hospdeptid,jdbcType=INTEGER}
+  </update>
+</mapper>

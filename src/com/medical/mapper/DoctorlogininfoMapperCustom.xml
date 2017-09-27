@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.DoctorlogininfoMapperCustom" >
+  
+  <select id="findDocCountByPhone" parameterType="String" resultType="java.lang.Integer" >
+    select count(*) from doctorlogininfo where docLoginPhone=#{phone}
+  </select>
+  <select id="selectDoctorByPhone" parameterType="String" resultType="com.medical.po.Doctorlogininfo" >
+    select * from doctorlogininfo where docLoginPhone=#{phone}
+  </select>
+  <select id="findDoctorByPP" parameterType="String" resultType="com.medical.po.Doctorlogininfo" >
+    select * from doctorlogininfo where docLoginPhone=#{0} and docLoginPwd = #{1}
+  </select>
+  <insert id="insertSelectiveReturnId" parameterType="com.medical.po.Doctorlogininfo" useGeneratedKeys="true" keyProperty="docloginid">
+   insert into doctorlogininfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="docloginid != null" >
+        docLoginId,
+      </if>
+      <if test="docloginname != null" >
+        docLoginName,
+      </if>
+      <if test="docloginphone != null" >
+        docLoginPhone,
+      </if>
+      <if test="docloginpwd != null" >
+        docLoginPwd,
+      </if>
+      <if test="doclogintoken != null" >
+        docLoginToken,
+      </if>
+      <if test="doclogindld != null" >
+        docLoginDld,
+      </if>
+      <if test="doclogintime != null" >
+        docLoginTime,
+      </if>
+      <if test="docloginlon != null" >
+        docLoginLon,
+      </if>
+      <if test="docloginlat != null" >
+        docLoginLat,
+      </if>
+      <if test="docloginloc != null" >
+        docLoginLoc,
+      </if>
+      <if test="doclogindev != null" >
+        docLoginDev,
+      </if>
+      <if test="docloginbver != null" >
+        docLoginBVer,
+      </if>
+      <if test="docloginmodel != null" >
+        docLoginModel,
+      </if>
+      <if test="docloginpver != null" >
+        docLoginPVer,
+      </if>
+      <if test="docloginmac != null" >
+        docLoginMac,
+      </if>
+      <if test="docloginip != null" >
+        docLoginIp,
+      </if>
+      <if test="doclogintype != null" >
+        docLoginType,
+      </if>
+      <if test="docloginpix != null" >
+        docLoginPix,
+      </if>
+      <if test="doclogincid != null" >
+        docLoginCId,
+      </if>
+      <if test="docloginsalt != null" >
+        docLoginSalt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="docloginid != null" >
+        #{docloginid,jdbcType=INTEGER},
+      </if>
+      <if test="docloginname != null" >
+        #{docloginname,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginphone != null" >
+        #{docloginphone,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginpwd != null" >
+        #{docloginpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogintoken != null" >
+        #{doclogintoken,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogindld != null" >
+        #{doclogindld,jdbcType=BIGINT},
+      </if>
+      <if test="doclogintime != null" >
+        #{doclogintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="docloginlon != null" >
+        #{docloginlon,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginlat != null" >
+        #{docloginlat,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginloc != null" >
+        #{docloginloc,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogindev != null" >
+        #{doclogindev,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginbver != null" >
+        #{docloginbver,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginmodel != null" >
+        #{docloginmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginpver != null" >
+        #{docloginpver,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginmac != null" >
+        #{docloginmac,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginip != null" >
+        #{docloginip,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogintype != null" >
+        #{doclogintype,jdbcType=BIT},
+      </if>
+      <if test="docloginpix != null" >
+        #{docloginpix,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogincid != null" >
+        #{doclogincid,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginsalt != null" >
+        #{docloginsalt,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

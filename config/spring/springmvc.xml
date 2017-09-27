@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       ">
+	<!-- 配置Controller扫描 -->
+	<context:component-scan base-package="com.medical" />
+	
+	<context:property-placeholder location="classpath:resource.properties" />
+	<!-- 配置注解驱动 -->
+	<mvc:annotation-driven conversion-service="conversionService" validator="validator"></mvc:annotation-driven>
+	<!-- <bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" /> -->
+	 <bean  class="com.medical.utils.ApplicationSwaggerConfig" />
+	
+	<!-- 对静态资源放行  -->
+	<mvc:resources location="/jsp/" mapping="/jsp/**"/>
+	<mvc:resources mapping="/swagger/**" location="/WEB-INF/swagger/"/>
+	<!-- 配置视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 前缀 -->
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<!-- 后缀 -->
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- 自定义参数绑定 -->
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<!-- 转换器 -->
+		<property name="converters">
+			<list>
+				<!-- 日期类型转换 -->
+				<bean class="com.medical.controller.converter.CustomDateConverter"/>
+				<bean class="com.medical.controller.converter.CustomDateConverter2"/>
+			</list>
+		</property>
+	</bean>
+	<!-- 校验器 -->
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<!-- hibernate校验器-->
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+		<!-- 指定校验使用的资源文件，在文件中配置校验错误信息，如果不指定则默认使用classpath下的ValidationMessages.properties -->
+		<property name="validationMessageSource" ref="messageSource"/>
+	</bean>
+	<!-- 校验错误信息配置文件 -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<!-- 资源文件名-->
+		<property name="basenames">   
+       	 <list>    
+            <value>classpath:CustomValidationMessages</value> 
+       	 </list>   
+    	</property>
+		<!-- 资源文件编码格式 -->
+		<property name="fileEncodings" value="utf-8" />
+		<!-- 对资源文件内容缓存时间，单位秒 -->
+		<property name="cacheSeconds" value="120" />
+		<property name="useCodeAsDefaultMessage" value="true" />
+	</bean>
+	<!-- 全局异常处理器
+	只要实现HandlerExceptionResolver接口就是全局异常处理器
+	 -->
+	<bean class="com.medical.exception.CustomExceptionResolver"></bean>
+	<!-- <bean class="com.medical.exception.DefaultExceptionHandler"></bean> -->
+	<!--拦截器 -->
+	<mvc:interceptors>
+		<!--多个拦截器,顺序执行 -->
+		<!-- 登陆认证拦截器 -->
+		<!--  <mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.medical.interceptor.LoginInterceptor"></bean>
+		</mvc:interceptor>  -->
+		<mvc:interceptor>
+			<!-- /**表示所有url包括子url路径 -->
+			<mvc:mapping path="/**"/>
+			<bean class="com.medical.interceptor.HandlerInterceptor1"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">  
+        <property name="messageConverters">  
+            <list>  
+                  
+                <bean   
+                    class="org.springframework.http.converter.StringHttpMessageConverter">  
+                    <property name="supportedMediaTypes">  
+                        <list>  
+                            <value>text/html;charset=UTF-8</value>  
+                        </list>  
+                    </property>  
+                </bean>  
+                 
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">  
+                    <property name="supportedMediaTypes">  
+                        <list>  
+                            <value>application/json;charset=UTF-8</value>  
+                        </list>  
+                    </property>  
+                </bean>  
+            </list>  
+        </property>  
+    </bean>
+    <tx:annotation-driven />
+   <!-- 上传图片配置实现类 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+       <!-- 上传图片的大小   B   10M  -->
+     	<property name="maxUploadSize" value="10485760"/>
+       <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+</beans>
+	

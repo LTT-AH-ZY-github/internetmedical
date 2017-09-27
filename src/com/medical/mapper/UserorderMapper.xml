@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.UserorderMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Userorder" >
+    <id column="userOrderId" property="userorderid" jdbcType="INTEGER" />
+    <result column="userOrderPTime" property="userorderptime" jdbcType="TIMESTAMP" />
+    <result column="userOrderRTime" property="userorderrtime" jdbcType="TIMESTAMP" />
+    <result column="userOrderETime" property="userorderetime" jdbcType="TIMESTAMP" />
+    <result column="userOrderAppointment" property="userorderappointment" jdbcType="VARCHAR" />
+    <result column="userOrderDocLoginId" property="userorderdocloginid" jdbcType="INTEGER" />
+    <result column="userOrderRecDocLoginId" property="userorderrecdocloginid" jdbcType="INTEGER" />
+    <result column="userOrderStateId" property="userorderstateid" jdbcType="INTEGER" />
+    <result column="userOrderHospId" property="userorderhospid" jdbcType="INTEGER" />
+    <result column="userOrderDPrice" property="userorderdprice" jdbcType="DECIMAL" />
+    <result column="userOrderHState" property="userorderhstate" jdbcType="TINYINT" />
+    <result column="userOrderHPrice" property="userorderhprice" jdbcType="DECIMAL" />
+    <result column="userOrderTPriceType" property="userordertpricetype" jdbcType="INTEGER" />
+    <result column="userOrderTPrice" property="userordertprice" jdbcType="DECIMAL" />
+    <result column="userOrderAPriceType" property="userorderapricetype" jdbcType="INTEGER" />
+    <result column="userOrderAPrice" property="userorderaprice" jdbcType="DECIMAL" />
+    <result column="userOrderEPriceType" property="userorderepricetype" jdbcType="INTEGER" />
+    <result column="userOrderEPrice" property="userordereprice" jdbcType="DECIMAL" />
+    <result column="userOrderPrice" property="userorderprice" jdbcType="DECIMAL" />
+    <result column="userOrderDeposit" property="userorderdeposit" jdbcType="DECIMAL" />
+    <result column="userSickId" property="usersickid" jdbcType="INTEGER" />
+    <result column="userLoginId" property="userloginid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    userOrderId, userOrderPTime, userOrderRTime, userOrderETime, userOrderAppointment, 
+    userOrderDocLoginId, userOrderRecDocLoginId, userOrderStateId, userOrderHospId, userOrderDPrice, 
+    userOrderHState, userOrderHPrice, userOrderTPriceType, userOrderTPrice, userOrderAPriceType, 
+    userOrderAPrice, userOrderEPriceType, userOrderEPrice, userOrderPrice, userOrderDeposit, 
+    userSickId, userLoginId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.UserorderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from userorder
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from userorder
+    where userOrderId = #{userorderid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from userorder
+    where userOrderId = #{userorderid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.UserorderExample" >
+    delete from userorder
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Userorder" >
+    insert into userorder (userOrderId, userOrderPTime, userOrderRTime, 
+      userOrderETime, userOrderAppointment, 
+      userOrderDocLoginId, userOrderRecDocLoginId, 
+      userOrderStateId, userOrderHospId, userOrderDPrice, 
+      userOrderHState, userOrderHPrice, userOrderTPriceType, 
+      userOrderTPrice, userOrderAPriceType, userOrderAPrice, 
+      userOrderEPriceType, userOrderEPrice, userOrderPrice, 
+      userOrderDeposit, userSickId, userLoginId
+      )
+    values (#{userorderid,jdbcType=INTEGER}, #{userorderptime,jdbcType=TIMESTAMP}, #{userorderrtime,jdbcType=TIMESTAMP}, 
+      #{userorderetime,jdbcType=TIMESTAMP}, #{userorderappointment,jdbcType=VARCHAR}, 
+      #{userorderdocloginid,jdbcType=INTEGER}, #{userorderrecdocloginid,jdbcType=INTEGER}, 
+      #{userorderstateid,jdbcType=INTEGER}, #{userorderhospid,jdbcType=INTEGER}, #{userorderdprice,jdbcType=DECIMAL}, 
+      #{userorderhstate,jdbcType=TINYINT}, #{userorderhprice,jdbcType=DECIMAL}, #{userordertpricetype,jdbcType=INTEGER}, 
+      #{userordertprice,jdbcType=DECIMAL}, #{userorderapricetype,jdbcType=INTEGER}, #{userorderaprice,jdbcType=DECIMAL}, 
+      #{userorderepricetype,jdbcType=INTEGER}, #{userordereprice,jdbcType=DECIMAL}, #{userorderprice,jdbcType=DECIMAL}, 
+      #{userorderdeposit,jdbcType=DECIMAL}, #{usersickid,jdbcType=INTEGER}, #{userloginid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Userorder" >
+    insert into userorder
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userorderid != null" >
+        userOrderId,
+      </if>
+      <if test="userorderptime != null" >
+        userOrderPTime,
+      </if>
+      <if test="userorderrtime != null" >
+        userOrderRTime,
+      </if>
+      <if test="userorderetime != null" >
+        userOrderETime,
+      </if>
+      <if test="userorderappointment != null" >
+        userOrderAppointment,
+      </if>
+      <if test="userorderdocloginid != null" >
+        userOrderDocLoginId,
+      </if>
+      <if test="userorderrecdocloginid != null" >
+        userOrderRecDocLoginId,
+      </if>
+      <if test="userorderstateid != null" >
+        userOrderStateId,
+      </if>
+      <if test="userorderhospid != null" >
+        userOrderHospId,
+      </if>
+      <if test="userorderdprice != null" >
+        userOrderDPrice,
+      </if>
+      <if test="userorderhstate != null" >
+        userOrderHState,
+      </if>
+      <if test="userorderhprice != null" >
+        userOrderHPrice,
+      </if>
+      <if test="userordertpricetype != null" >
+        userOrderTPriceType,
+      </if>
+      <if test="userordertprice != null" >
+        userOrderTPrice,
+      </if>
+      <if test="userorderapricetype != null" >
+        userOrderAPriceType,
+      </if>
+      <if test="userorderaprice != null" >
+        userOrderAPrice,
+      </if>
+      <if test="userorderepricetype != null" >
+        userOrderEPriceType,
+      </if>
+      <if test="userordereprice != null" >
+        userOrderEPrice,
+      </if>
+      <if test="userorderprice != null" >
+        userOrderPrice,
+      </if>
+      <if test="userorderdeposit != null" >
+        userOrderDeposit,
+      </if>
+      <if test="usersickid != null" >
+        userSickId,
+      </if>
+      <if test="userloginid != null" >
+        userLoginId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userorderid != null" >
+        #{userorderid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderptime != null" >
+        #{userorderptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderrtime != null" >
+        #{userorderrtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderetime != null" >
+        #{userorderetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderappointment != null" >
+        #{userorderappointment,jdbcType=VARCHAR},
+      </if>
+      <if test="userorderdocloginid != null" >
+        #{userorderdocloginid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderrecdocloginid != null" >
+        #{userorderrecdocloginid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderstateid != null" >
+        #{userorderstateid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderhospid != null" >
+        #{userorderhospid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderdprice != null" >
+        #{userorderdprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userorderhstate != null" >
+        #{userorderhstate,jdbcType=TINYINT},
+      </if>
+      <if test="userorderhprice != null" >
+        #{userorderhprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userordertpricetype != null" >
+        #{userordertpricetype,jdbcType=INTEGER},
+      </if>
+      <if test="userordertprice != null" >
+        #{userordertprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userorderapricetype != null" >
+        #{userorderapricetype,jdbcType=INTEGER},
+      </if>
+      <if test="userorderaprice != null" >
+        #{userorderaprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userorderepricetype != null" >
+        #{userorderepricetype,jdbcType=INTEGER},
+      </if>
+      <if test="userordereprice != null" >
+        #{userordereprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userorderprice != null" >
+        #{userorderprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userorderdeposit != null" >
+        #{userorderdeposit,jdbcType=DECIMAL},
+      </if>
+      <if test="usersickid != null" >
+        #{usersickid,jdbcType=INTEGER},
+      </if>
+      <if test="userloginid != null" >
+        #{userloginid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.UserorderExample" resultType="java.lang.Integer" >
+    select count(*) from userorder
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update userorder
+    <set >
+      <if test="record.userorderid != null" >
+        userOrderId = #{record.userorderid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userorderptime != null" >
+        userOrderPTime = #{record.userorderptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userorderrtime != null" >
+        userOrderRTime = #{record.userorderrtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userorderetime != null" >
+        userOrderETime = #{record.userorderetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userorderappointment != null" >
+        userOrderAppointment = #{record.userorderappointment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userorderdocloginid != null" >
+        userOrderDocLoginId = #{record.userorderdocloginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userorderrecdocloginid != null" >
+        userOrderRecDocLoginId = #{record.userorderrecdocloginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userorderstateid != null" >
+        userOrderStateId = #{record.userorderstateid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userorderhospid != null" >
+        userOrderHospId = #{record.userorderhospid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userorderdprice != null" >
+        userOrderDPrice = #{record.userorderdprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userorderhstate != null" >
+        userOrderHState = #{record.userorderhstate,jdbcType=TINYINT},
+      </if>
+      <if test="record.userorderhprice != null" >
+        userOrderHPrice = #{record.userorderhprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userordertpricetype != null" >
+        userOrderTPriceType = #{record.userordertpricetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.userordertprice != null" >
+        userOrderTPrice = #{record.userordertprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userorderapricetype != null" >
+        userOrderAPriceType = #{record.userorderapricetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.userorderaprice != null" >
+        userOrderAPrice = #{record.userorderaprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userorderepricetype != null" >
+        userOrderEPriceType = #{record.userorderepricetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.userordereprice != null" >
+        userOrderEPrice = #{record.userordereprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userorderprice != null" >
+        userOrderPrice = #{record.userorderprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userorderdeposit != null" >
+        userOrderDeposit = #{record.userorderdeposit,jdbcType=DECIMAL},
+      </if>
+      <if test="record.usersickid != null" >
+        userSickId = #{record.usersickid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userloginid != null" >
+        userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update userorder
+    set userOrderId = #{record.userorderid,jdbcType=INTEGER},
+      userOrderPTime = #{record.userorderptime,jdbcType=TIMESTAMP},
+      userOrderRTime = #{record.userorderrtime,jdbcType=TIMESTAMP},
+      userOrderETime = #{record.userorderetime,jdbcType=TIMESTAMP},
+      userOrderAppointment = #{record.userorderappointment,jdbcType=VARCHAR},
+      userOrderDocLoginId = #{record.userorderdocloginid,jdbcType=INTEGER},
+      userOrderRecDocLoginId = #{record.userorderrecdocloginid,jdbcType=INTEGER},
+      userOrderStateId = #{record.userorderstateid,jdbcType=INTEGER},
+      userOrderHospId = #{record.userorderhospid,jdbcType=INTEGER},
+      userOrderDPrice = #{record.userorderdprice,jdbcType=DECIMAL},
+      userOrderHState = #{record.userorderhstate,jdbcType=TINYINT},
+      userOrderHPrice = #{record.userorderhprice,jdbcType=DECIMAL},
+      userOrderTPriceType = #{record.userordertpricetype,jdbcType=INTEGER},
+      userOrderTPrice = #{record.userordertprice,jdbcType=DECIMAL},
+      userOrderAPriceType = #{record.userorderapricetype,jdbcType=INTEGER},
+      userOrderAPrice = #{record.userorderaprice,jdbcType=DECIMAL},
+      userOrderEPriceType = #{record.userorderepricetype,jdbcType=INTEGER},
+      userOrderEPrice = #{record.userordereprice,jdbcType=DECIMAL},
+      userOrderPrice = #{record.userorderprice,jdbcType=DECIMAL},
+      userOrderDeposit = #{record.userorderdeposit,jdbcType=DECIMAL},
+      userSickId = #{record.usersickid,jdbcType=INTEGER},
+      userLoginId = #{record.userloginid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Userorder" >
+    update userorder
+    <set >
+      <if test="userorderptime != null" >
+        userOrderPTime = #{userorderptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderrtime != null" >
+        userOrderRTime = #{userorderrtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderetime != null" >
+        userOrderETime = #{userorderetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderappointment != null" >
+        userOrderAppointment = #{userorderappointment,jdbcType=VARCHAR},
+      </if>
+      <if test="userorderdocloginid != null" >
+        userOrderDocLoginId = #{userorderdocloginid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderrecdocloginid != null" >
+        userOrderRecDocLoginId = #{userorderrecdocloginid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderstateid != null" >
+        userOrderStateId = #{userorderstateid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderhospid != null" >
+        userOrderHospId = #{userorderhospid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderdprice != null" >
+        userOrderDPrice = #{userorderdprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userorderhstate != null" >
+        userOrderHState = #{userorderhstate,jdbcType=TINYINT},
+      </if>
+      <if test="userorderhprice != null" >
+        userOrderHPrice = #{userorderhprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userordertpricetype != null" >
+        userOrderTPriceType = #{userordertpricetype,jdbcType=INTEGER},
+      </if>
+      <if test="userordertprice != null" >
+        userOrderTPrice = #{userordertprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userorderapricetype != null" >
+        userOrderAPriceType = #{userorderapricetype,jdbcType=INTEGER},
+      </if>
+      <if test="userorderaprice != null" >
+        userOrderAPrice = #{userorderaprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userorderepricetype != null" >
+        userOrderEPriceType = #{userorderepricetype,jdbcType=INTEGER},
+      </if>
+      <if test="userordereprice != null" >
+        userOrderEPrice = #{userordereprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userorderprice != null" >
+        userOrderPrice = #{userorderprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userorderdeposit != null" >
+        userOrderDeposit = #{userorderdeposit,jdbcType=DECIMAL},
+      </if>
+      <if test="usersickid != null" >
+        userSickId = #{usersickid,jdbcType=INTEGER},
+      </if>
+      <if test="userloginid != null" >
+        userLoginId = #{userloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where userOrderId = #{userorderid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Userorder" >
+    update userorder
+    set userOrderPTime = #{userorderptime,jdbcType=TIMESTAMP},
+      userOrderRTime = #{userorderrtime,jdbcType=TIMESTAMP},
+      userOrderETime = #{userorderetime,jdbcType=TIMESTAMP},
+      userOrderAppointment = #{userorderappointment,jdbcType=VARCHAR},
+      userOrderDocLoginId = #{userorderdocloginid,jdbcType=INTEGER},
+      userOrderRecDocLoginId = #{userorderrecdocloginid,jdbcType=INTEGER},
+      userOrderStateId = #{userorderstateid,jdbcType=INTEGER},
+      userOrderHospId = #{userorderhospid,jdbcType=INTEGER},
+      userOrderDPrice = #{userorderdprice,jdbcType=DECIMAL},
+      userOrderHState = #{userorderhstate,jdbcType=TINYINT},
+      userOrderHPrice = #{userorderhprice,jdbcType=DECIMAL},
+      userOrderTPriceType = #{userordertpricetype,jdbcType=INTEGER},
+      userOrderTPrice = #{userordertprice,jdbcType=DECIMAL},
+      userOrderAPriceType = #{userorderapricetype,jdbcType=INTEGER},
+      userOrderAPrice = #{userorderaprice,jdbcType=DECIMAL},
+      userOrderEPriceType = #{userorderepricetype,jdbcType=INTEGER},
+      userOrderEPrice = #{userordereprice,jdbcType=DECIMAL},
+      userOrderPrice = #{userorderprice,jdbcType=DECIMAL},
+      userOrderDeposit = #{userorderdeposit,jdbcType=DECIMAL},
+      userSickId = #{usersickid,jdbcType=INTEGER},
+      userLoginId = #{userloginid,jdbcType=INTEGER}
+    where userOrderId = #{userorderid,jdbcType=INTEGER}
+  </update>
+</mapper>

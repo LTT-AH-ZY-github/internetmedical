@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.AdminlogMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Adminlog" >
+    <id column="adminLogId" property="adminlogid" jdbcType="INTEGER" />
+    <result column="adminLogTime" property="adminlogtime" jdbcType="TIMESTAMP" />
+    <result column="adminLogLoc" property="adminlogloc" jdbcType="VARCHAR" />
+    <result column="adminLogBVer" property="adminlogbver" jdbcType="VARCHAR" />
+    <result column="adminLogMac" property="adminlogmac" jdbcType="VARCHAR" />
+    <result column="adminLogIp" property="adminlogip" jdbcType="VARCHAR" />
+    <result column="adminLogLon" property="adminloglon" jdbcType="VARCHAR" />
+    <result column="adminLogLat" property="adminloglat" jdbcType="VARCHAR" />
+    <result column="adminLoginId" property="adminloginid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    adminLogId, adminLogTime, adminLogLoc, adminLogBVer, adminLogMac, adminLogIp, adminLogLon, 
+    adminLogLat, adminLoginId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.AdminlogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from adminlog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from adminlog
+    where adminLogId = #{adminlogid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from adminlog
+    where adminLogId = #{adminlogid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.AdminlogExample" >
+    delete from adminlog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Adminlog" >
+    insert into adminlog (adminLogId, adminLogTime, adminLogLoc, 
+      adminLogBVer, adminLogMac, adminLogIp, 
+      adminLogLon, adminLogLat, adminLoginId
+      )
+    values (#{adminlogid,jdbcType=INTEGER}, #{adminlogtime,jdbcType=TIMESTAMP}, #{adminlogloc,jdbcType=VARCHAR}, 
+      #{adminlogbver,jdbcType=VARCHAR}, #{adminlogmac,jdbcType=VARCHAR}, #{adminlogip,jdbcType=VARCHAR}, 
+      #{adminloglon,jdbcType=VARCHAR}, #{adminloglat,jdbcType=VARCHAR}, #{adminloginid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Adminlog" >
+    insert into adminlog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="adminlogid != null" >
+        adminLogId,
+      </if>
+      <if test="adminlogtime != null" >
+        adminLogTime,
+      </if>
+      <if test="adminlogloc != null" >
+        adminLogLoc,
+      </if>
+      <if test="adminlogbver != null" >
+        adminLogBVer,
+      </if>
+      <if test="adminlogmac != null" >
+        adminLogMac,
+      </if>
+      <if test="adminlogip != null" >
+        adminLogIp,
+      </if>
+      <if test="adminloglon != null" >
+        adminLogLon,
+      </if>
+      <if test="adminloglat != null" >
+        adminLogLat,
+      </if>
+      <if test="adminloginid != null" >
+        adminLoginId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="adminlogid != null" >
+        #{adminlogid,jdbcType=INTEGER},
+      </if>
+      <if test="adminlogtime != null" >
+        #{adminlogtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adminlogloc != null" >
+        #{adminlogloc,jdbcType=VARCHAR},
+      </if>
+      <if test="adminlogbver != null" >
+        #{adminlogbver,jdbcType=VARCHAR},
+      </if>
+      <if test="adminlogmac != null" >
+        #{adminlogmac,jdbcType=VARCHAR},
+      </if>
+      <if test="adminlogip != null" >
+        #{adminlogip,jdbcType=VARCHAR},
+      </if>
+      <if test="adminloglon != null" >
+        #{adminloglon,jdbcType=VARCHAR},
+      </if>
+      <if test="adminloglat != null" >
+        #{adminloglat,jdbcType=VARCHAR},
+      </if>
+      <if test="adminloginid != null" >
+        #{adminloginid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.AdminlogExample" resultType="java.lang.Integer" >
+    select count(*) from adminlog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update adminlog
+    <set >
+      <if test="record.adminlogid != null" >
+        adminLogId = #{record.adminlogid,jdbcType=INTEGER},
+      </if>
+      <if test="record.adminlogtime != null" >
+        adminLogTime = #{record.adminlogtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.adminlogloc != null" >
+        adminLogLoc = #{record.adminlogloc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adminlogbver != null" >
+        adminLogBVer = #{record.adminlogbver,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adminlogmac != null" >
+        adminLogMac = #{record.adminlogmac,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adminlogip != null" >
+        adminLogIp = #{record.adminlogip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adminloglon != null" >
+        adminLogLon = #{record.adminloglon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adminloglat != null" >
+        adminLogLat = #{record.adminloglat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adminloginid != null" >
+        adminLoginId = #{record.adminloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update adminlog
+    set adminLogId = #{record.adminlogid,jdbcType=INTEGER},
+      adminLogTime = #{record.adminlogtime,jdbcType=TIMESTAMP},
+      adminLogLoc = #{record.adminlogloc,jdbcType=VARCHAR},
+      adminLogBVer = #{record.adminlogbver,jdbcType=VARCHAR},
+      adminLogMac = #{record.adminlogmac,jdbcType=VARCHAR},
+      adminLogIp = #{record.adminlogip,jdbcType=VARCHAR},
+      adminLogLon = #{record.adminloglon,jdbcType=VARCHAR},
+      adminLogLat = #{record.adminloglat,jdbcType=VARCHAR},
+      adminLoginId = #{record.adminloginid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Adminlog" >
+    update adminlog
+    <set >
+      <if test="adminlogtime != null" >
+        adminLogTime = #{adminlogtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="adminlogloc != null" >
+        adminLogLoc = #{adminlogloc,jdbcType=VARCHAR},
+      </if>
+      <if test="adminlogbver != null" >
+        adminLogBVer = #{adminlogbver,jdbcType=VARCHAR},
+      </if>
+      <if test="adminlogmac != null" >
+        adminLogMac = #{adminlogmac,jdbcType=VARCHAR},
+      </if>
+      <if test="adminlogip != null" >
+        adminLogIp = #{adminlogip,jdbcType=VARCHAR},
+      </if>
+      <if test="adminloglon != null" >
+        adminLogLon = #{adminloglon,jdbcType=VARCHAR},
+      </if>
+      <if test="adminloglat != null" >
+        adminLogLat = #{adminloglat,jdbcType=VARCHAR},
+      </if>
+      <if test="adminloginid != null" >
+        adminLoginId = #{adminloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where adminLogId = #{adminlogid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Adminlog" >
+    update adminlog
+    set adminLogTime = #{adminlogtime,jdbcType=TIMESTAMP},
+      adminLogLoc = #{adminlogloc,jdbcType=VARCHAR},
+      adminLogBVer = #{adminlogbver,jdbcType=VARCHAR},
+      adminLogMac = #{adminlogmac,jdbcType=VARCHAR},
+      adminLogIp = #{adminlogip,jdbcType=VARCHAR},
+      adminLogLon = #{adminloglon,jdbcType=VARCHAR},
+      adminLogLat = #{adminloglat,jdbcType=VARCHAR},
+      adminLoginId = #{adminloginid,jdbcType=INTEGER}
+    where adminLogId = #{adminlogid,jdbcType=INTEGER}
+  </update>
+</mapper>

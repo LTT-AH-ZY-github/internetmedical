@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.DoctorlogMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Doctorlog" >
+    <id column="docLogId" property="doclogid" jdbcType="INTEGER" />
+    <result column="docLogTime" property="doclogtime" jdbcType="TIMESTAMP" />
+    <result column="docLogLon" property="docloglon" jdbcType="VARCHAR" />
+    <result column="docLogLat" property="docloglat" jdbcType="VARCHAR" />
+    <result column="docLogLoc" property="doclogloc" jdbcType="VARCHAR" />
+    <result column="docLogDev" property="doclogdev" jdbcType="BIT" />
+    <result column="docLogBVer" property="doclogbver" jdbcType="VARCHAR" />
+    <result column="docLogModel" property="doclogmodel" jdbcType="VARCHAR" />
+    <result column="docLogPVer" property="doclogpver" jdbcType="VARCHAR" />
+    <result column="docLogMac" property="doclogmac" jdbcType="VARCHAR" />
+    <result column="docLogIp" property="doclogip" jdbcType="VARCHAR" />
+    <result column="docLoginId" property="docloginid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    docLogId, docLogTime, docLogLon, docLogLat, docLogLoc, docLogDev, docLogBVer, docLogModel, 
+    docLogPVer, docLogMac, docLogIp, docLoginId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.DoctorlogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from doctorlog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from doctorlog
+    where docLogId = #{doclogid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from doctorlog
+    where docLogId = #{doclogid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.DoctorlogExample" >
+    delete from doctorlog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Doctorlog" >
+    insert into doctorlog (docLogId, docLogTime, docLogLon, 
+      docLogLat, docLogLoc, docLogDev, 
+      docLogBVer, docLogModel, docLogPVer, 
+      docLogMac, docLogIp, docLoginId
+      )
+    values (#{doclogid,jdbcType=INTEGER}, #{doclogtime,jdbcType=TIMESTAMP}, #{docloglon,jdbcType=VARCHAR}, 
+      #{docloglat,jdbcType=VARCHAR}, #{doclogloc,jdbcType=VARCHAR}, #{doclogdev,jdbcType=BIT}, 
+      #{doclogbver,jdbcType=VARCHAR}, #{doclogmodel,jdbcType=VARCHAR}, #{doclogpver,jdbcType=VARCHAR}, 
+      #{doclogmac,jdbcType=VARCHAR}, #{doclogip,jdbcType=VARCHAR}, #{docloginid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Doctorlog" >
+    insert into doctorlog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="doclogid != null" >
+        docLogId,
+      </if>
+      <if test="doclogtime != null" >
+        docLogTime,
+      </if>
+      <if test="docloglon != null" >
+        docLogLon,
+      </if>
+      <if test="docloglat != null" >
+        docLogLat,
+      </if>
+      <if test="doclogloc != null" >
+        docLogLoc,
+      </if>
+      <if test="doclogdev != null" >
+        docLogDev,
+      </if>
+      <if test="doclogbver != null" >
+        docLogBVer,
+      </if>
+      <if test="doclogmodel != null" >
+        docLogModel,
+      </if>
+      <if test="doclogpver != null" >
+        docLogPVer,
+      </if>
+      <if test="doclogmac != null" >
+        docLogMac,
+      </if>
+      <if test="doclogip != null" >
+        docLogIp,
+      </if>
+      <if test="docloginid != null" >
+        docLoginId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="doclogid != null" >
+        #{doclogid,jdbcType=INTEGER},
+      </if>
+      <if test="doclogtime != null" >
+        #{doclogtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="docloglon != null" >
+        #{docloglon,jdbcType=VARCHAR},
+      </if>
+      <if test="docloglat != null" >
+        #{docloglat,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogloc != null" >
+        #{doclogloc,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogdev != null" >
+        #{doclogdev,jdbcType=BIT},
+      </if>
+      <if test="doclogbver != null" >
+        #{doclogbver,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogmodel != null" >
+        #{doclogmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogpver != null" >
+        #{doclogpver,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogmac != null" >
+        #{doclogmac,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogip != null" >
+        #{doclogip,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginid != null" >
+        #{docloginid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.DoctorlogExample" resultType="java.lang.Integer" >
+    select count(*) from doctorlog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update doctorlog
+    <set >
+      <if test="record.doclogid != null" >
+        docLogId = #{record.doclogid,jdbcType=INTEGER},
+      </if>
+      <if test="record.doclogtime != null" >
+        docLogTime = #{record.doclogtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.docloglon != null" >
+        docLogLon = #{record.docloglon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docloglat != null" >
+        docLogLat = #{record.docloglat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doclogloc != null" >
+        docLogLoc = #{record.doclogloc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doclogdev != null" >
+        docLogDev = #{record.doclogdev,jdbcType=BIT},
+      </if>
+      <if test="record.doclogbver != null" >
+        docLogBVer = #{record.doclogbver,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doclogmodel != null" >
+        docLogModel = #{record.doclogmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doclogpver != null" >
+        docLogPVer = #{record.doclogpver,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doclogmac != null" >
+        docLogMac = #{record.doclogmac,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doclogip != null" >
+        docLogIp = #{record.doclogip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docloginid != null" >
+        docLoginId = #{record.docloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update doctorlog
+    set docLogId = #{record.doclogid,jdbcType=INTEGER},
+      docLogTime = #{record.doclogtime,jdbcType=TIMESTAMP},
+      docLogLon = #{record.docloglon,jdbcType=VARCHAR},
+      docLogLat = #{record.docloglat,jdbcType=VARCHAR},
+      docLogLoc = #{record.doclogloc,jdbcType=VARCHAR},
+      docLogDev = #{record.doclogdev,jdbcType=BIT},
+      docLogBVer = #{record.doclogbver,jdbcType=VARCHAR},
+      docLogModel = #{record.doclogmodel,jdbcType=VARCHAR},
+      docLogPVer = #{record.doclogpver,jdbcType=VARCHAR},
+      docLogMac = #{record.doclogmac,jdbcType=VARCHAR},
+      docLogIp = #{record.doclogip,jdbcType=VARCHAR},
+      docLoginId = #{record.docloginid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Doctorlog" >
+    update doctorlog
+    <set >
+      <if test="doclogtime != null" >
+        docLogTime = #{doclogtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="docloglon != null" >
+        docLogLon = #{docloglon,jdbcType=VARCHAR},
+      </if>
+      <if test="docloglat != null" >
+        docLogLat = #{docloglat,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogloc != null" >
+        docLogLoc = #{doclogloc,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogdev != null" >
+        docLogDev = #{doclogdev,jdbcType=BIT},
+      </if>
+      <if test="doclogbver != null" >
+        docLogBVer = #{doclogbver,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogmodel != null" >
+        docLogModel = #{doclogmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogpver != null" >
+        docLogPVer = #{doclogpver,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogmac != null" >
+        docLogMac = #{doclogmac,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogip != null" >
+        docLogIp = #{doclogip,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginid != null" >
+        docLoginId = #{docloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where docLogId = #{doclogid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Doctorlog" >
+    update doctorlog
+    set docLogTime = #{doclogtime,jdbcType=TIMESTAMP},
+      docLogLon = #{docloglon,jdbcType=VARCHAR},
+      docLogLat = #{docloglat,jdbcType=VARCHAR},
+      docLogLoc = #{doclogloc,jdbcType=VARCHAR},
+      docLogDev = #{doclogdev,jdbcType=BIT},
+      docLogBVer = #{doclogbver,jdbcType=VARCHAR},
+      docLogModel = #{doclogmodel,jdbcType=VARCHAR},
+      docLogPVer = #{doclogpver,jdbcType=VARCHAR},
+      docLogMac = #{doclogmac,jdbcType=VARCHAR},
+      docLogIp = #{doclogip,jdbcType=VARCHAR},
+      docLoginId = #{docloginid,jdbcType=INTEGER}
+    where docLogId = #{doclogid,jdbcType=INTEGER}
+  </update>
+</mapper>

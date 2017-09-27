@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.HosplogininfoMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Hosplogininfo" >
+    <id column="hospLoginId" property="hosploginid" jdbcType="INTEGER" />
+    <result column="hospLoginName" property="hosploginname" jdbcType="VARCHAR" />
+    <result column="hospLoginPwd" property="hosploginpwd" jdbcType="VARCHAR" />
+    <result column="hospLoginToken" property="hosplogintoken" jdbcType="VARCHAR" />
+    <result column="hospLoginTime" property="hosplogintime" jdbcType="TIMESTAMP" />
+    <result column="hospLoginLoc" property="hosploginloc" jdbcType="VARCHAR" />
+    <result column="hospLoginBVer" property="hosploginbver" jdbcType="VARCHAR" />
+    <result column="hospLoginMac" property="hosploginmac" jdbcType="VARCHAR" />
+    <result column="hospLoginIp" property="hosploginip" jdbcType="VARCHAR" />
+    <result column="hospLoginType" property="hosplogintype" jdbcType="INTEGER" />
+    <result column="hospLoginPhone" property="hosploginphone" jdbcType="VARCHAR" />
+    <result column="hospLoginPix" property="hosploginpix" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    hospLoginId, hospLoginName, hospLoginPwd, hospLoginToken, hospLoginTime, hospLoginLoc, 
+    hospLoginBVer, hospLoginMac, hospLoginIp, hospLoginType, hospLoginPhone, hospLoginPix
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HosplogininfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hosplogininfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from hosplogininfo
+    where hospLoginId = #{hosploginid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from hosplogininfo
+    where hospLoginId = #{hosploginid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.HosplogininfoExample" >
+    delete from hosplogininfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Hosplogininfo" >
+    insert into hosplogininfo (hospLoginId, hospLoginName, hospLoginPwd, 
+      hospLoginToken, hospLoginTime, hospLoginLoc, 
+      hospLoginBVer, hospLoginMac, hospLoginIp, 
+      hospLoginType, hospLoginPhone, hospLoginPix
+      )
+    values (#{hosploginid,jdbcType=INTEGER}, #{hosploginname,jdbcType=VARCHAR}, #{hosploginpwd,jdbcType=VARCHAR}, 
+      #{hosplogintoken,jdbcType=VARCHAR}, #{hosplogintime,jdbcType=TIMESTAMP}, #{hosploginloc,jdbcType=VARCHAR}, 
+      #{hosploginbver,jdbcType=VARCHAR}, #{hosploginmac,jdbcType=VARCHAR}, #{hosploginip,jdbcType=VARCHAR}, 
+      #{hosplogintype,jdbcType=INTEGER}, #{hosploginphone,jdbcType=VARCHAR}, #{hosploginpix,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Hosplogininfo" >
+    insert into hosplogininfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hosploginid != null" >
+        hospLoginId,
+      </if>
+      <if test="hosploginname != null" >
+        hospLoginName,
+      </if>
+      <if test="hosploginpwd != null" >
+        hospLoginPwd,
+      </if>
+      <if test="hosplogintoken != null" >
+        hospLoginToken,
+      </if>
+      <if test="hosplogintime != null" >
+        hospLoginTime,
+      </if>
+      <if test="hosploginloc != null" >
+        hospLoginLoc,
+      </if>
+      <if test="hosploginbver != null" >
+        hospLoginBVer,
+      </if>
+      <if test="hosploginmac != null" >
+        hospLoginMac,
+      </if>
+      <if test="hosploginip != null" >
+        hospLoginIp,
+      </if>
+      <if test="hosplogintype != null" >
+        hospLoginType,
+      </if>
+      <if test="hosploginphone != null" >
+        hospLoginPhone,
+      </if>
+      <if test="hosploginpix != null" >
+        hospLoginPix,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hosploginid != null" >
+        #{hosploginid,jdbcType=INTEGER},
+      </if>
+      <if test="hosploginname != null" >
+        #{hosploginname,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginpwd != null" >
+        #{hosploginpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="hosplogintoken != null" >
+        #{hosplogintoken,jdbcType=VARCHAR},
+      </if>
+      <if test="hosplogintime != null" >
+        #{hosplogintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hosploginloc != null" >
+        #{hosploginloc,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginbver != null" >
+        #{hosploginbver,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginmac != null" >
+        #{hosploginmac,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginip != null" >
+        #{hosploginip,jdbcType=VARCHAR},
+      </if>
+      <if test="hosplogintype != null" >
+        #{hosplogintype,jdbcType=INTEGER},
+      </if>
+      <if test="hosploginphone != null" >
+        #{hosploginphone,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginpix != null" >
+        #{hosploginpix,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.HosplogininfoExample" resultType="java.lang.Integer" >
+    select count(*) from hosplogininfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update hosplogininfo
+    <set >
+      <if test="record.hosploginid != null" >
+        hospLoginId = #{record.hosploginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.hosploginname != null" >
+        hospLoginName = #{record.hosploginname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hosploginpwd != null" >
+        hospLoginPwd = #{record.hosploginpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hosplogintoken != null" >
+        hospLoginToken = #{record.hosplogintoken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hosplogintime != null" >
+        hospLoginTime = #{record.hosplogintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.hosploginloc != null" >
+        hospLoginLoc = #{record.hosploginloc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hosploginbver != null" >
+        hospLoginBVer = #{record.hosploginbver,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hosploginmac != null" >
+        hospLoginMac = #{record.hosploginmac,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hosploginip != null" >
+        hospLoginIp = #{record.hosploginip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hosplogintype != null" >
+        hospLoginType = #{record.hosplogintype,jdbcType=INTEGER},
+      </if>
+      <if test="record.hosploginphone != null" >
+        hospLoginPhone = #{record.hosploginphone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hosploginpix != null" >
+        hospLoginPix = #{record.hosploginpix,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update hosplogininfo
+    set hospLoginId = #{record.hosploginid,jdbcType=INTEGER},
+      hospLoginName = #{record.hosploginname,jdbcType=VARCHAR},
+      hospLoginPwd = #{record.hosploginpwd,jdbcType=VARCHAR},
+      hospLoginToken = #{record.hosplogintoken,jdbcType=VARCHAR},
+      hospLoginTime = #{record.hosplogintime,jdbcType=TIMESTAMP},
+      hospLoginLoc = #{record.hosploginloc,jdbcType=VARCHAR},
+      hospLoginBVer = #{record.hosploginbver,jdbcType=VARCHAR},
+      hospLoginMac = #{record.hosploginmac,jdbcType=VARCHAR},
+      hospLoginIp = #{record.hosploginip,jdbcType=VARCHAR},
+      hospLoginType = #{record.hosplogintype,jdbcType=INTEGER},
+      hospLoginPhone = #{record.hosploginphone,jdbcType=VARCHAR},
+      hospLoginPix = #{record.hosploginpix,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Hosplogininfo" >
+    update hosplogininfo
+    <set >
+      <if test="hosploginname != null" >
+        hospLoginName = #{hosploginname,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginpwd != null" >
+        hospLoginPwd = #{hosploginpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="hosplogintoken != null" >
+        hospLoginToken = #{hosplogintoken,jdbcType=VARCHAR},
+      </if>
+      <if test="hosplogintime != null" >
+        hospLoginTime = #{hosplogintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hosploginloc != null" >
+        hospLoginLoc = #{hosploginloc,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginbver != null" >
+        hospLoginBVer = #{hosploginbver,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginmac != null" >
+        hospLoginMac = #{hosploginmac,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginip != null" >
+        hospLoginIp = #{hosploginip,jdbcType=VARCHAR},
+      </if>
+      <if test="hosplogintype != null" >
+        hospLoginType = #{hosplogintype,jdbcType=INTEGER},
+      </if>
+      <if test="hosploginphone != null" >
+        hospLoginPhone = #{hosploginphone,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginpix != null" >
+        hospLoginPix = #{hosploginpix,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where hospLoginId = #{hosploginid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Hosplogininfo" >
+    update hosplogininfo
+    set hospLoginName = #{hosploginname,jdbcType=VARCHAR},
+      hospLoginPwd = #{hosploginpwd,jdbcType=VARCHAR},
+      hospLoginToken = #{hosplogintoken,jdbcType=VARCHAR},
+      hospLoginTime = #{hosplogintime,jdbcType=TIMESTAMP},
+      hospLoginLoc = #{hosploginloc,jdbcType=VARCHAR},
+      hospLoginBVer = #{hosploginbver,jdbcType=VARCHAR},
+      hospLoginMac = #{hosploginmac,jdbcType=VARCHAR},
+      hospLoginIp = #{hosploginip,jdbcType=VARCHAR},
+      hospLoginType = #{hosplogintype,jdbcType=INTEGER},
+      hospLoginPhone = #{hosploginphone,jdbcType=VARCHAR},
+      hospLoginPix = #{hosploginpix,jdbcType=VARCHAR}
+    where hospLoginId = #{hosploginid,jdbcType=INTEGER}
+  </update>
+</mapper>

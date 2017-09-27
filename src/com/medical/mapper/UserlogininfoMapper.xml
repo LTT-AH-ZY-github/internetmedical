@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.UserlogininfoMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Userlogininfo" >
+    <id column="userLoginId" property="userloginid" jdbcType="INTEGER" />
+    <result column="userLoginName" property="userloginname" jdbcType="VARCHAR" />
+    <result column="userLoginPhone" property="userloginphone" jdbcType="VARCHAR" />
+    <result column="userLoginPwd" property="userloginpwd" jdbcType="VARCHAR" />
+    <result column="userLoginSalt" property="userloginsalt" jdbcType="VARCHAR" />
+    <result column="userLoginToken" property="userlogintoken" jdbcType="VARCHAR" />
+    <result column="userLoginDld" property="userlogindld" jdbcType="BIGINT" />
+    <result column="userLoginLon" property="userloginlon" jdbcType="VARCHAR" />
+    <result column="userLoginLat" property="userloginlat" jdbcType="VARCHAR" />
+    <result column="userLoginTime" property="userlogintime" jdbcType="TIMESTAMP" />
+    <result column="userLoginProvince" property="userloginprovince" jdbcType="VARCHAR" />
+    <result column="userLoginCity" property="userlogincity" jdbcType="VARCHAR" />
+    <result column="userLoginArea" property="userloginarea" jdbcType="VARCHAR" />
+    <result column="userLoginOther" property="userloginother" jdbcType="VARCHAR" />
+    <result column="userLoginModel" property="userloginmodel" jdbcType="VARCHAR" />
+    <result column="userLoginPVer" property="userloginpver" jdbcType="VARCHAR" />
+    <result column="userLoginMac" property="userloginmac" jdbcType="VARCHAR" />
+    <result column="userLoginIp" property="userloginip" jdbcType="VARCHAR" />
+    <result column="userLoginType" property="userlogintype" jdbcType="BIT" />
+    <result column="userLoginPix" property="userloginpix" jdbcType="VARCHAR" />
+    <result column="userLoginCId" property="userlogincid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    userLoginId, userLoginName, userLoginPhone, userLoginPwd, userLoginSalt, userLoginToken, 
+    userLoginDld, userLoginLon, userLoginLat, userLoginTime, userLoginProvince, userLoginCity, 
+    userLoginArea, userLoginOther, userLoginModel, userLoginPVer, userLoginMac, userLoginIp, 
+    userLoginType, userLoginPix, userLoginCId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.UserlogininfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from userlogininfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from userlogininfo
+    where userLoginId = #{userloginid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from userlogininfo
+    where userLoginId = #{userloginid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.UserlogininfoExample" >
+    delete from userlogininfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Userlogininfo" >
+    insert into userlogininfo (userLoginId, userLoginName, userLoginPhone, 
+      userLoginPwd, userLoginSalt, userLoginToken, 
+      userLoginDld, userLoginLon, userLoginLat, 
+      userLoginTime, userLoginProvince, userLoginCity, 
+      userLoginArea, userLoginOther, userLoginModel, 
+      userLoginPVer, userLoginMac, userLoginIp, 
+      userLoginType, userLoginPix, userLoginCId
+      )
+    values (#{userloginid,jdbcType=INTEGER}, #{userloginname,jdbcType=VARCHAR}, #{userloginphone,jdbcType=VARCHAR}, 
+      #{userloginpwd,jdbcType=VARCHAR}, #{userloginsalt,jdbcType=VARCHAR}, #{userlogintoken,jdbcType=VARCHAR}, 
+      #{userlogindld,jdbcType=BIGINT}, #{userloginlon,jdbcType=VARCHAR}, #{userloginlat,jdbcType=VARCHAR}, 
+      #{userlogintime,jdbcType=TIMESTAMP}, #{userloginprovince,jdbcType=VARCHAR}, #{userlogincity,jdbcType=VARCHAR}, 
+      #{userloginarea,jdbcType=VARCHAR}, #{userloginother,jdbcType=VARCHAR}, #{userloginmodel,jdbcType=VARCHAR}, 
+      #{userloginpver,jdbcType=VARCHAR}, #{userloginmac,jdbcType=VARCHAR}, #{userloginip,jdbcType=VARCHAR}, 
+      #{userlogintype,jdbcType=BIT}, #{userloginpix,jdbcType=VARCHAR}, #{userlogincid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Userlogininfo" >
+    insert into userlogininfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userloginid != null" >
+        userLoginId,
+      </if>
+      <if test="userloginname != null" >
+        userLoginName,
+      </if>
+      <if test="userloginphone != null" >
+        userLoginPhone,
+      </if>
+      <if test="userloginpwd != null" >
+        userLoginPwd,
+      </if>
+      <if test="userloginsalt != null" >
+        userLoginSalt,
+      </if>
+      <if test="userlogintoken != null" >
+        userLoginToken,
+      </if>
+      <if test="userlogindld != null" >
+        userLoginDld,
+      </if>
+      <if test="userloginlon != null" >
+        userLoginLon,
+      </if>
+      <if test="userloginlat != null" >
+        userLoginLat,
+      </if>
+      <if test="userlogintime != null" >
+        userLoginTime,
+      </if>
+      <if test="userloginprovince != null" >
+        userLoginProvince,
+      </if>
+      <if test="userlogincity != null" >
+        userLoginCity,
+      </if>
+      <if test="userloginarea != null" >
+        userLoginArea,
+      </if>
+      <if test="userloginother != null" >
+        userLoginOther,
+      </if>
+      <if test="userloginmodel != null" >
+        userLoginModel,
+      </if>
+      <if test="userloginpver != null" >
+        userLoginPVer,
+      </if>
+      <if test="userloginmac != null" >
+        userLoginMac,
+      </if>
+      <if test="userloginip != null" >
+        userLoginIp,
+      </if>
+      <if test="userlogintype != null" >
+        userLoginType,
+      </if>
+      <if test="userloginpix != null" >
+        userLoginPix,
+      </if>
+      <if test="userlogincid != null" >
+        userLoginCId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userloginid != null" >
+        #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="userloginname != null" >
+        #{userloginname,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginphone != null" >
+        #{userloginphone,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginpwd != null" >
+        #{userloginpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginsalt != null" >
+        #{userloginsalt,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogintoken != null" >
+        #{userlogintoken,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogindld != null" >
+        #{userlogindld,jdbcType=BIGINT},
+      </if>
+      <if test="userloginlon != null" >
+        #{userloginlon,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginlat != null" >
+        #{userloginlat,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogintime != null" >
+        #{userlogintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userloginprovince != null" >
+        #{userloginprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogincity != null" >
+        #{userlogincity,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginarea != null" >
+        #{userloginarea,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginother != null" >
+        #{userloginother,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginmodel != null" >
+        #{userloginmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginpver != null" >
+        #{userloginpver,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginmac != null" >
+        #{userloginmac,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginip != null" >
+        #{userloginip,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogintype != null" >
+        #{userlogintype,jdbcType=BIT},
+      </if>
+      <if test="userloginpix != null" >
+        #{userloginpix,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogincid != null" >
+        #{userlogincid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.UserlogininfoExample" resultType="java.lang.Integer" >
+    select count(*) from userlogininfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update userlogininfo
+    <set >
+      <if test="record.userloginid != null" >
+        userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userloginname != null" >
+        userLoginName = #{record.userloginname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userloginphone != null" >
+        userLoginPhone = #{record.userloginphone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userloginpwd != null" >
+        userLoginPwd = #{record.userloginpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userloginsalt != null" >
+        userLoginSalt = #{record.userloginsalt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userlogintoken != null" >
+        userLoginToken = #{record.userlogintoken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userlogindld != null" >
+        userLoginDld = #{record.userlogindld,jdbcType=BIGINT},
+      </if>
+      <if test="record.userloginlon != null" >
+        userLoginLon = #{record.userloginlon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userloginlat != null" >
+        userLoginLat = #{record.userloginlat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userlogintime != null" >
+        userLoginTime = #{record.userlogintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userloginprovince != null" >
+        userLoginProvince = #{record.userloginprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userlogincity != null" >
+        userLoginCity = #{record.userlogincity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userloginarea != null" >
+        userLoginArea = #{record.userloginarea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userloginother != null" >
+        userLoginOther = #{record.userloginother,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userloginmodel != null" >
+        userLoginModel = #{record.userloginmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userloginpver != null" >
+        userLoginPVer = #{record.userloginpver,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userloginmac != null" >
+        userLoginMac = #{record.userloginmac,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userloginip != null" >
+        userLoginIp = #{record.userloginip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userlogintype != null" >
+        userLoginType = #{record.userlogintype,jdbcType=BIT},
+      </if>
+      <if test="record.userloginpix != null" >
+        userLoginPix = #{record.userloginpix,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userlogincid != null" >
+        userLoginCId = #{record.userlogincid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update userlogininfo
+    set userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      userLoginName = #{record.userloginname,jdbcType=VARCHAR},
+      userLoginPhone = #{record.userloginphone,jdbcType=VARCHAR},
+      userLoginPwd = #{record.userloginpwd,jdbcType=VARCHAR},
+      userLoginSalt = #{record.userloginsalt,jdbcType=VARCHAR},
+      userLoginToken = #{record.userlogintoken,jdbcType=VARCHAR},
+      userLoginDld = #{record.userlogindld,jdbcType=BIGINT},
+      userLoginLon = #{record.userloginlon,jdbcType=VARCHAR},
+      userLoginLat = #{record.userloginlat,jdbcType=VARCHAR},
+      userLoginTime = #{record.userlogintime,jdbcType=TIMESTAMP},
+      userLoginProvince = #{record.userloginprovince,jdbcType=VARCHAR},
+      userLoginCity = #{record.userlogincity,jdbcType=VARCHAR},
+      userLoginArea = #{record.userloginarea,jdbcType=VARCHAR},
+      userLoginOther = #{record.userloginother,jdbcType=VARCHAR},
+      userLoginModel = #{record.userloginmodel,jdbcType=VARCHAR},
+      userLoginPVer = #{record.userloginpver,jdbcType=VARCHAR},
+      userLoginMac = #{record.userloginmac,jdbcType=VARCHAR},
+      userLoginIp = #{record.userloginip,jdbcType=VARCHAR},
+      userLoginType = #{record.userlogintype,jdbcType=BIT},
+      userLoginPix = #{record.userloginpix,jdbcType=VARCHAR},
+      userLoginCId = #{record.userlogincid,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Userlogininfo" >
+    update userlogininfo
+    <set >
+      <if test="userloginname != null" >
+        userLoginName = #{userloginname,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginphone != null" >
+        userLoginPhone = #{userloginphone,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginpwd != null" >
+        userLoginPwd = #{userloginpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginsalt != null" >
+        userLoginSalt = #{userloginsalt,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogintoken != null" >
+        userLoginToken = #{userlogintoken,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogindld != null" >
+        userLoginDld = #{userlogindld,jdbcType=BIGINT},
+      </if>
+      <if test="userloginlon != null" >
+        userLoginLon = #{userloginlon,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginlat != null" >
+        userLoginLat = #{userloginlat,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogintime != null" >
+        userLoginTime = #{userlogintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userloginprovince != null" >
+        userLoginProvince = #{userloginprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogincity != null" >
+        userLoginCity = #{userlogincity,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginarea != null" >
+        userLoginArea = #{userloginarea,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginother != null" >
+        userLoginOther = #{userloginother,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginmodel != null" >
+        userLoginModel = #{userloginmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginpver != null" >
+        userLoginPVer = #{userloginpver,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginmac != null" >
+        userLoginMac = #{userloginmac,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginip != null" >
+        userLoginIp = #{userloginip,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogintype != null" >
+        userLoginType = #{userlogintype,jdbcType=BIT},
+      </if>
+      <if test="userloginpix != null" >
+        userLoginPix = #{userloginpix,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogincid != null" >
+        userLoginCId = #{userlogincid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where userLoginId = #{userloginid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Userlogininfo" >
+    update userlogininfo
+    set userLoginName = #{userloginname,jdbcType=VARCHAR},
+      userLoginPhone = #{userloginphone,jdbcType=VARCHAR},
+      userLoginPwd = #{userloginpwd,jdbcType=VARCHAR},
+      userLoginSalt = #{userloginsalt,jdbcType=VARCHAR},
+      userLoginToken = #{userlogintoken,jdbcType=VARCHAR},
+      userLoginDld = #{userlogindld,jdbcType=BIGINT},
+      userLoginLon = #{userloginlon,jdbcType=VARCHAR},
+      userLoginLat = #{userloginlat,jdbcType=VARCHAR},
+      userLoginTime = #{userlogintime,jdbcType=TIMESTAMP},
+      userLoginProvince = #{userloginprovince,jdbcType=VARCHAR},
+      userLoginCity = #{userlogincity,jdbcType=VARCHAR},
+      userLoginArea = #{userloginarea,jdbcType=VARCHAR},
+      userLoginOther = #{userloginother,jdbcType=VARCHAR},
+      userLoginModel = #{userloginmodel,jdbcType=VARCHAR},
+      userLoginPVer = #{userloginpver,jdbcType=VARCHAR},
+      userLoginMac = #{userloginmac,jdbcType=VARCHAR},
+      userLoginIp = #{userloginip,jdbcType=VARCHAR},
+      userLoginType = #{userlogintype,jdbcType=BIT},
+      userLoginPix = #{userloginpix,jdbcType=VARCHAR},
+      userLoginCId = #{userlogincid,jdbcType=VARCHAR}
+    where userLoginId = #{userloginid,jdbcType=INTEGER}
+  </update>
+</mapper>

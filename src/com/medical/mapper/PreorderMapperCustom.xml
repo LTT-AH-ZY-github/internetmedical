@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.PreorderMapperCustom" >
+  <delete id="deleteByUserSickId" parameterType="java.lang.Integer" >
+    delete from preorder
+    where preOrderType = "1" and userSickId = #{usersickid,jdbcType=INTEGER}
+  </delete>
+  <!--根据病情获取推荐医生  -->
+  <select id="selectByUserSickId" parameterType="map" resultType="map">
+  	select  a.preordertype,a.preorderid,a.preorderprice,
+  			b.docloginid,c.docloginpix,b.docname,b.doctitle,b.dochosp,b.hosplevel,b.docprimarydept,b.docseconddept,
+  			b.docallday,b.docexpert,
+  			d.docname as redocname,d.doctitle as redoctitle
+  	 <!-- 
+  	 ROUND(
+			     6378.138 * 2 * ASIN(
+			            SQRT(
+			                POW(
+			                    SIN(
+			                        (
+			                        
+			                           #{lat} * PI() / 180 - b.docLat * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                ) + COS(#{lat} * PI() / 180) * COS(b.docLat * PI() / 180) * POW(
+			                    SIN(
+			                        (
+			                            #{lon} * PI() / 180 - b.docLon * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                )
+			            )
+			        ) * 1000
+			    ) AS distance -->
+  	from preorder as a 
+  		left join doctorinfo as b  on a.preOrderDocLoginId=b.docLoginId
+  		left join doctorlogininfo as c on a.preOrderDocLoginId = c.docLoginId 
+  		left join doctorinfo as d on a.preOrderReDocLoginId = c.docLoginId
+  	where  a.userSickId =#{id} 
+  	<!-- ORDER BY distance ASC -->
+  </select>
+  <!-- 获取推荐医生详情 -->
+   <select id="selectAllInfoByPreOrderId" parameterType="int" resultType="map">
+  	select  a.preordertype,a.preordertime,a.preorderprice,
+  			d.docname as redocname,d.doctitle as redoctitle,d.docprimarydept as redocprimarydept,d.docseconddept as redocseconddept,
+  			b.docloginid,c.docloginpix,b.docname,b.docmale,b.docage,b.doctitle,b.docallday,b.docexpert,b.docabs,b.docprimarydept,b.docseconddept,
+  			b.dochosp,b.hosplevel,b.dochospprovince,b.dochospcity,b.dochosparea,b.dochospother
+  			
+  	 <!-- 
+  	 ROUND(
+			     6378.138 * 2 * ASIN(
+			            SQRT(
+			                POW(
+			                    SIN(
+			                        (
+			                        
+			                           #{lat} * PI() / 180 - b.docLat * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                ) + COS(#{lat} * PI() / 180) * COS(b.docLat * PI() / 180) * POW(
+			                    SIN(
+			                        (
+			                            #{lon} * PI() / 180 - b.docLon * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                )
+			            )
+			        ) * 1000
+			    ) AS distance -->
+  	from preorder as a 
+  		left join doctorinfo as b  on a.preOrderDocLoginId=b.docLoginId
+  		left join doctorlogininfo as c on a.preOrderDocLoginId = c.docLoginId
+  		left join doctorinfo as d on a.preOrderReDocLoginId = c.docLoginId 
+  	where  a.preOrderId =#{0} 
+  	<!-- ORDER BY distance ASC -->
+  </select>
+  <select id="selectByDocIdAndSickId" parameterType="java.lang.Integer" resultType="com.medical.po.Preorder">
+ 	 select * 
+	 from preorder
+	 where preOrderDocLoginId = #{0} and userSickId=#{1}
+	 	  
+  </select>
+  <select id="selectByDocLoginIdAndUserSickId" parameterType="java.lang.Integer" resultType="com.medical.po.Preorder">
+ 	 select * 
+	 from preorder
+	 where preOrderDocLoginId = #{0} and userSickId = #{1} and preOrderType=#{2}
+	 	  
+  </select>
+  <select id="selectByDocLoginIdAndPreOrderType" parameterType="java.lang.Integer" resultType="com.medical.po.Preorder">
+ 	 select * 
+	 from preorder
+	 where preOrderDocLoginId = #{0}  and preOrderType=#{1}
+	 	  
+  </select>
+  <!--获取医生已抢订单详情  -->
+  <select id="selectAllInfoByDocLoginId" parameterType="java.lang.Integer" resultType="map">
+ 	 select a.preorderid,a.preordertime,b.usersickid,b.usersickdesc,
+ 	 		b.usersickptime,b.usersickpic,c.userloginpix,d.familyname,d.familyage,d.familymale
+	 from preorder as a
+	 	left join usersick as b on a.userSickId=b.userSickId
+	 	left join userlogininfo as c on a.preOrderUserLoginId =c.userLoginId 
+  	   left join familyinfo as d on b.familyId =d.familyId
+	 where preOrderDocLoginId = #{0}  and preOrderType=2
+	 	  
+  </select>
+</mapper>

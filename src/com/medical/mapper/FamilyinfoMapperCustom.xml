@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.FamilyinfoMapperCustom" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Familyinfo" >
+    <id column="familyId" property="familyid" jdbcType="INTEGER" />
+    <result column="familyName" property="familyname" jdbcType="VARCHAR" />
+    <result column="familyMale" property="familymale" jdbcType="CHAR" />
+    <result column="familyAge" property="familyage" jdbcType="INTEGER" />
+    <result column="userLoginId" property="userloginid" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <insert id="insertReturnId" useGeneratedKeys="true" keyProperty="familyid" parameterType="com.medical.po.Familyinfo" >
+  insert into familyinfo ( familyName, familyMale, 
+      familyAge, userLoginId)
+    values ( #{familyname,jdbcType=VARCHAR}, #{familymale,jdbcType=CHAR}, 
+      #{familyage,jdbcType=INTEGER}, #{userloginid,jdbcType=INTEGER})
+  </insert>
+  <select id="findByUserLoginId" parameterType="int" resultType="com.medical.po.Familyinfo" >
+   SELECT * FROM familyinfo WHERE userLoginId=#{userLoginId}
+  </select>
+  <select id="selectByUserLoginIdAndType" parameterType="int" resultType="com.medical.po.Familyinfo" >
+   SELECT * FROM familyinfo WHERE userLoginId=#{0} and familyType=#{1}
+  </select>
+</mapper>

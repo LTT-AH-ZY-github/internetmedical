@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.UsersickMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Usersick" >
+    <id column="userSickId" property="usersickid" jdbcType="INTEGER" />
+    <result column="userSickDesc" property="usersickdesc" jdbcType="VARCHAR" />
+    <result column="userSickPic" property="usersickpic" jdbcType="VARCHAR" />
+    <result column="userSickPrimaryDept" property="usersickprimarydept" jdbcType="VARCHAR" />
+    <result column="userSickSecondDept" property="usersickseconddept" jdbcType="VARCHAR" />
+    <result column="familyId" property="familyid" jdbcType="INTEGER" />
+    <result column="userOrderId" property="userorderid" jdbcType="INTEGER" />
+    <result column="userLoginId" property="userloginid" jdbcType="INTEGER" />
+    <result column="userSickTime" property="usersicktime" jdbcType="TIMESTAMP" />
+    <result column="userSickStateId" property="usersickstateid" jdbcType="INTEGER" />
+    <result column="userSickPTime" property="usersickptime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    userSickId, userSickDesc, userSickPic, userSickPrimaryDept, userSickSecondDept, familyId, 
+    userOrderId, userLoginId, userSickTime, userSickStateId, userSickPTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.UsersickExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from usersick
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from usersick
+    where userSickId = #{usersickid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from usersick
+    where userSickId = #{usersickid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.UsersickExample" >
+    delete from usersick
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Usersick" >
+    insert into usersick (userSickId, userSickDesc, userSickPic, 
+      userSickPrimaryDept, userSickSecondDept, 
+      familyId, userOrderId, userLoginId, 
+      userSickTime, userSickStateId, userSickPTime
+      )
+    values (#{usersickid,jdbcType=INTEGER}, #{usersickdesc,jdbcType=VARCHAR}, #{usersickpic,jdbcType=VARCHAR}, 
+      #{usersickprimarydept,jdbcType=VARCHAR}, #{usersickseconddept,jdbcType=VARCHAR}, 
+      #{familyid,jdbcType=INTEGER}, #{userorderid,jdbcType=INTEGER}, #{userloginid,jdbcType=INTEGER}, 
+      #{usersicktime,jdbcType=TIMESTAMP}, #{usersickstateid,jdbcType=INTEGER}, #{usersickptime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Usersick" >
+    insert into usersick
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="usersickid != null" >
+        userSickId,
+      </if>
+      <if test="usersickdesc != null" >
+        userSickDesc,
+      </if>
+      <if test="usersickpic != null" >
+        userSickPic,
+      </if>
+      <if test="usersickprimarydept != null" >
+        userSickPrimaryDept,
+      </if>
+      <if test="usersickseconddept != null" >
+        userSickSecondDept,
+      </if>
+      <if test="familyid != null" >
+        familyId,
+      </if>
+      <if test="userorderid != null" >
+        userOrderId,
+      </if>
+      <if test="userloginid != null" >
+        userLoginId,
+      </if>
+      <if test="usersicktime != null" >
+        userSickTime,
+      </if>
+      <if test="usersickstateid != null" >
+        userSickStateId,
+      </if>
+      <if test="usersickptime != null" >
+        userSickPTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="usersickid != null" >
+        #{usersickid,jdbcType=INTEGER},
+      </if>
+      <if test="usersickdesc != null" >
+        #{usersickdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickpic != null" >
+        #{usersickpic,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickprimarydept != null" >
+        #{usersickprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickseconddept != null" >
+        #{usersickseconddept,jdbcType=VARCHAR},
+      </if>
+      <if test="familyid != null" >
+        #{familyid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderid != null" >
+        #{userorderid,jdbcType=INTEGER},
+      </if>
+      <if test="userloginid != null" >
+        #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="usersicktime != null" >
+        #{usersicktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usersickstateid != null" >
+        #{usersickstateid,jdbcType=INTEGER},
+      </if>
+      <if test="usersickptime != null" >
+        #{usersickptime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.UsersickExample" resultType="java.lang.Integer" >
+    select count(*) from usersick
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update usersick
+    <set >
+      <if test="record.usersickid != null" >
+        userSickId = #{record.usersickid,jdbcType=INTEGER},
+      </if>
+      <if test="record.usersickdesc != null" >
+        userSickDesc = #{record.usersickdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usersickpic != null" >
+        userSickPic = #{record.usersickpic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usersickprimarydept != null" >
+        userSickPrimaryDept = #{record.usersickprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usersickseconddept != null" >
+        userSickSecondDept = #{record.usersickseconddept,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familyid != null" >
+        familyId = #{record.familyid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userorderid != null" >
+        userOrderId = #{record.userorderid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userloginid != null" >
+        userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.usersicktime != null" >
+        userSickTime = #{record.usersicktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.usersickstateid != null" >
+        userSickStateId = #{record.usersickstateid,jdbcType=INTEGER},
+      </if>
+      <if test="record.usersickptime != null" >
+        userSickPTime = #{record.usersickptime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update usersick
+    set userSickId = #{record.usersickid,jdbcType=INTEGER},
+      userSickDesc = #{record.usersickdesc,jdbcType=VARCHAR},
+      userSickPic = #{record.usersickpic,jdbcType=VARCHAR},
+      userSickPrimaryDept = #{record.usersickprimarydept,jdbcType=VARCHAR},
+      userSickSecondDept = #{record.usersickseconddept,jdbcType=VARCHAR},
+      familyId = #{record.familyid,jdbcType=INTEGER},
+      userOrderId = #{record.userorderid,jdbcType=INTEGER},
+      userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      userSickTime = #{record.usersicktime,jdbcType=TIMESTAMP},
+      userSickStateId = #{record.usersickstateid,jdbcType=INTEGER},
+      userSickPTime = #{record.usersickptime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Usersick" >
+    update usersick
+    <set >
+      <if test="usersickdesc != null" >
+        userSickDesc = #{usersickdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickpic != null" >
+        userSickPic = #{usersickpic,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickprimarydept != null" >
+        userSickPrimaryDept = #{usersickprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickseconddept != null" >
+        userSickSecondDept = #{usersickseconddept,jdbcType=VARCHAR},
+      </if>
+      <if test="familyid != null" >
+        familyId = #{familyid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderid != null" >
+        userOrderId = #{userorderid,jdbcType=INTEGER},
+      </if>
+      <if test="userloginid != null" >
+        userLoginId = #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="usersicktime != null" >
+        userSickTime = #{usersicktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usersickstateid != null" >
+        userSickStateId = #{usersickstateid,jdbcType=INTEGER},
+      </if>
+      <if test="usersickptime != null" >
+        userSickPTime = #{usersickptime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where userSickId = #{usersickid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Usersick" >
+    update usersick
+    set userSickDesc = #{usersickdesc,jdbcType=VARCHAR},
+      userSickPic = #{usersickpic,jdbcType=VARCHAR},
+      userSickPrimaryDept = #{usersickprimarydept,jdbcType=VARCHAR},
+      userSickSecondDept = #{usersickseconddept,jdbcType=VARCHAR},
+      familyId = #{familyid,jdbcType=INTEGER},
+      userOrderId = #{userorderid,jdbcType=INTEGER},
+      userLoginId = #{userloginid,jdbcType=INTEGER},
+      userSickTime = #{usersicktime,jdbcType=TIMESTAMP},
+      userSickStateId = #{usersickstateid,jdbcType=INTEGER},
+      userSickPTime = #{usersickptime,jdbcType=TIMESTAMP}
+    where userSickId = #{usersickid,jdbcType=INTEGER}
+  </update>
+</mapper>

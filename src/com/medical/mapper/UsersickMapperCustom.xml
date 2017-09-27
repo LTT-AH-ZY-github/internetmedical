@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.UsersickMapperCustom" >
+  
+  <select id="selectAllInfoByUserLoginId" resultType="map" parameterType="java.lang.Integer" >
+     select   a.usersickstateid,a.usersickid, a.usersickdesc, a.usersickpic, a.usersickprimarydept,a.usersickseconddept, a.userorderid,
+      a.usersickpic,a.usersicktime, a.familyid,b.familyname,b.familymale,b.familyage  
+     from   usersick as a   left   join   familyinfo as b     on   a.familyId=b.familyId      
+     where a.userLoginId = #{userLoginId,jdbcType=INTEGER} 
+     order by userSickStateId desc, userSickTime  desc ;
+  </select>
+  <!--根据登录id及病情状态查询用户的所有病情  -->
+  <select id="selectByUserLoginIdAndState" resultType="com.medical.po.Usersick" parameterType="java.lang.Integer" >
+     select *  from   usersick    
+     where userLoginId= #{0,jdbcType=INTEGER}  and userSickStateId= #{1,jdbcType=INTEGER} 
+  </select>
+   <select id="selectById" resultType="map" parameterType="java.lang.Integer" >
+     select   a.usersickstateid,a.usersickid, a.usersickdesc, a.usersickpic, a.usersickprimarydept,a.usersickseconddept,a.userorderid, a.usersicktime,
+     a.usersickpic, a.familyid,b.familyname,b.familymale,b.familyage,a.usersickptime
+     from   usersick as a   left   join   familyinfo as b     on   a.familyId=b.familyId      
+     where  a.usersickid = #{userSickId,jdbcType=INTEGER}
+  </select>
+    <select id="selectByPhone" parameterType="String" resultType="com.medical.po.Usersick" >
+     select * from   usersick    
+     where usersick= #{userLoginId,jdbcType=INTEGER}
+  </select>
+   <insert id="insertSelectiveReturnId" useGeneratedKeys="true" keyProperty="usersickid"  parameterType="com.medical.po.Usersick" >
+    insert into usersick
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="usersickid != null" >
+        userSickId,
+      </if>
+      <if test="usersickdesc != null" >
+        userSickDesc,
+      </if>
+      <if test="usersickpic != null" >
+        userSickPic,
+      </if>
+      <if test="usersickprimarydept != null" >
+        userSickPrimaryDept,
+      </if>
+      <if test="usersickseconddept != null" >
+        userSickSecondDept,
+      </if>
+      <if test="familyid != null" >
+        familyId,
+      </if>
+      <if test="userorderid != null" >
+        userOrderId,
+      </if>
+      <if test="userloginid != null" >
+        userLoginId,
+      </if>
+      <if test="usersicktime != null" >
+        userSickTime,
+      </if>
+      <if test="usersickstateid != null" >
+        userSickStateId,
+      </if>
+      <if test="usersickptime != null" >
+        userSickPTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="usersickid != null" >
+        #{usersickid,jdbcType=INTEGER},
+      </if>
+      <if test="usersickdesc != null" >
+        #{usersickdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickpic != null" >
+        #{usersickpic,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickprimarydept != null" >
+        #{usersickprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickseconddept != null" >
+        #{usersickseconddept,jdbcType=VARCHAR},
+      </if>
+      <if test="familyid != null" >
+        #{familyid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderid != null" >
+        #{userorderid,jdbcType=INTEGER},
+      </if>
+      <if test="userloginid != null" >
+        #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="usersicktime != null" >
+        #{usersicktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usersickstateid != null" >
+        #{usersickstateid,jdbcType=INTEGER},
+      </if>
+      <if test="usersickptime != null" >
+        #{usersickptime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="selectAll" parameterType="com.medical.po.SickSearch" resultType="map">
+     select a.usersickid,a.usersickdesc,a.usersickptime,a.usersickptime,
+  		ROUND(
+			    6378.138 * 2 * ASIN(
+			          SQRT(
+			                POW(
+			                    SIN(
+			                        (
+			                        
+			                           #{lat} * PI() / 180 - b.userLoginLat * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                ) + COS(#{lat} * PI() / 180) * COS(b.userLoginLat * PI() / 180) * POW(
+			                    SIN(
+			                        (
+			                            #{lon} * PI() / 180 - b.userLoginLon * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                )
+			            )
+			        ) * 1000
+			    ) AS distance
+  from usersick as a left join userlogininfo as b on a.userLoginId =b.userLoginId
+   <where>
+		<if test="dept!=null">
+			and a.docDept=#{dept}
+		</if>
+		<if test="time!=null">
+	
+		</if>
+		<if test="loc!=null">
+			and a.docLoc like #{loc}
+		</if>
+   </where>
+	ORDER BY distance ASC
+	limit #{startPage},#{pageSize}; 
+  </select>
+  <select id="selectSickInfo" parameterType="int" resultType="map">
+  select *
+  from usersick as a left join userinfo as b on a.userLoginId =b.userLoginId
+  where  userSickId=#{id}
+  </select>
+   <select id="selectAllSortByTime" parameterType="com.medical.po.SickSearch" resultType="map">
+    select a.usersickid,a.usersickdesc,a.usersickptime,a.usersickpic,b.userloginpix,c.familyname,c.familyage,c.familymale,c.familyid,
+  		ROUND(
+			    6378.138 * 2 * ASIN(
+			          SQRT(
+			                POW(
+			                    SIN(
+			                        (
+			                        
+			                           #{lat} * PI() / 180 - b.userLoginLat * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                ) + COS(#{lat} * PI() / 180) * COS(b.userLoginLat * PI() / 180) * POW(
+			                    SIN(
+			                        (
+			                            #{lon} * PI() / 180 - b.userLoginLon * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                )
+			            )
+			        ) * 1000
+			    ) AS distance
+  from usersick as a left join userlogininfo as b on a.userLoginId =b.userLoginId left join familyinfo as c on a.familyId =c.familyId
+  where a.userSickStateId=2 <!-- and b.userLoginLoc like #{loc} -->
+   
+  ORDER BY a.userSickPTime ASC
+	limit #{startPage},#{pageSize};
+  </select>
+   <select id="selectAllSortByLoc" parameterType="com.medical.po.SickSearch" resultType="map">
+    select a.usersickid,a.usersickdesc,a.usersickptime,a.usersickpic,b.userloginpix,c.familyname,c.familyage,c.familymale,c.familyid,
+  		ROUND(
+			    6378.138 * 2 * ASIN(
+			          SQRT(
+			                POW(
+			                    SIN(
+			                        (
+			                        
+			                           #{lat} * PI() / 180 - b.userLoginLat * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                ) + COS(#{lat} * PI() / 180) * COS(b.userLoginLat * PI() / 180) * POW(
+			                    SIN(
+			                        (
+			                            #{lon} * PI() / 180 - b.userLoginLon * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                )
+			            )
+			        ) * 1000
+			    ) AS distance
+  from usersick as a left join userlogininfo as b on a.userLoginId =b.userLoginId left join familyinfo as c on a.familyId =c.familyId
+  where a.userSickStateId=2 and b.userLoginLoc like #{loc}
+   
+  ORDER BY distance ASC
+	limit #{startPage},#{pageSize};
+  </select>
+  <!--获取推荐病情  -->
+  <select id="paginationReSickSortByDistance" parameterType="com.medical.po.SickSearch" resultType="map">
+    select a.usersickid,a.usersickdesc,a.usersickptime,a.usersickpic,b.userloginpix,c.familyname,c.familyage,c.familymale,
+  		ROUND(
+			    6378.138 * 2 * ASIN(
+			          SQRT(
+			                POW(
+			                    SIN(
+			                        (
+			                        
+			                           #{lat} * PI() / 180 - b.userLoginLat * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                ) + COS(#{lat} * PI() / 180) * COS(b.userLoginLat * PI() / 180) * POW(
+			                    SIN(
+			                        (
+			                            #{lon} * PI() / 180 - b.userLoginLon * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                )
+			            )
+			        ) * 1000
+			    ) AS distance
+  from usersick as a 
+  	  left join userlogininfo as b on a.userLoginId =b.userLoginId 
+  	  left join familyinfo as c on a.familyId =c.familyId
+  where a.userSickStateId=2 
+  ORDER BY a.userSickPTime ASC
+	
+  </select>
+  <select id="paginationSickSortByTime" parameterType="com.medical.po.SickSearch" resultType="map">
+    select a.usersickid,a.usersickdesc,a.usersickptime,a.usersickpic,b.userloginpix,c.familyname,c.familyage,c.familymale,
+  		ROUND(
+			    6378.138 * 2 * ASIN(
+			          SQRT(
+			                POW(
+			                    SIN(
+			                        (
+			                        
+			                           #{lat} * PI() / 180 - b.userLoginLat * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                ) + COS(#{lat} * PI() / 180) * COS(b.userLoginLat * PI() / 180) * POW(
+			                    SIN(
+			                        (
+			                            #{lon} * PI() / 180 - b.userLoginLon * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                )
+			            )
+			        ) * 1000
+			    ) AS distance
+  from usersick as a 
+  	  left join userlogininfo as b on a.userLoginId =b.userLoginId 
+  	  left join familyinfo as c on a.familyId =c.familyId
+  where a.userSickStateId=2 
+  ORDER BY distance ASC
+	
+  </select>
+   <select id="paginationSickSortByLoc" parameterType="com.medical.po.SickSearch" resultType="map">
+    select a.usersickid,a.usersickdesc,a.usersickptime,a.usersickpic,b.userloginpix,c.familyname,c.familyage,c.familymale,
+  		ROUND(
+			    6378.138 * 2 * ASIN(
+			          SQRT(
+			                POW(
+			                    SIN(
+			                        (
+			                        
+			                           #{lat} * PI() / 180 - b.userLoginLat * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                ) + COS(#{lat} * PI() / 180) * COS(b.userLoginLat * PI() / 180) * POW(
+			                    SIN(
+			                        (
+			                            #{lon} * PI() / 180 - b.userLoginLon * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                )
+			            )
+			        ) * 1000
+			    ) AS distance
+  from usersick as a 
+  	  left join userlogininfo as b on a.userLoginId =b.userLoginId 
+  	  left join familyinfo as c on a.familyId =c.familyId
+  where a.userSickStateId=2 
+  ORDER BY distance ASC
+	
+  </select>
+  <select id="selectAllInfoByUserSickId" parameterType="java.lang.Integer" resultType="map">
+    select a.usersickid,a.usersickdesc,a.usersickptime,a.usersickpic,b.userloginpix,c.familyname,c.familyage,c.familymale,c.familyid
+  	from usersick as a 
+  	  left join userlogininfo as b on a.userLoginId =b.userLoginId 
+  	  left join familyinfo as c on a.familyId =c.familyId
+    where a.userSickId=#{0} 
+  </select>
+    <select id="selectReSickSortByDistance" parameterType="com.medical.po.SickSearch" resultType="map">
+    select a.usersickid,a.usersickdesc,a.usersickptime,a.usersickpic,b.userloginpix,c.familyname,c.familyage,c.familymale,c.familyid,
+  		ROUND(
+			    6378.138 * 2 * ASIN(
+			          SQRT(
+			                POW(
+			                    SIN(
+			                        (
+			                        
+			                           #{lat} * PI() / 180 - b.userLoginLat * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                ) + COS(#{lat} * PI() / 180) * COS(b.userLoginLat * PI() / 180) * POW(
+			                    SIN(
+			                        (
+			                            #{lon} * PI() / 180 - b.userLoginLon * PI() / 180
+			                        ) / 2
+			                    ),
+			                    2
+			                )
+			            )
+			        ) * 1000
+			    ) AS distance
+  from usersick as a left join userlogininfo as b on a.userLoginId =b.userLoginId left join familyinfo as c on a.familyId =c.familyId
+  where a.userSickStateId=2 
+   
+  ORDER BY distance ASC
+	<!-- limit #{startPage},#{pageSize}; -->
+  </select>
+</mapper>

@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.PreorderMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Preorder" >
+    <id column="preOrderId" property="preorderid" jdbcType="INTEGER" />
+    <result column="userSickId" property="usersickid" jdbcType="INTEGER" />
+    <result column="preOrderType" property="preordertype" jdbcType="INTEGER" />
+    <result column="preOrderState" property="preorderstate" jdbcType="INTEGER" />
+    <result column="preOrderUserLoginId" property="preorderuserloginid" jdbcType="INTEGER" />
+    <result column="preOrderDocLoginId" property="preorderdocloginid" jdbcType="INTEGER" />
+    <result column="preOrderReDocLoginId" property="preorderredocloginid" jdbcType="INTEGER" />
+    <result column="preOrderTime" property="preordertime" jdbcType="TIMESTAMP" />
+    <result column="preOrderDPrice" property="preorderdprice" jdbcType="DECIMAL" />
+    <result column="preOrderHState" property="preorderhstate" jdbcType="TINYINT" />
+    <result column="preOrderHPrice" property="preorderhprice" jdbcType="DECIMAL" />
+    <result column="preOrderTPriceType" property="preordertpricetype" jdbcType="INTEGER" />
+    <result column="preOrderTPrice" property="preordertprice" jdbcType="DECIMAL" />
+    <result column="preOrderAPriceType" property="preorderapricetype" jdbcType="INTEGER" />
+    <result column="preOrderAPrice" property="preorderaprice" jdbcType="DECIMAL" />
+    <result column="preOrderEPriceType" property="preorderepricetype" jdbcType="INTEGER" />
+    <result column="preOrderEPrice" property="preordereprice" jdbcType="DECIMAL" />
+    <result column="preOrderPrice" property="preorderprice" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    preOrderId, userSickId, preOrderType, preOrderState, preOrderUserLoginId, preOrderDocLoginId, 
+    preOrderReDocLoginId, preOrderTime, preOrderDPrice, preOrderHState, preOrderHPrice, 
+    preOrderTPriceType, preOrderTPrice, preOrderAPriceType, preOrderAPrice, preOrderEPriceType, 
+    preOrderEPrice, preOrderPrice
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.PreorderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from preorder
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from preorder
+    where preOrderId = #{preorderid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from preorder
+    where preOrderId = #{preorderid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.PreorderExample" >
+    delete from preorder
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Preorder" >
+    insert into preorder (preOrderId, userSickId, preOrderType, 
+      preOrderState, preOrderUserLoginId, preOrderDocLoginId, 
+      preOrderReDocLoginId, preOrderTime, preOrderDPrice, 
+      preOrderHState, preOrderHPrice, preOrderTPriceType, 
+      preOrderTPrice, preOrderAPriceType, preOrderAPrice, 
+      preOrderEPriceType, preOrderEPrice, preOrderPrice
+      )
+    values (#{preorderid,jdbcType=INTEGER}, #{usersickid,jdbcType=INTEGER}, #{preordertype,jdbcType=INTEGER}, 
+      #{preorderstate,jdbcType=INTEGER}, #{preorderuserloginid,jdbcType=INTEGER}, #{preorderdocloginid,jdbcType=INTEGER}, 
+      #{preorderredocloginid,jdbcType=INTEGER}, #{preordertime,jdbcType=TIMESTAMP}, #{preorderdprice,jdbcType=DECIMAL}, 
+      #{preorderhstate,jdbcType=TINYINT}, #{preorderhprice,jdbcType=DECIMAL}, #{preordertpricetype,jdbcType=INTEGER}, 
+      #{preordertprice,jdbcType=DECIMAL}, #{preorderapricetype,jdbcType=INTEGER}, #{preorderaprice,jdbcType=DECIMAL}, 
+      #{preorderepricetype,jdbcType=INTEGER}, #{preordereprice,jdbcType=DECIMAL}, #{preorderprice,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Preorder" >
+    insert into preorder
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="preorderid != null" >
+        preOrderId,
+      </if>
+      <if test="usersickid != null" >
+        userSickId,
+      </if>
+      <if test="preordertype != null" >
+        preOrderType,
+      </if>
+      <if test="preorderstate != null" >
+        preOrderState,
+      </if>
+      <if test="preorderuserloginid != null" >
+        preOrderUserLoginId,
+      </if>
+      <if test="preorderdocloginid != null" >
+        preOrderDocLoginId,
+      </if>
+      <if test="preorderredocloginid != null" >
+        preOrderReDocLoginId,
+      </if>
+      <if test="preordertime != null" >
+        preOrderTime,
+      </if>
+      <if test="preorderdprice != null" >
+        preOrderDPrice,
+      </if>
+      <if test="preorderhstate != null" >
+        preOrderHState,
+      </if>
+      <if test="preorderhprice != null" >
+        preOrderHPrice,
+      </if>
+      <if test="preordertpricetype != null" >
+        preOrderTPriceType,
+      </if>
+      <if test="preordertprice != null" >
+        preOrderTPrice,
+      </if>
+      <if test="preorderapricetype != null" >
+        preOrderAPriceType,
+      </if>
+      <if test="preorderaprice != null" >
+        preOrderAPrice,
+      </if>
+      <if test="preorderepricetype != null" >
+        preOrderEPriceType,
+      </if>
+      <if test="preordereprice != null" >
+        preOrderEPrice,
+      </if>
+      <if test="preorderprice != null" >
+        preOrderPrice,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="preorderid != null" >
+        #{preorderid,jdbcType=INTEGER},
+      </if>
+      <if test="usersickid != null" >
+        #{usersickid,jdbcType=INTEGER},
+      </if>
+      <if test="preordertype != null" >
+        #{preordertype,jdbcType=INTEGER},
+      </if>
+      <if test="preorderstate != null" >
+        #{preorderstate,jdbcType=INTEGER},
+      </if>
+      <if test="preorderuserloginid != null" >
+        #{preorderuserloginid,jdbcType=INTEGER},
+      </if>
+      <if test="preorderdocloginid != null" >
+        #{preorderdocloginid,jdbcType=INTEGER},
+      </if>
+      <if test="preorderredocloginid != null" >
+        #{preorderredocloginid,jdbcType=INTEGER},
+      </if>
+      <if test="preordertime != null" >
+        #{preordertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="preorderdprice != null" >
+        #{preorderdprice,jdbcType=DECIMAL},
+      </if>
+      <if test="preorderhstate != null" >
+        #{preorderhstate,jdbcType=TINYINT},
+      </if>
+      <if test="preorderhprice != null" >
+        #{preorderhprice,jdbcType=DECIMAL},
+      </if>
+      <if test="preordertpricetype != null" >
+        #{preordertpricetype,jdbcType=INTEGER},
+      </if>
+      <if test="preordertprice != null" >
+        #{preordertprice,jdbcType=DECIMAL},
+      </if>
+      <if test="preorderapricetype != null" >
+        #{preorderapricetype,jdbcType=INTEGER},
+      </if>
+      <if test="preorderaprice != null" >
+        #{preorderaprice,jdbcType=DECIMAL},
+      </if>
+      <if test="preorderepricetype != null" >
+        #{preorderepricetype,jdbcType=INTEGER},
+      </if>
+      <if test="preordereprice != null" >
+        #{preordereprice,jdbcType=DECIMAL},
+      </if>
+      <if test="preorderprice != null" >
+        #{preorderprice,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.PreorderExample" resultType="java.lang.Integer" >
+    select count(*) from preorder
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update preorder
+    <set >
+      <if test="record.preorderid != null" >
+        preOrderId = #{record.preorderid,jdbcType=INTEGER},
+      </if>
+      <if test="record.usersickid != null" >
+        userSickId = #{record.usersickid,jdbcType=INTEGER},
+      </if>
+      <if test="record.preordertype != null" >
+        preOrderType = #{record.preordertype,jdbcType=INTEGER},
+      </if>
+      <if test="record.preorderstate != null" >
+        preOrderState = #{record.preorderstate,jdbcType=INTEGER},
+      </if>
+      <if test="record.preorderuserloginid != null" >
+        preOrderUserLoginId = #{record.preorderuserloginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.preorderdocloginid != null" >
+        preOrderDocLoginId = #{record.preorderdocloginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.preorderredocloginid != null" >
+        preOrderReDocLoginId = #{record.preorderredocloginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.preordertime != null" >
+        preOrderTime = #{record.preordertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.preorderdprice != null" >
+        preOrderDPrice = #{record.preorderdprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.preorderhstate != null" >
+        preOrderHState = #{record.preorderhstate,jdbcType=TINYINT},
+      </if>
+      <if test="record.preorderhprice != null" >
+        preOrderHPrice = #{record.preorderhprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.preordertpricetype != null" >
+        preOrderTPriceType = #{record.preordertpricetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.preordertprice != null" >
+        preOrderTPrice = #{record.preordertprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.preorderapricetype != null" >
+        preOrderAPriceType = #{record.preorderapricetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.preorderaprice != null" >
+        preOrderAPrice = #{record.preorderaprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.preorderepricetype != null" >
+        preOrderEPriceType = #{record.preorderepricetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.preordereprice != null" >
+        preOrderEPrice = #{record.preordereprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.preorderprice != null" >
+        preOrderPrice = #{record.preorderprice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update preorder
+    set preOrderId = #{record.preorderid,jdbcType=INTEGER},
+      userSickId = #{record.usersickid,jdbcType=INTEGER},
+      preOrderType = #{record.preordertype,jdbcType=INTEGER},
+      preOrderState = #{record.preorderstate,jdbcType=INTEGER},
+      preOrderUserLoginId = #{record.preorderuserloginid,jdbcType=INTEGER},
+      preOrderDocLoginId = #{record.preorderdocloginid,jdbcType=INTEGER},
+      preOrderReDocLoginId = #{record.preorderredocloginid,jdbcType=INTEGER},
+      preOrderTime = #{record.preordertime,jdbcType=TIMESTAMP},
+      preOrderDPrice = #{record.preorderdprice,jdbcType=DECIMAL},
+      preOrderHState = #{record.preorderhstate,jdbcType=TINYINT},
+      preOrderHPrice = #{record.preorderhprice,jdbcType=DECIMAL},
+      preOrderTPriceType = #{record.preordertpricetype,jdbcType=INTEGER},
+      preOrderTPrice = #{record.preordertprice,jdbcType=DECIMAL},
+      preOrderAPriceType = #{record.preorderapricetype,jdbcType=INTEGER},
+      preOrderAPrice = #{record.preorderaprice,jdbcType=DECIMAL},
+      preOrderEPriceType = #{record.preorderepricetype,jdbcType=INTEGER},
+      preOrderEPrice = #{record.preordereprice,jdbcType=DECIMAL},
+      preOrderPrice = #{record.preorderprice,jdbcType=DECIMAL}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Preorder" >
+    update preorder
+    <set >
+      <if test="usersickid != null" >
+        userSickId = #{usersickid,jdbcType=INTEGER},
+      </if>
+      <if test="preordertype != null" >
+        preOrderType = #{preordertype,jdbcType=INTEGER},
+      </if>
+      <if test="preorderstate != null" >
+        preOrderState = #{preorderstate,jdbcType=INTEGER},
+      </if>
+      <if test="preorderuserloginid != null" >
+        preOrderUserLoginId = #{preorderuserloginid,jdbcType=INTEGER},
+      </if>
+      <if test="preorderdocloginid != null" >
+        preOrderDocLoginId = #{preorderdocloginid,jdbcType=INTEGER},
+      </if>
+      <if test="preorderredocloginid != null" >
+        preOrderReDocLoginId = #{preorderredocloginid,jdbcType=INTEGER},
+      </if>
+      <if test="preordertime != null" >
+        preOrderTime = #{preordertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="preorderdprice != null" >
+        preOrderDPrice = #{preorderdprice,jdbcType=DECIMAL},
+      </if>
+      <if test="preorderhstate != null" >
+        preOrderHState = #{preorderhstate,jdbcType=TINYINT},
+      </if>
+      <if test="preorderhprice != null" >
+        preOrderHPrice = #{preorderhprice,jdbcType=DECIMAL},
+      </if>
+      <if test="preordertpricetype != null" >
+        preOrderTPriceType = #{preordertpricetype,jdbcType=INTEGER},
+      </if>
+      <if test="preordertprice != null" >
+        preOrderTPrice = #{preordertprice,jdbcType=DECIMAL},
+      </if>
+      <if test="preorderapricetype != null" >
+        preOrderAPriceType = #{preorderapricetype,jdbcType=INTEGER},
+      </if>
+      <if test="preorderaprice != null" >
+        preOrderAPrice = #{preorderaprice,jdbcType=DECIMAL},
+      </if>
+      <if test="preorderepricetype != null" >
+        preOrderEPriceType = #{preorderepricetype,jdbcType=INTEGER},
+      </if>
+      <if test="preordereprice != null" >
+        preOrderEPrice = #{preordereprice,jdbcType=DECIMAL},
+      </if>
+      <if test="preorderprice != null" >
+        preOrderPrice = #{preorderprice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where preOrderId = #{preorderid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Preorder" >
+    update preorder
+    set userSickId = #{usersickid,jdbcType=INTEGER},
+      preOrderType = #{preordertype,jdbcType=INTEGER},
+      preOrderState = #{preorderstate,jdbcType=INTEGER},
+      preOrderUserLoginId = #{preorderuserloginid,jdbcType=INTEGER},
+      preOrderDocLoginId = #{preorderdocloginid,jdbcType=INTEGER},
+      preOrderReDocLoginId = #{preorderredocloginid,jdbcType=INTEGER},
+      preOrderTime = #{preordertime,jdbcType=TIMESTAMP},
+      preOrderDPrice = #{preorderdprice,jdbcType=DECIMAL},
+      preOrderHState = #{preorderhstate,jdbcType=TINYINT},
+      preOrderHPrice = #{preorderhprice,jdbcType=DECIMAL},
+      preOrderTPriceType = #{preordertpricetype,jdbcType=INTEGER},
+      preOrderTPrice = #{preordertprice,jdbcType=DECIMAL},
+      preOrderAPriceType = #{preorderapricetype,jdbcType=INTEGER},
+      preOrderAPrice = #{preorderaprice,jdbcType=DECIMAL},
+      preOrderEPriceType = #{preorderepricetype,jdbcType=INTEGER},
+      preOrderEPrice = #{preordereprice,jdbcType=DECIMAL},
+      preOrderPrice = #{preorderprice,jdbcType=DECIMAL}
+    where preOrderId = #{preorderid,jdbcType=INTEGER}
+  </update>
+</mapper>

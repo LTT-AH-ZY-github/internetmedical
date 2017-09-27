@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.UserinfoMapperCustom" >
+	
+	<!--根据外键查询用户信息表,外键为unique  -->
+    <select id="findUserInfoByLoginId" parameterType="int"
+  		 resultType="map">
+  		SELECT username,usermale,usercardnum,usercardphoto,useradrprovince,useradrcity,useradrarea,useradrother,userage FROM userinfo WHERE userLoginId=#{id}
+  	</select>
+  	 <select id="selectByLoginId" parameterType="int"
+  		 resultType="com.medical.po.Userinfo">
+  		SELECT * FROM userinfo WHERE userLoginId=#{id}
+  	</select>
+ </mapper>

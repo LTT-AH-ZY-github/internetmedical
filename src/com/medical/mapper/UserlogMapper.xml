@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.UserlogMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Userlog" >
+    <id column="userLogId" property="userlogid" jdbcType="INTEGER" />
+    <result column="userLoginId" property="userloginid" jdbcType="INTEGER" />
+    <result column="userLogTime" property="userlogtime" jdbcType="TIMESTAMP" />
+    <result column="userLogLon" property="userloglon" jdbcType="VARCHAR" />
+    <result column="userLogLat" property="userloglat" jdbcType="VARCHAR" />
+    <result column="userLogLoc" property="userlogloc" jdbcType="VARCHAR" />
+    <result column="userLogDev" property="userlogdev" jdbcType="BIT" />
+    <result column="userLogBVer" property="userlogbver" jdbcType="VARCHAR" />
+    <result column="userLogModel" property="userlogmodel" jdbcType="VARCHAR" />
+    <result column="userLogPVer" property="userlogpver" jdbcType="VARCHAR" />
+    <result column="userLogMac" property="userlogmac" jdbcType="VARCHAR" />
+    <result column="userLogIp" property="userlogip" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    userLogId, userLoginId, userLogTime, userLogLon, userLogLat, userLogLoc, userLogDev, 
+    userLogBVer, userLogModel, userLogPVer, userLogMac, userLogIp
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.UserlogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from userlog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from userlog
+    where userLogId = #{userlogid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from userlog
+    where userLogId = #{userlogid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.UserlogExample" >
+    delete from userlog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Userlog" >
+    insert into userlog (userLogId, userLoginId, userLogTime, 
+      userLogLon, userLogLat, userLogLoc, 
+      userLogDev, userLogBVer, userLogModel, 
+      userLogPVer, userLogMac, userLogIp
+      )
+    values (#{userlogid,jdbcType=INTEGER}, #{userloginid,jdbcType=INTEGER}, #{userlogtime,jdbcType=TIMESTAMP}, 
+      #{userloglon,jdbcType=VARCHAR}, #{userloglat,jdbcType=VARCHAR}, #{userlogloc,jdbcType=VARCHAR}, 
+      #{userlogdev,jdbcType=BIT}, #{userlogbver,jdbcType=VARCHAR}, #{userlogmodel,jdbcType=VARCHAR}, 
+      #{userlogpver,jdbcType=VARCHAR}, #{userlogmac,jdbcType=VARCHAR}, #{userlogip,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Userlog" >
+    insert into userlog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userlogid != null" >
+        userLogId,
+      </if>
+      <if test="userloginid != null" >
+        userLoginId,
+      </if>
+      <if test="userlogtime != null" >
+        userLogTime,
+      </if>
+      <if test="userloglon != null" >
+        userLogLon,
+      </if>
+      <if test="userloglat != null" >
+        userLogLat,
+      </if>
+      <if test="userlogloc != null" >
+        userLogLoc,
+      </if>
+      <if test="userlogdev != null" >
+        userLogDev,
+      </if>
+      <if test="userlogbver != null" >
+        userLogBVer,
+      </if>
+      <if test="userlogmodel != null" >
+        userLogModel,
+      </if>
+      <if test="userlogpver != null" >
+        userLogPVer,
+      </if>
+      <if test="userlogmac != null" >
+        userLogMac,
+      </if>
+      <if test="userlogip != null" >
+        userLogIp,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userlogid != null" >
+        #{userlogid,jdbcType=INTEGER},
+      </if>
+      <if test="userloginid != null" >
+        #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="userlogtime != null" >
+        #{userlogtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userloglon != null" >
+        #{userloglon,jdbcType=VARCHAR},
+      </if>
+      <if test="userloglat != null" >
+        #{userloglat,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogloc != null" >
+        #{userlogloc,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogdev != null" >
+        #{userlogdev,jdbcType=BIT},
+      </if>
+      <if test="userlogbver != null" >
+        #{userlogbver,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogmodel != null" >
+        #{userlogmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogpver != null" >
+        #{userlogpver,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogmac != null" >
+        #{userlogmac,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogip != null" >
+        #{userlogip,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.UserlogExample" resultType="java.lang.Integer" >
+    select count(*) from userlog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update userlog
+    <set >
+      <if test="record.userlogid != null" >
+        userLogId = #{record.userlogid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userloginid != null" >
+        userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userlogtime != null" >
+        userLogTime = #{record.userlogtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userloglon != null" >
+        userLogLon = #{record.userloglon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userloglat != null" >
+        userLogLat = #{record.userloglat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userlogloc != null" >
+        userLogLoc = #{record.userlogloc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userlogdev != null" >
+        userLogDev = #{record.userlogdev,jdbcType=BIT},
+      </if>
+      <if test="record.userlogbver != null" >
+        userLogBVer = #{record.userlogbver,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userlogmodel != null" >
+        userLogModel = #{record.userlogmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userlogpver != null" >
+        userLogPVer = #{record.userlogpver,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userlogmac != null" >
+        userLogMac = #{record.userlogmac,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userlogip != null" >
+        userLogIp = #{record.userlogip,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update userlog
+    set userLogId = #{record.userlogid,jdbcType=INTEGER},
+      userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      userLogTime = #{record.userlogtime,jdbcType=TIMESTAMP},
+      userLogLon = #{record.userloglon,jdbcType=VARCHAR},
+      userLogLat = #{record.userloglat,jdbcType=VARCHAR},
+      userLogLoc = #{record.userlogloc,jdbcType=VARCHAR},
+      userLogDev = #{record.userlogdev,jdbcType=BIT},
+      userLogBVer = #{record.userlogbver,jdbcType=VARCHAR},
+      userLogModel = #{record.userlogmodel,jdbcType=VARCHAR},
+      userLogPVer = #{record.userlogpver,jdbcType=VARCHAR},
+      userLogMac = #{record.userlogmac,jdbcType=VARCHAR},
+      userLogIp = #{record.userlogip,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Userlog" >
+    update userlog
+    <set >
+      <if test="userloginid != null" >
+        userLoginId = #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="userlogtime != null" >
+        userLogTime = #{userlogtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userloglon != null" >
+        userLogLon = #{userloglon,jdbcType=VARCHAR},
+      </if>
+      <if test="userloglat != null" >
+        userLogLat = #{userloglat,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogloc != null" >
+        userLogLoc = #{userlogloc,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogdev != null" >
+        userLogDev = #{userlogdev,jdbcType=BIT},
+      </if>
+      <if test="userlogbver != null" >
+        userLogBVer = #{userlogbver,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogmodel != null" >
+        userLogModel = #{userlogmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogpver != null" >
+        userLogPVer = #{userlogpver,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogmac != null" >
+        userLogMac = #{userlogmac,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogip != null" >
+        userLogIp = #{userlogip,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where userLogId = #{userlogid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Userlog" >
+    update userlog
+    set userLoginId = #{userloginid,jdbcType=INTEGER},
+      userLogTime = #{userlogtime,jdbcType=TIMESTAMP},
+      userLogLon = #{userloglon,jdbcType=VARCHAR},
+      userLogLat = #{userloglat,jdbcType=VARCHAR},
+      userLogLoc = #{userlogloc,jdbcType=VARCHAR},
+      userLogDev = #{userlogdev,jdbcType=BIT},
+      userLogBVer = #{userlogbver,jdbcType=VARCHAR},
+      userLogModel = #{userlogmodel,jdbcType=VARCHAR},
+      userLogPVer = #{userlogpver,jdbcType=VARCHAR},
+      userLogMac = #{userlogmac,jdbcType=VARCHAR},
+      userLogIp = #{userlogip,jdbcType=VARCHAR}
+    where userLogId = #{userlogid,jdbcType=INTEGER}
+  </update>
+</mapper>

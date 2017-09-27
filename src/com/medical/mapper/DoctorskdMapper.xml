@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.DoctorskdMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Doctorskd" >
+    <id column="docSkdId" property="docskdid" jdbcType="INTEGER" />
+    <result column="monAm" property="monam" jdbcType="BIT" />
+    <result column="monPm" property="monpm" jdbcType="BIT" />
+    <result column="tueAm" property="tueam" jdbcType="BIT" />
+    <result column="tuePm" property="tuepm" jdbcType="BIT" />
+    <result column="wedAm" property="wedam" jdbcType="BIT" />
+    <result column="wedPm" property="wedpm" jdbcType="BIT" />
+    <result column="thuAm" property="thuam" jdbcType="BIT" />
+    <result column="thuPm" property="thupm" jdbcType="BIT" />
+    <result column="friAm" property="friam" jdbcType="BIT" />
+    <result column="friPm" property="fripm" jdbcType="BIT" />
+    <result column="satAm" property="satam" jdbcType="BIT" />
+    <result column="satPm" property="satpm" jdbcType="BIT" />
+    <result column="sunAm" property="sunam" jdbcType="BIT" />
+    <result column="sunPm" property="sunpm" jdbcType="BIT" />
+    <result column="docLoginId" property="docloginid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    docSkdId, monAm, monPm, tueAm, tuePm, wedAm, wedPm, thuAm, thuPm, friAm, friPm, satAm, 
+    satPm, sunAm, sunPm, docLoginId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.DoctorskdExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from doctorskd
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from doctorskd
+    where docSkdId = #{docskdid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from doctorskd
+    where docSkdId = #{docskdid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.DoctorskdExample" >
+    delete from doctorskd
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Doctorskd" >
+    insert into doctorskd (docSkdId, monAm, monPm, 
+      tueAm, tuePm, wedAm, wedPm, 
+      thuAm, thuPm, friAm, friPm, 
+      satAm, satPm, sunAm, sunPm, 
+      docLoginId)
+    values (#{docskdid,jdbcType=INTEGER}, #{monam,jdbcType=BIT}, #{monpm,jdbcType=BIT}, 
+      #{tueam,jdbcType=BIT}, #{tuepm,jdbcType=BIT}, #{wedam,jdbcType=BIT}, #{wedpm,jdbcType=BIT}, 
+      #{thuam,jdbcType=BIT}, #{thupm,jdbcType=BIT}, #{friam,jdbcType=BIT}, #{fripm,jdbcType=BIT}, 
+      #{satam,jdbcType=BIT}, #{satpm,jdbcType=BIT}, #{sunam,jdbcType=BIT}, #{sunpm,jdbcType=BIT}, 
+      #{docloginid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Doctorskd" >
+    insert into doctorskd
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="docskdid != null" >
+        docSkdId,
+      </if>
+      <if test="monam != null" >
+        monAm,
+      </if>
+      <if test="monpm != null" >
+        monPm,
+      </if>
+      <if test="tueam != null" >
+        tueAm,
+      </if>
+      <if test="tuepm != null" >
+        tuePm,
+      </if>
+      <if test="wedam != null" >
+        wedAm,
+      </if>
+      <if test="wedpm != null" >
+        wedPm,
+      </if>
+      <if test="thuam != null" >
+        thuAm,
+      </if>
+      <if test="thupm != null" >
+        thuPm,
+      </if>
+      <if test="friam != null" >
+        friAm,
+      </if>
+      <if test="fripm != null" >
+        friPm,
+      </if>
+      <if test="satam != null" >
+        satAm,
+      </if>
+      <if test="satpm != null" >
+        satPm,
+      </if>
+      <if test="sunam != null" >
+        sunAm,
+      </if>
+      <if test="sunpm != null" >
+        sunPm,
+      </if>
+      <if test="docloginid != null" >
+        docLoginId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="docskdid != null" >
+        #{docskdid,jdbcType=INTEGER},
+      </if>
+      <if test="monam != null" >
+        #{monam,jdbcType=BIT},
+      </if>
+      <if test="monpm != null" >
+        #{monpm,jdbcType=BIT},
+      </if>
+      <if test="tueam != null" >
+        #{tueam,jdbcType=BIT},
+      </if>
+      <if test="tuepm != null" >
+        #{tuepm,jdbcType=BIT},
+      </if>
+      <if test="wedam != null" >
+        #{wedam,jdbcType=BIT},
+      </if>
+      <if test="wedpm != null" >
+        #{wedpm,jdbcType=BIT},
+      </if>
+      <if test="thuam != null" >
+        #{thuam,jdbcType=BIT},
+      </if>
+      <if test="thupm != null" >
+        #{thupm,jdbcType=BIT},
+      </if>
+      <if test="friam != null" >
+        #{friam,jdbcType=BIT},
+      </if>
+      <if test="fripm != null" >
+        #{fripm,jdbcType=BIT},
+      </if>
+      <if test="satam != null" >
+        #{satam,jdbcType=BIT},
+      </if>
+      <if test="satpm != null" >
+        #{satpm,jdbcType=BIT},
+      </if>
+      <if test="sunam != null" >
+        #{sunam,jdbcType=BIT},
+      </if>
+      <if test="sunpm != null" >
+        #{sunpm,jdbcType=BIT},
+      </if>
+      <if test="docloginid != null" >
+        #{docloginid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.DoctorskdExample" resultType="java.lang.Integer" >
+    select count(*) from doctorskd
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update doctorskd
+    <set >
+      <if test="record.docskdid != null" >
+        docSkdId = #{record.docskdid,jdbcType=INTEGER},
+      </if>
+      <if test="record.monam != null" >
+        monAm = #{record.monam,jdbcType=BIT},
+      </if>
+      <if test="record.monpm != null" >
+        monPm = #{record.monpm,jdbcType=BIT},
+      </if>
+      <if test="record.tueam != null" >
+        tueAm = #{record.tueam,jdbcType=BIT},
+      </if>
+      <if test="record.tuepm != null" >
+        tuePm = #{record.tuepm,jdbcType=BIT},
+      </if>
+      <if test="record.wedam != null" >
+        wedAm = #{record.wedam,jdbcType=BIT},
+      </if>
+      <if test="record.wedpm != null" >
+        wedPm = #{record.wedpm,jdbcType=BIT},
+      </if>
+      <if test="record.thuam != null" >
+        thuAm = #{record.thuam,jdbcType=BIT},
+      </if>
+      <if test="record.thupm != null" >
+        thuPm = #{record.thupm,jdbcType=BIT},
+      </if>
+      <if test="record.friam != null" >
+        friAm = #{record.friam,jdbcType=BIT},
+      </if>
+      <if test="record.fripm != null" >
+        friPm = #{record.fripm,jdbcType=BIT},
+      </if>
+      <if test="record.satam != null" >
+        satAm = #{record.satam,jdbcType=BIT},
+      </if>
+      <if test="record.satpm != null" >
+        satPm = #{record.satpm,jdbcType=BIT},
+      </if>
+      <if test="record.sunam != null" >
+        sunAm = #{record.sunam,jdbcType=BIT},
+      </if>
+      <if test="record.sunpm != null" >
+        sunPm = #{record.sunpm,jdbcType=BIT},
+      </if>
+      <if test="record.docloginid != null" >
+        docLoginId = #{record.docloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update doctorskd
+    set docSkdId = #{record.docskdid,jdbcType=INTEGER},
+      monAm = #{record.monam,jdbcType=BIT},
+      monPm = #{record.monpm,jdbcType=BIT},
+      tueAm = #{record.tueam,jdbcType=BIT},
+      tuePm = #{record.tuepm,jdbcType=BIT},
+      wedAm = #{record.wedam,jdbcType=BIT},
+      wedPm = #{record.wedpm,jdbcType=BIT},
+      thuAm = #{record.thuam,jdbcType=BIT},
+      thuPm = #{record.thupm,jdbcType=BIT},
+      friAm = #{record.friam,jdbcType=BIT},
+      friPm = #{record.fripm,jdbcType=BIT},
+      satAm = #{record.satam,jdbcType=BIT},
+      satPm = #{record.satpm,jdbcType=BIT},
+      sunAm = #{record.sunam,jdbcType=BIT},
+      sunPm = #{record.sunpm,jdbcType=BIT},
+      docLoginId = #{record.docloginid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Doctorskd" >
+    update doctorskd
+    <set >
+      <if test="monam != null" >
+        monAm = #{monam,jdbcType=BIT},
+      </if>
+      <if test="monpm != null" >
+        monPm = #{monpm,jdbcType=BIT},
+      </if>
+      <if test="tueam != null" >
+        tueAm = #{tueam,jdbcType=BIT},
+      </if>
+      <if test="tuepm != null" >
+        tuePm = #{tuepm,jdbcType=BIT},
+      </if>
+      <if test="wedam != null" >
+        wedAm = #{wedam,jdbcType=BIT},
+      </if>
+      <if test="wedpm != null" >
+        wedPm = #{wedpm,jdbcType=BIT},
+      </if>
+      <if test="thuam != null" >
+        thuAm = #{thuam,jdbcType=BIT},
+      </if>
+      <if test="thupm != null" >
+        thuPm = #{thupm,jdbcType=BIT},
+      </if>
+      <if test="friam != null" >
+        friAm = #{friam,jdbcType=BIT},
+      </if>
+      <if test="fripm != null" >
+        friPm = #{fripm,jdbcType=BIT},
+      </if>
+      <if test="satam != null" >
+        satAm = #{satam,jdbcType=BIT},
+      </if>
+      <if test="satpm != null" >
+        satPm = #{satpm,jdbcType=BIT},
+      </if>
+      <if test="sunam != null" >
+        sunAm = #{sunam,jdbcType=BIT},
+      </if>
+      <if test="sunpm != null" >
+        sunPm = #{sunpm,jdbcType=BIT},
+      </if>
+      <if test="docloginid != null" >
+        docLoginId = #{docloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where docSkdId = #{docskdid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Doctorskd" >
+    update doctorskd
+    set monAm = #{monam,jdbcType=BIT},
+      monPm = #{monpm,jdbcType=BIT},
+      tueAm = #{tueam,jdbcType=BIT},
+      tuePm = #{tuepm,jdbcType=BIT},
+      wedAm = #{wedam,jdbcType=BIT},
+      wedPm = #{wedpm,jdbcType=BIT},
+      thuAm = #{thuam,jdbcType=BIT},
+      thuPm = #{thupm,jdbcType=BIT},
+      friAm = #{friam,jdbcType=BIT},
+      friPm = #{fripm,jdbcType=BIT},
+      satAm = #{satam,jdbcType=BIT},
+      satPm = #{satpm,jdbcType=BIT},
+      sunAm = #{sunam,jdbcType=BIT},
+      sunPm = #{sunpm,jdbcType=BIT},
+      docLoginId = #{docloginid,jdbcType=INTEGER}
+    where docSkdId = #{docskdid,jdbcType=INTEGER}
+  </update>
+</mapper>

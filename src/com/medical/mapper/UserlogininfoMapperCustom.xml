@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.UserlogininfoMapperCustom" >
+	
+  	<!-- 新增用户 -->  
+  	<insert id="insertUserLoginInfo" parameterType="String" >
+	    insert into userlogininfo (userLoginPhone,userLoginPwd)
+	    values ( #{0},#{1})
+  	</insert>
+  	
+  	<!-- 根据手机号码和密码查询用户登录表 -->
+  	<select id="findUserLoginInfoByPhone" parameterType="String"
+  		 resultType="com.medical.po.UserlogininfoCustom">
+  		SELECT *  FROM userlogininfo where  userLoginPhone = #{0} 
+  	</select>
+  	
+  	<!-- 根据手机号码查询用户数量 -->
+  	<select id="findUserCountByPhone" parameterType="String"
+  		 resultType="int">
+  		SELECT count(*) FROM userlogininfo where  userLoginPhone = #{0} 
+  	</select>
+  	
+  	<!-- 根据手机号码和密码查询用户登录表，获取所有信息 -->
+  	<select id="findUserLoginInfoByPP" parameterType="String"
+  		 resultType="com.medical.po.UserlogininfoCustom">
+  		SELECT userlogininfo.* FROM userlogininfo where  userLoginPhone = #{0} and userLoginPwd =#{1}
+  	</select>
+  	<insert id="insertSelectiveReturnId" parameterType="com.medical.po.Userlogininfo"  useGeneratedKeys="true" keyProperty="userloginid">
+    insert into userlogininfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userloginid != null" >
+        userLoginId,
+      </if>
+      <if test="userloginname != null" >
+        userLoginName,
+      </if>
+      <if test="userloginphone != null" >
+        userLoginPhone,
+      </if>
+      <if test="userloginpwd != null" >
+        userLoginPwd,
+      </if>
+      <if test="userloginsalt != null" >
+        userLoginSalt,
+      </if>
+      <if test="userlogintoken != null" >
+        userLoginToken,
+      </if>
+      <if test="userlogindld != null" >
+        userLoginDld,
+      </if>
+      <if test="userloginlon != null" >
+        userLoginLon,
+      </if>
+      <if test="userloginlat != null" >
+        userLoginLat,
+      </if>
+      <if test="userlogintime != null" >
+        userLoginTime,
+      </if>
+      <if test="userloginprovince != null" >
+        userLoginProvince,
+      </if>
+      <if test="userlogincity != null" >
+        userLoginCity,
+      </if>
+      <if test="userloginarea != null" >
+        userLoginArea,
+      </if>
+      <if test="userloginother != null" >
+        userLoginOther,
+      </if>
+      <if test="userloginmodel != null" >
+        userLoginModel,
+      </if>
+      <if test="userloginpver != null" >
+        userLoginPVer,
+      </if>
+      <if test="userloginmac != null" >
+        userLoginMac,
+      </if>
+      <if test="userloginip != null" >
+        userLoginIp,
+      </if>
+      <if test="userlogintype != null" >
+        userLoginType,
+      </if>
+      <if test="userloginpix != null" >
+        userLoginPix,
+      </if>
+      <if test="userlogincid != null" >
+        userLoginCId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userloginid != null" >
+        #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="userloginname != null" >
+        #{userloginname,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginphone != null" >
+        #{userloginphone,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginpwd != null" >
+        #{userloginpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginsalt != null" >
+        #{userloginsalt,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogintoken != null" >
+        #{userlogintoken,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogindld != null" >
+        #{userlogindld,jdbcType=BIGINT},
+      </if>
+      <if test="userloginlon != null" >
+        #{userloginlon,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginlat != null" >
+        #{userloginlat,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogintime != null" >
+        #{userlogintime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userloginprovince != null" >
+        #{userloginprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogincity != null" >
+        #{userlogincity,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginarea != null" >
+        #{userloginarea,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginother != null" >
+        #{userloginother,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginmodel != null" >
+        #{userloginmodel,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginpver != null" >
+        #{userloginpver,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginmac != null" >
+        #{userloginmac,jdbcType=VARCHAR},
+      </if>
+      <if test="userloginip != null" >
+        #{userloginip,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogintype != null" >
+        #{userlogintype,jdbcType=BIT},
+      </if>
+      <if test="userloginpix != null" >
+        #{userloginpix,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogincid != null" >
+        #{userlogincid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

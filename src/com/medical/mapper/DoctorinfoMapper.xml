@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.DoctorinfoMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Doctorinfo" >
+    <id column="docId" property="docid" jdbcType="INTEGER" />
+    <result column="docName" property="docname" jdbcType="VARCHAR" />
+    <result column="docMale" property="docmale" jdbcType="CHAR" />
+    <result column="docAge" property="docage" jdbcType="INTEGER" />
+    <result column="docTitle" property="doctitle" jdbcType="VARCHAR" />
+    <result column="docCardNum" property="doccardnum" jdbcType="CHAR" />
+    <result column="docCardPhoto" property="doccardphoto" jdbcType="VARCHAR" />
+    <result column="docBirthDate" property="docbirthdate" jdbcType="DATE" />
+    <result column="docNation" property="docnation" jdbcType="CHAR" />
+    <result column="docHosp" property="dochosp" jdbcType="VARCHAR" />
+    <result column="hospLevel" property="hosplevel" jdbcType="VARCHAR" />
+    <result column="docHospProvince" property="dochospprovince" jdbcType="VARCHAR" />
+    <result column="docHospCity" property="dochospcity" jdbcType="VARCHAR" />
+    <result column="docHospArea" property="dochosparea" jdbcType="VARCHAR" />
+    <result column="docHospOther" property="dochospother" jdbcType="VARCHAR" />
+    <result column="docHospLon" property="dochosplon" jdbcType="VARCHAR" />
+    <result column="docHospLat" property="dochosplat" jdbcType="VARCHAR" />
+    <result column="docPrimaryDept" property="docprimarydept" jdbcType="VARCHAR" />
+    <result column="docSecondDept" property="docseconddept" jdbcType="VARCHAR" />
+    <result column="docDept" property="docdept" jdbcType="VARCHAR" />
+    <result column="docTitlePhoto" property="doctitlephoto" jdbcType="VARCHAR" />
+    <result column="docWorkCardPhoto" property="docworkcardphoto" jdbcType="VARCHAR" />
+    <result column="docQualPhoto" property="docqualphoto" jdbcType="VARCHAR" />
+    <result column="docExpert" property="docexpert" jdbcType="VARCHAR" />
+    <result column="docOtherPhoto" property="docotherphoto" jdbcType="VARCHAR" />
+    <result column="docAllDay" property="docallday" jdbcType="BIT" />
+    <result column="docAbs" property="docabs" jdbcType="VARCHAR" />
+    <result column="docLoc" property="docloc" jdbcType="VARCHAR" />
+    <result column="docAdrProvince" property="docadrprovince" jdbcType="VARCHAR" />
+    <result column="docAdrCity" property="docadrcity" jdbcType="VARCHAR" />
+    <result column="docAdrArea" property="docadrarea" jdbcType="VARCHAR" />
+    <result column="docAdrOther" property="docadrother" jdbcType="VARCHAR" />
+    <result column="docLat" property="doclat" jdbcType="VARCHAR" />
+    <result column="docLon" property="doclon" jdbcType="VARCHAR" />
+    <result column="docLoginId" property="docloginid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    docId, docName, docMale, docAge, docTitle, docCardNum, docCardPhoto, docBirthDate, 
+    docNation, docHosp, hospLevel, docHospProvince, docHospCity, docHospArea, docHospOther, 
+    docHospLon, docHospLat, docPrimaryDept, docSecondDept, docDept, docTitlePhoto, docWorkCardPhoto, 
+    docQualPhoto, docExpert, docOtherPhoto, docAllDay, docAbs, docLoc, docAdrProvince, 
+    docAdrCity, docAdrArea, docAdrOther, docLat, docLon, docLoginId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.DoctorinfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from doctorinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from doctorinfo
+    where docId = #{docid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from doctorinfo
+    where docId = #{docid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.DoctorinfoExample" >
+    delete from doctorinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Doctorinfo" >
+    insert into doctorinfo (docId, docName, docMale, 
+      docAge, docTitle, docCardNum, 
+      docCardPhoto, docBirthDate, docNation, 
+      docHosp, hospLevel, docHospProvince, 
+      docHospCity, docHospArea, docHospOther, 
+      docHospLon, docHospLat, docPrimaryDept, 
+      docSecondDept, docDept, docTitlePhoto, 
+      docWorkCardPhoto, docQualPhoto, docExpert, 
+      docOtherPhoto, docAllDay, docAbs, 
+      docLoc, docAdrProvince, docAdrCity, 
+      docAdrArea, docAdrOther, docLat, 
+      docLon, docLoginId)
+    values (#{docid,jdbcType=INTEGER}, #{docname,jdbcType=VARCHAR}, #{docmale,jdbcType=CHAR}, 
+      #{docage,jdbcType=INTEGER}, #{doctitle,jdbcType=VARCHAR}, #{doccardnum,jdbcType=CHAR}, 
+      #{doccardphoto,jdbcType=VARCHAR}, #{docbirthdate,jdbcType=DATE}, #{docnation,jdbcType=CHAR}, 
+      #{dochosp,jdbcType=VARCHAR}, #{hosplevel,jdbcType=VARCHAR}, #{dochospprovince,jdbcType=VARCHAR}, 
+      #{dochospcity,jdbcType=VARCHAR}, #{dochosparea,jdbcType=VARCHAR}, #{dochospother,jdbcType=VARCHAR}, 
+      #{dochosplon,jdbcType=VARCHAR}, #{dochosplat,jdbcType=VARCHAR}, #{docprimarydept,jdbcType=VARCHAR}, 
+      #{docseconddept,jdbcType=VARCHAR}, #{docdept,jdbcType=VARCHAR}, #{doctitlephoto,jdbcType=VARCHAR}, 
+      #{docworkcardphoto,jdbcType=VARCHAR}, #{docqualphoto,jdbcType=VARCHAR}, #{docexpert,jdbcType=VARCHAR}, 
+      #{docotherphoto,jdbcType=VARCHAR}, #{docallday,jdbcType=BIT}, #{docabs,jdbcType=VARCHAR}, 
+      #{docloc,jdbcType=VARCHAR}, #{docadrprovince,jdbcType=VARCHAR}, #{docadrcity,jdbcType=VARCHAR}, 
+      #{docadrarea,jdbcType=VARCHAR}, #{docadrother,jdbcType=VARCHAR}, #{doclat,jdbcType=VARCHAR}, 
+      #{doclon,jdbcType=VARCHAR}, #{docloginid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Doctorinfo" >
+    insert into doctorinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="docid != null" >
+        docId,
+      </if>
+      <if test="docname != null" >
+        docName,
+      </if>
+      <if test="docmale != null" >
+        docMale,
+      </if>
+      <if test="docage != null" >
+        docAge,
+      </if>
+      <if test="doctitle != null" >
+        docTitle,
+      </if>
+      <if test="doccardnum != null" >
+        docCardNum,
+      </if>
+      <if test="doccardphoto != null" >
+        docCardPhoto,
+      </if>
+      <if test="docbirthdate != null" >
+        docBirthDate,
+      </if>
+      <if test="docnation != null" >
+        docNation,
+      </if>
+      <if test="dochosp != null" >
+        docHosp,
+      </if>
+      <if test="hosplevel != null" >
+        hospLevel,
+      </if>
+      <if test="dochospprovince != null" >
+        docHospProvince,
+      </if>
+      <if test="dochospcity != null" >
+        docHospCity,
+      </if>
+      <if test="dochosparea != null" >
+        docHospArea,
+      </if>
+      <if test="dochospother != null" >
+        docHospOther,
+      </if>
+      <if test="dochosplon != null" >
+        docHospLon,
+      </if>
+      <if test="dochosplat != null" >
+        docHospLat,
+      </if>
+      <if test="docprimarydept != null" >
+        docPrimaryDept,
+      </if>
+      <if test="docseconddept != null" >
+        docSecondDept,
+      </if>
+      <if test="docdept != null" >
+        docDept,
+      </if>
+      <if test="doctitlephoto != null" >
+        docTitlePhoto,
+      </if>
+      <if test="docworkcardphoto != null" >
+        docWorkCardPhoto,
+      </if>
+      <if test="docqualphoto != null" >
+        docQualPhoto,
+      </if>
+      <if test="docexpert != null" >
+        docExpert,
+      </if>
+      <if test="docotherphoto != null" >
+        docOtherPhoto,
+      </if>
+      <if test="docallday != null" >
+        docAllDay,
+      </if>
+      <if test="docabs != null" >
+        docAbs,
+      </if>
+      <if test="docloc != null" >
+        docLoc,
+      </if>
+      <if test="docadrprovince != null" >
+        docAdrProvince,
+      </if>
+      <if test="docadrcity != null" >
+        docAdrCity,
+      </if>
+      <if test="docadrarea != null" >
+        docAdrArea,
+      </if>
+      <if test="docadrother != null" >
+        docAdrOther,
+      </if>
+      <if test="doclat != null" >
+        docLat,
+      </if>
+      <if test="doclon != null" >
+        docLon,
+      </if>
+      <if test="docloginid != null" >
+        docLoginId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="docid != null" >
+        #{docid,jdbcType=INTEGER},
+      </if>
+      <if test="docname != null" >
+        #{docname,jdbcType=VARCHAR},
+      </if>
+      <if test="docmale != null" >
+        #{docmale,jdbcType=CHAR},
+      </if>
+      <if test="docage != null" >
+        #{docage,jdbcType=INTEGER},
+      </if>
+      <if test="doctitle != null" >
+        #{doctitle,jdbcType=VARCHAR},
+      </if>
+      <if test="doccardnum != null" >
+        #{doccardnum,jdbcType=CHAR},
+      </if>
+      <if test="doccardphoto != null" >
+        #{doccardphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="docbirthdate != null" >
+        #{docbirthdate,jdbcType=DATE},
+      </if>
+      <if test="docnation != null" >
+        #{docnation,jdbcType=CHAR},
+      </if>
+      <if test="dochosp != null" >
+        #{dochosp,jdbcType=VARCHAR},
+      </if>
+      <if test="hosplevel != null" >
+        #{hosplevel,jdbcType=VARCHAR},
+      </if>
+      <if test="dochospprovince != null" >
+        #{dochospprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="dochospcity != null" >
+        #{dochospcity,jdbcType=VARCHAR},
+      </if>
+      <if test="dochosparea != null" >
+        #{dochosparea,jdbcType=VARCHAR},
+      </if>
+      <if test="dochospother != null" >
+        #{dochospother,jdbcType=VARCHAR},
+      </if>
+      <if test="dochosplon != null" >
+        #{dochosplon,jdbcType=VARCHAR},
+      </if>
+      <if test="dochosplat != null" >
+        #{dochosplat,jdbcType=VARCHAR},
+      </if>
+      <if test="docprimarydept != null" >
+        #{docprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="docseconddept != null" >
+        #{docseconddept,jdbcType=VARCHAR},
+      </if>
+      <if test="docdept != null" >
+        #{docdept,jdbcType=VARCHAR},
+      </if>
+      <if test="doctitlephoto != null" >
+        #{doctitlephoto,jdbcType=VARCHAR},
+      </if>
+      <if test="docworkcardphoto != null" >
+        #{docworkcardphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="docqualphoto != null" >
+        #{docqualphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="docexpert != null" >
+        #{docexpert,jdbcType=VARCHAR},
+      </if>
+      <if test="docotherphoto != null" >
+        #{docotherphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="docallday != null" >
+        #{docallday,jdbcType=BIT},
+      </if>
+      <if test="docabs != null" >
+        #{docabs,jdbcType=VARCHAR},
+      </if>
+      <if test="docloc != null" >
+        #{docloc,jdbcType=VARCHAR},
+      </if>
+      <if test="docadrprovince != null" >
+        #{docadrprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="docadrcity != null" >
+        #{docadrcity,jdbcType=VARCHAR},
+      </if>
+      <if test="docadrarea != null" >
+        #{docadrarea,jdbcType=VARCHAR},
+      </if>
+      <if test="docadrother != null" >
+        #{docadrother,jdbcType=VARCHAR},
+      </if>
+      <if test="doclat != null" >
+        #{doclat,jdbcType=VARCHAR},
+      </if>
+      <if test="doclon != null" >
+        #{doclon,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginid != null" >
+        #{docloginid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.DoctorinfoExample" resultType="java.lang.Integer" >
+    select count(*) from doctorinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update doctorinfo
+    <set >
+      <if test="record.docid != null" >
+        docId = #{record.docid,jdbcType=INTEGER},
+      </if>
+      <if test="record.docname != null" >
+        docName = #{record.docname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docmale != null" >
+        docMale = #{record.docmale,jdbcType=CHAR},
+      </if>
+      <if test="record.docage != null" >
+        docAge = #{record.docage,jdbcType=INTEGER},
+      </if>
+      <if test="record.doctitle != null" >
+        docTitle = #{record.doctitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doccardnum != null" >
+        docCardNum = #{record.doccardnum,jdbcType=CHAR},
+      </if>
+      <if test="record.doccardphoto != null" >
+        docCardPhoto = #{record.doccardphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docbirthdate != null" >
+        docBirthDate = #{record.docbirthdate,jdbcType=DATE},
+      </if>
+      <if test="record.docnation != null" >
+        docNation = #{record.docnation,jdbcType=CHAR},
+      </if>
+      <if test="record.dochosp != null" >
+        docHosp = #{record.dochosp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hosplevel != null" >
+        hospLevel = #{record.hosplevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dochospprovince != null" >
+        docHospProvince = #{record.dochospprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dochospcity != null" >
+        docHospCity = #{record.dochospcity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dochosparea != null" >
+        docHospArea = #{record.dochosparea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dochospother != null" >
+        docHospOther = #{record.dochospother,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dochosplon != null" >
+        docHospLon = #{record.dochosplon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dochosplat != null" >
+        docHospLat = #{record.dochosplat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docprimarydept != null" >
+        docPrimaryDept = #{record.docprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docseconddept != null" >
+        docSecondDept = #{record.docseconddept,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docdept != null" >
+        docDept = #{record.docdept,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doctitlephoto != null" >
+        docTitlePhoto = #{record.doctitlephoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docworkcardphoto != null" >
+        docWorkCardPhoto = #{record.docworkcardphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docqualphoto != null" >
+        docQualPhoto = #{record.docqualphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docexpert != null" >
+        docExpert = #{record.docexpert,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docotherphoto != null" >
+        docOtherPhoto = #{record.docotherphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docallday != null" >
+        docAllDay = #{record.docallday,jdbcType=BIT},
+      </if>
+      <if test="record.docabs != null" >
+        docAbs = #{record.docabs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docloc != null" >
+        docLoc = #{record.docloc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docadrprovince != null" >
+        docAdrProvince = #{record.docadrprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docadrcity != null" >
+        docAdrCity = #{record.docadrcity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docadrarea != null" >
+        docAdrArea = #{record.docadrarea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docadrother != null" >
+        docAdrOther = #{record.docadrother,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doclat != null" >
+        docLat = #{record.doclat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doclon != null" >
+        docLon = #{record.doclon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docloginid != null" >
+        docLoginId = #{record.docloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update doctorinfo
+    set docId = #{record.docid,jdbcType=INTEGER},
+      docName = #{record.docname,jdbcType=VARCHAR},
+      docMale = #{record.docmale,jdbcType=CHAR},
+      docAge = #{record.docage,jdbcType=INTEGER},
+      docTitle = #{record.doctitle,jdbcType=VARCHAR},
+      docCardNum = #{record.doccardnum,jdbcType=CHAR},
+      docCardPhoto = #{record.doccardphoto,jdbcType=VARCHAR},
+      docBirthDate = #{record.docbirthdate,jdbcType=DATE},
+      docNation = #{record.docnation,jdbcType=CHAR},
+      docHosp = #{record.dochosp,jdbcType=VARCHAR},
+      hospLevel = #{record.hosplevel,jdbcType=VARCHAR},
+      docHospProvince = #{record.dochospprovince,jdbcType=VARCHAR},
+      docHospCity = #{record.dochospcity,jdbcType=VARCHAR},
+      docHospArea = #{record.dochosparea,jdbcType=VARCHAR},
+      docHospOther = #{record.dochospother,jdbcType=VARCHAR},
+      docHospLon = #{record.dochosplon,jdbcType=VARCHAR},
+      docHospLat = #{record.dochosplat,jdbcType=VARCHAR},
+      docPrimaryDept = #{record.docprimarydept,jdbcType=VARCHAR},
+      docSecondDept = #{record.docseconddept,jdbcType=VARCHAR},
+      docDept = #{record.docdept,jdbcType=VARCHAR},
+      docTitlePhoto = #{record.doctitlephoto,jdbcType=VARCHAR},
+      docWorkCardPhoto = #{record.docworkcardphoto,jdbcType=VARCHAR},
+      docQualPhoto = #{record.docqualphoto,jdbcType=VARCHAR},
+      docExpert = #{record.docexpert,jdbcType=VARCHAR},
+      docOtherPhoto = #{record.docotherphoto,jdbcType=VARCHAR},
+      docAllDay = #{record.docallday,jdbcType=BIT},
+      docAbs = #{record.docabs,jdbcType=VARCHAR},
+      docLoc = #{record.docloc,jdbcType=VARCHAR},
+      docAdrProvince = #{record.docadrprovince,jdbcType=VARCHAR},
+      docAdrCity = #{record.docadrcity,jdbcType=VARCHAR},
+      docAdrArea = #{record.docadrarea,jdbcType=VARCHAR},
+      docAdrOther = #{record.docadrother,jdbcType=VARCHAR},
+      docLat = #{record.doclat,jdbcType=VARCHAR},
+      docLon = #{record.doclon,jdbcType=VARCHAR},
+      docLoginId = #{record.docloginid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Doctorinfo" >
+    update doctorinfo
+    <set >
+      <if test="docname != null" >
+        docName = #{docname,jdbcType=VARCHAR},
+      </if>
+      <if test="docmale != null" >
+        docMale = #{docmale,jdbcType=CHAR},
+      </if>
+      <if test="docage != null" >
+        docAge = #{docage,jdbcType=INTEGER},
+      </if>
+      <if test="doctitle != null" >
+        docTitle = #{doctitle,jdbcType=VARCHAR},
+      </if>
+      <if test="doccardnum != null" >
+        docCardNum = #{doccardnum,jdbcType=CHAR},
+      </if>
+      <if test="doccardphoto != null" >
+        docCardPhoto = #{doccardphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="docbirthdate != null" >
+        docBirthDate = #{docbirthdate,jdbcType=DATE},
+      </if>
+      <if test="docnation != null" >
+        docNation = #{docnation,jdbcType=CHAR},
+      </if>
+      <if test="dochosp != null" >
+        docHosp = #{dochosp,jdbcType=VARCHAR},
+      </if>
+      <if test="hosplevel != null" >
+        hospLevel = #{hosplevel,jdbcType=VARCHAR},
+      </if>
+      <if test="dochospprovince != null" >
+        docHospProvince = #{dochospprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="dochospcity != null" >
+        docHospCity = #{dochospcity,jdbcType=VARCHAR},
+      </if>
+      <if test="dochosparea != null" >
+        docHospArea = #{dochosparea,jdbcType=VARCHAR},
+      </if>
+      <if test="dochospother != null" >
+        docHospOther = #{dochospother,jdbcType=VARCHAR},
+      </if>
+      <if test="dochosplon != null" >
+        docHospLon = #{dochosplon,jdbcType=VARCHAR},
+      </if>
+      <if test="dochosplat != null" >
+        docHospLat = #{dochosplat,jdbcType=VARCHAR},
+      </if>
+      <if test="docprimarydept != null" >
+        docPrimaryDept = #{docprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="docseconddept != null" >
+        docSecondDept = #{docseconddept,jdbcType=VARCHAR},
+      </if>
+      <if test="docdept != null" >
+        docDept = #{docdept,jdbcType=VARCHAR},
+      </if>
+      <if test="doctitlephoto != null" >
+        docTitlePhoto = #{doctitlephoto,jdbcType=VARCHAR},
+      </if>
+      <if test="docworkcardphoto != null" >
+        docWorkCardPhoto = #{docworkcardphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="docqualphoto != null" >
+        docQualPhoto = #{docqualphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="docexpert != null" >
+        docExpert = #{docexpert,jdbcType=VARCHAR},
+      </if>
+      <if test="docotherphoto != null" >
+        docOtherPhoto = #{docotherphoto,jdbcType=VARCHAR},
+      </if>
+      <if test="docallday != null" >
+        docAllDay = #{docallday,jdbcType=BIT},
+      </if>
+      <if test="docabs != null" >
+        docAbs = #{docabs,jdbcType=VARCHAR},
+      </if>
+      <if test="docloc != null" >
+        docLoc = #{docloc,jdbcType=VARCHAR},
+      </if>
+      <if test="docadrprovince != null" >
+        docAdrProvince = #{docadrprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="docadrcity != null" >
+        docAdrCity = #{docadrcity,jdbcType=VARCHAR},
+      </if>
+      <if test="docadrarea != null" >
+        docAdrArea = #{docadrarea,jdbcType=VARCHAR},
+      </if>
+      <if test="docadrother != null" >
+        docAdrOther = #{docadrother,jdbcType=VARCHAR},
+      </if>
+      <if test="doclat != null" >
+        docLat = #{doclat,jdbcType=VARCHAR},
+      </if>
+      <if test="doclon != null" >
+        docLon = #{doclon,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginid != null" >
+        docLoginId = #{docloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where docId = #{docid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Doctorinfo" >
+    update doctorinfo
+    set docName = #{docname,jdbcType=VARCHAR},
+      docMale = #{docmale,jdbcType=CHAR},
+      docAge = #{docage,jdbcType=INTEGER},
+      docTitle = #{doctitle,jdbcType=VARCHAR},
+      docCardNum = #{doccardnum,jdbcType=CHAR},
+      docCardPhoto = #{doccardphoto,jdbcType=VARCHAR},
+      docBirthDate = #{docbirthdate,jdbcType=DATE},
+      docNation = #{docnation,jdbcType=CHAR},
+      docHosp = #{dochosp,jdbcType=VARCHAR},
+      hospLevel = #{hosplevel,jdbcType=VARCHAR},
+      docHospProvince = #{dochospprovince,jdbcType=VARCHAR},
+      docHospCity = #{dochospcity,jdbcType=VARCHAR},
+      docHospArea = #{dochosparea,jdbcType=VARCHAR},
+      docHospOther = #{dochospother,jdbcType=VARCHAR},
+      docHospLon = #{dochosplon,jdbcType=VARCHAR},
+      docHospLat = #{dochosplat,jdbcType=VARCHAR},
+      docPrimaryDept = #{docprimarydept,jdbcType=VARCHAR},
+      docSecondDept = #{docseconddept,jdbcType=VARCHAR},
+      docDept = #{docdept,jdbcType=VARCHAR},
+      docTitlePhoto = #{doctitlephoto,jdbcType=VARCHAR},
+      docWorkCardPhoto = #{docworkcardphoto,jdbcType=VARCHAR},
+      docQualPhoto = #{docqualphoto,jdbcType=VARCHAR},
+      docExpert = #{docexpert,jdbcType=VARCHAR},
+      docOtherPhoto = #{docotherphoto,jdbcType=VARCHAR},
+      docAllDay = #{docallday,jdbcType=BIT},
+      docAbs = #{docabs,jdbcType=VARCHAR},
+      docLoc = #{docloc,jdbcType=VARCHAR},
+      docAdrProvince = #{docadrprovince,jdbcType=VARCHAR},
+      docAdrCity = #{docadrcity,jdbcType=VARCHAR},
+      docAdrArea = #{docadrarea,jdbcType=VARCHAR},
+      docAdrOther = #{docadrother,jdbcType=VARCHAR},
+      docLat = #{doclat,jdbcType=VARCHAR},
+      docLon = #{doclon,jdbcType=VARCHAR},
+      docLoginId = #{docloginid,jdbcType=INTEGER}
+    where docId = #{docid,jdbcType=INTEGER}
+  </update>
+</mapper>
