@@ -549,7 +549,7 @@ public class DoctorController {
 	}
 */
 	// 获取病人头像
-	@RequestMapping(value = "/getuserpix", method = RequestMethod.POST)
+/*	@RequestMapping(value = "/getuserpix", method = RequestMethod.POST)
 	public Map<String, Object> getPix(@RequestBody Map<String, Integer> params) throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();
 		//病情id
@@ -561,7 +561,7 @@ public class DoctorController {
 			map.put("state", "7");
 		}
 		return map;
-	}
+	}*/
 	//获取科室
 	@RequestMapping(value = "/getdept", method = RequestMethod.GET)
 	public Map<String, Object> getDept() throws Exception {
