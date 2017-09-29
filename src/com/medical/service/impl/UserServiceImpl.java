@@ -708,6 +708,10 @@ public class UserServiceImpl implements UserService {
 			Usersick usersick = usersickMapper.selectByPrimaryKey(usersickid);
 			Integer stateid =  usersick.getUsersickstateid();
 			if (stateid<3) {
+				//发布状态 删除预订单提交医生
+				if (stateid==2) {
+					preorderMapperCustom.deleteByUserSickId(usersickid);
+				}
 				int result = usersickMapper.deleteByPrimaryKey(usersickid);
 				if (result > 0) {
 					return 1; // 删除成功
@@ -827,7 +831,10 @@ public class UserServiceImpl implements UserService {
 						boolean state = CreateFileUtil.createDir(reallyDir);
 						// 路径创建成功
 						if (state) {
-							String fileName = null;
+							String fileName = usersick.getUsersickpic();
+							if (fileName!=null) {
+								fileName += ",";
+							}
 							// 图片重命名及保存
 							for (int i = 0; i < pictureFile.length; i++) {
 								String name = CommonUtils.randomFileName();
@@ -1162,8 +1169,8 @@ public class UserServiceImpl implements UserService {
 					user.setUsersickid(userSickId);
 					user.setUsersickstateid(1); // "1"为草稿
 					int result = usersickMapper.updateByPrimaryKeySelective(user);
-					int deResult = preorderMapperCustom.deleteByUserSickId(userSickId);
-					if (result>0 && deResult>0) {
+					preorderMapperCustom.deleteByUserSickId(userSickId);
+					if (result>0) {
 						return 1; //请求成功
 					} else {
 						TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -1299,41 +1306,48 @@ public class UserServiceImpl implements UserService {
 	
 	//取消订单
 	@Override
-	public int updateOrderToCancel(Integer userOrderId)  throws Exception {
+	public int updateOrderToCancel(Integer userOrderId,Integer userLoginId)  throws Exception {
 		try {
 			Userorder user = userorderMapper.selectByPrimaryKey(userOrderId);
 			if (user!=null) {
-				int state = user.getUserorderstateid();
-				if (state<=3) {
-					Userorder userorder = new Userorder();
-					userorder.setUserorderid(userOrderId);
-					userorder.setUserorderetime(new Date());
-					userorder.setUserorderstateid(8); //病人取消订单
-					Usersick usersick = new Usersick();
-					usersick.setUsersickid(user.getUsersickid());
-					usersick.setUserorderid(0); //无订单
-					usersick.setUsersickstateid(2); //已发布
-					// 更新订单
-					int result = userorderMapper.updateByPrimaryKeySelective(userorder);
-					// 更新病情信息
-					int upResult =usersickMapper.updateByPrimaryKeySelective(usersick);
-					if (result>0 && upResult>0) {
-						return 1; //成功
+				Integer loginid = user.getUserloginid();
+				if (userLoginId==loginid) {
+					int state = user.getUserorderstateid();
+					if (state<=4) {
+						Userorder userorder = new Userorder();
+						userorder.setUserorderid(userOrderId);
+						userorder.setUserorderetime(new Date());
+						userorder.setUserorderstateid(8); //病人取消订单
+						Usersick usersick = new Usersick();
+						usersick.setUsersickid(user.getUsersickid());
+						usersick.setUserorderid(0); //无订单
+						usersick.setUsersickstateid(2); //已发布
+						// 更新订单
+						int result = userorderMapper.updateByPrimaryKeySelective(userorder);
+						// 更新病情信息
+						int upResult =usersickMapper.updateByPrimaryKeySelective(usersick);
+						if (result>0 && upResult>0) {
+							return 1; //成功
+						} else {
+							TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+							return 2; // 生成订单失败
+						}
 					} else {
-						TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-						return 2; // 生成订单失败
+						//该状态订单不支持取消
+						return 3;
 					}
 				} else {
-					//该状态订单不支持取消
-					return 3;
+					//用户和订单不匹配
+					return 4;
 				}
+				
 			} else {
 				// 无对应订单
-				return 4;
+				return 5;
 			}
 		} catch (Exception e) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			return 5; //操作异常
+			return 6; //操作异常
 		}
 		
 	}
@@ -1378,10 +1392,12 @@ public class UserServiceImpl implements UserService {
     
     //确认订单
     @Override
-    public int updateOrderToConfirm(Integer userOrderId) throws Exception{
+    public int updateOrderToConfirm(Integer userOrderId,Integer userLoginId) throws Exception{
     	try {
     		Userorder user = userorderMapper.selectByPrimaryKey(userOrderId);
 			if (user!=null) {
+				Integer loginid = user.getUserloginid();
+				if (userLoginId==loginid) {
 				int state = user.getUserorderstateid();
 				//订单处于等待病人确定状态
 				if (state==2) {
@@ -1419,12 +1435,16 @@ public class UserServiceImpl implements UserService {
 					//该状态不支持用户确认
 					return 3;
 				}
+				}else {
+					//用户和订单不匹配
+					return 4;
+				}
 			} else {
 				// 无对应订单
-				return 4;
+				return 5;
 			}
     	} catch (Exception e) {
-			return 5;
+			return 6;
 		}
     }
    /* //取消订单

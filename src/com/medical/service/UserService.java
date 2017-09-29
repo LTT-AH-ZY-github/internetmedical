@@ -127,9 +127,9 @@ public interface UserService {
 	Map<String, Object> getOrderAllInfo(Integer userLoginId);
 	
 	//确认订单
-	int updateOrderToConfirm(Integer userOrderId) throws Exception;
+	int updateOrderToConfirm(Integer userOrderId, Integer userloginid) throws Exception;
 	//取消订单
-	int updateOrderToCancel(Integer userOrderId) throws Exception;
+	int updateOrderToCancel(Integer userOrderId, Integer userloginid) throws Exception;
 
 	Map<String, Object> findReDoctorDetails(Integer preorderid) throws Exception;
 

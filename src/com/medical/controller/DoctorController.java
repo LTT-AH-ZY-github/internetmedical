@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.baidu.yun.push.utils.PushToAndroid;
 import com.mangofactory.swagger.annotations.ApiIgnore;
+import com.medical.po.City;
 import com.medical.po.DoctorSearch;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
@@ -66,7 +67,7 @@ public class DoctorController {
 	// 判断手机号码是否注册
 	@RequestMapping(value = "/phone", method = RequestMethod.POST, produces = "application/json")
 	
-	public Map<String, Object> phoneTest(@RequestBody  Map<String, String> params) throws Exception {
+	public Map<String, Object> phone(@RequestBody  Map<String, String> params) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String phone = params.get("phone");
 		if (phone != null && phone.trim() != "") {
@@ -77,17 +78,23 @@ public class DoctorController {
 		}
 		return map;
 	}
+
 	// 判断手机号码是否注册
 	@RequestMapping(value = "/phonetest", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "判断手机号码是否注册", httpMethod = "POST", notes = "判断手机号码是否注册")
-	public String phoneTest2(@ApiParam(name = "docloginphone",value="手机号码") @RequestParam String docloginphone) throws Exception {
-		int result = doctorService.findDocCountByPhone(docloginphone);
-		if (result == 1) {
-			return DataResult.success("该号码未注册");
-		} else if (result == 2) {
-			return DataResult.error("该号码已注册");
+	public String phoneTest(@ApiParam(name = "docloginphone", value = "手机号码") @RequestParam String docloginphone)
+			throws Exception {
+		if (docloginphone != null && docloginphone.trim().length() != 0) {
+			int result = doctorService.findDocCountByPhone(docloginphone);
+			if (result == 1) {
+				return DataResult.success("该号码未注册");
+			} else if (result == 2) {
+				return DataResult.error("该号码已注册");
+			} else {
+				return DataResult.error("异常错误");
+			}
 		} else {
-			return DataResult.error("异常错误");
+			return DataResult.error("手机号码为空");
 		}
 
 	}
@@ -117,14 +124,18 @@ public class DoctorController {
 	@RequestMapping(value = "/getmsgcode", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "发送短信验证码", httpMethod = "POST", notes = "发送短信验证码")
 	public String getMsgCode(@ApiParam(name = "docloginphone",value="手机号码") @RequestParam String docloginphone) throws Exception {
-
-		Map<String, Object> result = MsgCode.getCode(docloginphone);
-		double code = (double) result.get("code");
-		if (code == 200) {
-			return Result.success("成功");
+		if (docloginphone!=null && docloginphone.trim().length()!=0) {
+			Map<String, Object> result = MsgCode.getCode(docloginphone);
+			double code = (double) result.get("code");
+			if (code == 200) {
+				return Result.success("获取短信成功");
+			} else {
+				return Result.error("获取短信失败,错误代码为" + code);
+			}
 		} else {
-			return Result.error("获取短信失败,错误代码为" + code);
+			return DataResult.error("手机号码为空");
 		}
+		
 
 	}
 	
@@ -142,8 +153,6 @@ public class DoctorController {
 			} else {
 				map.put("state", "5"); // 5 验证码错误
 			}
-			
-
 		} else {
 			List<String> errList = new ArrayList<String>();
 			if (phone == null || phone.trim() == "") {
@@ -168,20 +177,34 @@ public class DoctorController {
 	public String doctorRegister(@ApiParam(name = "docloginphone", value = "手机号码") @RequestParam String docloginphone,
 			@ApiParam(name = "docloginpwd", value = "密码") @RequestParam String docloginpwd,
 			@ApiParam(name = "code", value = "短信验证码") @RequestParam String code) throws Exception {
-
-		int result = doctorService.createDoctor(docloginphone, code, docloginpwd);
-		if (1 == result) {
-			return DataResult.success("注册成功");
-		} else if (2 == result) {
-			return DataResult.error("注册失败");
-		} else if (3 == result) {
-			return DataResult.error("该号码已注册");
+		if (docloginphone != null && docloginphone.trim().length() != 0 && docloginpwd != null
+				&& docloginpwd.trim().length() != 0 && code != null && code.trim().length() != 0) {
+			int result = doctorService.createDoctor(docloginphone, code, docloginpwd);
+			if (1 == result) {
+				return DataResult.success("注册成功");
+			} else if (2 == result) {
+				return DataResult.error("注册失败");
+			} else if (3 == result) {
+				return DataResult.error("该号码已注册");
+			} else {
+				return DataResult.error("异常错误");
+			}
 		} else {
-			return DataResult.error("异常错误");
+			List<String> errList = new ArrayList<String>();
+			if (docloginphone == null || docloginphone.trim() == "") {
+				errList.add("手机号码为空"); // 密码为空
+			}
+			if (docloginpwd == null || docloginpwd.trim() == "") {
+				errList.add("密码为空"); // 手机号码为空
+			}
+			if (code == null || code.trim() == "") {
+				errList.add("验证码为空"); // 手机号码为空
+			}
+			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
 		}
-		// 1表示成功 2表示失败 3该号码已注册 4 操作异常
 
 	}
+	
 	// 登录
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json")
 	public @ResponseBody Map<String, Object> userLogin(@RequestBody @Valid Doctorlogininfo doctorlogininfo,BindingResult bindingResult) throws Exception {
@@ -218,44 +241,52 @@ public class DoctorController {
 			@ApiImplicitParam(name = "docloginpwd", required = true, value="密码",dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "doclogintoken", required = false, value="token",dataType = "String", paramType = "query") })
 	public String doctorLogin(@ApiIgnore Doctorlogininfo doctorlogininfo) throws Exception {
-
-		Map<String, Object> result = doctorService.updateDoctorToLogin(doctorlogininfo);
-		if ("1".equals(result.get("state"))) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("token", result.get("token"));
-			map.put("name", result.get("name"));
-			map.put("pix", result.get("pix"));
-			map.put("type", result.get("type"));
-			map.put("id", result.get("id"));
-			return DataResult.success("登录成功", map);
-		} else if ("2".equals(result.get("state"))) {
-			return DataResult.error("登录失败");
-		} else if ("3".equals(result.get("state"))) {
-			return DataResult.error("当前token不存在");
-		} else if ("4".equals(result.get("state"))) {
-			return DataResult.error("token已过期");
-		} else if ("4".equals(result.get("state"))) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("token", result.get("token"));
-			map.put("name", result.get("name"));
-			map.put("pix", result.get("pix"));
-			map.put("type", result.get("type"));
-			map.put("id", result.get("id"));
-			return DataResult.success("自动登录成功", map);
-		} else if ("6".equals(result.get("state"))) {
-			return DataResult.error(" 登录失败");
-
-		} else if ("7".equals(result.get("state"))) {
-			return DataResult.error("用户账号密码不匹配");
-
-		}
-		if ("8".equals(result.get("state"))) {
-			return DataResult.error("该号码未注册");
-
+		String docloginphone = doctorlogininfo.getDocloginphone();
+		String docloginpwd  = doctorlogininfo.getDocloginpwd();
+		if (docloginphone!=null&& docloginphone.trim().length()!=0 && docloginpwd!=null && docloginpwd.trim().length()!=0) {
+			Map<String, Object> result = doctorService.updateDoctorToLogin(doctorlogininfo);
+			if ("1".equals(result.get("state"))) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("token", result.get("token"));
+				map.put("name", result.get("name"));
+				map.put("pix", result.get("pix"));
+				map.put("type", result.get("type"));
+				map.put("id", result.get("id"));
+				return DataResult.success("登录成功", map);
+			} else if ("2".equals(result.get("state"))) {
+				return DataResult.error("登录失败");
+			} else if ("3".equals(result.get("state"))) {
+				return DataResult.error("当前token不存在");
+			} else if ("4".equals(result.get("state"))) {
+				return DataResult.error("token已过期");
+			} else if ("4".equals(result.get("state"))) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("token", result.get("token"));
+				map.put("name", result.get("name"));
+				map.put("pix", result.get("pix"));
+				map.put("type", result.get("type"));
+				map.put("id", result.get("id"));
+				return DataResult.success("自动登录成功", map);
+			} else if ("6".equals(result.get("state"))) {
+				return DataResult.error("自动登录失败");
+			} else if ("7".equals(result.get("state"))) {
+				return DataResult.error("用户账号密码不匹配");
+			}else if ("8".equals(result.get("state"))) {
+				return DataResult.error("该号码未注册");
+			} else {
+				return DataResult.error("操作异常");
+			}
 		} else {
-			return DataResult.error("操作异常");
-
+			List<String> errList = new ArrayList<String>();
+			if (docloginphone == null || docloginphone.trim() == "") {
+				errList.add("手机号码为空");
+			}
+			if (docloginpwd == null || docloginpwd.trim() == "") {
+				errList.add("密码为空"); 
+			}
+			return DataResult.error( errList.toString().replace("[", "").replace("]", ""));
 		}
+		
 	}
 	
 	//获取第一页个人信息
@@ -280,19 +311,26 @@ public class DoctorController {
 		}
 		return map;
 	}
-	//获取第一页个人信息
-	@RequestMapping(value="/getfirstinfo2",method=RequestMethod.POST,produces = "application/json;charset=UTF-8")
-		@ApiOperation(value = "获取第一页个人信息", httpMethod = "POST", notes = "获取第一页个人信息")
-		public String getFirstInfo2(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid) throws Exception{
-			Map<String, Object> result = doctorService.getInfo(docloginid,1);
+
+	// 获取第一页个人信息
+	@RequestMapping(value = "/getfirstinfo2", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取第一页个人信息", httpMethod = "POST", notes = "获取第一页个人信息")
+	public String getFirstInfo2(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
+			throws Exception {
+		if (docloginid!=null) {
+			Map<String, Object> result = doctorService.getInfo(docloginid, 1);
 			if ("1".equals(result.get("state"))) {
 				return DataResult.success("获取数据成功", result.get("data"));
 			} else if ("2".equals(result.get("state"))) {
-				return DataResult.error("获取数据失败");
-			}  else {
+				return DataResult.error("获取数据失败,因对应数据为空");
+			} else {
 				return DataResult.error("操作异常");
 
 			}
+		} else {
+			return DataResult.error("医生登录id为空");
+		}
+		
 	}
 	//获取第二页个人信息
 	@RequestMapping(value = "/getsecondinfo", method = RequestMethod.POST)
@@ -328,15 +366,20 @@ public class DoctorController {
 	@ApiOperation(value = "获取第二页个人信息", httpMethod = "POST", notes = "获取第二页个人信息")
 	public String getSecondInfo2(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
 			throws Exception {
-		Map<String, Object> result = doctorService.getInfo(docloginid, 2);
-		if ("1".equals(result.get("state"))) {
-			return DataResult.success("获取数据成功", result.get("data"));
-		} else if ("2".equals(result.get("state"))) {
-			return DataResult.error("获取数据失败");
-		} else {
-			return DataResult.error("操作异常");
+		if (docloginid != null) {
+			Map<String, Object> result = doctorService.getInfo(docloginid, 2);
+			if ("1".equals(result.get("state"))) {
+				return DataResult.success("获取数据成功", result.get("data"));
+			} else if ("2".equals(result.get("state"))) {
+				return DataResult.error("获取数据失败");
+			} else {
+				return DataResult.error("操作异常");
 
+			}
+		} else {
+			return DataResult.error("医生登录id为空");
 		}
+
 	}
 	
 	//更新第一页信息
@@ -361,10 +404,17 @@ public class DoctorController {
 	}
 	// 更新第一页个人信息
 	@RequestMapping(value = "/updatefirstinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "获取第二页个人信息", httpMethod = "POST", notes = "获取第二页个人信息")
+	@ApiOperation(value = "更新第一页个人信息", httpMethod = "POST", notes = "更新第一页个人信息")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "docloginid", required = true, value="医生登录id",dataType = "String", paramType = "query"),
 		@ApiImplicitParam(name = "dochosp", required = false, value="医院名称",dataType = "String", paramType = "query"),
+		@ApiImplicitParam(name = "hosplevel", required = false, value="医院等级",dataType = "String", paramType = "query"),
+		@ApiImplicitParam(name = "dochospprovince", required = false, value="医院所在省",dataType = "String", paramType = "query"),
+		@ApiImplicitParam(name = "dochospcity", required = false, value="医院所在市",dataType = "String", paramType = "query"),
+		@ApiImplicitParam(name = "dochosparea", required = false, value="医院所在区县",dataType = "String", paramType = "query"),
+		@ApiImplicitParam(name = "dochospother", required = false, value="医院所在具体地址",dataType = "String", paramType = "query"),
+		@ApiImplicitParam(name = "dochosplon", required = false, value="医院所在地址精度",dataType = "String", paramType = "query"),
+		@ApiImplicitParam(name = "dochosplat", required = false, value="医院所在地址纬度",dataType = "String", paramType = "query"),
 		@ApiImplicitParam(name = "docallday", required = false,value="是否全天接诊", dataType = "Boolean", paramType = "query"),
 		@ApiImplicitParam(name = "docage", required = false, value="年龄",dataType = "String", paramType = "query"),
 		@ApiImplicitParam(name = "docmale", required = false, value="性别",dataType = "Boolean", paramType = "query"),
@@ -376,21 +426,27 @@ public class DoctorController {
 	)
 	public String updateFirstInfo( Doctorinfo doctorinfo)
 			throws Exception {
-		int result = doctorService.updateInfo(doctorinfo);
-		if (result==1) {
-			return DataResult.success("修改资料成功");
-		} else if (result==2) {
-			return DataResult.error("修改数据失败");
-		} else  if (result==3) {
-			return DataResult.error("登录id对应的个人记录为空");
-		} else if (result==4) {
-			return DataResult.error("已被审核,个人信息不可修改");
-		} else if (result==5) {
-			return DataResult.error("登录id对应的信息为空");
-		} else{
-			return DataResult.error("操作异常");
+		Integer docloginid = doctorinfo.getDocloginid();
+		if (docloginid!=null) {
+			int result = doctorService.updateInfo(doctorinfo);
+			if (result==1) {
+				return DataResult.success("修改资料成功");
+			} else if (result==2) {
+				return DataResult.error("修改数据失败");
+			} else  if (result==3) {
+				return DataResult.error("登录id对应的个人记录为空");
+			} else if (result==4) {
+				return DataResult.error("已被审核,个人信息不可修改");
+			} else if (result==5) {
+				return DataResult.error("登录id对应的信息为空");
+			} else{
+				return DataResult.error("操作异常");
 
+			}
+		} else {
+			return DataResult.error("医生登录id为空");
 		}
+		
 	}
 	// 传图片
 	@RequestMapping(value = "/photo", method = RequestMethod.POST)
@@ -656,17 +712,20 @@ public class DoctorController {
 	@ApiOperation(value = "获取病情", httpMethod = "POST", notes = "获取病情",produces="application/json")
 	public String listSick(@ApiParam(name = "docloginid",required = true,value ="医生登录id")@RequestParam(required=true) Integer docloginid,
 			@ApiParam(name = "page",value ="当前页")@RequestParam(required=true) Integer page,
-			@ApiParam(name = "lat",value ="")@RequestParam(required=true) String lat,
-			@ApiParam(name = "lon",value ="医生登录id")@RequestParam(required=true) String lon,
-			@ApiParam(name = "distance",value ="位置")@RequestParam(required=false) String distance,
-			@ApiParam(name = "time",value ="时间")@RequestParam(required=false) String time
+			@ApiParam(name = "lat",value ="精度")@RequestParam(required=true) String lat,
+			@ApiParam(name = "lon",value ="纬度")@RequestParam(required=true) String lon,
+			@ApiParam(name = "time",value ="时间")@RequestParam(required=false) String time,
+			@ApiParam(name = "province",value ="省")@RequestParam(required=false) String province,
+			@ApiParam(name = "city",value ="省")@RequestParam(required=false) String city,
+			@ApiParam(name = "area",value ="省")@RequestParam(required=false) String area
+			
 			) throws Exception {
 		   Integer pageSize = 5;
-			Map<String, Object> result = doctorService.listSick(page, pageSize, docloginid,lat, lon,distance,time);
+			Map<String, Object> result = doctorService.listSick(page, pageSize, docloginid,lat, lon,time,province,city,area);
 			if ("1".equals(result.get("state"))) {
 				return PaginationResult.success("推荐病情获取成功", result.get("data"));
 			} else if ("2".equals(result.get("state"))) {
-				return PaginationResult.error("获取失败");
+				return PaginationResult.error("推荐病情获取失败,因数据为空",null);
 			} else if ("3".equals(result.get("state"))) {
 				return PaginationResult.success("按时间排序病情获取成功", result.get("data"));
 			} else if ("4".equals(result.get("state"))) {
@@ -682,6 +741,7 @@ public class DoctorController {
 			}		
 
 	}
+	
 	/*//获取病情详情
 	@RequestMapping(value = "/getsickdetail", method = RequestMethod.POST)
 	@ApiOperation(value = "获取病情详情", httpMethod = "POST", notes = "获取病情详情", produces = "application/json")

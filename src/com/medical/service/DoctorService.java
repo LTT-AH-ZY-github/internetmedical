@@ -19,7 +19,7 @@ import com.medical.po.Userorder;
 public interface DoctorService {
 	
 	//手机号码是否注册
-	int findDocCountByPhone(String phone) throws Exception;
+	int findDocCountByPhone(String docLoginPhone) throws Exception;
 	
 	// 医生注册
 	int createDoctor(String docLoginPhone, String magCode, String docLoginPwd);
@@ -28,7 +28,7 @@ public interface DoctorService {
 	Map<String, Object> updateDoctorToLogin(Doctorlogininfo doctorlogininfo) throws NoSuchAlgorithmException;
 	
 	//获取个人信息
-	Map<String, Object> getInfo(int id, int flag);
+	Map<String, Object> getInfo(Integer docLoginId, Integer flag);
 	
 	//上传照片
 	Map<String, Object>  updatePhoto(MultipartFile[] pictureFile, int id, Integer type) throws Exception;
@@ -94,13 +94,15 @@ public interface DoctorService {
 	
 	//获取病情
 	Map<String, Object> listSick(Integer pageNo, Integer pageSize, Integer docloginid, String lat, String lon,
-			String loc, String time);
+			String time, String province, String city, String area);
 
 	//获取病情详情
 	Map<String, Object> getSickDetail(Integer usersickid) throws Exception;
 	
 	//获取已抢订单
 	Map<String, Object> listGrabOrders(Integer docloginid);
+
+	
 
 	
 	

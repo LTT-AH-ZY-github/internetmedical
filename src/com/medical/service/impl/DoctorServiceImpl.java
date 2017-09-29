@@ -138,10 +138,10 @@ public class DoctorServiceImpl implements DoctorService {
 	Logger logger = Logger.getLogger(DoctorService.class);
 	// 判断手机号码是否注册
 	@Override
-	public int findDocCountByPhone(String phone) throws Exception {
+	public int findDocCountByPhone(String docLoginPhone) throws Exception {
 		try {
 			// 查询用户登录表
-			int count = doctorlogininfoMapperCustom.findDocCountByPhone(phone);
+			int count = doctorlogininfoMapperCustom.findDocCountByPhone(docLoginPhone);
 			if (count == 0) {
 				return 1; // 未注册
 			} else {
@@ -309,35 +309,31 @@ public class DoctorServiceImpl implements DoctorService {
 
 	}
 	
-	//获取个人信息
+	// 获取个人信息
 	@Override
-	public Map<String, Object> getInfo(int id,int flag){
+	public Map<String, Object> getInfo(Integer docLoginId, Integer flag) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			//根据登录Id查询个人信息
-			//Doctorinfo doctorinfo = doctorinfoMapperCustom.findDoctorinfoByDocLoginId(id);
-			//id对应的个人信息不为空
-			
-				if (flag==1) {
-					Map<String, Object> doctorinfo= doctorinfoMapperCustom.selectFirstInfoByDocLoginId(id);
-					if (doctorinfo!=null) {
-						map.put("state", "1");
-						map.put("data", doctorinfo);
-					}else {
-						map.put("state", "2"); //id对应的个人信息为空
-					}
+			if (flag == 1) {
+				Map<String, Object> doctorinfo = doctorinfoMapperCustom.selectFirstInfoByDocLoginId(docLoginId);
+				if (doctorinfo != null) {
+					map.put("state", "1");
+					map.put("data", doctorinfo);
 				} else {
-					Map<String, Object> doctorinfo= doctorinfoMapperCustom.selectSecondInfoByDocLoginId(id);
-					 //身份证照片   职称  行医资格证    工作证    其他照片
-					if (doctorinfo!=null) {
-						map.put("state", "1");
-						map.put("data", doctorinfo);
-					}else {
-						map.put("state", "2"); //id对应的个人信息为空
-					}
+					map.put("state", "2"); // id对应的个人信息为空
 				}
+			} else {
+				Map<String, Object> doctorinfo = doctorinfoMapperCustom.selectSecondInfoByDocLoginId(docLoginId);
+				// 身份证照片 职称 行医资格证 工作证 其他照片
+				if (doctorinfo != null) {
+					map.put("state", "1");
+					map.put("data", doctorinfo);
+				} else {
+					map.put("state", "2"); // id对应的个人信息为空
+				}
+			}
 		} catch (Exception e) {
-			logger.error("获取个人信息失败"+e);
+			logger.error("获取个人信息失败" + e);
 			map.put("state", "3"); // 操作异常
 		}
 		return map;
@@ -467,8 +463,8 @@ public class DoctorServiceImpl implements DoctorService {
 	}
 	//获取病情
 	@Override
-	public Map<String, Object> listSick(Integer pageNo, Integer pageSize, Integer docloginid, String lat, String lon,String loc,
-			 String time) {
+	public Map<String, Object> listSick(Integer pageNo, Integer pageSize, Integer docloginid, String lat, String lon,String time,
+			 String province,String city,String area) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			pageNo = pageNo == null ? 1 : pageNo;
@@ -479,7 +475,7 @@ public class DoctorServiceImpl implements DoctorService {
 				lat = lat == null ? doctorinfo.getDoclat() : lat;
 				lon = lon == null ? doctorinfo.getDoclon() : lon;
 				// 获取推荐病情
-				if ((loc == null || loc.trim() == "") && (time == null || time.trim() == "")) {
+				if ((province == null || province.trim().length() == 0) && (time == null || time.trim().length() == 0)) {
 					if (lat == null || lat.trim() == "" || lat == null || lat.trim() == "") {
 
 					}
@@ -494,7 +490,7 @@ public class DoctorServiceImpl implements DoctorService {
 					PageHelper.startPage(pageNo, pageSize);
 					List<Map<String, Object>> list = usersickMapperCustom.paginationReSickSortByDistance(doctorSearch);
 					PageInfo<Map<String, Object>> page = new PageInfo<Map<String, Object>>(list);
-					if (!list.isEmpty()) {
+					if (page.getTotal()>0) {
 						// 获取数据成功
 						map.put("state", "1");
 						map.put("data", page.getList());
@@ -524,6 +520,9 @@ public class DoctorServiceImpl implements DoctorService {
 						DoctorSearch doctorSearch = new DoctorSearch();
 						doctorSearch.setLat(lat);
 						doctorSearch.setLon(lon);
+						doctorSearch.setProvince(province);
+						doctorSearch.setCity(city);
+						doctorSearch.setArea(area);
 						PageHelper.startPage(pageNo, pageSize);
 						List<Map<String, Object>> list = usersickMapperCustom.paginationSickSortByLoc(doctorSearch);
 						PageInfo<Map<String, Object>> page = new PageInfo<Map<String, Object>>(list);
@@ -549,6 +548,25 @@ public class DoctorServiceImpl implements DoctorService {
 		
 		return map;
 	}
+
+	// 获取病情详情
+	@Override
+	public Map<String, Object> getSickDetail(Integer usersickid) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			Map<String, Object> data = usersickMapperCustom.selectAllInfoByUserSickId(usersickid);
+			if (!data.isEmpty()) {
+				map.put("state", "1");
+				map.put("data", data);
+			} else {
+				map.put("state", "2");
+			}
+		} catch (Exception e) {
+			map.put("state", "3");
+		}
+		return map;
+	}
+	
 	//医生抢单
 	@Override 
 	public Map<String, Object> creatPreOrder(int usersickid, int docloginid, Double preorderprice) {
@@ -836,23 +854,7 @@ public class DoctorServiceImpl implements DoctorService {
 		return map;
 	}
 	
-	//获取病情详情
-	@Override
-	public Map<String, Object> getSickDetail(Integer usersickid) throws  Exception{
-		Map<String, Object> map = new HashMap<String, Object>();
-		try {
-			Map<String, Object> data = usersickMapperCustom.selectAllInfoByUserSickId(usersickid);
-			if (!data.isEmpty()) {
-				map.put("state", "1");
-				map.put("data", data);
-			} else {
-				map.put("state", "2");
-			}
-		} catch (Exception e) {
-			map.put("state", "3");
-		}
-		return map;
-	}
+	
 	//获取病人头像
 	@Override
 	public Map<String, Object> getUserPix(int id)throws Exception{

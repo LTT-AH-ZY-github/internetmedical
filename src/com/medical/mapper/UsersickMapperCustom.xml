@@ -203,7 +203,7 @@
   </select>
   <!--获取推荐病情  -->
   <select id="paginationReSickSortByDistance" parameterType="com.medical.po.SickSearch" resultType="map">
-    select a.usersickid,a.usersickdesc,a.usersickptime,a.usersickpic,b.userloginpix,c.familyname,c.familyage,c.familymale,
+    select a.usersickid,a.usersickdesc,a.usersickptime,b.userloginpix,c.familyname,c.familyage,c.familymale,a.usersickpic,a.usersickprimarydept,a.usersickseconddept,
   		ROUND(
 			    6378.138 * 2 * ASIN(
 			          SQRT(
@@ -231,10 +231,10 @@
   	  left join familyinfo as c on a.familyId =c.familyId
   where a.userSickStateId=2 
   ORDER BY a.userSickPTime ASC
-	
-  </select>
+ </select>
+  <!--获取按时间排序的病情  -->
   <select id="paginationSickSortByTime" parameterType="com.medical.po.SickSearch" resultType="map">
-    select a.usersickid,a.usersickdesc,a.usersickptime,a.usersickpic,b.userloginpix,c.familyname,c.familyage,c.familymale,
+    select a.usersickid,a.usersickdesc,a.usersickptime,b.userloginpix,c.familyname,c.familyage,c.familymale,,a.usersickpic,a.usersickprimarydept,a.usersickseconddept,
   		ROUND(
 			    6378.138 * 2 * ASIN(
 			          SQRT(
@@ -264,8 +264,9 @@
   ORDER BY distance ASC
 	
   </select>
+  <!--获取按位置排序的病情  -->
    <select id="paginationSickSortByLoc" parameterType="com.medical.po.SickSearch" resultType="map">
-    select a.usersickid,a.usersickdesc,a.usersickptime,a.usersickpic,b.userloginpix,c.familyname,c.familyage,c.familymale,
+    select a.usersickid,a.usersickdesc,a.usersickptime,b.userloginpix,c.familyname,c.familyage,c.familymale,a.usersickpic,a.usersickprimarydept,a.usersickseconddept,
   		ROUND(
 			    6378.138 * 2 * ASIN(
 			          SQRT(
@@ -292,11 +293,20 @@
   	  left join userlogininfo as b on a.userLoginId =b.userLoginId 
   	  left join familyinfo as c on a.familyId =c.familyId
   where a.userSickStateId=2 
-  ORDER BY distance ASC
-	
-  </select>
+	  <if test="province!=null">
+	  	b.userLoginProvince=#{province}
+	  </if>
+	  <if test="city">
+	 	 b.userLoginCity=#{city}
+	  </if>
+	  <if test="area">
+	    b.userLoginArea=#{area}
+	  </if>
+	 ORDER BY distance ASC
+ </select>	
+ <!--查看病情详情  -->
   <select id="selectAllInfoByUserSickId" parameterType="java.lang.Integer" resultType="map">
-    select a.usersickid,a.usersickdesc,a.usersickptime,a.usersickpic,b.userloginpix,c.familyname,c.familyage,c.familymale,c.familyid
+    select a.usersickid,a.usersickdesc,a.usersickptime,b.userloginpix,c.familyname,c.familyage,c.familymale,a.usersickpic,a.usersickprimarydept,a.usersickseconddept
   	from usersick as a 
   	  left join userlogininfo as b on a.userLoginId =b.userLoginId 
   	  left join familyinfo as c on a.familyId =c.familyId

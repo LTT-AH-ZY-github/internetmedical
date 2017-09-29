@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
+import javax.validation.constraints.Null;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -424,7 +426,7 @@ public class UserController {
 		} else {
 			List<String> errList = new ArrayList<String>();
 			if (userloginid == null) {
-				errList.add("登录id");
+				errList.add("登录id为空");
 			}
 			if (familyname == null||familyname.trim().length()!=0) {
 				errList.add("寝室姓名为空");
@@ -450,25 +452,37 @@ public class UserController {
 			@ApiParam(name = "familymale", value = "性别") @RequestParam(required = false) String familymale,
 			@ApiParam(name = "familyage", value = "年龄") @RequestParam(required = false) Integer familyage)
 			throws Exception {
-		Familyinfo familyinfo = new Familyinfo();
-		familyinfo.setUserloginid(userloginid);
-		familyinfo.setFamilyage(familyage);
-		familyinfo.setFamilymale(familymale);
-		familyinfo.setFamilyname(familyname);
-		familyinfo.setFamilyid(familyid);
-		familyinfo.setFamilytype(false);
-		int result = userService.updateFamily(familyinfo);
-		if (result == 1) {
-			return DataResult.success("修改成功");
-		} else if (result == 2) {
-			return DataResult.error("修改失败");
-		} else if (result == 3) {
-			return DataResult.error("修改失败,本人信息不支持修改");
-		} else  if (result == 4) {
-			return DataResult.error("对应亲属信息为空");
-		} else{
-			return DataResult.error("异常错误");
+		if (userloginid!=null && familyid!=null) {
+			Familyinfo familyinfo = new Familyinfo();
+			familyinfo.setUserloginid(userloginid);
+			familyinfo.setFamilyage(familyage);
+			familyinfo.setFamilymale(familymale);
+			familyinfo.setFamilyname(familyname);
+			familyinfo.setFamilyid(familyid);
+			familyinfo.setFamilytype(false);
+			int result = userService.updateFamily(familyinfo);
+			if (result == 1) {
+				return DataResult.success("修改成功");
+			} else if (result == 2) {
+				return DataResult.error("修改失败");
+			} else if (result == 3) {
+				return DataResult.error("修改失败,本人信息不支持修改");
+			} else  if (result == 4) {
+				return DataResult.error("对应亲属信息为空");
+			} else{
+				return DataResult.error("异常错误");
+			}
+		} else {
+			List<String> errList = new ArrayList<String>();
+			if (userloginid == null) {
+				errList.add("登录id为空");
+			}
+			if (familyid == null) {
+				errList.add("亲属id为空");
+			}
+			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
 		}
+		
 	}
 
 	// 刪除亲属信息
@@ -553,9 +567,9 @@ public class UserController {
 		
 	}
 
-	// 获取单个医生信息
+	// 获取单个医生详细信息
 	@RequestMapping(value = "/doctorinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "获取单个医生信息", httpMethod = "POST", notes = "获取单个医生信息")
+	@ApiOperation(value = "获取单个医生详细信息", httpMethod = "POST", notes = "获取单个医生详细信息")
 	public String findDoctor(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
 			throws Exception {
 		if (docloginid != null) {
@@ -755,7 +769,8 @@ public class UserController {
 			@ApiImplicitParam(name = "usersickdesc", value = "病情描述", required = false, dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "usersickprimarydept", value = "医院一级科室", required = false, dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "usersickseconddept", value = "医院二级科室", required = false, dataType = "String", paramType = "query"),
-			@ApiImplicitParam(name = "familyid", value = "亲属id", required = false, dataType = "int", paramType = "query") })
+			@ApiImplicitParam(name = "familyid", value = "亲属id", required = false, dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "usersickpic", value = "原图片路径", required = false, dataType = "String", paramType = "query")})
 	public String editSick(
 			@ApiParam(name = "pictureFile", required = false, value = "图片") @RequestParam(required = false) MultipartFile[] pictureFile,
 			@ApiIgnore @Valid UsersickCustom usersickCustom, BindingResult bindingResult) throws Exception {
@@ -875,7 +890,7 @@ public class UserController {
 
 	}
 
-	// 获取推荐医生详情
+	/*// 获取推荐医生详情
 	@RequestMapping(value = "/getredoctordetail", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取推荐医生详情", httpMethod = "POST", notes = "获取推荐医生")
 	public String getrReDoctorInfo(@ApiParam(name = "preorderid", value = "预订单id") @RequestParam Integer preorderid)
@@ -895,28 +910,39 @@ public class UserController {
 			return DataResult.error("id为空");
 		}
 
-	}
+	}*/
 
 	// 预选医生
 	@RequestMapping(value = "/optdoctor", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "预选医生", httpMethod = "POST", notes = "预选医生")
 	public String optDoctor(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid) throws Exception {
-
-		int result = userService.addOptDoctor(docloginid, userloginid);
-		if (1 == result) {
-			return DataResult.success("成功");
-		} else if (2 == result) {
-			return DataResult.error("失败");
-		} else if (3 == result) {
-			return DataResult.error("该医生已被选");
-		} else if (4 == result) {
-			return DataResult.error("系统错误，发布的病情超过一个");
-		} else if (5 == result) {
-			return DataResult.error("没有发布的病情");
+		if (docloginid!=null && userloginid!=null) {
+			int result = userService.addOptDoctor(docloginid, userloginid);
+			if (1 == result) {
+				return DataResult.success("成功");
+			} else if (2 == result) {
+				return DataResult.error("失败");
+			} else if (3 == result) {
+				return DataResult.error("该医生已被选");
+			} else if (4 == result) {
+				return DataResult.error("系统错误，发布的病情超过一个");
+			} else if (5 == result) {
+				return DataResult.error("没有发布的病情");
+			} else {
+				return DataResult.error("异常错误");
+			}
 		} else {
-			return DataResult.error("异常错误");
+			List<String> errList = new ArrayList<String>();
+			if (userloginid == null) {
+				errList.add("用户登录id为空");
+			}
+			if (docloginid == null) {
+				errList.add("医生登录id为空");
+			}
+			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
 		}
+		
 
 	}
 
@@ -926,65 +952,97 @@ public class UserController {
 	public String createOrder(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
 			@ApiParam(name = "userorderappointment", value = "预约时间") @RequestParam String userorderappointment) throws Exception {
-
-		int result = userService.createOrder(docloginid, userloginid, userorderappointment);
-		if (1 == result) {
-			return DataResult.success("成功");
-		} else if (2 == result) {
-			return DataResult.error("失败");
-		} else if (3 == result) {
-			return DataResult.error("该医生未加入候选");
-		} else if (4 == result) {
-			return DataResult.error("系统错误，发布的病情超过一个");
-		} else if (5 == result) {
-			return DataResult.error("没有发布的病情");
+		if (docloginid!= null && userloginid!=null && userorderappointment!=null && userorderappointment.trim().length()!=0) {
+			int result = userService.createOrder(docloginid, userloginid, userorderappointment);
+			if (1 == result) {
+				return DataResult.success("成功");
+			} else if (2 == result) {
+				return DataResult.error("失败");
+			} else if (3 == result) {
+				return DataResult.error("该医生未加入候选");
+			} else if (4 == result) {
+				return DataResult.error("系统错误，发布的病情超过一个");
+			} else if (5 == result) {
+				return DataResult.error("没有发布的病情");
+			} else {
+				return DataResult.error("异常错误");
+			}
 		} else {
-			return DataResult.error("异常错误");
+			List<String> errList = new ArrayList<String>();
+			if (userloginid == null) {
+				errList.add("用户登录id为空");
+			}
+			if (docloginid == null) {
+				errList.add("医生登录id为空");
+			}
+			if (userorderappointment==null || userorderappointment.trim().length()==0) {
+				errList.add("预约时间为空");
+			}
+			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
 		}
+		
 
 	}
 
 	// 取消订单
 	@RequestMapping(value = "/cancleorder", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "取消订单", httpMethod = "POST", notes = "取消订单")
-	public String cancleOrder(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid)
+	public String cancleOrder(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
+			                  @ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid)
 			throws Exception {
-
-		int result = userService.updateOrderToCancel(userorderid);
-		if (1 == result) {
-			return DataResult.success("成功");
-		} else if (2 == result) {
-			return DataResult.error("失败");
-		} else if (3 == result) {
-			return DataResult.error("该状态订单不支持取消");
-		} else if (4 == result) {
-			return DataResult.error("无对应订单");
+		if (userorderid!=null && userloginid!=null) {
+			int result = userService.updateOrderToCancel(userorderid,userloginid);
+			if (1 == result) {
+				return DataResult.success("成功");
+			} else if (2 == result) {
+				return DataResult.error("失败");
+			} else if (3 == result) {
+				return DataResult.error("该状态订单不支持取消");
+			} else if (4 == result) {
+				return DataResult.error("用户登录id和订单不匹配");
+			} else if (5 == result) {
+				return DataResult.error("无对应订单");
+			} else {
+				return DataResult.error("异常错误");
+			}
 		} else {
-			return DataResult.error("异常错误");
+			List<String> errList = new ArrayList<String>();
+			if (userloginid == null) {
+				errList.add("用户登录id为空");
+			}
+			if (userorderid == null) {
+				errList.add("订单id为空");
+			}
+			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
 		}
+		
 
 	}
 
-	// 获取订单
+	// 获取正在进行订单
 	@RequestMapping(value = "/order", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取订单", httpMethod = "POST", notes = "获取订单")
 	public String order(@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid)
 			throws Exception {
+		if (userloginid!=null) {
+			Map<String, Object> resultMap = userService.getOrders(userloginid);
+			if ("1".equals(resultMap.get("state"))) {
+				return DataResult.success("获取成功", resultMap.get("data"));
 
-		Map<String, Object> resultMap = userService.getOrders(userloginid);
-		if ("1".equals(resultMap.get("state"))) {
-			return DataResult.success("获取成功", resultMap.get("data"));
+			} else if ("2".equals(resultMap.get("state"))) {
+				return DataResult.error("获取的数据为空");
 
-		} else if ("2".equals(resultMap.get("state"))) {
-			return DataResult.error("获取的数据为空");
-
+			} else {
+				return DataResult.error("操作异常");
+			}
 		} else {
-			return DataResult.error("操作异常");
+			return DataResult.error("用户登录id为空");
 		}
+		
 
 	}
 
-	// 获取订单详细信息
+	/*// 获取订单详细信息
 	@RequestMapping(value = "/orderdetail", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取订单详细信息", httpMethod = "POST", notes = "获取订单详细信息")
 	public String orderDetail(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid)
@@ -1000,43 +1058,64 @@ public class UserController {
 			return DataResult.error("操作异常");
 		}
 
-	}
+	}*/
 
 	// 确认订单
 	@RequestMapping(value = "/confirmorder", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "确认订单", httpMethod = "POST", notes = "确认订单")
-	public String confirmOrder(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid)
+	public String confirmOrder(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
+			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid
+			)
 			throws Exception {
-		int result = userService.updateOrderToConfirm(userorderid);
-		if (1 == result) {
-			return DataResult.success("成功");
-		} else if (2 == result) {
-			return DataResult.error("失败");
-		} else if (3 == result) {
-			return DataResult.error("该状态不支持用户确认");
-		} else if (4 == result) {
-			return DataResult.error("无对应订单");
+		if (userloginid != null && userorderid!=null) {
+			int result = userService.updateOrderToConfirm(userorderid,userloginid);
+			if (1 == result) {
+				return DataResult.success("成功");
+			} else if (2 == result) {
+				return DataResult.error("失败");
+			} else if (3 == result) {
+				return DataResult.error("该状态不支持用户确认");
+			} else if (4 == result) {
+				return DataResult.error("用户和订单不匹配");
+			} else if (5 == result) {
+				return DataResult.error("无对应订单");
+			} else {
+				return DataResult.error("异常错误");
+			}
 		} else {
-			return DataResult.error("异常错误");
+			List<String> errList = new ArrayList<String>();
+			if (userloginid == null) {
+				errList.add("用户登录id为空");
+			}
+			if (userorderid == null) {
+				errList.add("订单id为空");
+			}
+			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
 		}
+		
 
 	}
-    //获取历史订单
+    
+	//获取历史订单
 	@RequestMapping(value = "/getoldorder", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取历史订单", httpMethod = "POST", notes = "获取历史订单")
 	public String getOldOrders(@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid)
 				throws Exception {
+		if (userloginid!=null) {
+			Map<String, Object> resultMap = userService.listOldOrders(userloginid);
+			if ("1".equals(resultMap.get("state"))) {
+				return DataResult.success("获取成功", resultMap.get("data"));
 
-		Map<String, Object> resultMap = userService.listOldOrders(userloginid);
-		if ("1".equals(resultMap.get("state"))) {
-			return DataResult.success("获取成功", resultMap.get("data"));
+			} else if ("2".equals(resultMap.get("state"))) {
+				return DataResult.error("获取的数据为空");
 
-		} else if ("2".equals(resultMap.get("state"))) {
-			return DataResult.error("获取的数据为空");
-
+			} else {
+				return DataResult.error("操作异常");
+			}
 		} else {
-			return DataResult.error("操作异常");
+			return DataResult.error("用户登录id为空");
 		}
+		
 
 	}
 	/*
