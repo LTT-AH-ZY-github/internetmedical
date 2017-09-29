@@ -52,8 +52,7 @@ public interface DoctorService {
 	Map<String, Object> deletePreOrder(int preorderid);
 	
 
-	Map<String, Object> updateOrderConfirm(Integer userorderid, Double userorderdprice, Double userorderhprice,
-			Integer userorderhospid);
+	Map<String, Object> updateOrderConfirm(Userorder userorder);
 
 	
 
@@ -82,12 +81,7 @@ public interface DoctorService {
 	Map<String, Object> getDeptByFatherId(int id) throws Exception;
 
 	Map<String, Object> getDept() throws Exception;
-	//获取订单
 	
-
-	
-
-	Map<String, Object> listOrder(Integer docLoginId, Integer type) throws Exception;
 
 	
 
@@ -100,7 +94,21 @@ public interface DoctorService {
 	Map<String, Object> getSickDetail(Integer usersickid) throws Exception;
 	
 	//获取已抢订单
-	Map<String, Object> listGrabOrders(Integer docloginid);
+	Map<String, Object> listGrabOrders(Integer docloginid, Integer pageNo, Integer pageSize);
+	//获取已抢订单详情
+	Map<String, Object> getGrabOrderDetail(Integer preOrderId);
+	//获取订单
+	Map<String, Object> listOrder(Integer docLoginId, Integer type, Integer pageNo, Integer pageSize) throws Exception;
+	//获取订单详请
+	Map<String, Object> getOrderDetail(Integer docLoginId, Integer userOrderId);
+
+	
+
+	
+
+	
+	
+	
 
 	
 

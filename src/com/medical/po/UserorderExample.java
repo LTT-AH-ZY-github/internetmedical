@@ -726,52 +726,52 @@ public class UserorderExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserorderhstateEqualTo(Byte value) {
+        public Criteria andUserorderhstateEqualTo(Boolean value) {
             addCriterion("userOrderHState =", value, "userorderhstate");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderhstateNotEqualTo(Byte value) {
+        public Criteria andUserorderhstateNotEqualTo(Boolean value) {
             addCriterion("userOrderHState <>", value, "userorderhstate");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderhstateGreaterThan(Byte value) {
+        public Criteria andUserorderhstateGreaterThan(Boolean value) {
             addCriterion("userOrderHState >", value, "userorderhstate");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderhstateGreaterThanOrEqualTo(Byte value) {
+        public Criteria andUserorderhstateGreaterThanOrEqualTo(Boolean value) {
             addCriterion("userOrderHState >=", value, "userorderhstate");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderhstateLessThan(Byte value) {
+        public Criteria andUserorderhstateLessThan(Boolean value) {
             addCriterion("userOrderHState <", value, "userorderhstate");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderhstateLessThanOrEqualTo(Byte value) {
+        public Criteria andUserorderhstateLessThanOrEqualTo(Boolean value) {
             addCriterion("userOrderHState <=", value, "userorderhstate");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderhstateIn(List<Byte> values) {
+        public Criteria andUserorderhstateIn(List<Boolean> values) {
             addCriterion("userOrderHState in", values, "userorderhstate");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderhstateNotIn(List<Byte> values) {
+        public Criteria andUserorderhstateNotIn(List<Boolean> values) {
             addCriterion("userOrderHState not in", values, "userorderhstate");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderhstateBetween(Byte value1, Byte value2) {
+        public Criteria andUserorderhstateBetween(Boolean value1, Boolean value2) {
             addCriterion("userOrderHState between", value1, value2, "userorderhstate");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderhstateNotBetween(Byte value1, Byte value2) {
+        public Criteria andUserorderhstateNotBetween(Boolean value1, Boolean value2) {
             addCriterion("userOrderHState not between", value1, value2, "userorderhstate");
             return (Criteria) this;
         }

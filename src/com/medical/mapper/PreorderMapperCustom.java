@@ -17,5 +17,9 @@ public interface PreorderMapperCustom {
     List<Preorder>  selectByDocLoginIdAndPreOrderType(Integer docloginid, Integer preOrderType);
     
 	Map<String, Object> selectAllInfoByPreOrderId(Integer preorderid);
-	List<Map<String, Object>>  selectAllInfoByDocLoginId(Integer docloginid);
+	
+	//获取医生已抢订单
+	List<Map<String, Object>>  listByDocLoginId(Integer docloginid);
+	//获取已抢订单详情
+	Map<String, Object> selectAllInfoByPreOrderIdInDoc(Integer preorderid);
 }

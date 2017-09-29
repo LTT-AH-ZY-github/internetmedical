@@ -133,7 +133,7 @@ public interface UserService {
 
 	Map<String, Object> findReDoctorDetails(Integer preorderid) throws Exception;
 
-	Map<String, Object> listOldOrders(Integer userloginid);
+	Map<String, Object> listOldOrders(Integer userloginid, Integer pageNo, Integer pageSize);
 
 	
 

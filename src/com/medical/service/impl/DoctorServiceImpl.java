@@ -677,31 +677,13 @@ public class DoctorServiceImpl implements DoctorService {
 		}
 		return map;
 	}
-	//获取订单
-	@Override 
-	public Map<String, Object> listOrder(Integer docLoginId,Integer type) throws Exception{
-		Map<String, Object> map = new HashMap<String, Object>();
-		try {
-			List<Map<String, Object>> data = userorderMapperCustom.selectAllByDocLoginId(docLoginId);
-			if (data.size()!=0) {
-				map.put("state", "1");
-				map.put("data", data);
-			} else {
-				map.put("state", "2");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			map.put("state", "3");
-			logger.error("医生获取订单异常"+e);
-		}
-		return map;
-	}
+	
 	//医生确认
 	@Override
-	public Map<String, Object> updateOrderConfirm(Integer userorderid, Double userorderdprice, Double userorderhprice,
-			Integer userorderhospid){
+	public Map<String, Object> updateOrderConfirm(Userorder userorder){
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
+			Integer userorderid = userorder.getUserorderid();
 			Userorder order = userorderMapper.selectByPrimaryKey(userorderid);
 			//订单存在
 			if (order!=null) {
@@ -709,34 +691,6 @@ public class DoctorServiceImpl implements DoctorService {
 				int stateid = order.getUserorderstateid();
 				//等待医生确认状态
 				if (stateid==1) {
-					BigDecimal orderdprice = order.getUserorderdprice();
-					BigDecimal orderhprice = order.getUserorderhprice();
-					//订单信息
-					Userorder userorder = new Userorder();
-					userorder.setUserorderid(userorderid);
-					if (userorderdprice!=null) {
-						userorder.setUserorderdprice(new BigDecimal(userorderdprice));
-						orderdprice = new BigDecimal(userorderdprice);
-					}else {
-						if (orderdprice==null) {
-							//医生价格为空
-							map.put("state", "7"); 
-							return map;
-						}
-					}
-					if (userorderhprice!=null) {
-						userorder.setUserorderhprice(new BigDecimal(userorderhprice));
-						orderhprice = new BigDecimal(userorderhprice);
-					}else{
-						if (orderhprice==null) {
-							//医院价格为空
-							map.put("state", "8"); 
-							return map;
-						}
-					}
-					BigDecimal userorderprice = orderdprice.add(orderhprice);
-					userorder.setUserorderprice(userorderprice);
-					userorder.setUserorderhospid(userorderhospid);
 					userorder.setUserorderstateid(2);
 					//接单时间
 					userorder.setUserorderrtime(new Date());
@@ -781,7 +735,7 @@ public class DoctorServiceImpl implements DoctorService {
 			logger.error("医生确认订单错误"+e);
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			 //操作异常
-			map.put("state", "9"); 
+			map.put("state", "7"); 
 		}
 		return map;
 	}
@@ -1120,15 +1074,19 @@ public class DoctorServiceImpl implements DoctorService {
 		}
 		return map;
 	}
+	
 	//获取已抢订单
 	@Override
-	public Map<String, Object> listGrabOrders(Integer docloginid) {
+	public Map<String, Object> listGrabOrders(Integer docloginid,Integer pageNo,Integer pageSize) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			List<Map<String, Object>> result = preorderMapperCustom.selectAllInfoByDocLoginId(docloginid);
-			if (result.size()!=0) {
-				map.put("state", "1");// 获取成功
-				map.put("data", result);
+			PageHelper.startPage(pageNo, pageSize);
+			List<Map<String, Object>> list = preorderMapperCustom.listByDocLoginId(docloginid);
+			PageInfo<Map<String, Object>> page = new PageInfo<Map<String, Object>>(list);
+			if (page.getTotal()>0) {
+				// 获取数据成功
+				map.put("state", "1");
+				map.put("data", page.getList());
 			} else {
 				map.put("state", "2");
 			}
@@ -1139,7 +1097,68 @@ public class DoctorServiceImpl implements DoctorService {
 		
 		return map;
 	}
+	//获取已抢订单详情
+	@Override
+	public Map<String, Object> getGrabOrderDetail(Integer preOrderId) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			Map<String, Object> result = preorderMapperCustom.selectAllInfoByPreOrderIdInDoc(preOrderId);
+			if (!result.isEmpty()) {
+				map.put("state", "1");// 获取成功
+				map.put("data", result);
+			} else {
+				map.put("state", "2");
+			}
+		}catch (Exception e) {
+			logger.error("获取已抢订单详情"+e);
+			map.put("state", "3");
+		}
+		
+		return map;
+	}
 
+	// 获取订单
+	@Override
+	public Map<String, Object> listOrder(Integer docLoginId, Integer type,Integer pageNo,Integer pageSize) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			PageHelper.startPage(pageNo, pageSize);
+			List<Map<String, Object>> list = userorderMapperCustom.listByDocLoginId(docLoginId,type);
+			PageInfo<Map<String, Object>> page = new PageInfo<Map<String, Object>>(list);
+			if (page.getTotal()>0) {
+				// 获取数据成功
+				map.put("state", "1");
+				map.put("data", page.getList());
+			} else {
+				map.put("state", "2");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("state", "3");
+			logger.error("医生获取订单异常" + e);
+		}
+		return map;
+	}
+
+	// 获取订单详情
+	@Override
+	public Map<String, Object> getOrderDetail(Integer docLoginId,Integer userOrderId) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			Map<String, Object> data = userorderMapperCustom.selectAllInfoByUserOrderIdInDoc(docLoginId,userOrderId);
+			if (!data.isEmpty()) {
+				map.put("state", "1");
+				map.put("data", data);
+			} else {
+				map.put("state", "2");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("state", "3");
+			logger.error("医生获取订单异常" + e);
+		}
+		return map;
+	}
 	
 
 	

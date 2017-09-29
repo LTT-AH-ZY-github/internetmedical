@@ -96,15 +96,25 @@
 	 where preOrderDocLoginId = #{0}  and preOrderType=#{1}
 	 	  
   </select>
-  <!--获取医生已抢订单详情  -->
-  <select id="selectAllInfoByDocLoginId" parameterType="java.lang.Integer" resultType="map">
- 	 select a.preorderid,a.preordertime,b.usersickid,b.usersickdesc,
- 	 		b.usersickptime,b.usersickpic,c.userloginpix,d.familyname,d.familyage,d.familymale
+  <!--获取医生已抢订单  -->
+  <select id="listByDocLoginId" parameterType="java.lang.Integer" resultType="map">
+ 	 select a.preorderid,a.preordertime,b.usersickdesc,
+ 	 		c.userloginpix,d.familyname,d.familyage,d.familymale
 	 from preorder as a
 	 	left join usersick as b on a.userSickId=b.userSickId
 	 	left join userlogininfo as c on a.preOrderUserLoginId =c.userLoginId 
   	   left join familyinfo as d on b.familyId =d.familyId
 	 where preOrderDocLoginId = #{0}  and preOrderType=2
-	 	  
-  </select>
+	</select>
+	<!--获取已抢订单详情  -->
+	 <select id="selectAllInfoByPreOrderIdInDoc" parameterType="java.lang.Integer" resultType="map">
+ 	 select a.preorderid,a.preordertime,a.preOrderPrice,
+ 	 		b.usersickdesc,b.usersickid,b.usersickptime,b.usersickpic,b.usersickprimarydept,b.usersickseconddept,
+ 	 		c.userloginpix,d.familyname,d.familyage,d.familymale
+	 from preorder as a
+	 	left join usersick as b on a.userSickId=b.userSickId
+	 	left join userlogininfo as c on a.preOrderUserLoginId =c.userLoginId 
+  	   left join familyinfo as d on b.familyId =d.familyId
+	 where preOrderId = #{0}
+	</select>
 </mapper>

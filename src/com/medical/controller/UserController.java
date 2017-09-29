@@ -1099,10 +1099,12 @@ public class UserController {
 	//获取历史订单
 	@RequestMapping(value = "/getoldorder", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取历史订单", httpMethod = "POST", notes = "获取历史订单")
-	public String getOldOrders(@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid)
+	public String getOldOrders(@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
+			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page)
 				throws Exception {
 		if (userloginid!=null) {
-			Map<String, Object> resultMap = userService.listOldOrders(userloginid);
+			Integer pageSize = 5;
+			Map<String, Object> resultMap = userService.listOldOrders(userloginid,page,pageSize);
 			if ("1".equals(resultMap.get("state"))) {
 				return DataResult.success("获取成功", resultMap.get("data"));
 

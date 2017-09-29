@@ -12,7 +12,7 @@
     <result column="userOrderStateId" property="userorderstateid" jdbcType="INTEGER" />
     <result column="userOrderHospId" property="userorderhospid" jdbcType="INTEGER" />
     <result column="userOrderDPrice" property="userorderdprice" jdbcType="DECIMAL" />
-    <result column="userOrderHState" property="userorderhstate" jdbcType="TINYINT" />
+    <result column="userOrderHState" property="userorderhstate" jdbcType="BIT" />
     <result column="userOrderHPrice" property="userorderhprice" jdbcType="DECIMAL" />
     <result column="userOrderTPriceType" property="userordertpricetype" jdbcType="INTEGER" />
     <result column="userOrderTPrice" property="userordertprice" jdbcType="DECIMAL" />
@@ -134,7 +134,7 @@
       #{userorderetime,jdbcType=TIMESTAMP}, #{userorderappointment,jdbcType=VARCHAR}, 
       #{userorderdocloginid,jdbcType=INTEGER}, #{userorderrecdocloginid,jdbcType=INTEGER}, 
       #{userorderstateid,jdbcType=INTEGER}, #{userorderhospid,jdbcType=INTEGER}, #{userorderdprice,jdbcType=DECIMAL}, 
-      #{userorderhstate,jdbcType=TINYINT}, #{userorderhprice,jdbcType=DECIMAL}, #{userordertpricetype,jdbcType=INTEGER}, 
+      #{userorderhstate,jdbcType=BIT}, #{userorderhprice,jdbcType=DECIMAL}, #{userordertpricetype,jdbcType=INTEGER}, 
       #{userordertprice,jdbcType=DECIMAL}, #{userorderapricetype,jdbcType=INTEGER}, #{userorderaprice,jdbcType=DECIMAL}, 
       #{userorderepricetype,jdbcType=INTEGER}, #{userordereprice,jdbcType=DECIMAL}, #{userorderprice,jdbcType=DECIMAL}, 
       #{userorderdeposit,jdbcType=DECIMAL}, #{usersickid,jdbcType=INTEGER}, #{userloginid,jdbcType=INTEGER}
@@ -242,7 +242,7 @@
         #{userorderdprice,jdbcType=DECIMAL},
       </if>
       <if test="userorderhstate != null" >
-        #{userorderhstate,jdbcType=TINYINT},
+        #{userorderhstate,jdbcType=BIT},
       </if>
       <if test="userorderhprice != null" >
         #{userorderhprice,jdbcType=DECIMAL},
@@ -319,7 +319,7 @@
         userOrderDPrice = #{record.userorderdprice,jdbcType=DECIMAL},
       </if>
       <if test="record.userorderhstate != null" >
-        userOrderHState = #{record.userorderhstate,jdbcType=TINYINT},
+        userOrderHState = #{record.userorderhstate,jdbcType=BIT},
       </if>
       <if test="record.userorderhprice != null" >
         userOrderHPrice = #{record.userorderhprice,jdbcType=DECIMAL},
@@ -371,7 +371,7 @@
       userOrderStateId = #{record.userorderstateid,jdbcType=INTEGER},
       userOrderHospId = #{record.userorderhospid,jdbcType=INTEGER},
       userOrderDPrice = #{record.userorderdprice,jdbcType=DECIMAL},
-      userOrderHState = #{record.userorderhstate,jdbcType=TINYINT},
+      userOrderHState = #{record.userorderhstate,jdbcType=BIT},
       userOrderHPrice = #{record.userorderhprice,jdbcType=DECIMAL},
       userOrderTPriceType = #{record.userordertpricetype,jdbcType=INTEGER},
       userOrderTPrice = #{record.userordertprice,jdbcType=DECIMAL},
@@ -418,7 +418,7 @@
         userOrderDPrice = #{userorderdprice,jdbcType=DECIMAL},
       </if>
       <if test="userorderhstate != null" >
-        userOrderHState = #{userorderhstate,jdbcType=TINYINT},
+        userOrderHState = #{userorderhstate,jdbcType=BIT},
       </if>
       <if test="userorderhprice != null" >
         userOrderHPrice = #{userorderhprice,jdbcType=DECIMAL},
@@ -467,7 +467,7 @@
       userOrderStateId = #{userorderstateid,jdbcType=INTEGER},
       userOrderHospId = #{userorderhospid,jdbcType=INTEGER},
       userOrderDPrice = #{userorderdprice,jdbcType=DECIMAL},
-      userOrderHState = #{userorderhstate,jdbcType=TINYINT},
+      userOrderHState = #{userorderhstate,jdbcType=BIT},
       userOrderHPrice = #{userorderhprice,jdbcType=DECIMAL},
       userOrderTPriceType = #{userordertpricetype,jdbcType=INTEGER},
       userOrderTPrice = #{userordertprice,jdbcType=DECIMAL},

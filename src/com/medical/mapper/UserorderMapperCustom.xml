@@ -215,14 +215,37 @@
    ORDER BY a.userorderptime ASC
   </select>
    <!--查找医生所有的订单-->
-  <select id="selectAllByDocLoginId" parameterType="int" resultType="map">
+  <select id="listByDocLoginId" parameterType="int" resultType="map">
 	  select a.userorderid,a.userorderstateid,a.userorderptime,a.userorderappointment,
-	  		f.familyname,e.usersickdesc,e.usersickpic
+	  		f.familyname,f.familymale,f.familyage,e.usersickdesc
 	  from userorder  as a 
 	  		left join doctorinfo as b on a.userOrderDocLoginId=b.docLoginId 
 	  		left join usersick as e on a.userSickId = e.userSickId
 	  		left join familyinfo as f on e.familyId = f.familyId
-	  where a.userOrderDocLoginId=#{0} 
+	  where a.userOrderDocLoginId=#{0}
+	  <if test="param2==1">
+	  	and a.userOrderStateId=1
+	  </if>
+	  <if test="param2==2">
+	  	and a.userOrderStateId<![CDATA[>]]>1 and a.userOrderStateId<![CDATA[<]]>9
+	  </if>
 	   ORDER BY a.userOrderPTime ASC
   </select>
+    <!--获取医生的订单详情-->
+  <select id="selectAllInfoByUserOrderIdInDoc" parameterType="int" resultType="map">
+	  select a.userorderid,a.userorderstateid,a.userorderptime,a.userorderappointment,a.userorderrtime,a.userorderetime,a.userorderdprice,
+	  		a.userorderhstate,a.userorderhprice,a.userordertpricetype,a.userordertprice,a.userorderapricetype,a.userorderaprice,
+	  		a.userorderepricetype,a.userordereprice,a.userorderdeposit,
+	  		a.userorderrecdocloginid,e.docname as redocname,e.doctitle as redoctitle,e.docprimarydept as redocprimarydept,e.docseconddept as redocseconddept,
+	  		a.userorderhospid,f.hospname,f.hospgrade,f.hospadrprovince,f.hospadrcity,f.hospadrarea,f.hospadrother,
+	  		d.familyname,d.familymale,d.familyage,
+	  		c.usersickdesc,c.usersickpic,c.usersickprimarydept,usersickseconddept,usersickptime
+	  from userorder  as a 
+	  		left join doctorinfo as b on a.userOrderDocLoginId=b.docLoginId 
+	  		left join usersick as c on a.userSickId = c.userSickId
+	  		left join familyinfo as d on d.familyId = c.familyId
+	  		left join doctorinfo as e on a.userOrderDocLoginId=e.docLoginId 
+	  		left join hospinfo as f on a.userOrderHospId = f.hospLoginId
+	  where a.userOrderId=#{1} and userOrderDocLoginId=#{0}
+ </select>
 </mapper>

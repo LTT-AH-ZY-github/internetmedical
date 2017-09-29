@@ -1487,17 +1487,19 @@ public class UserServiceImpl implements UserService {
     }*/
     //获取历史订单
 	@Override
-	public Map<String, Object> listOldOrders(Integer userloginid) {
+	public Map<String, Object> listOldOrders(Integer userloginid,Integer pageNo,Integer pageSize) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			List<Map<String, Object>> order = userorderMapperCustom.selectByUserLoginId(userloginid);
-			if (order.size()== 1) {
+			PageHelper.startPage(pageNo, pageSize);
+			List<Map<String, Object>> list = userorderMapperCustom.selectByUserLoginId(userloginid);
+			PageInfo<Map<String, Object>> page = new PageInfo<Map<String, Object>>(list);
+			if (page.getTotal()>0) {
+				// 获取数据成功
 				map.put("state", "1");
-				map.put("data", order);
+				map.put("data", page.getList());
 			} else {
 				map.put("state", "2");
 			}
-
 		} catch (Exception e) {
 			map.put("state", "3");
 		}

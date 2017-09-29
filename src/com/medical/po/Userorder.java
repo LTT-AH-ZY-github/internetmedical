@@ -24,7 +24,7 @@ public class Userorder {
 
     private BigDecimal userorderdprice;
 
-    private Byte userorderhstate;
+    private Boolean userorderhstate;
 
     private BigDecimal userorderhprice;
 
@@ -128,11 +128,11 @@ public class Userorder {
         this.userorderdprice = userorderdprice;
     }
 
-    public Byte getUserorderhstate() {
+    public Boolean getUserorderhstate() {
         return userorderhstate;
     }
 
-    public void setUserorderhstate(Byte userorderhstate) {
+    public void setUserorderhstate(Boolean userorderhstate) {
         this.userorderhstate = userorderhstate;
     }
 
