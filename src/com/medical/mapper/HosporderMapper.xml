@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.HosporderMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Hosporder" >
+    <id column="HospOrderId" property="hosporderid" jdbcType="INTEGER" />
+    <result column="HospId" property="hospid" jdbcType="INTEGER" />
+    <result column="DoctorId" property="doctorid" jdbcType="INTEGER" />
+    <result column="OrderPrice" property="orderprice" jdbcType="DECIMAL" />
+    <result column="OrderAbs" property="orderabs" jdbcType="VARCHAR" />
+    <result column="OrderState" property="orderstate" jdbcType="INTEGER" />
+    <result column="OrderPTime" property="orderptime" jdbcType="TIMESTAMP" />
+    <result column="OrderRTime" property="orderrtime" jdbcType="TIMESTAMP" />
+    <result column="OrderETime" property="orderetime" jdbcType="TIMESTAMP" />
+    <result column="OrderSTime" property="orderstime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    HospOrderId, HospId, DoctorId, OrderPrice, OrderAbs, OrderState, OrderPTime, OrderRTime, 
+    OrderETime, OrderSTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HosporderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hosporder
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from hosporder
+    where HospOrderId = #{hosporderid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from hosporder
+    where HospOrderId = #{hosporderid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.HosporderExample" >
+    delete from hosporder
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Hosporder" >
+    insert into hosporder (HospOrderId, HospId, DoctorId, 
+      OrderPrice, OrderAbs, OrderState, 
+      OrderPTime, OrderRTime, OrderETime, 
+      OrderSTime)
+    values (#{hosporderid,jdbcType=INTEGER}, #{hospid,jdbcType=INTEGER}, #{doctorid,jdbcType=INTEGER}, 
+      #{orderprice,jdbcType=DECIMAL}, #{orderabs,jdbcType=VARCHAR}, #{orderstate,jdbcType=INTEGER}, 
+      #{orderptime,jdbcType=TIMESTAMP}, #{orderrtime,jdbcType=TIMESTAMP}, #{orderetime,jdbcType=TIMESTAMP}, 
+      #{orderstime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Hosporder" >
+    insert into hosporder
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hosporderid != null" >
+        HospOrderId,
+      </if>
+      <if test="hospid != null" >
+        HospId,
+      </if>
+      <if test="doctorid != null" >
+        DoctorId,
+      </if>
+      <if test="orderprice != null" >
+        OrderPrice,
+      </if>
+      <if test="orderabs != null" >
+        OrderAbs,
+      </if>
+      <if test="orderstate != null" >
+        OrderState,
+      </if>
+      <if test="orderptime != null" >
+        OrderPTime,
+      </if>
+      <if test="orderrtime != null" >
+        OrderRTime,
+      </if>
+      <if test="orderetime != null" >
+        OrderETime,
+      </if>
+      <if test="orderstime != null" >
+        OrderSTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hosporderid != null" >
+        #{hosporderid,jdbcType=INTEGER},
+      </if>
+      <if test="hospid != null" >
+        #{hospid,jdbcType=INTEGER},
+      </if>
+      <if test="doctorid != null" >
+        #{doctorid,jdbcType=INTEGER},
+      </if>
+      <if test="orderprice != null" >
+        #{orderprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderabs != null" >
+        #{orderabs,jdbcType=VARCHAR},
+      </if>
+      <if test="orderstate != null" >
+        #{orderstate,jdbcType=INTEGER},
+      </if>
+      <if test="orderptime != null" >
+        #{orderptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderrtime != null" >
+        #{orderrtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderetime != null" >
+        #{orderetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderstime != null" >
+        #{orderstime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.HosporderExample" resultType="java.lang.Integer" >
+    select count(*) from hosporder
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update hosporder
+    <set >
+      <if test="record.hosporderid != null" >
+        HospOrderId = #{record.hosporderid,jdbcType=INTEGER},
+      </if>
+      <if test="record.hospid != null" >
+        HospId = #{record.hospid,jdbcType=INTEGER},
+      </if>
+      <if test="record.doctorid != null" >
+        DoctorId = #{record.doctorid,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderprice != null" >
+        OrderPrice = #{record.orderprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orderabs != null" >
+        OrderAbs = #{record.orderabs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderstate != null" >
+        OrderState = #{record.orderstate,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderptime != null" >
+        OrderPTime = #{record.orderptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orderrtime != null" >
+        OrderRTime = #{record.orderrtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orderetime != null" >
+        OrderETime = #{record.orderetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orderstime != null" >
+        OrderSTime = #{record.orderstime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update hosporder
+    set HospOrderId = #{record.hosporderid,jdbcType=INTEGER},
+      HospId = #{record.hospid,jdbcType=INTEGER},
+      DoctorId = #{record.doctorid,jdbcType=INTEGER},
+      OrderPrice = #{record.orderprice,jdbcType=DECIMAL},
+      OrderAbs = #{record.orderabs,jdbcType=VARCHAR},
+      OrderState = #{record.orderstate,jdbcType=INTEGER},
+      OrderPTime = #{record.orderptime,jdbcType=TIMESTAMP},
+      OrderRTime = #{record.orderrtime,jdbcType=TIMESTAMP},
+      OrderETime = #{record.orderetime,jdbcType=TIMESTAMP},
+      OrderSTime = #{record.orderstime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Hosporder" >
+    update hosporder
+    <set >
+      <if test="hospid != null" >
+        HospId = #{hospid,jdbcType=INTEGER},
+      </if>
+      <if test="doctorid != null" >
+        DoctorId = #{doctorid,jdbcType=INTEGER},
+      </if>
+      <if test="orderprice != null" >
+        OrderPrice = #{orderprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderabs != null" >
+        OrderAbs = #{orderabs,jdbcType=VARCHAR},
+      </if>
+      <if test="orderstate != null" >
+        OrderState = #{orderstate,jdbcType=INTEGER},
+      </if>
+      <if test="orderptime != null" >
+        OrderPTime = #{orderptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderrtime != null" >
+        OrderRTime = #{orderrtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderetime != null" >
+        OrderETime = #{orderetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderstime != null" >
+        OrderSTime = #{orderstime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where HospOrderId = #{hosporderid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Hosporder" >
+    update hosporder
+    set HospId = #{hospid,jdbcType=INTEGER},
+      DoctorId = #{doctorid,jdbcType=INTEGER},
+      OrderPrice = #{orderprice,jdbcType=DECIMAL},
+      OrderAbs = #{orderabs,jdbcType=VARCHAR},
+      OrderState = #{orderstate,jdbcType=INTEGER},
+      OrderPTime = #{orderptime,jdbcType=TIMESTAMP},
+      OrderRTime = #{orderrtime,jdbcType=TIMESTAMP},
+      OrderETime = #{orderetime,jdbcType=TIMESTAMP},
+      OrderSTime = #{orderstime,jdbcType=TIMESTAMP}
+    where HospOrderId = #{hosporderid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.druid.sql.dialect.mysql.ast.MysqlForeignKey.On;
+import com.alibaba.druid.util.MapComparator;
+import com.baidu.yun.push.exception.PushServerException;
 import com.baidu.yun.push.utils.PushToAndroid;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -44,6 +46,7 @@ import com.medical.mapper.DoctorskdMapperCustom;
 import com.medical.mapper.DoctortitleMapper;
 import com.medical.mapper.FamilyinfoMapper;
 import com.medical.mapper.FamilyinfoMapperCustom;
+import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.HospitaldeptMapper;
 import com.medical.mapper.HospitaldeptMapperCustom;
 import com.medical.mapper.PreorderMapper;
@@ -134,6 +137,8 @@ public class DoctorServiceImpl implements DoctorService {
 	private DoctortitleMapper doctortitleMapper;
 	@Autowired
 	private HospitaldeptMapperCustom hospitaldeptMapperCustom;
+	@Autowired
+	private HospinfoMapperCustom hospinfoMapperCustom;
 	
 	Logger logger = Logger.getLogger(DoctorService.class);
 	// 判断手机号码是否注册
@@ -387,7 +392,7 @@ public class DoctorServiceImpl implements DoctorService {
 				    Doctorinfo doctorinfo2 = doctorinfoMapperCustom.findDoctorinfoByDocLoginId(doctor.getDocloginid());
 				    if (doctorinfo2!=null) {
 				    	doctorinfo.setDocid(doctorinfo2.getDocid()); //个人信息id
-						int result = doctorinfoMapper.insertSelective(doctorinfo);
+						int result = doctorinfoMapper.updateByPrimaryKeySelective(doctorinfo);
 						if (result==1) {
 							return 1; //成功
 						} else {
@@ -410,6 +415,150 @@ public class DoctorServiceImpl implements DoctorService {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return 6; //操作异常
 		}
+	}
+
+	// 更新医生照片
+	@Override
+	public int updateSecondInfo(Integer docloginid, String olddoccardphoto, MultipartFile[] doccardphoto,
+			String olddoctitlephoto, MultipartFile[] doctitlephoto, String olddocqualphoto,
+			MultipartFile[] docqualphoto, String olddocworkcardphoto, MultipartFile[] docworkcardphoto,
+			String olddocotherphoto, MultipartFile[] docotherphoto) {
+		try {
+			Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+			Doctorinfo info = doctorinfoMapperCustom.findDoctorinfoByDocLoginId(docloginid);
+			// 该id对应的医生不为空
+			if (doctorlogininfo != null && info != null) {
+				boolean type = doctorlogininfo.getDoclogintype();
+				// 该医生信息未被审核
+				if (!type) {
+					// 真实路径
+					String reallyDir = "D:\\\\upload\\\\doctor\\\\" + docloginid + "\\\\card\\\\";
+					// 保存到数据库的路径
+					String virtualDir = "doctor/" + docloginid + "/card/";
+					boolean state = CreateFileUtil.createDir(reallyDir);
+					if (state) {
+						if (olddoccardphoto == null) {
+							olddoccardphoto = "";
+						}else {
+							olddoccardphoto += ",";	
+						}
+						for (int i = 0; i < doccardphoto.length; i++) {
+							String name = CommonUtils.randomFileName();
+							String ext = "jpg";
+							String file = name + "." + ext;
+							String reallyPath = reallyDir + file;
+							String virtualPath = virtualDir + file;
+							doccardphoto[i].transferTo(new File(reallyPath));
+							if (i != doccardphoto.length - 1) {
+								olddoccardphoto += virtualPath + ",";
+							} else {
+								olddoccardphoto += virtualPath;
+							}
+						}
+						if (olddoctitlephoto == null) {
+							olddoctitlephoto = "";
+						}else {
+							olddoctitlephoto += ",";
+						}
+						for (int i = 0; i < doctitlephoto.length; i++) {
+							String name = CommonUtils.randomFileName();
+							String ext = "jpg";
+							String file = name + "." + ext;
+							String reallyPath = reallyDir + file;
+							String virtualPath = virtualDir + file;
+							doctitlephoto[i].transferTo(new File(reallyPath));
+							if (i != doctitlephoto.length - 1) {
+								olddoctitlephoto += virtualPath + ",";
+							} else {
+								olddoctitlephoto += virtualPath;
+							}
+						}
+						if (olddocqualphoto == null) {
+							olddocqualphoto = "";
+						}else {
+							olddocqualphoto += ",";
+						}
+						for (int i = 0; i < docqualphoto.length; i++) {
+							String name = CommonUtils.randomFileName();
+							String ext = "jpg";
+							String file = name + "." + ext;
+							String reallyPath = reallyDir + file;
+							String virtualPath = virtualDir + file;
+							docqualphoto[i].transferTo(new File(reallyPath));
+							if (i != docqualphoto.length - 1) {
+								olddocqualphoto += virtualPath + ",";
+							} else {
+								olddocqualphoto += virtualPath;
+							}
+						}
+						if (olddocworkcardphoto == null) {
+							olddocworkcardphoto = "";
+						}else {
+							olddocworkcardphoto += ",";
+						}
+						for (int i = 0; i < docworkcardphoto.length; i++) {
+							String name = CommonUtils.randomFileName();
+							String ext = "jpg";
+							String file = name + "." + ext;
+							String reallyPath = reallyDir + file;
+							String virtualPath = virtualDir + file;
+							docworkcardphoto[i].transferTo(new File(reallyPath));
+							if (i != docworkcardphoto.length - 1) {
+								olddocworkcardphoto += virtualPath + ",";
+							} else {
+								olddocworkcardphoto += virtualPath;
+							}
+						}
+						if (olddocotherphoto == null) {
+							olddocotherphoto = "";
+						}else {
+							olddocotherphoto += ",";
+						}
+						for (int i = 0; i < docotherphoto.length; i++) {
+							String name = CommonUtils.randomFileName();
+							String ext = "jpg";
+							String file = name + "." + ext;
+							String reallyPath = reallyDir + file;
+							String virtualPath = virtualDir + file;
+							docotherphoto[i].transferTo(new File(reallyPath));
+							if (i != docotherphoto.length - 1) {
+								olddocotherphoto += virtualPath + ",";
+							} else {
+								olddocotherphoto += virtualPath;
+							}
+						}
+						Doctorinfo doctorinfo = new Doctorinfo();
+						doctorinfo.setDocid(info.getDocid());
+						doctorinfo.setDoccardphoto(olddoccardphoto);
+						doctorinfo.setDocqualphoto(olddocqualphoto);
+						doctorinfo.setDocworkcardphoto(olddocworkcardphoto);
+						doctorinfo.setDoctitlephoto(olddoctitlephoto);
+						doctorinfo.setDocotherphoto(olddocotherphoto);
+						int result = doctorinfoMapper.updateByPrimaryKeySelective(doctorinfo);
+						if (result > 0) {
+							// 更新成功
+							return 1;
+						} else {
+							// 更新失败
+							return 2;
+						}
+					} else {
+						// 更新失败，路径创建失败
+						return 3;
+					}
+				} else {
+					return 4; // 医生已被审核,个人信息无法修改
+				}
+			} else {
+				return 5; // 登录id对应的信息为空
+			}
+
+		} catch (Exception e) {
+			logger.error("更新医生图片失败" + e);
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return 6; // 操作异常
+		}
+
 	}
 	//获取日程
 	@Override
@@ -694,6 +843,8 @@ public class DoctorServiceImpl implements DoctorService {
 					userorder.setUserorderstateid(2);
 					//接单时间
 					userorder.setUserorderrtime(new Date());
+					System.out.println("id............."+userorder.getUserloginid());
+					userorder.setUserloginid(null);
 					int state = userorderMapper.updateByPrimaryKeySelective(userorder);
 					//确认成功
 					if (state>0) {
@@ -1159,6 +1310,231 @@ public class DoctorServiceImpl implements DoctorService {
 		}
 		return map;
 	}
+
+	@Override
+	public Map<String, Object> getHospital(String hospname) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		String name = "%"+hospname+"%";
+		try {
+			List<Map<String, Object>>  data = hospinfoMapperCustom.selectByHospName(name);
+			if (data.size()==0) {
+				map.put("state", "2");
+			} else {
+				map.put("state", "1");
+				map.put("data", data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("state", "3");
+		}
+		return map;
+	}
+	
+	//医生取消订单
+	@Override
+	public Map<String, Object> updateOrderToCancle(Integer docLoginId, Integer userorderid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			Userorder userorder = userorderMapper.selectByPrimaryKey(userorderid);
+			if (userorder!=null) {
+				Integer doc = userorder.getUserorderdocloginid();
+				if (docLoginId==doc) {
+					Integer userorderstateid = userorder.getUserorderstateid();
+					Integer usersickid = userorder.getUsersickid();
+					if (userorderstateid<4) {
+						//订单信息
+						Userorder record = new Userorder();
+						record.setUserorderid(userorderid);
+						record.setUserorderstateid(12);
+						record.setUserorderetime(new Date());
+						Usersick usersick = usersickMapper.selectByPrimaryKey(usersickid);
+						if (usersick!=null) {
+							//病情信息
+							Usersick sick = new Usersick();
+							sick.setUsersickid(usersickid);
+							sick.setUsersickstateid(2);
+							int orderResult = userorderMapper.updateByPrimaryKeySelective(record);
+							int sickResult = usersickMapper.updateByPrimaryKeySelective(sick);
+							if (orderResult>0 && sickResult>0) {
+								Doctorinfo doctor  =doctorinfoMapperCustom.findDoctorinfoByDocLoginId(docLoginId);
+								Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(usersick.getUserloginid());
+								if (doctor!=null && user!=null) {
+									String[] tags = {user.getUserloginphone(),"sick"};
+									String title = "通知";
+									String msg = doctor.getDocname()+"医生取消订单";
+									String sign = "3"; //等待病人再确认
+									//消息推送
+									Map<String, Object> push = PushToAndroid.PushMsgToSmartTag(tags, title, msg,sign);
+									if ("1".equals(push.get("state"))) {
+										//取消订单成功，且消息发送成功
+										map.put("state", "1");
+									} else {
+										//取消订单成功，且消息发送失败
+										map.put("state", "2");
+										map.put("msg", push.get("msg"));
+									}
+									
+								} else {
+									//取消订单成功，且消息发送失败
+									map.put("state", "2");
+									map.put("msg", "获取用户信息失败");
+								}
+							} else {
+								//取消失败，未知错误
+								TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+								map.put("state", "3");
+							}
+							
+						} else {
+							//病情不存在，取消失败
+							map.put("state", "4");
+						}
+					} else {
+						//该状态不支持取消
+						map.put("state", "5");
+					}
+					
+				} else {
+					//医生与订单不匹配
+					map.put("state", "6");
+				}
+				
+			} else {
+				//订单不存在
+				map.put("state", "7");
+			}
+		} catch (Exception e) {
+			//异常错误
+			map.put("state", "8");
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
+		
+		return map;
+	}
+	
+	//医生拒绝接单并推荐其他
+	@Override
+	public Map<String, Object> updateOrderToRefuse(Integer docloginid, Integer userorderid, Integer redocloginid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			Userorder userorder = userorderMapper.selectByPrimaryKey(userorderid);
+			if (userorder!=null) {
+				Integer doc = userorder.getUserorderdocloginid();
+				if (docloginid==doc) {
+					Integer userorderstateid = userorder.getUserorderstateid();
+					Integer usersickid = userorder.getUsersickid();
+					if (userorderstateid==1) {
+						//订单信息
+						Userorder record = new Userorder();
+						record.setUserorderid(userorderid);
+						if (redocloginid==null) {
+							record.setUserorderstateid(10);
+						} else {
+							record.setUserorderstateid(11);
+							Preorder preorder = new Preorder();
+							preorder.setUsersickid(usersickid);
+							//医生推荐
+							preorder.setPreordertype(3);
+							preorder.setPreorderredocloginid(docloginid);
+							Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(redocloginid);
+							if (userlogininfo!=null) {
+								preorder.setPreorderdocloginid(redocloginid);
+								preorder.setPreordertime(new Date());
+								List<Preorder> list = preorderMapperCustom.selectByDocLoginIdAndUserSickId(redocloginid, usersickid, 3);
+								if (list.size()==0) {
+									int preResult = preorderMapper.insertSelective(preorder);
+									if (preResult==0) {
+										//插入推荐医生失败
+										map.put("state", "8");
+										return map;
+									}
+								} else {
+									//该医生已被推荐
+									map.put("state", "9");
+									return map;
+								}
+							} else {
+								//推荐医生不存在
+								map.put("state", "10");
+								return map;
+							}
+							
+						}
+						record.setUserorderetime(new Date());
+						Usersick usersick = usersickMapper.selectByPrimaryKey(usersickid);
+						if (usersick!=null) {
+							//病情信息
+							Usersick sick = new Usersick();
+							sick.setUsersickid(usersickid);
+							sick.setUsersickstateid(2);
+							int orderResult = userorderMapper.updateByPrimaryKeySelective(record);
+							int sickResult = usersickMapper.updateByPrimaryKeySelective(sick);
+							if (orderResult>0 && sickResult>0 ) {
+								Doctorinfo doctor  =doctorinfoMapperCustom.findDoctorinfoByDocLoginId(docloginid);
+								Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(usersick.getUserloginid());
+								if (doctor!=null && user!=null) {
+									String[] tags = {user.getUserloginphone(),"sick"};
+									String title = "通知";
+									String msg = doctor.getDocname()+"医生拒绝该订单";
+									String sign = "3"; //等待病人再确认
+									//消息推送
+									Map<String, Object> push = PushToAndroid.PushMsgToSmartTag(tags, title, msg,sign);
+									if ("1".equals(push.get("state"))) {
+										//取消订单成功，且消息发送成功
+										map.put("state", "1");
+									} else {
+										//取消订单成功，且消息发送失败
+										map.put("state", "2");
+										map.put("msg", push.get("msg"));
+									}
+									
+								} else {
+									//取消订单成功，且消息发送失败
+									map.put("state", "2");
+									map.put("msg", "获取用户信息失败");
+								}
+							} else {
+								//取消失败，未知错误
+								TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+								map.put("state", "3");
+							}
+							
+						} else {
+							//病情不存在，取消失败
+							map.put("state", "4");
+						}
+					} else {
+						//该状态不支持取消
+						map.put("state", "5");
+					}
+					
+				} else {
+					//医生与订单不匹配
+					map.put("state", "6");
+				}
+				
+			} else {
+				//订单不存在
+				map.put("state", "7");
+			}
+		} catch (Exception e) {
+			//异常错误
+			map.put("state", "11");
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+		}
+		
+		return map;
+	}
+	//医生修改病情部门
+	@Override
+	public Map<String, Object> changeDept(Integer docloginid, Integer userorderid, String usersickprimarydept,
+			String usersickseconddept) {
+		
+		return null;
+	}
+
+	
+	
 	
 
 	

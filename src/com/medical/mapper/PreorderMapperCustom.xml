@@ -5,8 +5,8 @@
     delete from preorder
     where preOrderType = "1" and userSickId = #{usersickid,jdbcType=INTEGER}
   </delete>
-  <!--根据病情获取推荐医生  -->
-  <select id="selectByUserSickId" parameterType="map" resultType="map">
+  <!--根据病情获取相关医生  -->
+  <select id="selectByUserSickId" parameterType="java.lang.Integer" resultType="map">
   	select  a.preordertype,a.preorderid,a.preorderprice,
   			b.docloginid,c.docloginpix,b.docname,b.doctitle,b.dochosp,b.hosplevel,b.docprimarydept,b.docseconddept,
   			b.docallday,b.docexpert,
@@ -38,7 +38,10 @@
   		left join doctorinfo as b  on a.preOrderDocLoginId=b.docLoginId
   		left join doctorlogininfo as c on a.preOrderDocLoginId = c.docLoginId 
   		left join doctorinfo as d on a.preOrderReDocLoginId = c.docLoginId
-  	where  a.userSickId =#{id} 
+  	where  a.userSickId =#{0}
+  	<if test="param2!=null">
+    	 and a.preOrderType=#{1}
+     </if>
   	<!-- ORDER BY distance ASC -->
   </select>
   <!-- 获取推荐医生详情 -->

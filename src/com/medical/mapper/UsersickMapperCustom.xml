@@ -6,8 +6,14 @@
      select   a.usersickstateid,a.usersickid, a.usersickdesc, a.usersickpic, a.usersickprimarydept,a.usersickseconddept, a.userorderid,
       a.usersickpic,a.usersicktime, a.familyid,b.familyname,b.familymale,b.familyage  
      from   usersick as a   left   join   familyinfo as b     on   a.familyId=b.familyId      
-     where a.userLoginId = #{userLoginId,jdbcType=INTEGER} 
-     order by userSickStateId desc, userSickTime  desc ;
+     where a.userLoginId = #{0,jdbcType=INTEGER}
+     <if test="param2==1">
+    	 and  a.userSickStateId = 1
+     </if>
+     <if test="param2==2">
+    	 and  a.userSickStateId >= 2 and a.userSickStateId <![CDATA[<=]]> 3
+     </if>
+   	 order by userSickStateId desc, userSickTime  desc ;
   </select>
   <!--根据登录id及病情状态查询用户的所有病情  -->
   <select id="selectByUserLoginIdAndState" resultType="com.medical.po.Usersick" parameterType="java.lang.Integer" >
@@ -296,10 +302,10 @@
 	  <if test="province!=null">
 	  	b.userLoginProvince=#{province}
 	  </if>
-	  <if test="city">
+	  <if test="city!=null">
 	 	 b.userLoginCity=#{city}
 	  </if>
-	  <if test="area">
+	  <if test="area!=null">
 	    b.userLoginArea=#{area}
 	  </if>
 	 ORDER BY distance ASC

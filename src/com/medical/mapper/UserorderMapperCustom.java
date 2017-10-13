@@ -19,7 +19,7 @@ public interface UserorderMapperCustom {
     Map<String, Object> selectAllByDocLoginIdAndOrderType(Integer docLoginId, Integer type);
     Map<String, Object> selectAllInfoByUserLoginIdAndStateId(Integer docLoginId, Integer type);
     //查询病人正在进行中的订单
-    List<Map<String, Object>> selectAllInfoByUserLoginId(Integer userloginid);
+    List<Map<String, Object>> selectAllInfoByUserLoginId(Integer userloginid, Integer type);
     //查询医生所有订单
     List<Map<String, Object>> listByDocLoginId(Integer docLoginId, Integer type);
     //获取医生订单详情

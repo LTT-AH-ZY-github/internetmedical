@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.HospinfoMapperCustom" >
+   <select id="selectByHospName" resultType="map" parameterType="String" >
+    select a.hosploginid,a.hospname,b.hosplevelname
+ 	from hospinfo as a 
+ 			left join hospLevel  as b on a.hospGrade = b.hospLevelId
+    where a.hospName like #{0}
+  </select>
+  <select id="selectByHospLoginId" resultType="com.medical.po.Hospinfo" parameterType="java.lang.Integer" >
+    select *
+ 	from hospinfo
+ 	where hospLoginId=#{0}
+  </select>
+</mapper>

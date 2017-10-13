@@ -77,7 +77,7 @@ public interface UserService {
 	public int deleteSick(Integer id) throws Exception;
 
 	// 获取所有病情
-	public Map<String, Object> findSicks(Integer userloginid) throws Exception;
+	public Map<String, Object> findSicks(Integer userloginid, Integer type) throws Exception;
 
 	// 获取病情详情
 	Map<String, Object> getSickInfo(Integer id) throws Exception;
@@ -104,7 +104,7 @@ public interface UserService {
 	int creatReDoctor(Integer userSickId, Date date, String desc, String primaryDept, String secondDept) throws Exception;
 
 	// 查询推荐医生
-	public Map<String, Object> findReDoctor(Integer userloginid) throws Exception ;
+	public Map<String, Object> findReDoctor(Integer userloginid, Integer preordertype) throws Exception ;
 
 	// 生成订单
 	int createOrder(Integer docLoginId, Integer userSickId, String time) throws Exception;
@@ -121,7 +121,7 @@ public interface UserService {
 	int addOptDoctor(Integer docLoginid, Integer userloginid) throws Exception;
    
 	//获取订单
-	Map<String, Object> getOrders(Integer userloginid);
+	Map<String, Object> getOrders(Integer userloginid, Integer page, Integer type);
 	
 	//获取完整订单信息
 	Map<String, Object> getOrderAllInfo(Integer userLoginId);

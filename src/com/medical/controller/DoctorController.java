@@ -333,6 +333,7 @@ public class DoctorController {
 		}
 		
 	}
+	
 	//获取第二页个人信息
 	@RequestMapping(value = "/getsecondinfo", method = RequestMethod.POST)
 	public Map<String, Object> getSecondInfo(@RequestBody Map<String, Integer> params) throws Exception {
@@ -403,6 +404,7 @@ public class DoctorController {
 		return map;
 		
 	}
+	
 	// 更新第一页个人信息
 	@RequestMapping(value = "/updatefirstinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "更新第一页个人信息", httpMethod = "POST", notes = "更新第一页个人信息")
@@ -417,15 +419,15 @@ public class DoctorController {
 		@ApiImplicitParam(name = "dochosplon", required = false, value="医院所在地址精度",dataType = "String", paramType = "query"),
 		@ApiImplicitParam(name = "dochosplat", required = false, value="医院所在地址纬度",dataType = "String", paramType = "query"),
 		@ApiImplicitParam(name = "docallday", required = false,value="是否全天接诊", dataType = "Boolean", paramType = "query"),
-		@ApiImplicitParam(name = "docage", required = false, value="年龄",dataType = "String", paramType = "query"),
-		@ApiImplicitParam(name = "docmale", required = false, value="性别",dataType = "Boolean", paramType = "query"),
+		@ApiImplicitParam(name = "docage", required = false, value="年龄",dataType = "int", paramType = "query"),
+		@ApiImplicitParam(name = "docmale", required = false, value="性别",dataType = "String", paramType = "query"),
 		@ApiImplicitParam(name = "doccardnum", required = false,value="身份证号码", dataType = "String", paramType = "query"),
-		@ApiImplicitParam(name = "docname", required = false, value="姓名",dataType = "Boolean", paramType = "query"),
-		@ApiImplicitParam(name = "docprimarydept", required = false, value="一级部门",dataType = "Boolean", paramType = "query"),
-		@ApiImplicitParam(name = "docseconddept", required = false,value="二级部门", dataType = "Boolean", paramType = "query"),
+		@ApiImplicitParam(name = "docname", required = false, value="姓名",dataType = "String", paramType = "query"),
+		@ApiImplicitParam(name = "docprimarydept", required = false, value="一级部门",dataType = "String", paramType = "query"),
+		@ApiImplicitParam(name = "docseconddept", required = false,value="二级部门", dataType = "String", paramType = "query"),
 		}
 	)
-	public String updateFirstInfo( Doctorinfo doctorinfo)
+	public String updateFirstInfo(@ApiIgnore Doctorinfo doctorinfo)
 			throws Exception {
 		Integer docloginid = doctorinfo.getDocloginid();
 		if (docloginid!=null) {
@@ -449,6 +451,46 @@ public class DoctorController {
 		}
 		
 	}
+
+	// 传图片
+	@RequestMapping(value = "/updateSecondInfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "更新第二页个人信息", httpMethod = "POST", notes = "更新第二页个人信息")
+	public String updateSecondInfo(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
+			@ApiParam(name = "olddoccardphoto", value = "原身份证照片路径") @RequestParam(required = false) String olddoccardphoto,
+			@ApiParam(name = "doccardphoto", value = "身份证照片") @RequestParam MultipartFile[] doccardphoto,
+			@ApiParam(name = "olddoctitlephoto", value = "原职称照片路径") @RequestParam(required = false) String olddoctitlephoto,
+			@ApiParam(name = "doctitlephoto", value = "职称照片") @RequestParam MultipartFile[] doctitlephoto,
+			@ApiParam(name = "olddocqualphoto", value = "原行医资格证照片路径") @RequestParam(required = false) String olddocqualphoto,
+			@ApiParam(name = "docqualphoto", value = "行医资格证照片") @RequestParam MultipartFile[] docqualphoto,
+			@ApiParam(name = "olddocworkcardphoto", value = "原工作证照片路径") @RequestParam(required = false) String olddocworkcardphoto,
+			@ApiParam(name = "docworkcardphoto", value = "工作证照片") @RequestParam MultipartFile[] docworkcardphoto,
+			@ApiParam(name = "olddocotherphoto", value = "原其他照片路径") @RequestParam(required = false) String olddocotherphoto,
+			@ApiParam(name = "docotherphoto", value = "其他照片") @RequestParam MultipartFile[] docotherphoto)
+			throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		if (docloginid != null) {
+			int result = doctorService.updateSecondInfo(docloginid, olddoccardphoto, doccardphoto, olddoctitlephoto,
+					doctitlephoto, olddocqualphoto, docqualphoto, olddocworkcardphoto, docworkcardphoto,
+					olddocotherphoto, docotherphoto);
+			if (result == 1) {
+				return DataResult.success("修改资料成功");
+			} else if (result == 2) {
+				return DataResult.error("修改数据失败");
+			} else if (result == 3) {
+				return DataResult.error("修改数据失败,路径创建失败");
+			} else if (result == 4) {
+				return DataResult.error("已被审核,个人信息不可修改");
+			} else if (result == 5) {
+				return DataResult.error("登录id对应的信息为空");
+			} else {
+				return DataResult.error("操作异常");
+			}
+		} else {
+			return DataResult.error("医生登陆Id为空");
+		}
+	}
+		
 	// 传图片
 	@RequestMapping(value = "/photo", method = RequestMethod.POST)
 	public Map<String, Object> editUserInfo(@RequestParam("appPhoto") MultipartFile[] pictureFile,
@@ -710,7 +752,7 @@ public class DoctorController {
 	}
 	
 	// 获取病情
-	@RequestMapping(value = "/listsicks", method = RequestMethod.POST)
+	@RequestMapping(value = "/listsicks", method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取病情", httpMethod = "POST", notes = "获取病情",produces="application/json")
 	public String listSick(@ApiParam(name = "docloginid",required = true,value ="医生登录id")@RequestParam(required=true) Integer docloginid,
 			@ApiParam(name = "page",value ="当前页")@RequestParam(required=true) Integer page,
@@ -718,8 +760,8 @@ public class DoctorController {
 			@ApiParam(name = "lon",value ="纬度")@RequestParam(required=true) String lon,
 			@ApiParam(name = "time",value ="时间")@RequestParam(required=false) String time,
 			@ApiParam(name = "province",value ="省")@RequestParam(required=false) String province,
-			@ApiParam(name = "city",value ="省")@RequestParam(required=false) String city,
-			@ApiParam(name = "area",value ="省")@RequestParam(required=false) String area
+			@ApiParam(name = "city",value ="市")@RequestParam(required=false) String city,
+			@ApiParam(name = "area",value ="区")@RequestParam(required=false) String area
 			
 			) throws Exception {
 		   Integer pageSize = 5;
@@ -745,7 +787,7 @@ public class DoctorController {
 	}
 	
 	//获取病情详情
-	@RequestMapping(value = "/getsickdetail", method = RequestMethod.POST)
+	@RequestMapping(value = "/getsickdetail", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取病情详情", httpMethod = "POST", notes = "获取病情详情", produces = "application/json")
 	public String getsickDeatil(
 			@ApiParam(name = "usersickid", required = true, value = "病情id") @RequestParam(required = true) Integer usersickid
@@ -794,7 +836,7 @@ public class DoctorController {
 			if (usersickid == null) {
 				errList.add("病情id为空"); // 手机号码为空
 			}
-			return errList.toString().replace("[", "").replace("]", "");
+			return DataResult.error( errList.toString().replace("[", "").replace("]", ""));
 		}
 	}
 	
@@ -925,21 +967,80 @@ public class DoctorController {
 		Map<String, Object> resultMap = doctorService.getOrderDetail(docloginid,userorderid);
 		if ("1".equals(resultMap.get("state"))) {
 			return DataResult.success("获取成功", resultMap.get("data"));
-
 		} else if ("2".equals(resultMap.get("state"))) {
-			return DataResult.error("获取的数据为空");
-
+			return DataResult.success("请求成功,但数据为空");
 		} else {
 			return DataResult.error("操作异常");
 		}
 
 	}
 	
+	//根据医院名迷糊查询医院
+	@RequestMapping(value="/gethospital",method = RequestMethod.POST,produces="application/json;charset=UTF-8")
+	@ApiOperation(value = "根据医院名迷糊查询医院", httpMethod = "POST", notes = "根据医院名迷糊查询医院")
+	public String getHosptial(@ApiParam(name = "hospname", required = true, value = "医院名") @RequestParam String hospname) throws Exception{
+		if (hospname!=null) {
+			Map<String, Object> result = doctorService.getHospital(hospname);
+			if ("1".equals(result.get("state"))) {
+				return DataResult.success("请求成功", result.get("data"));
+			} else if ("2".equals(result.get("state"))){
+				return DataResult.success("请求成功,但数据为空");
+			}else {
+				return DataResult.error("操作异常");
+			}
+		} else {
+			return DataResult.error("医院名为空");
+		}
+	}
+
+	// 医生拒绝接单
+	@RequestMapping(value = "/refuseorder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "医生拒绝接单", httpMethod = "POST", notes = "医生拒绝接单")
+	public String refuseOrder(
+			@ApiParam(name = "docloginid", required = true, value = "医生登陆id") @RequestParam Integer docloginid,
+			@ApiParam(name = "userorderid", required = true, value = "订单id") @RequestParam Integer userorderid,
+			@ApiParam(name = "redocloginid", value = "推荐医生登陆id") @RequestParam(required = false) Integer redocloginid) {
+		if (docloginid != null && userorderid != null) {
+			Map<String, Object> result = doctorService.updateOrderToRefuse(docloginid, userorderid, redocloginid);
+			if ("1".equals(result.get("state"))) {
+				return DataResult.success("拒绝接单成功,且消息发送成功");
+			} else if ("2".equals(result.get("state"))) {
+				return DataResult.success("拒绝接单成功,但消息发送失败");
+			} else if ("3".equals(result.get("state"))) {
+				return DataResult.success("拒绝接单失败，未知错误");
+			} else if ("4".equals(result.get("state"))) {
+				return DataResult.error("病情不存在，拒绝接单失败");
+			} else if ("5".equals(result.get("state"))) {
+				return DataResult.error("该状态不支持拒绝接单");
+			} else if ("6".equals(result.get("state"))) {
+				return DataResult.error("医生与订单不匹配");
+			} else if ("7".equals(result.get("state"))) {
+				return DataResult.error("订单不存在");
+			} else if ("8".equals(result.get("state"))) {
+				return DataResult.error("拒绝接单失败,因推荐医生失败");
+			} else if ("9".equals(result.get("state"))) {
+				return DataResult.error("拒绝接单失败,因该医生已被推荐");
+			} else if ("10".equals(result.get("state"))) {
+				return DataResult.error("拒绝接单失败,因该推荐医生不存在");
+			} else {
+				return DataResult.error("异常错误");
+			}
+		} else {
+			List<String> errList = new ArrayList<String>();
+			if (userorderid == null) {
+				errList.add("订单id为空");
+			}
+			if (docloginid == null) {
+				errList.add("医生id为空");
+			}
+			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
+		}
+	}
 	//医生确认订单
 	@RequestMapping(value="/confirmorder",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "医生确认订单", httpMethod = "POST", notes = "医生确认订单")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "userloginid",required = true,value ="医生登录id",dataType = "int", paramType = "query"),
+		@ApiImplicitParam(name = "docloginid",required = true,value ="医生登录id",dataType = "int", paramType = "query"),
 		@ApiImplicitParam(name = "userorderid",required = true,value ="订单id",dataType = "int", paramType = "query"),
 		@ApiImplicitParam(name = "userorderdprice",required = false,value ="医生价格",dataType = "Double", paramType = "query"),
 		@ApiImplicitParam(name = "userorderhstate",required = true,value ="是否住院" ,dataType = "Boolean", paramType = "query"),
@@ -952,7 +1053,7 @@ public class DoctorController {
 		@ApiImplicitParam(name = "userorderepricetype",required = true,value ="餐饮类型",dataType = "int", paramType = "query" ),
 		@ApiImplicitParam(name = "userordereprice",required = false,value ="住宿价格",dataType = "Double", paramType = "query" )
 		 })
-	public String confirmOrder(@ApiIgnore Userorder userorder)throws Exception{
+	public String confirmOrder(@ApiIgnore Userorder userorder,@ApiIgnore Integer docloginid)throws Exception{
 		Integer userorderid = userorder.getUserorderid();
 		Boolean userorderhstate = userorder.getUserorderhstate();
 		Integer userordertpricetype = userorder.getUserordertpricetype();
@@ -989,13 +1090,86 @@ public class DoctorController {
 			if (userorderepricetype == null) {
 				errList.add("餐饮类型为空");
 			}
-			
-			return errList.toString().replace("[", "").replace("]", "");
+			return DataResult.error( errList.toString().replace("[", "").replace("]", ""));
 		}
 		
 	
 	}
 	
+	//医生取消订单
+	@RequestMapping(value = "/cancel", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "医生取消订单", httpMethod = "POST", notes = "医生取消订单")
+	public String cancel(
+			@ApiParam(name = "docloginid",required = true,value ="医生登陆id" )@RequestParam Integer docloginid,
+			@ApiParam(name = "userorderid",required = true,value ="订单id" )@RequestParam Integer userorderid) {
+		if (docloginid != null && userorderid!=null) {
+			Map<String, Object> result = doctorService.updateOrderToCancle(docloginid,userorderid);
+			if ("1".equals(result.get("state"))) {
+				return DataResult.success("取消成功,且消息发送成功");
+			} else if ("2".equals(result.get("state"))) {
+				return DataResult.success("取消成功,但消息发送失败");
+			} else if ("3".equals(result.get("state"))) {
+				return DataResult.success("取消失败，未知错误");
+			} else if ("4".equals(result.get("state"))) {
+				return DataResult.error("病情不存在，取消失败");
+			} else if ("5".equals(result.get("state"))) {
+				return DataResult.error("该状态不支持取消");
+			} else if ("6".equals(result.get("state"))) {
+				return DataResult.error("医生与订单不匹配");
+			} else if ("7".equals(result.get("state"))) {
+				return DataResult.error("订单不存在");
+			}else {
+				return DataResult.error("异常错误");
+			}
+		} else {
+			List<String> errList = new ArrayList<String>();
+			if (userorderid == null) {
+				errList.add("订单id为空"); 
+			}
+			if (docloginid == null) {
+				errList.add("医生id为空"); 
+			}
+			return DataResult.error( errList.toString().replace("[", "").replace("]", ""));
+		}
+	}
+	//更换部门
+	@RequestMapping(value = "/changedept", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "更换部门", httpMethod = "POST", notes = "更换部门")
+	public String changeDept(
+			@ApiParam(name = "docloginid",required = true,value ="医生登陆id" )@RequestParam Integer docloginid,
+			@ApiParam(name = "usersickid",required = true,value ="订单id" )@RequestParam Integer userorderid,
+			@ApiParam(name = "usersickprimarydept",value ="一级部门" )@RequestParam String usersickprimarydept,
+			@ApiParam(name = "usersickseconddept",value ="二级部门" )@RequestParam(required=false) String usersickseconddept) {
+		if (docloginid != null && userorderid!=null) {
+			Map<String, Object> result = doctorService.changeDept(docloginid,userorderid,usersickprimarydept,usersickseconddept);
+			if ("1".equals(result.get("state"))) {
+				return DataResult.success("取消成功,且消息发送成功");
+			} else if ("2".equals(result.get("state"))) {
+				return DataResult.success("取消成功,但消息发送失败");
+			} else if ("3".equals(result.get("state"))) {
+				return DataResult.success("取消失败，未知错误");
+			} else if ("4".equals(result.get("state"))) {
+				return DataResult.error("病情不存在，取消失败");
+			} else if ("5".equals(result.get("state"))) {
+				return DataResult.error("该状态不支持取消");
+			} else if ("6".equals(result.get("state"))) {
+				return DataResult.error("医生与订单不匹配");
+			} else if ("7".equals(result.get("state"))) {
+				return DataResult.error("订单不存在");
+			}else {
+				return DataResult.error("异常错误");
+			}
+		} else {
+			List<String> errList = new ArrayList<String>();
+			if (userorderid == null) {
+				errList.add("订单id为空"); 
+			}
+			if (docloginid == null) {
+				errList.add("医生id为空"); 
+			}
+			return DataResult.error( errList.toString().replace("[", "").replace("]", ""));
+		}
+	}
 	/*//医生完善订单信息
 	@RequestMapping(value="/updateorder")
 	public Map<String, Object> editOrder(@RequestBody @Valid Userorder userorder,BindingResult bindingResult) throws Exception {

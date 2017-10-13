@@ -27,6 +27,7 @@ import com.medical.service.UserService;
 import com.medical.utils.result.DataResult;
 import com.medical.utils.result.Result;
 import com.netease.code.MsgCode;
+import com.sun.xml.internal.ws.policy.EffectiveAlternativeSelector;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -190,7 +191,7 @@ public class UserController {
 			if (1 == result) {
 				return DataResult.success("登录成功");
 			} else if (2 == result) {
-				return DataResult.error(" token为空");
+				return DataResult.error("token为空");
 			} else if (3 == result) {
 				return DataResult.error("id对应记录为空");
 			} else {
@@ -217,15 +218,15 @@ public class UserController {
 			} else if ("2".equals(result.get("state"))) {
 				return DataResult.error("修改失败");
 			} else if ("3".equals(result.get("state"))) {
-				return DataResult.error("路径创建失败");
+				return DataResult.error("修改失败，因路径创建失败");
 			} else if ("4".equals(result.get("state"))) {
 				return DataResult.success("修改昵称成功");
-			} else if ("4".equals(result.get("state"))) {
-				return DataResult.success("修改昵称失败");
+			} else if ("5".equals(result.get("state"))) {
+				return DataResult.error("修改昵称失败");
 			} else if ("6".equals(result.get("state"))) {
 				return DataResult.error("该id对应的记录为空");
 			} else {
-				return DataResult.error("操作异常", null);
+				return DataResult.error("操作异常");
 
 			}
 		} else {
@@ -290,7 +291,7 @@ public class UserController {
 				&& userloginpwd.trim().length() != 0 && code != null && code.trim().length() != 0) {
 			int result = userService.updatePassword(userloginphone, userloginpwd, code);
 			if (1 == result) {
-				return DataResult.error("修改成功");
+				return DataResult.success("修改成功");
 			} else if (2 == result) {
 				return DataResult.error("修改失败");
 			} else if (3 == result) {
@@ -367,8 +368,7 @@ public class UserController {
 				return DataResult.error("创建路径失败");
 			} else if (result == 4) {
 				return DataResult.error("该用户已审核");
-			}
-			if (result == 5) {
+			}else if (result == 5) {
 				return DataResult.error("该id对应的记录为空");
 			} else {
 				return DataResult.error("操作异常");
@@ -389,7 +389,7 @@ public class UserController {
 			if ("1".equals(resultMap.get("state"))) {
 				return DataResult.success("查询成功", resultMap.get("data"));
 			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.error("查询出的亲属为空");
+				return DataResult.success("查询成功，但亲属为空");
 			} else {
 				return DataResult.error("操作异常");
 			}
@@ -557,7 +557,7 @@ public class UserController {
 			if ("1".equals(resultMap.get("state"))) {
 				return DataResult.success("获取数据成功",resultMap.get("data"));
 			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.error("获取数据失败");
+				return DataResult.success("获取数据为空");
 			} else{
 				return DataResult.error("异常错误");
 			}
@@ -578,7 +578,7 @@ public class UserController {
 				return DataResult.success("获取成功", resultMap.get("data"));
 
 			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.error("获取的数据为空");
+				return DataResult.success("获取的数据为空");
 
 			} else {
 				return DataResult.error("操作异常");
@@ -599,7 +599,7 @@ public class UserController {
 			if ("1".equals(resultMap.get("state"))) {
 				return DataResult.success("获取成功", resultMap.get("data"));
 			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.error("请求成功,数据为空");
+				return DataResult.success("请求成功,数据为空");
 			} else {
 				return DataResult.error("请求异常");
 			}
@@ -691,17 +691,20 @@ public class UserController {
 	@RequestMapping(value = "/getsick", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取病情", httpMethod = "POST", notes = "获取病情")
 	public @ResponseBody String getSick(
-			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid) throws Exception {
+			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
+			@ApiParam(name = "type", value = "病情类型,不填获取全部 ,1是未发布的病情 ,2是已发布和生成订单的") @RequestParam(required=false) Integer type) throws Exception {
 		if (userloginid != null) {
-			Map<String, Object> resultMap = userService.findSicks(userloginid);
+			if (type!=null && type >2) {
+				return DataResult.error("type超出范围");
+			}
+			Map<String, Object> resultMap = userService.findSicks(userloginid,type);
 			if ("1".equals(resultMap.get("state"))) {
 				return DataResult.success("获取成功", resultMap.get("data"));
 			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.error("请求成功,数据为空");
+				return DataResult.success("请求成功,数据为空");
 			} else {
 				return DataResult.error("请求异常");
 			}
-
 		} else {
 			return DataResult.error("用户id为空");
 		}
@@ -728,7 +731,7 @@ public class UserController {
 			if ("1".equals(resultMap.get("state"))) {
 				return DataResult.success("获取成功", resultMap.get("data"));
 			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.error("请求成功,数据为空");
+				return DataResult.success("请求成功,数据为空");
 			} else {
 				return DataResult.error("请求异常");
 			}
@@ -861,18 +864,22 @@ public class UserController {
 
 	}
 
-	// 获取推荐医生
+	// 获取当前发布病情相关医生
 	@RequestMapping(value = "/getredoctor", produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "获取推荐医生", httpMethod = "POST", notes = "获取推荐医生")
-	public String getrReDoctor(@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid)
+	@ApiOperation(value = "获取当前发布病情相关医生", httpMethod = "POST", notes = "获取推荐医生")
+	public String getrReDoctor(@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
+			@ApiParam(name = "preordertype", value = "医生类型,不填为所有医生,1为系统推荐医生，2为抢单医生，3为其他医生推荐医生，4为预选医生") @RequestParam(required=false) Integer preordertype)
 			throws Exception {
 		if (userloginid != null) {
-			Map<String, Object> resultMap = userService.findReDoctor(userloginid);
+			if (preordertype!=null&&preordertype>4) {
+				return DataResult.error("preordertype超出范围");
+			}
+			Map<String, Object> resultMap = userService.findReDoctor(userloginid,preordertype);
 			if ("1".equals(resultMap.get("state"))) {
 				return DataResult.success("获取成功", resultMap.get("data"));
 
 			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.error("获取的数据为空");
+				return DataResult.success("获取成功,获取的数据为空");
 
 			} else if ("3".equals(resultMap.get("state"))) {
 				return DataResult.error("系统错误，发布的病情超过一个");
@@ -1019,18 +1026,23 @@ public class UserController {
 
 	}
 
-	// 获取正在进行订单
-	@RequestMapping(value = "/order", produces = "application/json;charset=UTF-8")
+	// 获取订单
+	@RequestMapping(value = "/getorder", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取订单", httpMethod = "POST", notes = "获取订单")
-	public String order(@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid)
+	public String order(
+			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
+			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page,
+			@ApiParam(name = "type", value = "订单类型，为空获取全部,1代表等待确认的订单，2代表正在进行的") @RequestParam(required=false) Integer type)
 			throws Exception {
-		if (userloginid!=null) {
-			Map<String, Object> resultMap = userService.getOrders(userloginid);
+		if (userloginid!=null && page!=null) {
+			if (type!=null&&type>2) {
+				return DataResult.error("type超出范围");
+			}
+			Map<String, Object> resultMap = userService.getOrders(userloginid,page,type);
 			if ("1".equals(resultMap.get("state"))) {
 				return DataResult.success("获取成功", resultMap.get("data"));
-
 			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.error("获取的数据为空");
+				return DataResult.success("获取的数据为空");
 
 			} else {
 				return DataResult.error("操作异常");
@@ -1096,7 +1108,7 @@ public class UserController {
 
 	}
     
-	//获取历史订单
+	/*//获取历史订单
 	@RequestMapping(value = "/getoldorder", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取历史订单", httpMethod = "POST", notes = "获取历史订单")
 	public String getOldOrders(@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
@@ -1109,7 +1121,7 @@ public class UserController {
 				return DataResult.success("获取成功", resultMap.get("data"));
 
 			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.error("获取的数据为空");
+				return DataResult.success("获取的数据为空");
 
 			} else {
 				return DataResult.error("操作异常");
@@ -1119,7 +1131,7 @@ public class UserController {
 		}
 		
 
-	}
+	}*/
 	/*
 	 * //取消订单
 	 * 

@@ -170,8 +170,8 @@
   	<select id="paginationDoctorList" parameterType="com.medical.po.HospSearchDocTerm"
   		 resultType="map">
   		   SELECT a.docloginid,a.docloginpix,a.docloginname,c.docallday,a.docloginphone,c.dochosp,c.docdept,c.docage,c.docmale,
-  		   			d.doctitlename,c.docname,c.docbirthdate,c.docnation,c.docexpert,c.docabs,
-  		   			 a.docloginprovince,a.doclogincity,a.docloginarea,a.docloginother,
+  		   			c.doctitle,c.docname,c.docbirthdate,c.docnation,c.docexpert,c.docabs,
+  		   			c.dochospprovince,c.dochospcity,c.dochosparea,c.dochospother,
   		   			b.monam,b.monpm,b.tueam,b.tuepm,b.wedam,b.wedpm,b.thuam,b.thupm,b.friam,b.fripm,b.satam,b.satpm,b.sunam,b.sunpm
   		   FROM doctorlogininfo as a 
   		   left join doctorskd as b on a.docLoginId=b.docLoginId 

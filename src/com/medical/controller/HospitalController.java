@@ -23,6 +23,7 @@ import com.google.gson.JsonObject;
 import com.medical.po.HospSearchDocTerm;
 import com.medical.po.Hospitaldept;
 import com.medical.service.HospitalService;
+import com.medical.utils.result.DataResult;
 import com.medical.utils.result.Result;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -99,9 +100,39 @@ public class HospitalController {
 		return map;
 
 	}
-	@RequestMapping(value="/PreOrderRequest")
-	public String PreOrderRequest(@RequestParam Integer docloginid, @RequestParam Integer hosploginid) throws Exception{
-		return Result.success("成功");
+	//创建会诊
+	@RequestMapping(value="/PreOrderRequest", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "创建会诊", httpMethod = "POST", notes = "创建会诊")
+	public @ResponseBody String PreOrderRequest(@ApiParam(name = "docloginid",required = true,value ="医生登陆id" )@RequestParam Integer docloginid, 
+			@ApiParam(name = "hosploginid",required = true,value ="医院登陆id" )@RequestParam Integer hosploginid,
+			@ApiParam(name = "orderprice",required = true,value ="会诊价格" )@RequestParam Double orderprice) throws Exception{
+		if (docloginid!=null && hosploginid!=null && orderprice!=null) {
+			Map<String, Object> result = hospitalService.preorderrequest(docloginid,hosploginid,orderprice);
+			if ("1".equals(result.get("state"))) {
+				return DataResult.success("创建会诊成功,且消息发送成功");
+			} else if ("2".equals(result.get("state"))) {
+				return DataResult.success("创建会诊成功,但消息发送失败");
+			} else if ("3".equals(result.get("state"))) {
+				return DataResult.error("创建会诊失败，未知错误");
+			}  else if ("4".equals(result.get("state"))) {
+				return DataResult.error("创建会诊失败,因医生id对于医生信息为空");
+			} else {
+				return DataResult.error("异常错误");
+			}
+		} else {
+			List<String> errList = new ArrayList<String>();
+			if (docloginid == null) {
+				errList.add("医生id为空"); 
+			}
+			if (hosploginid == null) {
+				errList.add("医院id为空"); 
+			}
+			if (orderprice == null) {
+				errList.add("价格为空"); 
+			}
+			return DataResult.error( errList.toString().replace("[", "").replace("]", ""));
+		}
+		
 		
 	}
 }

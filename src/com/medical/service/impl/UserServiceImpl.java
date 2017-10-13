@@ -665,10 +665,10 @@ public class UserServiceImpl implements UserService {
 	
 	//获取全部病情
 	@Override
-	public Map<String, Object> findSicks(Integer userloginid) throws Exception {
+	public Map<String, Object> findSicks(Integer userloginid,Integer type) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			List<Map<String, Object>> list = usersickMapperCustom.selectAllInfoByUserLoginId(userloginid);
+			List<Map<String, Object>> list = usersickMapperCustom.selectAllInfoByUserLoginId(userloginid,type);
 			if (list!=null) {
 				map.put("state", "1");
 				map.put("data", list);// 获取成功
@@ -677,6 +677,7 @@ public class UserServiceImpl implements UserService {
 			}
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 			map.put("state", "3"); // 异常错误
 		}
 		return map;
@@ -767,7 +768,7 @@ public class UserServiceImpl implements UserService {
 				String virtualDir = "user/"+userloginid+"/sick/";
 				boolean state = CreateFileUtil.createDir(reallyDir);
 				if (state) {
-					String fileName = null;
+					String fileName = "";
 					// 图片重命名及保存
 					for (int i = 0; i < pictureFile.length; i++) {
 						String name = CommonUtils.randomFileName();
@@ -834,6 +835,8 @@ public class UserServiceImpl implements UserService {
 							String fileName = usersick.getUsersickpic();
 							if (fileName!=null) {
 								fileName += ",";
+							}else {
+								fileName = "";
 							}
 							// 图片重命名及保存
 							for (int i = 0; i < pictureFile.length; i++) {
@@ -1046,16 +1049,18 @@ public class UserServiceImpl implements UserService {
 	
 	//获取推荐医生
 	@Override
-	public Map<String, Object> findReDoctor(Integer userloginid) throws Exception {
+	public Map<String, Object> findReDoctor(Integer userloginid,Integer preordertype) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			List<Usersick> list = usersickMapperCustom.selectByUserLoginIdAndState(userloginid, 2);
 			if (list.size()==1) {
-				Map<String, Object> params = new HashMap<String, Object>();
+				/*Map<String, Object> params = new HashMap<String, Object>();
 				params.put("id", list.get(0).getUsersickid());
 				params.put("lon", 0);
-				params.put("lat", 0);
-				List<Map<String,Object>> dataMap = preorderMapperCustom.selectByUserSickId(params);
+				params.put("lat", 0);*/
+				int userSickId = list.get(0).getUsersickid();
+				
+				List<Map<String,Object>> dataMap = preorderMapperCustom.selectByUserSickId(userSickId,preordertype);
 				if (dataMap.size()!=0) {
 					map.put("state", "1"); //获取数据成功
 					map.put("data", dataMap);
@@ -1112,7 +1117,7 @@ public class UserServiceImpl implements UserService {
 			if (usersick!=null) {
 				int type = usersick.getUsersickstateid();
 				if (type==1) {
-					List<Map<String, Object>> maps = usersickMapperCustom.selectAllInfoByUserLoginId(usersick.getUserloginid());
+					List<Map<String, Object>> maps = usersickMapperCustom.selectAllInfoByUserLoginId(usersick.getUserloginid(),1);
 					int state = 1;
 					for (Map<String, Object> map:maps) {
 						if ((int)map.get("usersickstateid")==2) {
@@ -1354,18 +1359,21 @@ public class UserServiceImpl implements UserService {
 	
 	//获取订单
 	@Override
-	public Map<String, Object> getOrders(Integer userloginid) {
+	public Map<String, Object> getOrders(Integer userloginid,Integer page, Integer type) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			List<Map<String, Object>> order = userorderMapperCustom.selectAllInfoByUserLoginId(userloginid);
-			if (order.size()== 1) {
+			PageHelper.startPage(page, 5);
+			List<Map<String, Object>> list = userorderMapperCustom.selectAllInfoByUserLoginId(userloginid,type);
+			PageInfo<Map<String, Object>> order = new PageInfo<Map<String, Object>>(list);
+			if (order.getTotal()>0) {
+				// 获取数据成功
 				map.put("state", "1");
-				map.put("data", order);
+				map.put("data", order.getList());
 			} else {
 				map.put("state", "2");
 			}
-
 		} catch (Exception e) {
+			e.printStackTrace();
 			map.put("state", "3");
 		}
 		return map;

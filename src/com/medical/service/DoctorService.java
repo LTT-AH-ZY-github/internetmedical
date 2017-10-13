@@ -102,6 +102,20 @@ public interface DoctorService {
 	//获取订单详请
 	Map<String, Object> getOrderDetail(Integer docLoginId, Integer userOrderId);
 
+	Map<String, Object> getHospital(String hospname);
+	//医生取消订单
+	Map<String, Object> updateOrderToCancle(Integer docloginid, Integer userorderid);
+	//医生拒绝接单
+	Map<String, Object> updateOrderToRefuse(Integer docloginid, Integer userorderid, Integer redocloginid);
+	//医生修改病情部门
+	Map<String, Object> changeDept(Integer docloginid, Integer userorderid, String usersickprimarydept,
+			String usersickseconddept);
+
+	int updateSecondInfo(Integer docloginid, String olddoccardphoto, MultipartFile[] doccardphoto,
+			String olddoctitlephoto, MultipartFile[] doctitlephoto, String olddocqualphoto,
+			MultipartFile[] docqualphoto, String olddocworkcardphoto, MultipartFile[] docworkcardphoto,
+			String olddocotherphoto, MultipartFile[] docotherphoto);
+
 	
 
 	

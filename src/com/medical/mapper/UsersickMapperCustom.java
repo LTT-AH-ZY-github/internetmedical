@@ -12,7 +12,7 @@ import org.apache.ibatis.annotations.Param;
 public interface UsersickMapperCustom {
    
 	//查询病情及所有相关信息
-    List<Map<String, Object>> selectAllInfoByUserLoginId(Integer id);
+    List<Map<String, Object>> selectAllInfoByUserLoginId(Integer id, Integer type);
     //根据登录id及病情状态查询用户的所有病情
     List<Usersick> selectByUserLoginIdAndState(Integer userloginid,Integer usersickstateid);
     Usersick selectByPhone(String phone);
