@@ -11,4 +11,5 @@
   		 resultType="com.medical.po.Userinfo">
   		SELECT * FROM userinfo WHERE userLoginId=#{id}
   	</select>
+  	
  </mapper>

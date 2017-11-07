@@ -1675,73 +1675,73 @@ public class DoctorlogininfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andDoclogincidIsNull() {
-            addCriterion("docLoginCId is null");
+        public Criteria andDocloginchannelidIsNull() {
+            addCriterion("docLoginChannelId is null");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogincidIsNotNull() {
-            addCriterion("docLoginCId is not null");
+        public Criteria andDocloginchannelidIsNotNull() {
+            addCriterion("docLoginChannelId is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogincidEqualTo(String value) {
-            addCriterion("docLoginCId =", value, "doclogincid");
+        public Criteria andDocloginchannelidEqualTo(String value) {
+            addCriterion("docLoginChannelId =", value, "docloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogincidNotEqualTo(String value) {
-            addCriterion("docLoginCId <>", value, "doclogincid");
+        public Criteria andDocloginchannelidNotEqualTo(String value) {
+            addCriterion("docLoginChannelId <>", value, "docloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogincidGreaterThan(String value) {
-            addCriterion("docLoginCId >", value, "doclogincid");
+        public Criteria andDocloginchannelidGreaterThan(String value) {
+            addCriterion("docLoginChannelId >", value, "docloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogincidGreaterThanOrEqualTo(String value) {
-            addCriterion("docLoginCId >=", value, "doclogincid");
+        public Criteria andDocloginchannelidGreaterThanOrEqualTo(String value) {
+            addCriterion("docLoginChannelId >=", value, "docloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogincidLessThan(String value) {
-            addCriterion("docLoginCId <", value, "doclogincid");
+        public Criteria andDocloginchannelidLessThan(String value) {
+            addCriterion("docLoginChannelId <", value, "docloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogincidLessThanOrEqualTo(String value) {
-            addCriterion("docLoginCId <=", value, "doclogincid");
+        public Criteria andDocloginchannelidLessThanOrEqualTo(String value) {
+            addCriterion("docLoginChannelId <=", value, "docloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogincidLike(String value) {
-            addCriterion("docLoginCId like", value, "doclogincid");
+        public Criteria andDocloginchannelidLike(String value) {
+            addCriterion("docLoginChannelId like", value, "docloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogincidNotLike(String value) {
-            addCriterion("docLoginCId not like", value, "doclogincid");
+        public Criteria andDocloginchannelidNotLike(String value) {
+            addCriterion("docLoginChannelId not like", value, "docloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogincidIn(List<String> values) {
-            addCriterion("docLoginCId in", values, "doclogincid");
+        public Criteria andDocloginchannelidIn(List<String> values) {
+            addCriterion("docLoginChannelId in", values, "docloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogincidNotIn(List<String> values) {
-            addCriterion("docLoginCId not in", values, "doclogincid");
+        public Criteria andDocloginchannelidNotIn(List<String> values) {
+            addCriterion("docLoginChannelId not in", values, "docloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogincidBetween(String value1, String value2) {
-            addCriterion("docLoginCId between", value1, value2, "doclogincid");
+        public Criteria andDocloginchannelidBetween(String value1, String value2) {
+            addCriterion("docLoginChannelId between", value1, value2, "docloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogincidNotBetween(String value1, String value2) {
-            addCriterion("docLoginCId not between", value1, value2, "doclogincid");
+        public Criteria andDocloginchannelidNotBetween(String value1, String value2) {
+            addCriterion("docLoginChannelId not between", value1, value2, "docloginchannelid");
             return (Criteria) this;
         }
     }

@@ -1982,493 +1982,493 @@ public class DoctorinfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andDoclocIsNull() {
-            addCriterion("docLoc is null");
+        public Criteria andDocaddresslocationIsNull() {
+            addCriterion("docAddressLocation is null");
             return (Criteria) this;
         }
 
-        public Criteria andDoclocIsNotNull() {
-            addCriterion("docLoc is not null");
+        public Criteria andDocaddresslocationIsNotNull() {
+            addCriterion("docAddressLocation is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDoclocEqualTo(String value) {
-            addCriterion("docLoc =", value, "docloc");
+        public Criteria andDocaddresslocationEqualTo(String value) {
+            addCriterion("docAddressLocation =", value, "docaddresslocation");
             return (Criteria) this;
         }
 
-        public Criteria andDoclocNotEqualTo(String value) {
-            addCriterion("docLoc <>", value, "docloc");
+        public Criteria andDocaddresslocationNotEqualTo(String value) {
+            addCriterion("docAddressLocation <>", value, "docaddresslocation");
             return (Criteria) this;
         }
 
-        public Criteria andDoclocGreaterThan(String value) {
-            addCriterion("docLoc >", value, "docloc");
+        public Criteria andDocaddresslocationGreaterThan(String value) {
+            addCriterion("docAddressLocation >", value, "docaddresslocation");
             return (Criteria) this;
         }
 
-        public Criteria andDoclocGreaterThanOrEqualTo(String value) {
-            addCriterion("docLoc >=", value, "docloc");
+        public Criteria andDocaddresslocationGreaterThanOrEqualTo(String value) {
+            addCriterion("docAddressLocation >=", value, "docaddresslocation");
             return (Criteria) this;
         }
 
-        public Criteria andDoclocLessThan(String value) {
-            addCriterion("docLoc <", value, "docloc");
+        public Criteria andDocaddresslocationLessThan(String value) {
+            addCriterion("docAddressLocation <", value, "docaddresslocation");
             return (Criteria) this;
         }
 
-        public Criteria andDoclocLessThanOrEqualTo(String value) {
-            addCriterion("docLoc <=", value, "docloc");
+        public Criteria andDocaddresslocationLessThanOrEqualTo(String value) {
+            addCriterion("docAddressLocation <=", value, "docaddresslocation");
             return (Criteria) this;
         }
 
-        public Criteria andDoclocLike(String value) {
-            addCriterion("docLoc like", value, "docloc");
+        public Criteria andDocaddresslocationLike(String value) {
+            addCriterion("docAddressLocation like", value, "docaddresslocation");
             return (Criteria) this;
         }
 
-        public Criteria andDoclocNotLike(String value) {
-            addCriterion("docLoc not like", value, "docloc");
+        public Criteria andDocaddresslocationNotLike(String value) {
+            addCriterion("docAddressLocation not like", value, "docaddresslocation");
             return (Criteria) this;
         }
 
-        public Criteria andDoclocIn(List<String> values) {
-            addCriterion("docLoc in", values, "docloc");
+        public Criteria andDocaddresslocationIn(List<String> values) {
+            addCriterion("docAddressLocation in", values, "docaddresslocation");
             return (Criteria) this;
         }
 
-        public Criteria andDoclocNotIn(List<String> values) {
-            addCriterion("docLoc not in", values, "docloc");
+        public Criteria andDocaddresslocationNotIn(List<String> values) {
+            addCriterion("docAddressLocation not in", values, "docaddresslocation");
             return (Criteria) this;
         }
 
-        public Criteria andDoclocBetween(String value1, String value2) {
-            addCriterion("docLoc between", value1, value2, "docloc");
+        public Criteria andDocaddresslocationBetween(String value1, String value2) {
+            addCriterion("docAddressLocation between", value1, value2, "docaddresslocation");
             return (Criteria) this;
         }
 
-        public Criteria andDoclocNotBetween(String value1, String value2) {
-            addCriterion("docLoc not between", value1, value2, "docloc");
+        public Criteria andDocaddresslocationNotBetween(String value1, String value2) {
+            addCriterion("docAddressLocation not between", value1, value2, "docaddresslocation");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrprovinceIsNull() {
-            addCriterion("docAdrProvince is null");
+        public Criteria andDocaddressprovinceIsNull() {
+            addCriterion("docAddressProvince is null");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrprovinceIsNotNull() {
-            addCriterion("docAdrProvince is not null");
+        public Criteria andDocaddressprovinceIsNotNull() {
+            addCriterion("docAddressProvince is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrprovinceEqualTo(String value) {
-            addCriterion("docAdrProvince =", value, "docadrprovince");
+        public Criteria andDocaddressprovinceEqualTo(String value) {
+            addCriterion("docAddressProvince =", value, "docaddressprovince");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrprovinceNotEqualTo(String value) {
-            addCriterion("docAdrProvince <>", value, "docadrprovince");
+        public Criteria andDocaddressprovinceNotEqualTo(String value) {
+            addCriterion("docAddressProvince <>", value, "docaddressprovince");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrprovinceGreaterThan(String value) {
-            addCriterion("docAdrProvince >", value, "docadrprovince");
+        public Criteria andDocaddressprovinceGreaterThan(String value) {
+            addCriterion("docAddressProvince >", value, "docaddressprovince");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrprovinceGreaterThanOrEqualTo(String value) {
-            addCriterion("docAdrProvince >=", value, "docadrprovince");
+        public Criteria andDocaddressprovinceGreaterThanOrEqualTo(String value) {
+            addCriterion("docAddressProvince >=", value, "docaddressprovince");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrprovinceLessThan(String value) {
-            addCriterion("docAdrProvince <", value, "docadrprovince");
+        public Criteria andDocaddressprovinceLessThan(String value) {
+            addCriterion("docAddressProvince <", value, "docaddressprovince");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrprovinceLessThanOrEqualTo(String value) {
-            addCriterion("docAdrProvince <=", value, "docadrprovince");
+        public Criteria andDocaddressprovinceLessThanOrEqualTo(String value) {
+            addCriterion("docAddressProvince <=", value, "docaddressprovince");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrprovinceLike(String value) {
-            addCriterion("docAdrProvince like", value, "docadrprovince");
+        public Criteria andDocaddressprovinceLike(String value) {
+            addCriterion("docAddressProvince like", value, "docaddressprovince");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrprovinceNotLike(String value) {
-            addCriterion("docAdrProvince not like", value, "docadrprovince");
+        public Criteria andDocaddressprovinceNotLike(String value) {
+            addCriterion("docAddressProvince not like", value, "docaddressprovince");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrprovinceIn(List<String> values) {
-            addCriterion("docAdrProvince in", values, "docadrprovince");
+        public Criteria andDocaddressprovinceIn(List<String> values) {
+            addCriterion("docAddressProvince in", values, "docaddressprovince");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrprovinceNotIn(List<String> values) {
-            addCriterion("docAdrProvince not in", values, "docadrprovince");
+        public Criteria andDocaddressprovinceNotIn(List<String> values) {
+            addCriterion("docAddressProvince not in", values, "docaddressprovince");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrprovinceBetween(String value1, String value2) {
-            addCriterion("docAdrProvince between", value1, value2, "docadrprovince");
+        public Criteria andDocaddressprovinceBetween(String value1, String value2) {
+            addCriterion("docAddressProvince between", value1, value2, "docaddressprovince");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrprovinceNotBetween(String value1, String value2) {
-            addCriterion("docAdrProvince not between", value1, value2, "docadrprovince");
+        public Criteria andDocaddressprovinceNotBetween(String value1, String value2) {
+            addCriterion("docAddressProvince not between", value1, value2, "docaddressprovince");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrcityIsNull() {
-            addCriterion("docAdrCity is null");
+        public Criteria andDocaddresscityIsNull() {
+            addCriterion("docAddressCity is null");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrcityIsNotNull() {
-            addCriterion("docAdrCity is not null");
+        public Criteria andDocaddresscityIsNotNull() {
+            addCriterion("docAddressCity is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrcityEqualTo(String value) {
-            addCriterion("docAdrCity =", value, "docadrcity");
+        public Criteria andDocaddresscityEqualTo(String value) {
+            addCriterion("docAddressCity =", value, "docaddresscity");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrcityNotEqualTo(String value) {
-            addCriterion("docAdrCity <>", value, "docadrcity");
+        public Criteria andDocaddresscityNotEqualTo(String value) {
+            addCriterion("docAddressCity <>", value, "docaddresscity");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrcityGreaterThan(String value) {
-            addCriterion("docAdrCity >", value, "docadrcity");
+        public Criteria andDocaddresscityGreaterThan(String value) {
+            addCriterion("docAddressCity >", value, "docaddresscity");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrcityGreaterThanOrEqualTo(String value) {
-            addCriterion("docAdrCity >=", value, "docadrcity");
+        public Criteria andDocaddresscityGreaterThanOrEqualTo(String value) {
+            addCriterion("docAddressCity >=", value, "docaddresscity");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrcityLessThan(String value) {
-            addCriterion("docAdrCity <", value, "docadrcity");
+        public Criteria andDocaddresscityLessThan(String value) {
+            addCriterion("docAddressCity <", value, "docaddresscity");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrcityLessThanOrEqualTo(String value) {
-            addCriterion("docAdrCity <=", value, "docadrcity");
+        public Criteria andDocaddresscityLessThanOrEqualTo(String value) {
+            addCriterion("docAddressCity <=", value, "docaddresscity");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrcityLike(String value) {
-            addCriterion("docAdrCity like", value, "docadrcity");
+        public Criteria andDocaddresscityLike(String value) {
+            addCriterion("docAddressCity like", value, "docaddresscity");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrcityNotLike(String value) {
-            addCriterion("docAdrCity not like", value, "docadrcity");
+        public Criteria andDocaddresscityNotLike(String value) {
+            addCriterion("docAddressCity not like", value, "docaddresscity");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrcityIn(List<String> values) {
-            addCriterion("docAdrCity in", values, "docadrcity");
+        public Criteria andDocaddresscityIn(List<String> values) {
+            addCriterion("docAddressCity in", values, "docaddresscity");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrcityNotIn(List<String> values) {
-            addCriterion("docAdrCity not in", values, "docadrcity");
+        public Criteria andDocaddresscityNotIn(List<String> values) {
+            addCriterion("docAddressCity not in", values, "docaddresscity");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrcityBetween(String value1, String value2) {
-            addCriterion("docAdrCity between", value1, value2, "docadrcity");
+        public Criteria andDocaddresscityBetween(String value1, String value2) {
+            addCriterion("docAddressCity between", value1, value2, "docaddresscity");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrcityNotBetween(String value1, String value2) {
-            addCriterion("docAdrCity not between", value1, value2, "docadrcity");
+        public Criteria andDocaddresscityNotBetween(String value1, String value2) {
+            addCriterion("docAddressCity not between", value1, value2, "docaddresscity");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrareaIsNull() {
-            addCriterion("docAdrArea is null");
+        public Criteria andDocaddressareaIsNull() {
+            addCriterion("docAddressArea is null");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrareaIsNotNull() {
-            addCriterion("docAdrArea is not null");
+        public Criteria andDocaddressareaIsNotNull() {
+            addCriterion("docAddressArea is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrareaEqualTo(String value) {
-            addCriterion("docAdrArea =", value, "docadrarea");
+        public Criteria andDocaddressareaEqualTo(String value) {
+            addCriterion("docAddressArea =", value, "docaddressarea");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrareaNotEqualTo(String value) {
-            addCriterion("docAdrArea <>", value, "docadrarea");
+        public Criteria andDocaddressareaNotEqualTo(String value) {
+            addCriterion("docAddressArea <>", value, "docaddressarea");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrareaGreaterThan(String value) {
-            addCriterion("docAdrArea >", value, "docadrarea");
+        public Criteria andDocaddressareaGreaterThan(String value) {
+            addCriterion("docAddressArea >", value, "docaddressarea");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrareaGreaterThanOrEqualTo(String value) {
-            addCriterion("docAdrArea >=", value, "docadrarea");
+        public Criteria andDocaddressareaGreaterThanOrEqualTo(String value) {
+            addCriterion("docAddressArea >=", value, "docaddressarea");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrareaLessThan(String value) {
-            addCriterion("docAdrArea <", value, "docadrarea");
+        public Criteria andDocaddressareaLessThan(String value) {
+            addCriterion("docAddressArea <", value, "docaddressarea");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrareaLessThanOrEqualTo(String value) {
-            addCriterion("docAdrArea <=", value, "docadrarea");
+        public Criteria andDocaddressareaLessThanOrEqualTo(String value) {
+            addCriterion("docAddressArea <=", value, "docaddressarea");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrareaLike(String value) {
-            addCriterion("docAdrArea like", value, "docadrarea");
+        public Criteria andDocaddressareaLike(String value) {
+            addCriterion("docAddressArea like", value, "docaddressarea");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrareaNotLike(String value) {
-            addCriterion("docAdrArea not like", value, "docadrarea");
+        public Criteria andDocaddressareaNotLike(String value) {
+            addCriterion("docAddressArea not like", value, "docaddressarea");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrareaIn(List<String> values) {
-            addCriterion("docAdrArea in", values, "docadrarea");
+        public Criteria andDocaddressareaIn(List<String> values) {
+            addCriterion("docAddressArea in", values, "docaddressarea");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrareaNotIn(List<String> values) {
-            addCriterion("docAdrArea not in", values, "docadrarea");
+        public Criteria andDocaddressareaNotIn(List<String> values) {
+            addCriterion("docAddressArea not in", values, "docaddressarea");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrareaBetween(String value1, String value2) {
-            addCriterion("docAdrArea between", value1, value2, "docadrarea");
+        public Criteria andDocaddressareaBetween(String value1, String value2) {
+            addCriterion("docAddressArea between", value1, value2, "docaddressarea");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrareaNotBetween(String value1, String value2) {
-            addCriterion("docAdrArea not between", value1, value2, "docadrarea");
+        public Criteria andDocaddressareaNotBetween(String value1, String value2) {
+            addCriterion("docAddressArea not between", value1, value2, "docaddressarea");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrotherIsNull() {
-            addCriterion("docAdrOther is null");
+        public Criteria andDocaddressotherIsNull() {
+            addCriterion("docAddressOther is null");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrotherIsNotNull() {
-            addCriterion("docAdrOther is not null");
+        public Criteria andDocaddressotherIsNotNull() {
+            addCriterion("docAddressOther is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrotherEqualTo(String value) {
-            addCriterion("docAdrOther =", value, "docadrother");
+        public Criteria andDocaddressotherEqualTo(String value) {
+            addCriterion("docAddressOther =", value, "docaddressother");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrotherNotEqualTo(String value) {
-            addCriterion("docAdrOther <>", value, "docadrother");
+        public Criteria andDocaddressotherNotEqualTo(String value) {
+            addCriterion("docAddressOther <>", value, "docaddressother");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrotherGreaterThan(String value) {
-            addCriterion("docAdrOther >", value, "docadrother");
+        public Criteria andDocaddressotherGreaterThan(String value) {
+            addCriterion("docAddressOther >", value, "docaddressother");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrotherGreaterThanOrEqualTo(String value) {
-            addCriterion("docAdrOther >=", value, "docadrother");
+        public Criteria andDocaddressotherGreaterThanOrEqualTo(String value) {
+            addCriterion("docAddressOther >=", value, "docaddressother");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrotherLessThan(String value) {
-            addCriterion("docAdrOther <", value, "docadrother");
+        public Criteria andDocaddressotherLessThan(String value) {
+            addCriterion("docAddressOther <", value, "docaddressother");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrotherLessThanOrEqualTo(String value) {
-            addCriterion("docAdrOther <=", value, "docadrother");
+        public Criteria andDocaddressotherLessThanOrEqualTo(String value) {
+            addCriterion("docAddressOther <=", value, "docaddressother");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrotherLike(String value) {
-            addCriterion("docAdrOther like", value, "docadrother");
+        public Criteria andDocaddressotherLike(String value) {
+            addCriterion("docAddressOther like", value, "docaddressother");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrotherNotLike(String value) {
-            addCriterion("docAdrOther not like", value, "docadrother");
+        public Criteria andDocaddressotherNotLike(String value) {
+            addCriterion("docAddressOther not like", value, "docaddressother");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrotherIn(List<String> values) {
-            addCriterion("docAdrOther in", values, "docadrother");
+        public Criteria andDocaddressotherIn(List<String> values) {
+            addCriterion("docAddressOther in", values, "docaddressother");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrotherNotIn(List<String> values) {
-            addCriterion("docAdrOther not in", values, "docadrother");
+        public Criteria andDocaddressotherNotIn(List<String> values) {
+            addCriterion("docAddressOther not in", values, "docaddressother");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrotherBetween(String value1, String value2) {
-            addCriterion("docAdrOther between", value1, value2, "docadrother");
+        public Criteria andDocaddressotherBetween(String value1, String value2) {
+            addCriterion("docAddressOther between", value1, value2, "docaddressother");
             return (Criteria) this;
         }
 
-        public Criteria andDocadrotherNotBetween(String value1, String value2) {
-            addCriterion("docAdrOther not between", value1, value2, "docadrother");
+        public Criteria andDocaddressotherNotBetween(String value1, String value2) {
+            addCriterion("docAddressOther not between", value1, value2, "docaddressother");
             return (Criteria) this;
         }
 
-        public Criteria andDoclatIsNull() {
-            addCriterion("docLat is null");
+        public Criteria andDocaddresslonIsNull() {
+            addCriterion("docAddressLon is null");
             return (Criteria) this;
         }
 
-        public Criteria andDoclatIsNotNull() {
-            addCriterion("docLat is not null");
+        public Criteria andDocaddresslonIsNotNull() {
+            addCriterion("docAddressLon is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDoclatEqualTo(String value) {
-            addCriterion("docLat =", value, "doclat");
+        public Criteria andDocaddresslonEqualTo(String value) {
+            addCriterion("docAddressLon =", value, "docaddresslon");
             return (Criteria) this;
         }
 
-        public Criteria andDoclatNotEqualTo(String value) {
-            addCriterion("docLat <>", value, "doclat");
+        public Criteria andDocaddresslonNotEqualTo(String value) {
+            addCriterion("docAddressLon <>", value, "docaddresslon");
             return (Criteria) this;
         }
 
-        public Criteria andDoclatGreaterThan(String value) {
-            addCriterion("docLat >", value, "doclat");
+        public Criteria andDocaddresslonGreaterThan(String value) {
+            addCriterion("docAddressLon >", value, "docaddresslon");
             return (Criteria) this;
         }
 
-        public Criteria andDoclatGreaterThanOrEqualTo(String value) {
-            addCriterion("docLat >=", value, "doclat");
+        public Criteria andDocaddresslonGreaterThanOrEqualTo(String value) {
+            addCriterion("docAddressLon >=", value, "docaddresslon");
             return (Criteria) this;
         }
 
-        public Criteria andDoclatLessThan(String value) {
-            addCriterion("docLat <", value, "doclat");
+        public Criteria andDocaddresslonLessThan(String value) {
+            addCriterion("docAddressLon <", value, "docaddresslon");
             return (Criteria) this;
         }
 
-        public Criteria andDoclatLessThanOrEqualTo(String value) {
-            addCriterion("docLat <=", value, "doclat");
+        public Criteria andDocaddresslonLessThanOrEqualTo(String value) {
+            addCriterion("docAddressLon <=", value, "docaddresslon");
             return (Criteria) this;
         }
 
-        public Criteria andDoclatLike(String value) {
-            addCriterion("docLat like", value, "doclat");
+        public Criteria andDocaddresslonLike(String value) {
+            addCriterion("docAddressLon like", value, "docaddresslon");
             return (Criteria) this;
         }
 
-        public Criteria andDoclatNotLike(String value) {
-            addCriterion("docLat not like", value, "doclat");
+        public Criteria andDocaddresslonNotLike(String value) {
+            addCriterion("docAddressLon not like", value, "docaddresslon");
             return (Criteria) this;
         }
 
-        public Criteria andDoclatIn(List<String> values) {
-            addCriterion("docLat in", values, "doclat");
+        public Criteria andDocaddresslonIn(List<String> values) {
+            addCriterion("docAddressLon in", values, "docaddresslon");
             return (Criteria) this;
         }
 
-        public Criteria andDoclatNotIn(List<String> values) {
-            addCriterion("docLat not in", values, "doclat");
+        public Criteria andDocaddresslonNotIn(List<String> values) {
+            addCriterion("docAddressLon not in", values, "docaddresslon");
             return (Criteria) this;
         }
 
-        public Criteria andDoclatBetween(String value1, String value2) {
-            addCriterion("docLat between", value1, value2, "doclat");
+        public Criteria andDocaddresslonBetween(String value1, String value2) {
+            addCriterion("docAddressLon between", value1, value2, "docaddresslon");
             return (Criteria) this;
         }
 
-        public Criteria andDoclatNotBetween(String value1, String value2) {
-            addCriterion("docLat not between", value1, value2, "doclat");
+        public Criteria andDocaddresslonNotBetween(String value1, String value2) {
+            addCriterion("docAddressLon not between", value1, value2, "docaddresslon");
             return (Criteria) this;
         }
 
-        public Criteria andDoclonIsNull() {
-            addCriterion("docLon is null");
+        public Criteria andDocaddresslatIsNull() {
+            addCriterion("docAddressLat is null");
             return (Criteria) this;
         }
 
-        public Criteria andDoclonIsNotNull() {
-            addCriterion("docLon is not null");
+        public Criteria andDocaddresslatIsNotNull() {
+            addCriterion("docAddressLat is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDoclonEqualTo(String value) {
-            addCriterion("docLon =", value, "doclon");
+        public Criteria andDocaddresslatEqualTo(String value) {
+            addCriterion("docAddressLat =", value, "docaddresslat");
             return (Criteria) this;
         }
 
-        public Criteria andDoclonNotEqualTo(String value) {
-            addCriterion("docLon <>", value, "doclon");
+        public Criteria andDocaddresslatNotEqualTo(String value) {
+            addCriterion("docAddressLat <>", value, "docaddresslat");
             return (Criteria) this;
         }
 
-        public Criteria andDoclonGreaterThan(String value) {
-            addCriterion("docLon >", value, "doclon");
+        public Criteria andDocaddresslatGreaterThan(String value) {
+            addCriterion("docAddressLat >", value, "docaddresslat");
             return (Criteria) this;
         }
 
-        public Criteria andDoclonGreaterThanOrEqualTo(String value) {
-            addCriterion("docLon >=", value, "doclon");
+        public Criteria andDocaddresslatGreaterThanOrEqualTo(String value) {
+            addCriterion("docAddressLat >=", value, "docaddresslat");
             return (Criteria) this;
         }
 
-        public Criteria andDoclonLessThan(String value) {
-            addCriterion("docLon <", value, "doclon");
+        public Criteria andDocaddresslatLessThan(String value) {
+            addCriterion("docAddressLat <", value, "docaddresslat");
             return (Criteria) this;
         }
 
-        public Criteria andDoclonLessThanOrEqualTo(String value) {
-            addCriterion("docLon <=", value, "doclon");
+        public Criteria andDocaddresslatLessThanOrEqualTo(String value) {
+            addCriterion("docAddressLat <=", value, "docaddresslat");
             return (Criteria) this;
         }
 
-        public Criteria andDoclonLike(String value) {
-            addCriterion("docLon like", value, "doclon");
+        public Criteria andDocaddresslatLike(String value) {
+            addCriterion("docAddressLat like", value, "docaddresslat");
             return (Criteria) this;
         }
 
-        public Criteria andDoclonNotLike(String value) {
-            addCriterion("docLon not like", value, "doclon");
+        public Criteria andDocaddresslatNotLike(String value) {
+            addCriterion("docAddressLat not like", value, "docaddresslat");
             return (Criteria) this;
         }
 
-        public Criteria andDoclonIn(List<String> values) {
-            addCriterion("docLon in", values, "doclon");
+        public Criteria andDocaddresslatIn(List<String> values) {
+            addCriterion("docAddressLat in", values, "docaddresslat");
             return (Criteria) this;
         }
 
-        public Criteria andDoclonNotIn(List<String> values) {
-            addCriterion("docLon not in", values, "doclon");
+        public Criteria andDocaddresslatNotIn(List<String> values) {
+            addCriterion("docAddressLat not in", values, "docaddresslat");
             return (Criteria) this;
         }
 
-        public Criteria andDoclonBetween(String value1, String value2) {
-            addCriterion("docLon between", value1, value2, "doclon");
+        public Criteria andDocaddresslatBetween(String value1, String value2) {
+            addCriterion("docAddressLat between", value1, value2, "docaddresslat");
             return (Criteria) this;
         }
 
-        public Criteria andDoclonNotBetween(String value1, String value2) {
-            addCriterion("docLon not between", value1, value2, "doclon");
+        public Criteria andDocaddresslatNotBetween(String value1, String value2) {
+            addCriterion("docAddressLat not between", value1, value2, "docaddresslat");
             return (Criteria) this;
         }
 

@@ -24,6 +24,8 @@ import com.medical.mapper.HospitaldeptMapperCustom;
 import com.medical.mapper.HosplogininfoMapper;
 import com.medical.mapper.HosporderMapper;
 import com.medical.mapper.UserlogininfoMapper;
+import com.medical.mapper.UserorderMapper;
+import com.medical.mapper.UserorderMapperCustom;
 import com.medical.po.Doctorinfo;
 import com.medical.po.DoctorinfoCustom;
 import com.medical.po.Doctorlogininfo;
@@ -34,6 +36,7 @@ import com.medical.po.Hospitaldept;
 import com.medical.po.Hosplogininfo;
 import com.medical.po.Hosporder;
 import com.medical.po.Userlogininfo;
+import com.medical.po.Userorder;
 import com.medical.service.DoctorService;
 import com.medical.service.HospitalService;
 
@@ -52,6 +55,10 @@ public class HospitalServiceImpl implements HospitalService{
 	private DoctorlogininfoMapper doctorlogininfoMapper;
 	@Autowired
 	private HospinfoMapperCustom hospinfoMapperCustom;
+	@Autowired
+	private UserorderMapperCustom userorderMapperCustom;
+	@Autowired
+	private UserorderMapper userorderMapper;
 	
 	Logger logger = Logger.getLogger(HospitalService.class);
 	@Override
@@ -142,6 +149,71 @@ public class HospitalServiceImpl implements HospitalService{
 		}
 		
 		return map; 
+	}
+	//医院获取需要住院的病人订单
+	@Override
+	public Map<String, Object> listUserOrder(Integer hosploginid, Integer type, Integer limit, Integer offset) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			 int pageNo = 1; 
+			 if (offset!=0) {
+				pageNo =  offset/limit+1;
+			 }
+			  PageHelper.startPage(pageNo, limit);
+			 List<Map<String, Object>> list = userorderMapperCustom.listByHospLoginIdAnType(hosploginid,type);
+			 //用PageInfo对结果进行包装
+			 PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
+			    if (pageInfo.getSize()!=0) {
+					map.put("state", "1");
+					Map<String, Object> data = new HashMap<String, Object>();
+					data.put("rows", pageInfo.getList());
+					//总共页数
+					data.put("total", pageInfo.getTotal());
+					map.put("data", data);
+				} else {
+					map.put("state", "2");
+				}
+			
+		} catch (Exception e) {
+			logger.error("医院获取需要住院的病人订单异常"+e);
+			map.put("state", "3");
+		}
+		return map;
+	}
+
+	// 医院确认需要住院的病人订单
+	@Override
+	public Map<String, Object> confirmUserOrder(Integer hosploginid, Integer userorderid, Double userorderdeposit) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			Userorder order = userorderMapper.selectByPrimaryKey(userorderid);
+			if (order != null) {
+				Integer stateid  = order.getUserorderstateid();
+				if (stateid==5) {
+					Userorder userorder = new Userorder();
+					userorder.setUserorderid(userorderid);
+					userorder.setUserorderdeposit(new BigDecimal(userorderdeposit));
+					userorder.setUserorderstateid(6);
+					int result = userorderMapper.updateByPrimaryKeySelective(userorder);
+					if (result > 0) {
+						map.put("state", "1");
+					}else {
+						map.put("state", "2");
+					}
+				} else {
+					//该订单状态不支持确认
+					map.put("state", "3");
+				}
+			}else {
+				//该订单不存在
+				map.put("state", "4");
+			}
+			
+		} catch (Exception e) {
+			logger.error(" 医院确认需要住院的病人订单异常"+e);
+			map.put("state", "5");
+		}
+		return map;
 	}
 	
 	

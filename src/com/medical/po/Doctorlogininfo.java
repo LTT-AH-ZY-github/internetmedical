@@ -49,7 +49,7 @@ public class Doctorlogininfo {
 
     private String docloginpix;
 
-    private String doclogincid;
+    private String docloginchannelid;
 
     public Integer getDocloginid() {
         return docloginid;
@@ -235,11 +235,11 @@ public class Doctorlogininfo {
         this.docloginpix = docloginpix == null ? null : docloginpix.trim();
     }
 
-    public String getDoclogincid() {
-        return doclogincid;
+    public String getDocloginchannelid() {
+        return docloginchannelid;
     }
 
-    public void setDoclogincid(String doclogincid) {
-        this.doclogincid = doclogincid == null ? null : doclogincid.trim();
+    public void setDocloginchannelid(String docloginchannelid) {
+        this.docloginchannelid = docloginchannelid == null ? null : docloginchannelid.trim();
     }
 }

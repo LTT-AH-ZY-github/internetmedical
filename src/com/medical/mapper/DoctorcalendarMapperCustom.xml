@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.DoctorcalendarMapperCustom" >
+ 
+  <select id="selectByDocloginid" resultType="com.medical.po.Doctorcalendar" parameterType="java.lang.Integer" >
+    select *
+   	from doctorcalendar
+    where docLoginId = #{0,jdbcType=INTEGER}
+  </select>
+  <!--查询日程及地址信息  -->
+  <select id="selectAllInfoByDocloginid" resultType="map" parameterType="java.lang.Integer" >
+    select a.doccalendarid,a.doccalendarday,a.doccalendartime,a.doccalendaraffair,
+    	b.docaddresslocation,b.docaddressprovince,b.docaddresscity,b.docaddressarea,b.docaddressother,b.docaddresslon,b.docaddresslat
+   	from doctorcalendar as a 
+   		left join doctoraddress as b on a.docCalendarAdressId = b.docAddressId 
+    where a.docLoginId = #{0,jdbcType=INTEGER}
+  </select>
+  <!--根据时间查询日程-->
+  <select id="selectByDayAndTime" resultType="com.medical.po.Doctorcalendar" parameterType="java.lang.String" >
+    select *
+   	from doctorcalendar 
+   	where docCalendarDay = #{0} and docCalendarTime = #{1}
+  </select>
+ 
+</mapper>

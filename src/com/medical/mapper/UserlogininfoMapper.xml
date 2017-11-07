@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.medical.po.Userlogininfo" >
     <id column="userLoginId" property="userloginid" jdbcType="INTEGER" />
     <result column="userLoginName" property="userloginname" jdbcType="VARCHAR" />
-    <result column="userLoginPhone" property="userloginphone" jdbcType="VARCHAR" />
+    <result column="userLoginPhone" property="userloginphone" jdbcType="CHAR" />
     <result column="userLoginPwd" property="userloginpwd" jdbcType="VARCHAR" />
     <result column="userLoginSalt" property="userloginsalt" jdbcType="VARCHAR" />
     <result column="userLoginToken" property="userlogintoken" jdbcType="VARCHAR" />
@@ -22,7 +22,7 @@
     <result column="userLoginIp" property="userloginip" jdbcType="VARCHAR" />
     <result column="userLoginType" property="userlogintype" jdbcType="BIT" />
     <result column="userLoginPix" property="userloginpix" jdbcType="VARCHAR" />
-    <result column="userLoginCId" property="userlogincid" jdbcType="VARCHAR" />
+    <result column="userLoginChannelId" property="userloginchannelid" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -86,7 +86,7 @@
     userLoginId, userLoginName, userLoginPhone, userLoginPwd, userLoginSalt, userLoginToken, 
     userLoginDld, userLoginLon, userLoginLat, userLoginTime, userLoginProvince, userLoginCity, 
     userLoginArea, userLoginOther, userLoginModel, userLoginPVer, userLoginMac, userLoginIp, 
-    userLoginType, userLoginPix, userLoginCId
+    userLoginType, userLoginPix, userLoginChannelId
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.UserlogininfoExample" >
     select
@@ -125,15 +125,15 @@
       userLoginTime, userLoginProvince, userLoginCity, 
       userLoginArea, userLoginOther, userLoginModel, 
       userLoginPVer, userLoginMac, userLoginIp, 
-      userLoginType, userLoginPix, userLoginCId
+      userLoginType, userLoginPix, userLoginChannelId
       )
-    values (#{userloginid,jdbcType=INTEGER}, #{userloginname,jdbcType=VARCHAR}, #{userloginphone,jdbcType=VARCHAR}, 
+    values (#{userloginid,jdbcType=INTEGER}, #{userloginname,jdbcType=VARCHAR}, #{userloginphone,jdbcType=CHAR}, 
       #{userloginpwd,jdbcType=VARCHAR}, #{userloginsalt,jdbcType=VARCHAR}, #{userlogintoken,jdbcType=VARCHAR}, 
       #{userlogindld,jdbcType=BIGINT}, #{userloginlon,jdbcType=VARCHAR}, #{userloginlat,jdbcType=VARCHAR}, 
       #{userlogintime,jdbcType=TIMESTAMP}, #{userloginprovince,jdbcType=VARCHAR}, #{userlogincity,jdbcType=VARCHAR}, 
       #{userloginarea,jdbcType=VARCHAR}, #{userloginother,jdbcType=VARCHAR}, #{userloginmodel,jdbcType=VARCHAR}, 
       #{userloginpver,jdbcType=VARCHAR}, #{userloginmac,jdbcType=VARCHAR}, #{userloginip,jdbcType=VARCHAR}, 
-      #{userlogintype,jdbcType=BIT}, #{userloginpix,jdbcType=VARCHAR}, #{userlogincid,jdbcType=VARCHAR}
+      #{userlogintype,jdbcType=BIT}, #{userloginpix,jdbcType=VARCHAR}, #{userloginchannelid,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Userlogininfo" >
@@ -199,8 +199,8 @@
       <if test="userloginpix != null" >
         userLoginPix,
       </if>
-      <if test="userlogincid != null" >
-        userLoginCId,
+      <if test="userloginchannelid != null" >
+        userLoginChannelId,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -211,7 +211,7 @@
         #{userloginname,jdbcType=VARCHAR},
       </if>
       <if test="userloginphone != null" >
-        #{userloginphone,jdbcType=VARCHAR},
+        #{userloginphone,jdbcType=CHAR},
       </if>
       <if test="userloginpwd != null" >
         #{userloginpwd,jdbcType=VARCHAR},
@@ -264,8 +264,8 @@
       <if test="userloginpix != null" >
         #{userloginpix,jdbcType=VARCHAR},
       </if>
-      <if test="userlogincid != null" >
-        #{userlogincid,jdbcType=VARCHAR},
+      <if test="userloginchannelid != null" >
+        #{userloginchannelid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -285,7 +285,7 @@
         userLoginName = #{record.userloginname,jdbcType=VARCHAR},
       </if>
       <if test="record.userloginphone != null" >
-        userLoginPhone = #{record.userloginphone,jdbcType=VARCHAR},
+        userLoginPhone = #{record.userloginphone,jdbcType=CHAR},
       </if>
       <if test="record.userloginpwd != null" >
         userLoginPwd = #{record.userloginpwd,jdbcType=VARCHAR},
@@ -338,8 +338,8 @@
       <if test="record.userloginpix != null" >
         userLoginPix = #{record.userloginpix,jdbcType=VARCHAR},
       </if>
-      <if test="record.userlogincid != null" >
-        userLoginCId = #{record.userlogincid,jdbcType=VARCHAR},
+      <if test="record.userloginchannelid != null" >
+        userLoginChannelId = #{record.userloginchannelid,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -350,7 +350,7 @@
     update userlogininfo
     set userLoginId = #{record.userloginid,jdbcType=INTEGER},
       userLoginName = #{record.userloginname,jdbcType=VARCHAR},
-      userLoginPhone = #{record.userloginphone,jdbcType=VARCHAR},
+      userLoginPhone = #{record.userloginphone,jdbcType=CHAR},
       userLoginPwd = #{record.userloginpwd,jdbcType=VARCHAR},
       userLoginSalt = #{record.userloginsalt,jdbcType=VARCHAR},
       userLoginToken = #{record.userlogintoken,jdbcType=VARCHAR},
@@ -368,7 +368,7 @@
       userLoginIp = #{record.userloginip,jdbcType=VARCHAR},
       userLoginType = #{record.userlogintype,jdbcType=BIT},
       userLoginPix = #{record.userloginpix,jdbcType=VARCHAR},
-      userLoginCId = #{record.userlogincid,jdbcType=VARCHAR}
+      userLoginChannelId = #{record.userloginchannelid,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -380,7 +380,7 @@
         userLoginName = #{userloginname,jdbcType=VARCHAR},
       </if>
       <if test="userloginphone != null" >
-        userLoginPhone = #{userloginphone,jdbcType=VARCHAR},
+        userLoginPhone = #{userloginphone,jdbcType=CHAR},
       </if>
       <if test="userloginpwd != null" >
         userLoginPwd = #{userloginpwd,jdbcType=VARCHAR},
@@ -433,8 +433,8 @@
       <if test="userloginpix != null" >
         userLoginPix = #{userloginpix,jdbcType=VARCHAR},
       </if>
-      <if test="userlogincid != null" >
-        userLoginCId = #{userlogincid,jdbcType=VARCHAR},
+      <if test="userloginchannelid != null" >
+        userLoginChannelId = #{userloginchannelid,jdbcType=VARCHAR},
       </if>
     </set>
     where userLoginId = #{userloginid,jdbcType=INTEGER}
@@ -442,7 +442,7 @@
   <update id="updateByPrimaryKey" parameterType="com.medical.po.Userlogininfo" >
     update userlogininfo
     set userLoginName = #{userloginname,jdbcType=VARCHAR},
-      userLoginPhone = #{userloginphone,jdbcType=VARCHAR},
+      userLoginPhone = #{userloginphone,jdbcType=CHAR},
       userLoginPwd = #{userloginpwd,jdbcType=VARCHAR},
       userLoginSalt = #{userloginsalt,jdbcType=VARCHAR},
       userLoginToken = #{userlogintoken,jdbcType=VARCHAR},
@@ -460,7 +460,7 @@
       userLoginIp = #{userloginip,jdbcType=VARCHAR},
       userLoginType = #{userlogintype,jdbcType=BIT},
       userLoginPix = #{userloginpix,jdbcType=VARCHAR},
-      userLoginCId = #{userlogincid,jdbcType=VARCHAR}
+      userLoginChannelId = #{userloginchannelid,jdbcType=VARCHAR}
     where userLoginId = #{userloginid,jdbcType=INTEGER}
   </update>
 </mapper>

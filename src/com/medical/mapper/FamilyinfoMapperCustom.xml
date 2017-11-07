@@ -21,4 +21,7 @@
   <select id="selectByUserLoginIdAndType" parameterType="int" resultType="com.medical.po.Familyinfo" >
    SELECT * FROM familyinfo WHERE userLoginId=#{0} and familyType=#{1}
   </select>
+   <select id="selectByUserLoginIdAndInfo" parameterType="com.medical.po.Familyinfo" resultType="com.medical.po.Familyinfo" >
+   SELECT * FROM familyinfo WHERE userLoginId=#{userloginid} and familyName=#{familyname} and familyMale=#{familymale} and familyAge=#{familyage}
+  </select>
 </mapper>

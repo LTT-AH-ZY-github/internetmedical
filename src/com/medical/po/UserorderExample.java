@@ -166,6 +166,66 @@ public class UserorderExample {
             return (Criteria) this;
         }
 
+        public Criteria andUserorderstateidIsNull() {
+            addCriterion("userOrderStateId is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderstateidIsNotNull() {
+            addCriterion("userOrderStateId is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderstateidEqualTo(Integer value) {
+            addCriterion("userOrderStateId =", value, "userorderstateid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderstateidNotEqualTo(Integer value) {
+            addCriterion("userOrderStateId <>", value, "userorderstateid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderstateidGreaterThan(Integer value) {
+            addCriterion("userOrderStateId >", value, "userorderstateid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderstateidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("userOrderStateId >=", value, "userorderstateid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderstateidLessThan(Integer value) {
+            addCriterion("userOrderStateId <", value, "userorderstateid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderstateidLessThanOrEqualTo(Integer value) {
+            addCriterion("userOrderStateId <=", value, "userorderstateid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderstateidIn(List<Integer> values) {
+            addCriterion("userOrderStateId in", values, "userorderstateid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderstateidNotIn(List<Integer> values) {
+            addCriterion("userOrderStateId not in", values, "userorderstateid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderstateidBetween(Integer value1, Integer value2) {
+            addCriterion("userOrderStateId between", value1, value2, "userorderstateid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderstateidNotBetween(Integer value1, Integer value2) {
+            addCriterion("userOrderStateId not between", value1, value2, "userorderstateid");
+            return (Criteria) this;
+        }
+
         public Criteria andUserorderptimeIsNull() {
             addCriterion("userOrderPTime is null");
             return (Criteria) this;
@@ -223,196 +283,6 @@ public class UserorderExample {
 
         public Criteria andUserorderptimeNotBetween(Date value1, Date value2) {
             addCriterion("userOrderPTime not between", value1, value2, "userorderptime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderrtimeIsNull() {
-            addCriterion("userOrderRTime is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderrtimeIsNotNull() {
-            addCriterion("userOrderRTime is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderrtimeEqualTo(Date value) {
-            addCriterion("userOrderRTime =", value, "userorderrtime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderrtimeNotEqualTo(Date value) {
-            addCriterion("userOrderRTime <>", value, "userorderrtime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderrtimeGreaterThan(Date value) {
-            addCriterion("userOrderRTime >", value, "userorderrtime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderrtimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("userOrderRTime >=", value, "userorderrtime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderrtimeLessThan(Date value) {
-            addCriterion("userOrderRTime <", value, "userorderrtime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderrtimeLessThanOrEqualTo(Date value) {
-            addCriterion("userOrderRTime <=", value, "userorderrtime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderrtimeIn(List<Date> values) {
-            addCriterion("userOrderRTime in", values, "userorderrtime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderrtimeNotIn(List<Date> values) {
-            addCriterion("userOrderRTime not in", values, "userorderrtime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderrtimeBetween(Date value1, Date value2) {
-            addCriterion("userOrderRTime between", value1, value2, "userorderrtime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderrtimeNotBetween(Date value1, Date value2) {
-            addCriterion("userOrderRTime not between", value1, value2, "userorderrtime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderetimeIsNull() {
-            addCriterion("userOrderETime is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderetimeIsNotNull() {
-            addCriterion("userOrderETime is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderetimeEqualTo(Date value) {
-            addCriterion("userOrderETime =", value, "userorderetime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderetimeNotEqualTo(Date value) {
-            addCriterion("userOrderETime <>", value, "userorderetime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderetimeGreaterThan(Date value) {
-            addCriterion("userOrderETime >", value, "userorderetime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderetimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("userOrderETime >=", value, "userorderetime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderetimeLessThan(Date value) {
-            addCriterion("userOrderETime <", value, "userorderetime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderetimeLessThanOrEqualTo(Date value) {
-            addCriterion("userOrderETime <=", value, "userorderetime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderetimeIn(List<Date> values) {
-            addCriterion("userOrderETime in", values, "userorderetime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderetimeNotIn(List<Date> values) {
-            addCriterion("userOrderETime not in", values, "userorderetime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderetimeBetween(Date value1, Date value2) {
-            addCriterion("userOrderETime between", value1, value2, "userorderetime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderetimeNotBetween(Date value1, Date value2) {
-            addCriterion("userOrderETime not between", value1, value2, "userorderetime");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderappointmentIsNull() {
-            addCriterion("userOrderAppointment is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderappointmentIsNotNull() {
-            addCriterion("userOrderAppointment is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderappointmentEqualTo(String value) {
-            addCriterion("userOrderAppointment =", value, "userorderappointment");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderappointmentNotEqualTo(String value) {
-            addCriterion("userOrderAppointment <>", value, "userorderappointment");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderappointmentGreaterThan(String value) {
-            addCriterion("userOrderAppointment >", value, "userorderappointment");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderappointmentGreaterThanOrEqualTo(String value) {
-            addCriterion("userOrderAppointment >=", value, "userorderappointment");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderappointmentLessThan(String value) {
-            addCriterion("userOrderAppointment <", value, "userorderappointment");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderappointmentLessThanOrEqualTo(String value) {
-            addCriterion("userOrderAppointment <=", value, "userorderappointment");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderappointmentLike(String value) {
-            addCriterion("userOrderAppointment like", value, "userorderappointment");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderappointmentNotLike(String value) {
-            addCriterion("userOrderAppointment not like", value, "userorderappointment");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderappointmentIn(List<String> values) {
-            addCriterion("userOrderAppointment in", values, "userorderappointment");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderappointmentNotIn(List<String> values) {
-            addCriterion("userOrderAppointment not in", values, "userorderappointment");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderappointmentBetween(String value1, String value2) {
-            addCriterion("userOrderAppointment between", value1, value2, "userorderappointment");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderappointmentNotBetween(String value1, String value2) {
-            addCriterion("userOrderAppointment not between", value1, value2, "userorderappointment");
             return (Criteria) this;
         }
 
@@ -536,123 +406,63 @@ public class UserorderExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserorderstateidIsNull() {
-            addCriterion("userOrderStateId is null");
+        public Criteria andUserorderrtimeIsNull() {
+            addCriterion("userOrderRTime is null");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderstateidIsNotNull() {
-            addCriterion("userOrderStateId is not null");
+        public Criteria andUserorderrtimeIsNotNull() {
+            addCriterion("userOrderRTime is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderstateidEqualTo(Integer value) {
-            addCriterion("userOrderStateId =", value, "userorderstateid");
+        public Criteria andUserorderrtimeEqualTo(Date value) {
+            addCriterion("userOrderRTime =", value, "userorderrtime");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderstateidNotEqualTo(Integer value) {
-            addCriterion("userOrderStateId <>", value, "userorderstateid");
+        public Criteria andUserorderrtimeNotEqualTo(Date value) {
+            addCriterion("userOrderRTime <>", value, "userorderrtime");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderstateidGreaterThan(Integer value) {
-            addCriterion("userOrderStateId >", value, "userorderstateid");
+        public Criteria andUserorderrtimeGreaterThan(Date value) {
+            addCriterion("userOrderRTime >", value, "userorderrtime");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderstateidGreaterThanOrEqualTo(Integer value) {
-            addCriterion("userOrderStateId >=", value, "userorderstateid");
+        public Criteria andUserorderrtimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("userOrderRTime >=", value, "userorderrtime");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderstateidLessThan(Integer value) {
-            addCriterion("userOrderStateId <", value, "userorderstateid");
+        public Criteria andUserorderrtimeLessThan(Date value) {
+            addCriterion("userOrderRTime <", value, "userorderrtime");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderstateidLessThanOrEqualTo(Integer value) {
-            addCriterion("userOrderStateId <=", value, "userorderstateid");
+        public Criteria andUserorderrtimeLessThanOrEqualTo(Date value) {
+            addCriterion("userOrderRTime <=", value, "userorderrtime");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderstateidIn(List<Integer> values) {
-            addCriterion("userOrderStateId in", values, "userorderstateid");
+        public Criteria andUserorderrtimeIn(List<Date> values) {
+            addCriterion("userOrderRTime in", values, "userorderrtime");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderstateidNotIn(List<Integer> values) {
-            addCriterion("userOrderStateId not in", values, "userorderstateid");
+        public Criteria andUserorderrtimeNotIn(List<Date> values) {
+            addCriterion("userOrderRTime not in", values, "userorderrtime");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderstateidBetween(Integer value1, Integer value2) {
-            addCriterion("userOrderStateId between", value1, value2, "userorderstateid");
+        public Criteria andUserorderrtimeBetween(Date value1, Date value2) {
+            addCriterion("userOrderRTime between", value1, value2, "userorderrtime");
             return (Criteria) this;
         }
 
-        public Criteria andUserorderstateidNotBetween(Integer value1, Integer value2) {
-            addCriterion("userOrderStateId not between", value1, value2, "userorderstateid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderhospidIsNull() {
-            addCriterion("userOrderHospId is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderhospidIsNotNull() {
-            addCriterion("userOrderHospId is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderhospidEqualTo(Integer value) {
-            addCriterion("userOrderHospId =", value, "userorderhospid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderhospidNotEqualTo(Integer value) {
-            addCriterion("userOrderHospId <>", value, "userorderhospid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderhospidGreaterThan(Integer value) {
-            addCriterion("userOrderHospId >", value, "userorderhospid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderhospidGreaterThanOrEqualTo(Integer value) {
-            addCriterion("userOrderHospId >=", value, "userorderhospid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderhospidLessThan(Integer value) {
-            addCriterion("userOrderHospId <", value, "userorderhospid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderhospidLessThanOrEqualTo(Integer value) {
-            addCriterion("userOrderHospId <=", value, "userorderhospid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderhospidIn(List<Integer> values) {
-            addCriterion("userOrderHospId in", values, "userorderhospid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderhospidNotIn(List<Integer> values) {
-            addCriterion("userOrderHospId not in", values, "userorderhospid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderhospidBetween(Integer value1, Integer value2) {
-            addCriterion("userOrderHospId between", value1, value2, "userorderhospid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderhospidNotBetween(Integer value1, Integer value2) {
-            addCriterion("userOrderHospId not between", value1, value2, "userorderhospid");
+        public Criteria andUserorderrtimeNotBetween(Date value1, Date value2) {
+            addCriterion("userOrderRTime not between", value1, value2, "userorderrtime");
             return (Criteria) this;
         }
 
@@ -716,6 +526,136 @@ public class UserorderExample {
             return (Criteria) this;
         }
 
+        public Criteria andUserorderappointmentIsNull() {
+            addCriterion("userOrderAppointment is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderappointmentIsNotNull() {
+            addCriterion("userOrderAppointment is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderappointmentEqualTo(String value) {
+            addCriterion("userOrderAppointment =", value, "userorderappointment");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderappointmentNotEqualTo(String value) {
+            addCriterion("userOrderAppointment <>", value, "userorderappointment");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderappointmentGreaterThan(String value) {
+            addCriterion("userOrderAppointment >", value, "userorderappointment");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderappointmentGreaterThanOrEqualTo(String value) {
+            addCriterion("userOrderAppointment >=", value, "userorderappointment");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderappointmentLessThan(String value) {
+            addCriterion("userOrderAppointment <", value, "userorderappointment");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderappointmentLessThanOrEqualTo(String value) {
+            addCriterion("userOrderAppointment <=", value, "userorderappointment");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderappointmentLike(String value) {
+            addCriterion("userOrderAppointment like", value, "userorderappointment");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderappointmentNotLike(String value) {
+            addCriterion("userOrderAppointment not like", value, "userorderappointment");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderappointmentIn(List<String> values) {
+            addCriterion("userOrderAppointment in", values, "userorderappointment");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderappointmentNotIn(List<String> values) {
+            addCriterion("userOrderAppointment not in", values, "userorderappointment");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderappointmentBetween(String value1, String value2) {
+            addCriterion("userOrderAppointment between", value1, value2, "userorderappointment");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderappointmentNotBetween(String value1, String value2) {
+            addCriterion("userOrderAppointment not between", value1, value2, "userorderappointment");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderetimeIsNull() {
+            addCriterion("userOrderETime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderetimeIsNotNull() {
+            addCriterion("userOrderETime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderetimeEqualTo(Date value) {
+            addCriterion("userOrderETime =", value, "userorderetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderetimeNotEqualTo(Date value) {
+            addCriterion("userOrderETime <>", value, "userorderetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderetimeGreaterThan(Date value) {
+            addCriterion("userOrderETime >", value, "userorderetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderetimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("userOrderETime >=", value, "userorderetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderetimeLessThan(Date value) {
+            addCriterion("userOrderETime <", value, "userorderetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderetimeLessThanOrEqualTo(Date value) {
+            addCriterion("userOrderETime <=", value, "userorderetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderetimeIn(List<Date> values) {
+            addCriterion("userOrderETime in", values, "userorderetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderetimeNotIn(List<Date> values) {
+            addCriterion("userOrderETime not in", values, "userorderetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderetimeBetween(Date value1, Date value2) {
+            addCriterion("userOrderETime between", value1, value2, "userorderetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderetimeNotBetween(Date value1, Date value2) {
+            addCriterion("userOrderETime not between", value1, value2, "userorderetime");
+            return (Criteria) this;
+        }
+
         public Criteria andUserorderhstateIsNull() {
             addCriterion("userOrderHState is null");
             return (Criteria) this;
@@ -776,6 +716,366 @@ public class UserorderExample {
             return (Criteria) this;
         }
 
+        public Criteria andUserorderchosehosptimeIsNull() {
+            addCriterion("userOrderChoseHospTime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderchosehosptimeIsNotNull() {
+            addCriterion("userOrderChoseHospTime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderchosehosptimeEqualTo(Date value) {
+            addCriterion("userOrderChoseHospTime =", value, "userorderchosehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderchosehosptimeNotEqualTo(Date value) {
+            addCriterion("userOrderChoseHospTime <>", value, "userorderchosehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderchosehosptimeGreaterThan(Date value) {
+            addCriterion("userOrderChoseHospTime >", value, "userorderchosehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderchosehosptimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("userOrderChoseHospTime >=", value, "userorderchosehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderchosehosptimeLessThan(Date value) {
+            addCriterion("userOrderChoseHospTime <", value, "userorderchosehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderchosehosptimeLessThanOrEqualTo(Date value) {
+            addCriterion("userOrderChoseHospTime <=", value, "userorderchosehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderchosehosptimeIn(List<Date> values) {
+            addCriterion("userOrderChoseHospTime in", values, "userorderchosehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderchosehosptimeNotIn(List<Date> values) {
+            addCriterion("userOrderChoseHospTime not in", values, "userorderchosehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderchosehosptimeBetween(Date value1, Date value2) {
+            addCriterion("userOrderChoseHospTime between", value1, value2, "userorderchosehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderchosehosptimeNotBetween(Date value1, Date value2) {
+            addCriterion("userOrderChoseHospTime not between", value1, value2, "userorderchosehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospconfirmtimeIsNull() {
+            addCriterion("userOrderHospConfirmTime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospconfirmtimeIsNotNull() {
+            addCriterion("userOrderHospConfirmTime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospconfirmtimeEqualTo(Date value) {
+            addCriterion("userOrderHospConfirmTime =", value, "userorderhospconfirmtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospconfirmtimeNotEqualTo(Date value) {
+            addCriterion("userOrderHospConfirmTime <>", value, "userorderhospconfirmtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospconfirmtimeGreaterThan(Date value) {
+            addCriterion("userOrderHospConfirmTime >", value, "userorderhospconfirmtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospconfirmtimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("userOrderHospConfirmTime >=", value, "userorderhospconfirmtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospconfirmtimeLessThan(Date value) {
+            addCriterion("userOrderHospConfirmTime <", value, "userorderhospconfirmtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospconfirmtimeLessThanOrEqualTo(Date value) {
+            addCriterion("userOrderHospConfirmTime <=", value, "userorderhospconfirmtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospconfirmtimeIn(List<Date> values) {
+            addCriterion("userOrderHospConfirmTime in", values, "userorderhospconfirmtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospconfirmtimeNotIn(List<Date> values) {
+            addCriterion("userOrderHospConfirmTime not in", values, "userorderhospconfirmtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospconfirmtimeBetween(Date value1, Date value2) {
+            addCriterion("userOrderHospConfirmTime between", value1, value2, "userorderhospconfirmtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospconfirmtimeNotBetween(Date value1, Date value2) {
+            addCriterion("userOrderHospConfirmTime not between", value1, value2, "userorderhospconfirmtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderleavehosptimeIsNull() {
+            addCriterion("userOrderLeaveHospTime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderleavehosptimeIsNotNull() {
+            addCriterion("userOrderLeaveHospTime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderleavehosptimeEqualTo(Date value) {
+            addCriterion("userOrderLeaveHospTime =", value, "userorderleavehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderleavehosptimeNotEqualTo(Date value) {
+            addCriterion("userOrderLeaveHospTime <>", value, "userorderleavehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderleavehosptimeGreaterThan(Date value) {
+            addCriterion("userOrderLeaveHospTime >", value, "userorderleavehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderleavehosptimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("userOrderLeaveHospTime >=", value, "userorderleavehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderleavehosptimeLessThan(Date value) {
+            addCriterion("userOrderLeaveHospTime <", value, "userorderleavehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderleavehosptimeLessThanOrEqualTo(Date value) {
+            addCriterion("userOrderLeaveHospTime <=", value, "userorderleavehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderleavehosptimeIn(List<Date> values) {
+            addCriterion("userOrderLeaveHospTime in", values, "userorderleavehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderleavehosptimeNotIn(List<Date> values) {
+            addCriterion("userOrderLeaveHospTime not in", values, "userorderleavehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderleavehosptimeBetween(Date value1, Date value2) {
+            addCriterion("userOrderLeaveHospTime between", value1, value2, "userorderleavehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderleavehosptimeNotBetween(Date value1, Date value2) {
+            addCriterion("userOrderLeaveHospTime not between", value1, value2, "userorderleavehosptime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospidIsNull() {
+            addCriterion("userOrderHospId is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospidIsNotNull() {
+            addCriterion("userOrderHospId is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospidEqualTo(Integer value) {
+            addCriterion("userOrderHospId =", value, "userorderhospid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospidNotEqualTo(Integer value) {
+            addCriterion("userOrderHospId <>", value, "userorderhospid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospidGreaterThan(Integer value) {
+            addCriterion("userOrderHospId >", value, "userorderhospid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("userOrderHospId >=", value, "userorderhospid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospidLessThan(Integer value) {
+            addCriterion("userOrderHospId <", value, "userorderhospid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospidLessThanOrEqualTo(Integer value) {
+            addCriterion("userOrderHospId <=", value, "userorderhospid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospidIn(List<Integer> values) {
+            addCriterion("userOrderHospId in", values, "userorderhospid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospidNotIn(List<Integer> values) {
+            addCriterion("userOrderHospId not in", values, "userorderhospid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospidBetween(Integer value1, Integer value2) {
+            addCriterion("userOrderHospId between", value1, value2, "userorderhospid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospidNotBetween(Integer value1, Integer value2) {
+            addCriterion("userOrderHospId not between", value1, value2, "userorderhospid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderdepositIsNull() {
+            addCriterion("userOrderDeposit is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderdepositIsNotNull() {
+            addCriterion("userOrderDeposit is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderdepositEqualTo(BigDecimal value) {
+            addCriterion("userOrderDeposit =", value, "userorderdeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderdepositNotEqualTo(BigDecimal value) {
+            addCriterion("userOrderDeposit <>", value, "userorderdeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderdepositGreaterThan(BigDecimal value) {
+            addCriterion("userOrderDeposit >", value, "userorderdeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderdepositGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("userOrderDeposit >=", value, "userorderdeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderdepositLessThan(BigDecimal value) {
+            addCriterion("userOrderDeposit <", value, "userorderdeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderdepositLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("userOrderDeposit <=", value, "userorderdeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderdepositIn(List<BigDecimal> values) {
+            addCriterion("userOrderDeposit in", values, "userorderdeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderdepositNotIn(List<BigDecimal> values) {
+            addCriterion("userOrderDeposit not in", values, "userorderdeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderdepositBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("userOrderDeposit between", value1, value2, "userorderdeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderdepositNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("userOrderDeposit not between", value1, value2, "userorderdeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserordertotaldepositIsNull() {
+            addCriterion("userOrderTotalDeposit is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserordertotaldepositIsNotNull() {
+            addCriterion("userOrderTotalDeposit is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserordertotaldepositEqualTo(BigDecimal value) {
+            addCriterion("userOrderTotalDeposit =", value, "userordertotaldeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserordertotaldepositNotEqualTo(BigDecimal value) {
+            addCriterion("userOrderTotalDeposit <>", value, "userordertotaldeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserordertotaldepositGreaterThan(BigDecimal value) {
+            addCriterion("userOrderTotalDeposit >", value, "userordertotaldeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserordertotaldepositGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("userOrderTotalDeposit >=", value, "userordertotaldeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserordertotaldepositLessThan(BigDecimal value) {
+            addCriterion("userOrderTotalDeposit <", value, "userordertotaldeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserordertotaldepositLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("userOrderTotalDeposit <=", value, "userordertotaldeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserordertotaldepositIn(List<BigDecimal> values) {
+            addCriterion("userOrderTotalDeposit in", values, "userordertotaldeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserordertotaldepositNotIn(List<BigDecimal> values) {
+            addCriterion("userOrderTotalDeposit not in", values, "userordertotaldeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserordertotaldepositBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("userOrderTotalDeposit between", value1, value2, "userordertotaldeposit");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserordertotaldepositNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("userOrderTotalDeposit not between", value1, value2, "userordertotaldeposit");
+            return (Criteria) this;
+        }
+
         public Criteria andUserorderhpriceIsNull() {
             addCriterion("userOrderHPrice is null");
             return (Criteria) this;
@@ -833,6 +1133,146 @@ public class UserorderExample {
 
         public Criteria andUserorderhpriceNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("userOrderHPrice not between", value1, value2, "userorderhprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospprimarydeptIsNull() {
+            addCriterion("userOrderHospPrimaryDept is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospprimarydeptIsNotNull() {
+            addCriterion("userOrderHospPrimaryDept is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospprimarydeptEqualTo(String value) {
+            addCriterion("userOrderHospPrimaryDept =", value, "userorderhospprimarydept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospprimarydeptNotEqualTo(String value) {
+            addCriterion("userOrderHospPrimaryDept <>", value, "userorderhospprimarydept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospprimarydeptGreaterThan(String value) {
+            addCriterion("userOrderHospPrimaryDept >", value, "userorderhospprimarydept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospprimarydeptGreaterThanOrEqualTo(String value) {
+            addCriterion("userOrderHospPrimaryDept >=", value, "userorderhospprimarydept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospprimarydeptLessThan(String value) {
+            addCriterion("userOrderHospPrimaryDept <", value, "userorderhospprimarydept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospprimarydeptLessThanOrEqualTo(String value) {
+            addCriterion("userOrderHospPrimaryDept <=", value, "userorderhospprimarydept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospprimarydeptLike(String value) {
+            addCriterion("userOrderHospPrimaryDept like", value, "userorderhospprimarydept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospprimarydeptNotLike(String value) {
+            addCriterion("userOrderHospPrimaryDept not like", value, "userorderhospprimarydept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospprimarydeptIn(List<String> values) {
+            addCriterion("userOrderHospPrimaryDept in", values, "userorderhospprimarydept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospprimarydeptNotIn(List<String> values) {
+            addCriterion("userOrderHospPrimaryDept not in", values, "userorderhospprimarydept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospprimarydeptBetween(String value1, String value2) {
+            addCriterion("userOrderHospPrimaryDept between", value1, value2, "userorderhospprimarydept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospprimarydeptNotBetween(String value1, String value2) {
+            addCriterion("userOrderHospPrimaryDept not between", value1, value2, "userorderhospprimarydept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospseconddeptIsNull() {
+            addCriterion("userOrderHospSecondDept is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospseconddeptIsNotNull() {
+            addCriterion("userOrderHospSecondDept is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospseconddeptEqualTo(String value) {
+            addCriterion("userOrderHospSecondDept =", value, "userorderhospseconddept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospseconddeptNotEqualTo(String value) {
+            addCriterion("userOrderHospSecondDept <>", value, "userorderhospseconddept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospseconddeptGreaterThan(String value) {
+            addCriterion("userOrderHospSecondDept >", value, "userorderhospseconddept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospseconddeptGreaterThanOrEqualTo(String value) {
+            addCriterion("userOrderHospSecondDept >=", value, "userorderhospseconddept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospseconddeptLessThan(String value) {
+            addCriterion("userOrderHospSecondDept <", value, "userorderhospseconddept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospseconddeptLessThanOrEqualTo(String value) {
+            addCriterion("userOrderHospSecondDept <=", value, "userorderhospseconddept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospseconddeptLike(String value) {
+            addCriterion("userOrderHospSecondDept like", value, "userorderhospseconddept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospseconddeptNotLike(String value) {
+            addCriterion("userOrderHospSecondDept not like", value, "userorderhospseconddept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospseconddeptIn(List<String> values) {
+            addCriterion("userOrderHospSecondDept in", values, "userorderhospseconddept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospseconddeptNotIn(List<String> values) {
+            addCriterion("userOrderHospSecondDept not in", values, "userorderhospseconddept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospseconddeptBetween(String value1, String value2) {
+            addCriterion("userOrderHospSecondDept between", value1, value2, "userorderhospseconddept");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderhospseconddeptNotBetween(String value1, String value2) {
+            addCriterion("userOrderHospSecondDept not between", value1, value2, "userorderhospseconddept");
             return (Criteria) this;
         }
 
@@ -1256,66 +1696,6 @@ public class UserorderExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserorderdepositIsNull() {
-            addCriterion("userOrderDeposit is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderdepositIsNotNull() {
-            addCriterion("userOrderDeposit is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderdepositEqualTo(BigDecimal value) {
-            addCriterion("userOrderDeposit =", value, "userorderdeposit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderdepositNotEqualTo(BigDecimal value) {
-            addCriterion("userOrderDeposit <>", value, "userorderdeposit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderdepositGreaterThan(BigDecimal value) {
-            addCriterion("userOrderDeposit >", value, "userorderdeposit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderdepositGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("userOrderDeposit >=", value, "userorderdeposit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderdepositLessThan(BigDecimal value) {
-            addCriterion("userOrderDeposit <", value, "userorderdeposit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderdepositLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("userOrderDeposit <=", value, "userorderdeposit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderdepositIn(List<BigDecimal> values) {
-            addCriterion("userOrderDeposit in", values, "userorderdeposit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderdepositNotIn(List<BigDecimal> values) {
-            addCriterion("userOrderDeposit not in", values, "userorderdeposit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderdepositBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("userOrderDeposit between", value1, value2, "userorderdeposit");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserorderdepositNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("userOrderDeposit not between", value1, value2, "userorderdeposit");
-            return (Criteria) this;
-        }
-
         public Criteria andUsersickidIsNull() {
             addCriterion("userSickId is null");
             return (Criteria) this;
@@ -1433,6 +1813,66 @@ public class UserorderExample {
 
         public Criteria andUserloginidNotBetween(Integer value1, Integer value2) {
             addCriterion("userLoginId not between", value1, value2, "userloginid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderfinishtimeIsNull() {
+            addCriterion("userOrderFinishTime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderfinishtimeIsNotNull() {
+            addCriterion("userOrderFinishTime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderfinishtimeEqualTo(Date value) {
+            addCriterion("userOrderFinishTime =", value, "userorderfinishtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderfinishtimeNotEqualTo(Date value) {
+            addCriterion("userOrderFinishTime <>", value, "userorderfinishtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderfinishtimeGreaterThan(Date value) {
+            addCriterion("userOrderFinishTime >", value, "userorderfinishtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderfinishtimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("userOrderFinishTime >=", value, "userorderfinishtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderfinishtimeLessThan(Date value) {
+            addCriterion("userOrderFinishTime <", value, "userorderfinishtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderfinishtimeLessThanOrEqualTo(Date value) {
+            addCriterion("userOrderFinishTime <=", value, "userorderfinishtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderfinishtimeIn(List<Date> values) {
+            addCriterion("userOrderFinishTime in", values, "userorderfinishtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderfinishtimeNotIn(List<Date> values) {
+            addCriterion("userOrderFinishTime not in", values, "userorderfinishtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderfinishtimeBetween(Date value1, Date value2) {
+            addCriterion("userOrderFinishTime between", value1, value2, "userorderfinishtime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderfinishtimeNotBetween(Date value1, Date value2) {
+            addCriterion("userOrderFinishTime not between", value1, value2, "userorderfinishtime");
             return (Criteria) this;
         }
     }

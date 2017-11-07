@@ -3,39 +3,28 @@ package com.medical.service.impl;
 import java.io.File;
 import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.crypto.MacSpi;
-
-import org.apache.commons.collections.map.ListOrderedMap;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.apache.taglibs.standard.lang.jstl.LessThanOperator;
-import org.eclipse.jdt.internal.compiler.tool.EclipseCompiler;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
-import org.springframework.jdbc.support.incrementer.HsqlMaxValueIncrementer;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.alibaba.druid.sql.dialect.mysql.ast.MysqlForeignKey.On;
-import com.alibaba.druid.util.MapComparator;
-import com.baidu.yun.push.exception.PushServerException;
 import com.baidu.yun.push.utils.PushToAndroid;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.medical.controller.DoctorController;
+import com.huanxin.utils.UserManger;
 import com.medical.interceptor.MapTokenManager;
 import com.medical.interceptor.TokenModel;
 import com.medical.mapper.CityMapperCustom;
+import com.medical.mapper.DoctoraddressMapper;
+import com.medical.mapper.DoctoraddressMapperCustom;
+import com.medical.mapper.DoctorcalendarMapper;
+import com.medical.mapper.DoctorcalendarMapperCustom;
 import com.medical.mapper.DoctorinfoMapper;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogMapper;
@@ -60,34 +49,32 @@ import com.medical.mapper.UserorderMapper;
 import com.medical.mapper.UserorderMapperCustom;
 import com.medical.mapper.UsersickMapper;
 import com.medical.mapper.UsersickMapperCustom;
-import com.medical.po.City;
-import com.medical.po.DoctorCustom;
 import com.medical.po.DoctorSearch;
+import com.medical.po.Doctoraddress;
+import com.medical.po.Doctorcalendar;
 import com.medical.po.Doctorinfo;
-import com.medical.po.DoctorinfoCustom;
 import com.medical.po.Doctorlogininfo;
 import com.medical.po.Doctorskd;
-import com.medical.po.Doctortitle;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Preorder;
 import com.medical.po.SickSearch;
 import com.medical.po.Userlogininfo;
-import com.medical.po.UserlogininfoCustom;
 import com.medical.po.Userorder;
 import com.medical.po.Usersick;
 import com.medical.po.Doctorlog;
-
+import com.medical.service.iface.CommonService;
+import com.medical.service.iface.doctor.DoctorAccountService;
 import com.medical.service.DoctorService;
-import com.medical.service.UserService;
 import com.medical.utils.CommonUtils;
 import com.medical.utils.CreateFileUtil;
 import com.medical.utils.MD5Util;
-import com.netease.code.MsgCode;
-import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
+import com.medical.utils.PictureTool;
 
-import javafx.scene.layout.AnchorPane;
-import sun.net.www.content.text.plain;
-
+/**
+ * 
+ * @author xyh
+ *
+ */
 public class DoctorServiceImpl implements DoctorService {
 	@Autowired
 	private DoctorinfoMapperCustom doctorinfoMapperCustom;
@@ -109,20 +96,10 @@ public class DoctorServiceImpl implements DoctorService {
 	private UserorderMapper userorderMapper;
 	@Autowired
 	private UserlogininfoMapper userlogininfoMapper;
-	@Autowired
-	private UserinfoMapper userinfoMapper;
-	@Autowired
-	private UserinfoMapperCustom userinfoMapperCustom;
+	
 	@Autowired
 	private UserlogininfoMapperCustom userlogininfoMapperCustom;
-	@Autowired
-	private UserlogMapper userlogMapper;
-	@Autowired
-	private FamilyinfoMapper familyinfoMapper;
-	@Autowired
-	private FamilyinfoMapperCustom familyinfoMapperCustom;
-	@Autowired
-	private CityMapperCustom cityMapperCustom;
+	
 	@Autowired
 	private UsersickMapper usersickMapper; 
 	@Autowired
@@ -131,31 +108,49 @@ public class DoctorServiceImpl implements DoctorService {
 	private PreorderMapperCustom preorderMapperCustom;
 	@Autowired
 	private UserorderMapperCustom userorderMapperCustom;
-	@Autowired
-	private HospitaldeptMapper hospitaldeptMapper;
-	@Autowired
-	private DoctortitleMapper doctortitleMapper;
+	
+	
 	@Autowired
 	private HospitaldeptMapperCustom hospitaldeptMapperCustom;
 	@Autowired
 	private HospinfoMapperCustom hospinfoMapperCustom;
+	@Autowired
+	private CommonService commonService;
+	@Autowired
+	private DoctoraddressMapper doctoraddressMapper;
+	@Autowired
+	private DoctoraddressMapperCustom doctoraddressMapperCustom;
+	@Autowired
+	private DoctorcalendarMapper doctorcalendarMapper;
+	@Autowired
+	private DoctorcalendarMapperCustom doctorcalendarMapperCustom;
+	@Autowired
+	private DoctorAccountService doctorAccountService;
 	
 	Logger logger = Logger.getLogger(DoctorService.class);
+
 	// 判断手机号码是否注册
 	@Override
-	public int findDocCountByPhone(String docLoginPhone) throws Exception {
-		try {
-			// 查询用户登录表
-			int count = doctorlogininfoMapperCustom.findDocCountByPhone(docLoginPhone);
-			if (count == 0) {
-				return 1; // 未注册
+	public int findDocCountByPhone(String phone) {
+		
+		
+			// 查询医生登录表
+			int doctorCount = doctorlogininfoMapperCustom.findDocCountByPhone(phone);
+			// 查询病人登录表
+			int userCount = userlogininfoMapperCustom.findUserCountByPhone(phone);
+			
+			if (doctorCount == 0 && userCount == 0) {
+				// 未注册
+				return 1;
 			} else {
-				return 2; // 已注册
+				if (userCount > 0) {
+					// 在病人端已注册
+					return 2;
+				} else {
+					// 在医生端已注册
+					return 3;
+				}
 			}
-		} catch (Exception e) {
-			logger.error("验证手机号码异常"+e);
-			return 3; // 操作异常
-		}
 	}
 
 	// 注册
@@ -171,9 +166,12 @@ public class DoctorServiceImpl implements DoctorService {
 					doctorLogininfo.setDocloginphone(docLoginPhone);
 					doctorLogininfo.setDocloginname(docLoginPhone);
 					String[] str = MD5Util.generate(docLoginPwd);
-					doctorLogininfo.setDocloginpwd(str[0]); //md5值密码
-					doctorLogininfo.setDocloginsalt(str[1]); //salt值
-					doctorLogininfo.setDoclogintype(false);//未审核用户
+					//md5值密码
+					doctorLogininfo.setDocloginpwd(str[0]); 
+					//salt值
+					doctorLogininfo.setDocloginsalt(str[1]); 
+					//未审核用户
+					doctorLogininfo.setDoclogintype(false);
 					doctorLogininfo.setDocloginpix("1.jpg");
 					//插入登录信息表
 					int result = doctorlogininfoMapperCustom.insertSelectiveReturnId(doctorLogininfo);
@@ -187,6 +185,7 @@ public class DoctorServiceImpl implements DoctorService {
 					int skdResult = doctorskdMapper.insertSelective(doctorskd);
 					// 操作成功
 					if (result >0 && infoResult>0 &&skdResult>0) {
+						doctorAccountService.addHuanXinAccout(doctorLogininfo.getDocloginid(),docLoginPwd);
 						return 1;
 					} else {
 						logger.error("医生注册异常,有信息未插入");
@@ -204,6 +203,7 @@ public class DoctorServiceImpl implements DoctorService {
 			}
 			
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("医生注册异常"+e);
 			//操作异常，回滚
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -343,6 +343,25 @@ public class DoctorServiceImpl implements DoctorService {
 		}
 		return map;
 	}
+	@Override
+	public Map<String, Object> getDoctorDept(Integer docloginid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			
+				Map<String, Object> doctorinfo = doctorinfoMapperCustom.selectFirstInfoDeptByDocLoginId(docloginid);
+				if (doctorinfo != null) {
+					map.put("state", "1");
+					map.put("data", doctorinfo);
+				} else {
+					map.put("state", "2"); // id对应的个人信息为空
+				}
+			
+		} catch (Exception e) {
+			logger.error("获取个人信息失败" + e);
+			map.put("state", "3"); // 操作异常
+		}
+		return map;
+	}
 	// 获取头像
 	@Override
 	public Map<String,Object> getPix(int id) throws Exception{
@@ -378,7 +397,7 @@ public class DoctorServiceImpl implements DoctorService {
 		if (doctorlogininfo!=null) {
 			boolean type = doctorlogininfo.getDoclogintype();
 			//该医生信息未被审核
-			if (!type) {
+			if (true) {
 				 Doctorinfo doctorinfo = new Doctorinfo();
 				    doctor.setDocloginid(doctor.getDocloginid());
 				    doctorinfo.setDocname(doctor.getDocname());
@@ -386,9 +405,19 @@ public class DoctorServiceImpl implements DoctorService {
 				    doctorinfo.setDocmale(doctor.getDocmale());
 				    doctorinfo.setDocage(doctor.getDocage());
 				    doctorinfo.setDochosp(doctor.getDochosp());
+				    doctorinfo.setHosplevel(doctor.getHosplevel());
+				    doctorinfo.setDochospprovince(doctor.getDochospprovince());
+				    doctorinfo.setDochospcity(doctor.getDochospcity());
+				    doctorinfo.setDochosparea(doctor.getDochosparea());
+				    doctorinfo.setDochospother(doctor.getDochospother());
+				    doctorinfo.setDochosplat(doctor.getDochosplat());
+				    doctorinfo.setDochosplon(doctor.getDochosplon());
+				    doctorinfo.setDocaddresslat(doctor.getDochosplat());
+				    doctorinfo.setDocaddresslon(doctor.getDochosplon());
 				    doctorinfo.setDocprimarydept(doctor.getDocprimarydept());
 				    doctorinfo.setDocseconddept(doctor.getDocseconddept());
 				    doctorinfo.setDocallday(doctor.getDocallday());
+				    doctorinfo.setDoctitle(doctor.getDoctitle());
 				    Doctorinfo doctorinfo2 = doctorinfoMapperCustom.findDoctorinfoByDocLoginId(doctor.getDocloginid());
 				    if (doctorinfo2!=null) {
 				    	doctorinfo.setDocid(doctorinfo2.getDocid()); //个人信息id
@@ -430,102 +459,53 @@ public class DoctorServiceImpl implements DoctorService {
 			if (doctorlogininfo != null && info != null) {
 				boolean type = doctorlogininfo.getDoclogintype();
 				// 该医生信息未被审核
-				if (!type) {
-					// 真实路径
-					String reallyDir = "D:\\\\upload\\\\doctor\\\\" + docloginid + "\\\\card\\\\";
-					// 保存到数据库的路径
-					String virtualDir = "doctor/" + docloginid + "/card/";
-					boolean state = CreateFileUtil.createDir(reallyDir);
-					if (state) {
-						if (olddoccardphoto == null) {
-							olddoccardphoto = "";
-						}else {
-							olddoccardphoto += ",";	
-						}
-						for (int i = 0; i < doccardphoto.length; i++) {
-							String name = CommonUtils.randomFileName();
-							String ext = "jpg";
-							String file = name + "." + ext;
-							String reallyPath = reallyDir + file;
-							String virtualPath = virtualDir + file;
-							doccardphoto[i].transferTo(new File(reallyPath));
-							if (i != doccardphoto.length - 1) {
-								olddoccardphoto += virtualPath + ",";
-							} else {
-								olddoccardphoto += virtualPath;
+				if (true) {
+						String cardPhotoPath = PictureTool.SavePictures(doccardphoto);
+						if (olddoccardphoto != null) {
+							if (cardPhotoPath != null) {
+								olddoccardphoto = olddoccardphoto + "," + cardPhotoPath;
 							}
+						} else {
+							olddoccardphoto = cardPhotoPath;
 						}
-						if (olddoctitlephoto == null) {
-							olddoctitlephoto = "";
-						}else {
-							olddoctitlephoto += ",";
-						}
-						for (int i = 0; i < doctitlephoto.length; i++) {
-							String name = CommonUtils.randomFileName();
-							String ext = "jpg";
-							String file = name + "." + ext;
-							String reallyPath = reallyDir + file;
-							String virtualPath = virtualDir + file;
-							doctitlephoto[i].transferTo(new File(reallyPath));
-							if (i != doctitlephoto.length - 1) {
-								olddoctitlephoto += virtualPath + ",";
-							} else {
-								olddoctitlephoto += virtualPath;
+						
+						String titlePhotoPath = PictureTool.SavePictures(doctitlephoto);
+						if (olddoctitlephoto != null) {
+							if (titlePhotoPath != null) {
+								olddoctitlephoto = olddoctitlephoto + "," + titlePhotoPath;
 							}
+						} else {
+							olddoctitlephoto = titlePhotoPath;
 						}
-						if (olddocqualphoto == null) {
-							olddocqualphoto = "";
-						}else {
-							olddocqualphoto += ",";
-						}
-						for (int i = 0; i < docqualphoto.length; i++) {
-							String name = CommonUtils.randomFileName();
-							String ext = "jpg";
-							String file = name + "." + ext;
-							String reallyPath = reallyDir + file;
-							String virtualPath = virtualDir + file;
-							docqualphoto[i].transferTo(new File(reallyPath));
-							if (i != docqualphoto.length - 1) {
-								olddocqualphoto += virtualPath + ",";
-							} else {
-								olddocqualphoto += virtualPath;
+						
+						String qualPhotoPath = PictureTool.SavePictures(docqualphoto);
+						if (olddocqualphoto != null) {
+							if (qualPhotoPath != null) {
+								olddocqualphoto = olddocqualphoto + "," + qualPhotoPath;
 							}
+							
+						} else {
+							olddocqualphoto = qualPhotoPath;
 						}
-						if (olddocworkcardphoto == null) {
-							olddocworkcardphoto = "";
-						}else {
-							olddocworkcardphoto += ",";
-						}
-						for (int i = 0; i < docworkcardphoto.length; i++) {
-							String name = CommonUtils.randomFileName();
-							String ext = "jpg";
-							String file = name + "." + ext;
-							String reallyPath = reallyDir + file;
-							String virtualPath = virtualDir + file;
-							docworkcardphoto[i].transferTo(new File(reallyPath));
-							if (i != docworkcardphoto.length - 1) {
-								olddocworkcardphoto += virtualPath + ",";
-							} else {
-								olddocworkcardphoto += virtualPath;
+						
+						String workCardPhotoPath = PictureTool.SavePictures(docworkcardphoto);
+						if (olddocworkcardphoto != null) {
+							if (workCardPhotoPath != null) {
+								olddocworkcardphoto = olddocworkcardphoto + "," + workCardPhotoPath;
 							}
+							
+						} else {
+							olddocworkcardphoto = workCardPhotoPath;
 						}
-						if (olddocotherphoto == null) {
-							olddocotherphoto = "";
-						}else {
-							olddocotherphoto += ",";
-						}
-						for (int i = 0; i < docotherphoto.length; i++) {
-							String name = CommonUtils.randomFileName();
-							String ext = "jpg";
-							String file = name + "." + ext;
-							String reallyPath = reallyDir + file;
-							String virtualPath = virtualDir + file;
-							docotherphoto[i].transferTo(new File(reallyPath));
-							if (i != docotherphoto.length - 1) {
-								olddocotherphoto += virtualPath + ",";
-							} else {
-								olddocotherphoto += virtualPath;
+						
+						String otherPhotoPath = PictureTool.SavePictures(docotherphoto);
+						if (olddocotherphoto != null) {
+							if (otherPhotoPath != null) {
+								olddocotherphoto = olddocotherphoto + "," + otherPhotoPath;
 							}
+							
+						} else {
+							olddocotherphoto = otherPhotoPath;
 						}
 						Doctorinfo doctorinfo = new Doctorinfo();
 						doctorinfo.setDocid(info.getDocid());
@@ -542,10 +522,7 @@ public class DoctorServiceImpl implements DoctorService {
 							// 更新失败
 							return 2;
 						}
-					} else {
-						// 更新失败，路径创建失败
-						return 3;
-					}
+					
 				} else {
 					return 4; // 医生已被审核,个人信息无法修改
 				}
@@ -560,6 +537,7 @@ public class DoctorServiceImpl implements DoctorService {
 		}
 
 	}
+	
 	//获取日程
 	@Override
 	public Map<String,Object> getSchedule(Integer docLoginId) throws Exception{
@@ -584,6 +562,7 @@ public class DoctorServiceImpl implements DoctorService {
 		}
 		return map;
 	}
+	
 	//更新用户日程
 	@Override
 	public int updateSchedule(Doctorskd doctorskd){
@@ -621,8 +600,8 @@ public class DoctorServiceImpl implements DoctorService {
 			Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
 			// 医生个人信息不为空
 			if (doctorinfo != null) {
-				lat = lat == null ? doctorinfo.getDoclat() : lat;
-				lon = lon == null ? doctorinfo.getDoclon() : lon;
+				lat = lat == null ? doctorinfo.getDocaddresslat() : lat;
+				lon = lon == null ? doctorinfo.getDocaddresslon() : lon;
 				// 获取推荐病情
 				if ((province == null || province.trim().length() == 0) && (time == null || time.trim().length() == 0)) {
 					if (lat == null || lat.trim() == "" || lat == null || lat.trim() == "") {
@@ -782,7 +761,7 @@ public class DoctorServiceImpl implements DoctorService {
 	}
 	//医生取消抢单
 	@Override
-	public Map<String, Object> deletePreOrder(int preorderid) {
+	public Map<String, Object> deletePreOrder(Integer docloginid ,Integer preorderid) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			Preorder preorder = preorderMapper.selectByPrimaryKey(preorderid);
@@ -790,39 +769,44 @@ public class DoctorServiceImpl implements DoctorService {
 				Integer docLoginId = preorder.getPreorderdocloginid();
 				Integer userLoginId = preorder.getPreorderuserloginid();
 				Integer userSickId = preorder.getUsersickid();
-				int result = preorderMapper.deleteByPrimaryKey(preorderid);
-				if (result > 0) {
-					Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userLoginId);
-					Doctorinfo doctor = doctorinfoMapperCustom.findDoctorinfoByDocLoginId(docLoginId);
-					if (user != null && doctor != null) {
-						String[] tags = { user.getUserloginphone(), "sick" };
-						String title = "通知";
-						String msg = doctor.getDocname() + "医生已取消抢单";
-						String sign = "1"; // 医生抢单
-						// 消息推送
-						Map<String, Object> pushMap = PushToAndroid.PushMsgToSmartTag(tags, title, msg, sign);
-						if ("1".equals(pushMap.get("state"))) {
-							map.put("state", "1"); // 操作成功,且消息发送成功
+				if (docloginid== docLoginId) {
+					int result = preorderMapper.deleteByPrimaryKey(preorderid);
+					if (result > 0) {
+						Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userLoginId);
+						Doctorinfo doctor = doctorinfoMapperCustom.findDoctorinfoByDocLoginId(docLoginId);
+						if (user != null && doctor != null) {
+							String[] tags = { user.getUserloginphone(), "sick" };
+							String title = "通知";
+							String msg = doctor.getDocname() + "医生已取消抢单";
+							String sign = "1"; // 医生抢单
+							// 消息推送
+							Map<String, Object> pushMap = PushToAndroid.PushMsgToSmartTag(tags, title, msg, sign);
+							if ("1".equals(pushMap.get("state"))) {
+								map.put("state", "1"); // 操作成功,且消息发送成功
+							} else {
+								map.put("state", "2");
+								map.put("msg", pushMap.get("msg"));// 操作成功，但消息推送失败
+							}
+							
 						} else {
-							map.put("state", "2");
-							map.put("msg", pushMap.get("msg"));// 操作成功，但消息推送失败
+							map.put("state", "3"); // 操作成功，但消息推送失败因获取数据失败
 						}
-						
 					} else {
-						map.put("state", "3"); // 操作成功，但消息推送失败因获取数据失败
+						map.put("state", "4");// 取消抢单失败
 					}
 				} else {
-					map.put("state", "4");// 取消抢单失败
+					//预定单与医生信息不符
+					map.put("state", "5");
 				}
 			} else {
 				// 预订单id对应数据为空
-				map.put("state", "5");
+				map.put("state", "6");
 			}
 
 		} catch (Exception e) {
 		
 			logger.error("医生取消抢单失败" + e);
-			map.put("state", "6");// 操作异常
+			map.put("state", "7");// 操作异常
 		}
 		return map;
 	}
@@ -890,22 +874,16 @@ public class DoctorServiceImpl implements DoctorService {
 		}
 		return map;
 	}
-	
+	//待修改
 	//医生完善订单消息
-	@Override
+	/*@Override
 	public int updateOrder(Userorder userorder) throws Exception{
 		try {
 			Userorder order = new Userorder();
 			order.setUserorderid(userorder.getUserorderid());
 			order.setUserorderstateid(3);
 			order.setUserorderrtime(new Date());
-			BigDecimal doctorMoney = userorder.getUserorderdprice();
-			BigDecimal hospMoney  = userorder.getUserorderhprice();
-			BigDecimal money =doctorMoney.add(hospMoney);
-			order.setUserorderdprice(doctorMoney);
-			order.setUserorderhprice(hospMoney);
-			order.setUserorderprice(money);
-			order.setUserorderhospid(userorder.getUserorderhospid());
+			order.setUserorderdprice(userorder.getUserorderdprice());
 			int state = userorderMapper.updateByPrimaryKeySelective(order);
 			if (state>0) {
 				Userorder info= userorderMapper.selectByPrimaryKey(userorder.getUserorderid());
@@ -938,7 +916,7 @@ public class DoctorServiceImpl implements DoctorService {
 			return 5; //操作异常
 		}
 	}
-	
+	*/
 	//获取全部病情
 	@Override 
 	public Map<String, Object> getSicks(SickSearch sickSearch)throws Exception{
@@ -1075,9 +1053,9 @@ public class DoctorServiceImpl implements DoctorService {
 			if (doctorinfo!=null) {
 				SickSearch sickSearch =new SickSearch();
 				sickSearch.setDept(doctorinfo.getDocdept());
-				sickSearch.setLat(doctorinfo.getDoclat());
-				sickSearch.setLon(doctorinfo.getDoclon());
-				sickSearch.setPageSize(10);
+				sickSearch.setLat(doctorinfo.getDocaddresslat());
+				sickSearch.setLon(doctorinfo.getDocaddresslon());
+				sickSearch.setPageSize(11);
 				sickSearch.setStartPage(page);
 				List<Map<String, Object>> list = usersickMapperCustom.selectReSickSortByDistance(sickSearch);
 				if (!list.isEmpty()) {
@@ -1107,8 +1085,8 @@ public class DoctorServiceImpl implements DoctorService {
 				//String[] str = doctorinfo.getDocloc().split("市");
 				SickSearch sickSearch = new SickSearch();
 				//sickSearch.setLoc("%"+str[0]+"%");
-				sickSearch.setLat(doctorinfo.getDoclat());
-				sickSearch.setLon(doctorinfo.getDoclon());
+				sickSearch.setLat(doctorinfo.getDocaddresslat());
+				sickSearch.setLon(doctorinfo.getDocaddresslon());
 				sickSearch.setPageSize(5);
 				sickSearch.setStartPage(page);
 				List<Map<String, Object>> list = usersickMapperCustom.selectAllSortByTime(sickSearch);
@@ -1139,8 +1117,8 @@ public class DoctorServiceImpl implements DoctorService {
 			if (doctorinfo != null) {
 				SickSearch sickSearch = new SickSearch();
 				sickSearch.setLoc("%" + loc + "%");
-				sickSearch.setLat(doctorinfo.getDoclat());
-				sickSearch.setLon(doctorinfo.getDoclon());
+				sickSearch.setLat(doctorinfo.getDocaddresslat());
+				sickSearch.setLon(doctorinfo.getDocaddresslon());
 				sickSearch.setPageSize(5);
 				sickSearch.setStartPage(page);
 				List<Map<String, Object>> list = usersickMapperCustom.selectAllSortByLoc(sickSearch);
@@ -1278,6 +1256,7 @@ public class DoctorServiceImpl implements DoctorService {
 			PageInfo<Map<String, Object>> page = new PageInfo<Map<String, Object>>(list);
 			if (page.getTotal()>0) {
 				// 获取数据成功
+				
 				map.put("state", "1");
 				map.put("data", page.getList());
 			} else {
@@ -1345,7 +1324,7 @@ public class DoctorServiceImpl implements DoctorService {
 						//订单信息
 						Userorder record = new Userorder();
 						record.setUserorderid(userorderid);
-						record.setUserorderstateid(12);
+						record.setUserorderstateid(15);
 						record.setUserorderetime(new Date());
 						Usersick usersick = usersickMapper.selectByPrimaryKey(usersickid);
 						if (usersick!=null) {
@@ -1428,11 +1407,12 @@ public class DoctorServiceImpl implements DoctorService {
 						Userorder record = new Userorder();
 						record.setUserorderid(userorderid);
 						if (redocloginid==null) {
-							record.setUserorderstateid(10);
+							record.setUserorderstateid(13);
 						} else {
-							record.setUserorderstateid(11);
+							record.setUserorderstateid(14);
 							Preorder preorder = new Preorder();
 							preorder.setUsersickid(usersickid);
+							preorder.setPreorderuserloginid(userorder.getUserloginid());
 							//医生推荐
 							preorder.setPreordertype(3);
 							preorder.setPreorderredocloginid(docloginid);
@@ -1525,14 +1505,571 @@ public class DoctorServiceImpl implements DoctorService {
 		
 		return map;
 	}
+	
 	//医生修改病情部门
 	@Override
-	public Map<String, Object> changeDept(Integer docloginid, Integer userorderid, String usersickprimarydept,
+	public Map<String, Object> changeDept(Integer docloginid, Integer usersickid, String usersickprimarydept,
 			String usersickseconddept) {
-		
+		try {
+			Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+			Usersick sick = usersickMapper.selectByPrimaryKey(usersickid);
+			if (doctorlogininfo!=null) {
+				Usersick usersick = new Usersick();
+				usersick.setUsersickid(usersickid);
+				usersick.setUsersickprimarydept(usersickprimarydept);
+				usersick.setUsersickseconddept(usersickseconddept);
+				int result = usersickMapper.updateByPrimaryKeySelective(usersick);
+				int delresult = preorderMapperCustom.deleteByDocLoginIdAndPreOrderType(docloginid, 1);
+				if (result>0 && delresult>0) {
+					Map<String, Object> resultMap = commonService.listRecommendDoctors(sick.getUsersickpic(), sick.getUsersickprimarydept(), sick.getUsersickseconddept());
+					boolean flag = false;
+					if ("1".equals(resultMap.get("state"))) {
+						List<Doctorinfo> list = (List<Doctorinfo>) resultMap.get("data");
+						for (Doctorinfo doctorinfo : list) {
+							Preorder preorder = new Preorder();
+							preorder.setPreorderdocloginid(doctorinfo.getDocloginid());
+							preorder.setUsersickid(usersickid);
+							preorder.setPreordertype(1);
+							preorder.setPreordertime(new Date());
+							int preResult = preorderMapper.insertSelective(preorder);
+							if (preResult<=0) {
+								flag =true;
+								break;
+							} 
+						}
+						if (flag) {
+							TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+							
+						}
+				} else {
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				}
+				
+				} else {
+
+				}
+			} else {
+
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return null;
 	}
 
+	@Override
+	public Map<String, Object> finishOrder(Integer docloginid, Integer userorderid, Boolean userorderhstate,
+			Integer userorderhospid) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			Userorder order = userorderMapperCustom.selectByDocLoginIdAndUserOrderId(docloginid,userorderid);
+			Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
+			if (order!=null) {
+				Integer userOrderStateId = order.getUserorderstateid();
+				//预付款完成,等待医生就诊状态
+				if (userOrderStateId==4) {
+					if (userorderhstate) {
+						Userorder userorder = new Userorder();
+						userorder.setUserorderid(userorderid);
+						//需要住院，等待医院确认
+						userorder.setUserorderstateid(5);
+						userorder.setUserorderhospid(userorderhospid);
+						userorder.setUserorderchosehosptime(new Date());
+						//住院部门默认为医生所在部门
+						userorder.setUserorderhospprimarydept(doctorinfo.getDocprimarydept());
+						userorder.setUserorderhospseconddept(doctorinfo.getDocseconddept());
+						int result = userorderMapper.updateByPrimaryKeySelective(userorder);
+						if (result>0) {
+							map.put("state", "1");
+						} else {
+							//操作失败
+							map.put("state", "2");
+						}
+					} else {
+						Userorder userorder = new Userorder();
+						userorder.setUserorderid(userorderid);
+						userorder.setUserorderetime(new Date());
+						userorder.setUserorderstateid(9);
+						int result = userorderMapper.updateByPrimaryKeySelective(userorder);
+						Usersick usersick = new Usersick();
+						usersick.setUsersickid(order.getUsersickid());
+						//该病情已结束
+						usersick.setUsersickstateid(4);
+						int sickResult = usersickMapper.updateByPrimaryKeySelective(usersick);
+						if (result>0 && sickResult>0) {
+							map.put("state", "3");
+						} else {
+							//操作失败
+							map.put("state", "4");
+						}
+					}
+				} else {
+					//该状态不支持该操作
+					map.put("state", "5");
+				}
+				
+			} else {
+				//订单id跟医生id不匹配
+				map.put("state", "6");
+			}		
+		} catch (Exception e) {
+			map.put("state", "7");
+		}
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> getDoctorByName(String docname) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			List<Map<String, Object>> list = doctorinfoMapperCustom.selectByName(docname);
+			if (list.size()>0) {
+				map.put("state", "1");
+				map.put("data", list);
+			} else {
+				map.put("state", "2");
+			}
+			
+		} catch (Exception e) {
+			map.put("state", "3");
+		}
+		return map;
+	}
+
+	@Override
+	public int addAddress(Doctoraddress doctoraddress) {
+		try {
+			int docloginid = doctoraddress.getDocloginid();
+			Doctorlogininfo doctorlogininfo =  doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+			if (doctorlogininfo != null) {
+					doctoraddress.setDocaddresstype(false);
+					doctoraddress.setDocaddresschecked(false);
+					int result = doctoraddressMapper.insertSelective(doctoraddress);
+					if (result>0) {
+						//新增成功
+						return 1;
+					} else {
+						//新增失败
+						return 2;
+					}
+				
+			}else {
+				//新增失败,该医生不存在
+				return 3;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			//新增失败,异常错误
+			logger.error("医生添加常用地址"+e);
+			return 4;
+		}
+		
+	}
+
+	@Override
+	public int editAddress(Doctoraddress doctoraddress) {
+		try {
+			int docloginid = doctoraddress.getDocloginid();
+			int docaddressid = doctoraddress.getDocaddressid();
+			Doctoraddress  address = doctoraddressMapper.selectByPrimaryKey(docaddressid);
+			if (address!=null) {
+				int loginid = address.getDocloginid();
+				if (docloginid == loginid) {
+					boolean type = address.getDocaddresstype();
+					if (!type) {
+						int result = doctoraddressMapper.updateByPrimaryKeySelective(doctoraddress);
+						if (result>0) {
+							//修改成功
+							return 1;
+						} else {
+							//修改失败
+							return 2;
+							}
+						
+					}else {
+						//默认地址不可修改
+						return 3;
+					}
+				} else {
+					//该地址不属于该医生
+					return 4;
+				}
+					
+			} else {
+				//该地址不存在
+				return 5;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			//新增失败,异常错误
+			logger.error("医生添加常用地址"+e);
+			return 6;
+		}
+	}
+
+	@Override
+	public int delAddress(Integer docloginid, Integer docaddressid) {
+		try {
+			Doctoraddress  address = doctoraddressMapper.selectByPrimaryKey(docaddressid);
+			if (address!=null) {
+				int loginid = address.getDocloginid();
+				boolean type = address.getDocaddresstype();
+				if (!type) {
+					if (docloginid == loginid) {
+						boolean checked = address.getDocaddresschecked();
+						if (!checked) {
+							int result = doctoraddressMapper.deleteByPrimaryKey(docaddressid);
+							if (result>0) {
+								//删除成功
+								return 1;
+							} else {
+								//删除失败
+								return 2;
+							}
+						} else {
+							//该地址正在使用
+							return 3;
+						}
+						
+					} else {
+						//该地址不属于该医生
+						return 4;
+					}
+						
+				} else {
+					//默认地址不可删除
+					return 5;
+				}
+				
+			} else {
+				//该地址不存在
+				return 6;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			//删除失败,异常错误
+			logger.error("医生删除常用地址异常"+e);
+			return 7;
+		}
+	}
+
+	@Override
+	public Map<String, Object> getAddress(Integer docloginid, Integer page) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			PageHelper.startPage(page, 5);
+			List<Doctoraddress> result = doctoraddressMapperCustom.selectByDocloginid(docloginid);
+		    PageInfo<Doctoraddress> pageInfo = new PageInfo<Doctoraddress>(result);
+		    if (pageInfo.getSize()!=0) {
+				map.put("state", "1");
+				map.put("data", pageInfo.getList());
+			} else {
+				map.put("state", "2");
+			}
+			
+			if (result.size()>0) {
+				map.put("state", "1");
+				map.put("data", result);
+			} else {
+				//数据为空
+				map.put("state", "2");		
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("查询常用地址异常"+e);
+			map.put("state", "3");
+		}
+		return map;
+	}
+
+	@Override
+	public Map<String, Object> getCalendar(Integer docloginid, Integer page) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			PageHelper.startPage(page, 5);
+			List<Map<String, Object>> result = doctorcalendarMapperCustom.selectAllInfoByDocloginid(docloginid);
+		    PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(result);
+		    if (pageInfo.getSize()!=0) {
+				map.put("state", "1");
+				map.put("data", pageInfo.getList());
+			} else {
+				map.put("state", "2");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("查询日程表异常"+e);
+			map.put("state", "3");
+		}
+		return map;
+	}
+
+	@Override
+	public int addCalendar(Integer docloginid,Date doccalendarday, String doccalendartime,
+			String doccalendaraffair, Integer doccalendaradressid) {
+		try {
+			List<Doctorcalendar> lists = doctorcalendarMapperCustom.selectByDocloginid(docloginid);
+			if (lists.size()==0) {
+				Doctorcalendar doctorcalendar = new Doctorcalendar();
+				doctorcalendar.setDoccalendarday(doccalendarday);
+				doctorcalendar.setDoccalendartime(doccalendartime);
+				doctorcalendar.setDoccalendaraffair(doccalendaraffair);
+				doctorcalendar.setDocloginid(docloginid);
+				doctorcalendar.setDoccalendaradressid(doccalendaradressid);
+				int result = doctorcalendarMapper.insertSelective(doctorcalendar);
+				if (result>0) {
+					return 1;
+				} else {
+					return 2;		
+				}
+			} else {
+				boolean flag = true;
+				for (Doctorcalendar doctorcalendar : lists) {
+					if (doccalendarday.getTime()==doctorcalendar.getDoccalendarday().getTime() && doccalendartime.equals(doctorcalendar.getDoccalendartime())) {
+						flag = false;
+						break;
+					}
+				}
+				if (flag) {
+					Doctorcalendar doctorcalendar = new Doctorcalendar();
+					doctorcalendar.setDoccalendarday(doccalendarday);
+					doctorcalendar.setDoccalendartime(doccalendartime);
+					doctorcalendar.setDoccalendaraffair(doccalendaraffair);
+					doctorcalendar.setDocloginid(docloginid);
+					doctorcalendar.setDoccalendaradressid(doccalendaradressid);
+					int result = doctorcalendarMapper.insertSelective(doctorcalendar);
+					if (result>0) {
+						return 1;
+					} else {
+						return 2;		
+					}
+				} else {
+					return 3;	
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("新增日程异常"+e);
+			return 4;
+		}
+	}
+	@Override
+	public int editCalendar(Integer doccalendarid, Integer docloginid,Date doccalendarday, String doccalendartime,
+			String doccalendaraffair, Integer doccalendaradressid) {
+		try {
+			Doctorcalendar calendar = doctorcalendarMapper.selectByPrimaryKey(doccalendarid);
+			if (calendar != null) {
+				int doctor = calendar.getDocloginid();
+				if (docloginid==doctor) {
+					Doctorcalendar doctorcalendar = new Doctorcalendar();
+					doctorcalendar.setDoccalendarday(doccalendarday);
+					doctorcalendar.setDoccalendartime(doccalendartime);
+					doctorcalendar.setDoccalendaraffair(doccalendaraffair);
+					doctorcalendar.setDocloginid(docloginid);
+					doctorcalendar.setDoccalendaradressid(doccalendaradressid);
+					doctorcalendar.setDoccalendarid(doccalendarid);
+					int result = doctorcalendarMapper.updateByPrimaryKeySelective(doctorcalendar);
+					if (result>0) {
+						return 1;
+					} else {
+						return 2;		
+					}
+				} else {
+					//该日程不属于该医生
+					return 3;	
+				}
+			}else {
+				//该日程不存在
+				return 4;	
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("更新日程异常"+e);
+			return 5;
+		}
+	}
+
+	@Override
+	public int deleteCalendar(Integer doccalendarid, Integer docloginid) {
+		try {
+			Doctorcalendar doctorcalendar = doctorcalendarMapper.selectByPrimaryKey(doccalendarid);
+			if (doctorcalendar != null) {
+				Integer doctor = doctorcalendar.getDocloginid();
+				if (docloginid==doctor) {
+					Calendar current = Calendar.getInstance();
+					Calendar today = Calendar.getInstance();	//今天
+					today.set(Calendar.YEAR, current.get(Calendar.YEAR));
+					today.set(Calendar.MONTH, current.get(Calendar.MONTH));
+					today.set(Calendar.DAY_OF_MONTH,current.get(Calendar.DAY_OF_MONTH));
+					//  Calendar.HOUR——12小时制的小时数 Calendar.HOUR_OF_DAY——24小时制的小时数
+					today.set( Calendar.HOUR_OF_DAY, 0);
+					today.set( Calendar.MINUTE, 0);
+					today.set(Calendar.SECOND, 0);
+					Date day = today.getTime();
+					Calendar tridDay = Calendar.getInstance();	
+					tridDay.set(Calendar.YEAR, current.get(Calendar.YEAR));
+			        tridDay.set(Calendar.MONTH, current.get(Calendar.MONTH));
+			        tridDay.set(Calendar.DAY_OF_MONTH,current.get(Calendar.DAY_OF_MONTH)+3);
+			        tridDay.set( Calendar.HOUR_OF_DAY, 0);
+			        tridDay.set( Calendar.MINUTE, 0);
+			        tridDay.set(Calendar.SECOND, 0);
+			        Date day2 = tridDay.getTime(); 
+					Date time = doctorcalendar.getDoccalendarday();
+					System.out.println("三天"+tridDay+"time"+time+"今天"+today);
+					System.out.println("三天"+day2.getTime());
+					System.out.println("某天"+time.getTime());
+					System.out.println("今天"+day.getTime());
+					System.out.println("结果"+(day2.getTime()>time.getTime() && time.getTime()>day.getTime()));
+					if (day2.getTime()>time.getTime() && time.getTime()>day.getTime()) {
+						//修改医生定位
+						Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
+						Doctorinfo info = new Doctorinfo();
+						info.setDocaddressprovince(null);
+						info.setDocaddresscity(null);
+						info.setDocaddressarea(null);
+						info.setDocaddressother(null);
+						info.setDocaddresslocation(null);
+						info.setDocaddresslon(doctorinfo.getDochosplon());
+						info.setDocaddresslat(doctorinfo.getDochosplat());
+						info.setDocid(doctorinfo.getDocid());
+						int docResult = doctorinfoMapperCustom.updateInfoByPrimaryKey(info);
+						int result = doctorcalendarMapper.deleteByPrimaryKey(doccalendarid);
+						if (result>0 && docResult>0) {
+							return 1;
+						} else {
+							TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+							return 2;
+						}
+						
+					} else {
+						int result = doctorcalendarMapper.deleteByPrimaryKey(doccalendarid);
+						if (result>0) {
+							return 3;
+						} else {
+							return 4;
+						}
+					}
+					
+				} else {
+					//该日程不属于该医生
+					return 5;
+				}
+			}else {
+				//该日程不存在
+				return 6;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			// TODO: handle exception
+			return 7;
+		}
+	}
+
+	@Override
+	public int updateAddress(Integer docloginid, Integer docaddressid) {
+		try {
+			Doctoraddress doctoraddress = doctoraddressMapper.selectByPrimaryKey(docaddressid);
+			if (doctoraddress != null) {
+				Integer doctor = doctoraddress.getDocloginid();
+				if (docloginid.equals(doctor)) {
+					boolean checked = doctoraddress.getDocaddresschecked();
+					if (!checked) {
+						int result = doctoraddressMapperCustom.updateCheckedByDocLoginId(docloginid, 0);
+						System.out.println("更新的人数"+result);
+						Doctoraddress address = new Doctoraddress();
+						address.setDocaddressid(docaddressid);
+						address.setDocaddresschecked(true);
+						int upResult = doctoraddressMapper.updateByPrimaryKeySelective(address);
+						Doctorinfo doctorallinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
+						Doctorinfo doctorinfo = new Doctorinfo();
+						doctorinfo.setDocaddressprovince(doctoraddress.getDocaddressprovince());
+						doctorinfo.setDocaddresscity(doctoraddress.getDocaddresscity());
+						doctorinfo.setDocaddressarea(doctoraddress.getDocaddressarea());
+						doctorinfo.setDocaddressother(doctoraddress.getDocaddressother());
+						doctorinfo.setDocaddresslat(doctoraddress.getDocaddresslat());
+						doctorinfo.setDocaddresslon(doctoraddress.getDocaddresslon());
+						doctorinfo.setDocaddresslocation(doctoraddress.getDocaddresslocation());
+						doctorinfo.setDocid(doctorallinfo.getDocid());
+						int infoResult = doctorinfoMapper.updateByPrimaryKeySelective(doctorinfo);
+						if (upResult > 0 && infoResult>0) {
+							return 1;
+						} else {
+							TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+							return 2;
+						}
+					} else {
+						// 该地址已被设置为当前坐诊位置
+						return 3;
+					}
+
+				} else {
+					// 该地址不属于该医生
+					return 4;
+				}
+
+			}else {
+				// 该地址不存在
+				return 5;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return 6;
+		}
+
+	}
+
+	@Override
+	public int updateChannelId(Integer docloginid, String channelid) {
+		try {
+			Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+			if (doctorlogininfo != null) {
+				Doctorlogininfo record = new Doctorlogininfo();
+				record.setDocloginid(docloginid);
+				record.setDocloginchannelid(channelid);
+				int result = doctorlogininfoMapper.updateByPrimaryKeySelective(record);
+				if (result>0) {
+					return 1;
+				} else {
+					return 2;
+				}
+				
+			}else {
+				return 3;
+			}
+		} catch (Exception e) {
+			logger.error("更新channelId异常"+e);
+			return 4;
+		}
+		
+	}
+	@Override
+	public int setLocation(String time) {
+		Calendar current = Calendar.getInstance();
+		Calendar tridDay = Calendar.getInstance();	
+		tridDay.set(Calendar.YEAR, current.get(Calendar.YEAR));
+        tridDay.set(Calendar.MONTH, current.get(Calendar.MONTH));
+        tridDay.set(Calendar.DAY_OF_MONTH,current.get(Calendar.DAY_OF_MONTH)+3);
+        tridDay.set( Calendar.HOUR_OF_DAY, 0);
+        tridDay.set( Calendar.MINUTE, 0);
+        tridDay.set(Calendar.SECOND, 0);
+        Date day2 = tridDay.getTime(); 
+        SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd");
+        String time2=df.format(day2);
+        System.out.println("时间"+time2);
+        List<Doctorcalendar> list = doctorcalendarMapperCustom.selectByDayAndTime(time2, time);
+        if (list.size()!=0) {
+			for (Doctorcalendar doctorcalendar : list) {
+				updateAddress(doctorcalendar.getDocloginid(),doctorcalendar.getDoccalendaradressid());
+			}
+		}
+		return 1;
+	}   
 	
 	
 	

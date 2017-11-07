@@ -13,14 +13,14 @@
 			                    SIN(
 			                        (
 			                        
-			                           #{lat} * PI() / 180 - a.docHospLat * PI() / 180
+			                           #{lat} * PI() / 180 - a.docAddressLat * PI() / 180
 			                        ) / 2
 			                    ),
 			                    2
-			                ) + COS(#{lat} * PI() / 180) * COS(a.docHospLat * PI() / 180) * POW(
+			                ) + COS(#{lat} * PI() / 180) * COS(a.docAddressLat * PI() / 180) * POW(
 			                    SIN(
 			                        (
-			                            #{lon} * PI() / 180 - a.docHospLon * PI() / 180
+			                            #{lon} * PI() / 180 - a.docAddressLon * PI() / 180
 			                        ) / 2
 			                    ),
 			                    2
@@ -96,7 +96,7 @@
   		   </where>
   		   ORDER BY distance ASC
   	</select>
-  	<select id="findDoctorInfoInListByLoc" parameterType="com.medical.po.DoctorSearch" 
+  <!-- 	<select id="findDoctorInfoInListByLoc" parameterType="com.medical.po.DoctorSearch" 
   						resultType="map">
   		   SELECT a.docname,a.docmale,a.docage,a.doctitle,a.dochosp,a.docdept,a.docallday,a.docloginid,a.docexpert,a.docabs,a.hosplevel,
   		   e.docloginprovince,e.doclogincity,e.docloginarea,e.docloginother
@@ -116,12 +116,11 @@
 	  		   </if>
 	  		ORDER BY distance ASC
   		   limit #{pageNo},#{pageSize}; 
-  	</select>
+  	</select> -->
  	<!--医生信息地图模式  -->
-  	<select id="findDoctorInfoInMap" parameterType="String" resultType="map">
-  		   SELECT a.docloginid,b.docloginpix,a.dochosplat,a.dochosplon,a.docprimarydept,docseconddept
-  		  
-  		   FROM doctorinfo as a
+  	<select id="findDoctorInfoInMap" parameterType="double" resultType="map">
+  		   SELECT a.docloginid,b.docloginpix,a.docAddressLat as dochosplat, a.docAddressLon as dochosplon,a.docprimarydept,docseconddept,docname
+  		  	FROM doctorinfo as a
   		   	  left join doctorlogininfo as b on a.docLoginId = b.docLoginId
   		   where  (a.docHospLat BETWEEN #{0} AND #{1}) AND (a.docHospLon BETWEEN #{2} AND #{3});
   	</select>
@@ -155,7 +154,12 @@
   		   limit #{pageNo},#{pageSize}; 
   	</select>
   	<select id="selectFirstInfoByDocLoginId" parameterType="java.lang.Integer" resultType="map">
-  			select docname,doccardnum,docmale,docage,dochosp,docdept,docallday
+  			select docname,doccardnum,docmale,docage,dochosp,docallday,doctitle,docprimarydept,docseconddept,hosplevel,
+  			dochospprovince,dochospcity,dochosparea,dochospother,dochosplon,dochosplat
+  			from doctorinfo where docLoginId = #{id}
+  	</select>
+  	<select id="selectFirstInfoDeptByDocLoginId" parameterType="java.lang.Integer" resultType="map">
+  			select docprimarydept,docseconddept
   			from doctorinfo where docLoginId = #{id}
   	</select>
   	<select id="selectSecondInfoByDocLoginId" parameterType="java.lang.Integer" resultType="map">
@@ -190,4 +194,37 @@
   	<select id="selectByDocLoginId" parameterType="java.lang.Integer" resultType="com.medical.po.Doctorinfo">
   			select * from doctorinfo where docLoginId = #{0}
   	</select>
+  	 <select id="selectByDept" parameterType="String" resultType="com.medical.po.Doctorinfo">
+  		SELECT a.* 
+  			FROM doctorinfo as a
+  				left join doctorlogininfo as b on a.docLoginId = b.docLoginId
+  		where
+  			b.docLoginType=1
+  		<if test="param1!=null">
+  			and a.docPrimaryDept=#{0} 
+  		</if>
+  		
+		<if test="param2!=null">
+			and a.docSecondDept=#{1}
+		</if>
+  		ORDER BY docId ASC
+  	</select>
+  	 <select id="selectByName" parameterType="String" resultType="map">
+  		SELECT docloginid,docname,docmale,docage,doctitle,dochosp,docprimarydept,docseconddept
+  		FROM doctorinfo 
+  		where docName=#{0} 
+  	</select>
+  	<update id="updateInfoByPrimaryKey" parameterType="com.medical.po.Doctorinfo" >
+    update doctorinfo
+    set 
+      docAddressLocation = #{docaddresslocation,jdbcType=VARCHAR},
+      docAddressProvince = #{docaddressprovince,jdbcType=VARCHAR},
+      docAddressCity = #{docaddresscity,jdbcType=VARCHAR},
+      docAddressArea = #{docaddressarea,jdbcType=VARCHAR},
+      docAddressOther = #{docaddressother,jdbcType=VARCHAR},
+      docAddressLon = #{docaddresslon,jdbcType=VARCHAR},
+      docAddressLat = #{docaddresslat,jdbcType=VARCHAR}
+      
+    where docId = #{docid,jdbcType=INTEGER}
+  </update>
   </mapper>

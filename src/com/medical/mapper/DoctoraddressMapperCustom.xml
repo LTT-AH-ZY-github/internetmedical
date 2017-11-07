@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.DoctoraddressMapperCustom" >
+  
+  <select id="selectByDocloginid" resultType="com.medical.po.Doctoraddress" parameterType="java.lang.Integer" >
+    select *
+ 	from doctoraddress
+    where docLoginId = #{0,jdbcType=INTEGER}
+  </select>
+   <update id="updateCheckedByDocLoginId" parameterType="java.lang.Integer" >
+    update doctoraddress
+    set 
+      docAddressChecked = #{1,jdbcType=BIT}
+    where docLoginId = #{0,jdbcType=INTEGER}
+  </update>
+</mapper>

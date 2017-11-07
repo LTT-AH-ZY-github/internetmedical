@@ -1465,73 +1465,73 @@ public class UserlogininfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserlogincidIsNull() {
-            addCriterion("userLoginCId is null");
+        public Criteria andUserloginchannelidIsNull() {
+            addCriterion("userLoginChannelId is null");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogincidIsNotNull() {
-            addCriterion("userLoginCId is not null");
+        public Criteria andUserloginchannelidIsNotNull() {
+            addCriterion("userLoginChannelId is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogincidEqualTo(String value) {
-            addCriterion("userLoginCId =", value, "userlogincid");
+        public Criteria andUserloginchannelidEqualTo(String value) {
+            addCriterion("userLoginChannelId =", value, "userloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogincidNotEqualTo(String value) {
-            addCriterion("userLoginCId <>", value, "userlogincid");
+        public Criteria andUserloginchannelidNotEqualTo(String value) {
+            addCriterion("userLoginChannelId <>", value, "userloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogincidGreaterThan(String value) {
-            addCriterion("userLoginCId >", value, "userlogincid");
+        public Criteria andUserloginchannelidGreaterThan(String value) {
+            addCriterion("userLoginChannelId >", value, "userloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogincidGreaterThanOrEqualTo(String value) {
-            addCriterion("userLoginCId >=", value, "userlogincid");
+        public Criteria andUserloginchannelidGreaterThanOrEqualTo(String value) {
+            addCriterion("userLoginChannelId >=", value, "userloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogincidLessThan(String value) {
-            addCriterion("userLoginCId <", value, "userlogincid");
+        public Criteria andUserloginchannelidLessThan(String value) {
+            addCriterion("userLoginChannelId <", value, "userloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogincidLessThanOrEqualTo(String value) {
-            addCriterion("userLoginCId <=", value, "userlogincid");
+        public Criteria andUserloginchannelidLessThanOrEqualTo(String value) {
+            addCriterion("userLoginChannelId <=", value, "userloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogincidLike(String value) {
-            addCriterion("userLoginCId like", value, "userlogincid");
+        public Criteria andUserloginchannelidLike(String value) {
+            addCriterion("userLoginChannelId like", value, "userloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogincidNotLike(String value) {
-            addCriterion("userLoginCId not like", value, "userlogincid");
+        public Criteria andUserloginchannelidNotLike(String value) {
+            addCriterion("userLoginChannelId not like", value, "userloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogincidIn(List<String> values) {
-            addCriterion("userLoginCId in", values, "userlogincid");
+        public Criteria andUserloginchannelidIn(List<String> values) {
+            addCriterion("userLoginChannelId in", values, "userloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogincidNotIn(List<String> values) {
-            addCriterion("userLoginCId not in", values, "userlogincid");
+        public Criteria andUserloginchannelidNotIn(List<String> values) {
+            addCriterion("userLoginChannelId not in", values, "userloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogincidBetween(String value1, String value2) {
-            addCriterion("userLoginCId between", value1, value2, "userlogincid");
+        public Criteria andUserloginchannelidBetween(String value1, String value2) {
+            addCriterion("userLoginChannelId between", value1, value2, "userloginchannelid");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogincidNotBetween(String value1, String value2) {
-            addCriterion("userLoginCId not between", value1, value2, "userlogincid");
+        public Criteria andUserloginchannelidNotBetween(String value1, String value2) {
+            addCriterion("userLoginChannelId not between", value1, value2, "userloginchannelid");
             return (Criteria) this;
         }
     }

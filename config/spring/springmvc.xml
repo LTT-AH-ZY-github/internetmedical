@@ -4,13 +4,18 @@
 	xmlns:context="http://www.springframework.org/schema/context" 
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:task="http://www.springframework.org/schema/task"  
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/task  
+	   http://www.springframework.org/schema/task/spring-task-4.0.xsd  
        ">
 	<!-- 配置Controller扫描 -->
 	<context:component-scan base-package="com.medical" />
+	<task:annotation-driven scheduler="myScheduler"/>  
+	<task:scheduler id="myScheduler" pool-size="5"/>  
 	
 	<context:property-placeholder location="classpath:resource.properties" />
 	<!-- 配置注解驱动 -->
@@ -64,8 +69,8 @@
 	<!-- 全局异常处理器
 	只要实现HandlerExceptionResolver接口就是全局异常处理器
 	 -->
-	<bean class="com.medical.exception.CustomExceptionResolver"></bean>
-	<!-- <bean class="com.medical.exception.DefaultExceptionHandler"></bean> -->
+	<!-- <bean class="com.medical.exception.CustomExceptionResolver"></bean> -->
+	<bean class="com.medical.exception.DefaultExceptionHandler"></bean>
 	<!--拦截器 -->
 	<mvc:interceptors>
 		<!--多个拦截器,顺序执行 -->

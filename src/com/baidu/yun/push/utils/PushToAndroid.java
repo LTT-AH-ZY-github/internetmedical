@@ -2,13 +2,10 @@ package com.baidu.yun.push.utils;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.log4j.Logger;
-
 import com.baidu.yun.core.log.YunLogEvent;
 import com.baidu.yun.core.log.YunLogHandler;
 import com.baidu.yun.push.auth.PushKeyPair;
@@ -28,11 +25,21 @@ import com.medical.service.DoctorService;
 
 public class PushToAndroid {
 	static Logger logger = Logger.getLogger(PushToAndroid.class);
-	public static void pushMsgToSingleDevice(String id,String title,String msg) throws PushClientException,
+	
+	public static void main(String[] args) throws PushClientException, PushServerException{
+		JSONObject jsonCustormCont = new JSONObject();
+		jsonCustormCont.put("doc_id", 12);
+		jsonCustormCont.put("sick_id", 12);
+		jsonCustormCont.put("type", 2);
+		pushMsgToSingleDevice("3525584841907349538","你好","你好",jsonCustormCont);
+	}
+	public static void pushMsgToSingleDevice(String channelId,String title,String msg,JSONObject jsonCustormCont) throws PushClientException,
 			PushServerException {
 		// 1. get apiKey and secretKey from developer console
-		String apiKey = "GnIsxXgAHX6U2NsyMgP91o3n";
-		String secretKey = "ng5QmzKFVp8ouXYdnzy7v2B5rEGSXhqX";
+		//String apiKey = "ugtoId8rc30G9vCMy5A4tFe9";
+		//String secretKey = "M0IliFMLSmbOEPN1CUBzKy9Y3xtIustE";
+		String apiKey = "xU6dBHm80gQbZ63hx01LwZdChu56ZRCG";
+		String secretKey = "zwxVyhFfMTUlSTsYWU6xXprTlfwyGtYr";
 		PushKeyPair pair = new PushKeyPair(apiKey, secretKey);
 
 		// 2. build a BaidupushClient object to access released interfaces
@@ -47,7 +54,6 @@ public class PushToAndroid {
 				System.out.println(event.getMessage());
 			}
 		});
-
 		try {
 			// 4. specify request arguments
 			//创建 Android的通知
@@ -58,12 +64,12 @@ public class PushToAndroid {
 			notification.put("notification_basic_style", 4);
 			notification.put("open_type", 2);
 			//notification.put("url", "http://push.baidu.com");
-			JSONObject jsonCustormCont = new JSONObject();
+			/*JSONObject jsonCustormCont = new JSONObject();
 			jsonCustormCont.put("key", "value"); //自定义内容，key-value
-			notification.put("custom_content", jsonCustormCont);
+*/			notification.put("custom_content", jsonCustormCont);
 
 			PushMsgToSingleDeviceRequest request = new PushMsgToSingleDeviceRequest()
-					.addChannelId(id)
+					.addChannelId(channelId)
 					.addMsgExpires(new Integer(3600)). // message有效时间
 					addMessageType(1).// 1：通知,0:透传消息. 默认为0 注：IOS只有通知.
 					addMessage(notification.toString()).

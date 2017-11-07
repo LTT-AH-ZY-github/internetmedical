@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.DoctorcommentMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Doctorcomment" >
+    <id column="docCommentId" property="doccommentid" jdbcType="INTEGER" />
+    <result column="docCommentFatherId" property="doccommentfatherid" jdbcType="INTEGER" />
+    <result column="docCommentGrade" property="doccommentgrade" jdbcType="INTEGER" />
+    <result column="docCommentServiceLevel" property="doccommentservicelevel" jdbcType="INTEGER" />
+    <result column="docCommentProfessionalLevel" property="doccommentprofessionallevel" jdbcType="INTEGER" />
+    <result column="docCommentPriceLevel" property="doccommentpricelevel" jdbcType="INTEGER" />
+    <result column="docCommentWords" property="doccommentwords" jdbcType="VARCHAR" />
+    <result column="docLoginId" property="docloginid" jdbcType="INTEGER" />
+    <result column="userOrderId" property="userorderid" jdbcType="INTEGER" />
+    <result column="userLoginId" property="userloginid" jdbcType="INTEGER" />
+    <result column="docCommentTime" property="doccommenttime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    docCommentId, docCommentFatherId, docCommentGrade, docCommentServiceLevel, docCommentProfessionalLevel, 
+    docCommentPriceLevel, docCommentWords, docLoginId, userOrderId, userLoginId, docCommentTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.DoctorcommentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from doctorcomment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from doctorcomment
+    where docCommentId = #{doccommentid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from doctorcomment
+    where docCommentId = #{doccommentid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.DoctorcommentExample" >
+    delete from doctorcomment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Doctorcomment" >
+    insert into doctorcomment (docCommentId, docCommentFatherId, 
+      docCommentGrade, docCommentServiceLevel, 
+      docCommentProfessionalLevel, docCommentPriceLevel, 
+      docCommentWords, docLoginId, userOrderId, 
+      userLoginId, docCommentTime)
+    values (#{doccommentid,jdbcType=INTEGER}, #{doccommentfatherid,jdbcType=INTEGER}, 
+      #{doccommentgrade,jdbcType=INTEGER}, #{doccommentservicelevel,jdbcType=INTEGER}, 
+      #{doccommentprofessionallevel,jdbcType=INTEGER}, #{doccommentpricelevel,jdbcType=INTEGER}, 
+      #{doccommentwords,jdbcType=VARCHAR}, #{docloginid,jdbcType=INTEGER}, #{userorderid,jdbcType=INTEGER}, 
+      #{userloginid,jdbcType=INTEGER}, #{doccommenttime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Doctorcomment" >
+    insert into doctorcomment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="doccommentid != null" >
+        docCommentId,
+      </if>
+      <if test="doccommentfatherid != null" >
+        docCommentFatherId,
+      </if>
+      <if test="doccommentgrade != null" >
+        docCommentGrade,
+      </if>
+      <if test="doccommentservicelevel != null" >
+        docCommentServiceLevel,
+      </if>
+      <if test="doccommentprofessionallevel != null" >
+        docCommentProfessionalLevel,
+      </if>
+      <if test="doccommentpricelevel != null" >
+        docCommentPriceLevel,
+      </if>
+      <if test="doccommentwords != null" >
+        docCommentWords,
+      </if>
+      <if test="docloginid != null" >
+        docLoginId,
+      </if>
+      <if test="userorderid != null" >
+        userOrderId,
+      </if>
+      <if test="userloginid != null" >
+        userLoginId,
+      </if>
+      <if test="doccommenttime != null" >
+        docCommentTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="doccommentid != null" >
+        #{doccommentid,jdbcType=INTEGER},
+      </if>
+      <if test="doccommentfatherid != null" >
+        #{doccommentfatherid,jdbcType=INTEGER},
+      </if>
+      <if test="doccommentgrade != null" >
+        #{doccommentgrade,jdbcType=INTEGER},
+      </if>
+      <if test="doccommentservicelevel != null" >
+        #{doccommentservicelevel,jdbcType=INTEGER},
+      </if>
+      <if test="doccommentprofessionallevel != null" >
+        #{doccommentprofessionallevel,jdbcType=INTEGER},
+      </if>
+      <if test="doccommentpricelevel != null" >
+        #{doccommentpricelevel,jdbcType=INTEGER},
+      </if>
+      <if test="doccommentwords != null" >
+        #{doccommentwords,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginid != null" >
+        #{docloginid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderid != null" >
+        #{userorderid,jdbcType=INTEGER},
+      </if>
+      <if test="userloginid != null" >
+        #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="doccommenttime != null" >
+        #{doccommenttime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.DoctorcommentExample" resultType="java.lang.Integer" >
+    select count(*) from doctorcomment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update doctorcomment
+    <set >
+      <if test="record.doccommentid != null" >
+        docCommentId = #{record.doccommentid,jdbcType=INTEGER},
+      </if>
+      <if test="record.doccommentfatherid != null" >
+        docCommentFatherId = #{record.doccommentfatherid,jdbcType=INTEGER},
+      </if>
+      <if test="record.doccommentgrade != null" >
+        docCommentGrade = #{record.doccommentgrade,jdbcType=INTEGER},
+      </if>
+      <if test="record.doccommentservicelevel != null" >
+        docCommentServiceLevel = #{record.doccommentservicelevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.doccommentprofessionallevel != null" >
+        docCommentProfessionalLevel = #{record.doccommentprofessionallevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.doccommentpricelevel != null" >
+        docCommentPriceLevel = #{record.doccommentpricelevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.doccommentwords != null" >
+        docCommentWords = #{record.doccommentwords,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docloginid != null" >
+        docLoginId = #{record.docloginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userorderid != null" >
+        userOrderId = #{record.userorderid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userloginid != null" >
+        userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.doccommenttime != null" >
+        docCommentTime = #{record.doccommenttime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update doctorcomment
+    set docCommentId = #{record.doccommentid,jdbcType=INTEGER},
+      docCommentFatherId = #{record.doccommentfatherid,jdbcType=INTEGER},
+      docCommentGrade = #{record.doccommentgrade,jdbcType=INTEGER},
+      docCommentServiceLevel = #{record.doccommentservicelevel,jdbcType=INTEGER},
+      docCommentProfessionalLevel = #{record.doccommentprofessionallevel,jdbcType=INTEGER},
+      docCommentPriceLevel = #{record.doccommentpricelevel,jdbcType=INTEGER},
+      docCommentWords = #{record.doccommentwords,jdbcType=VARCHAR},
+      docLoginId = #{record.docloginid,jdbcType=INTEGER},
+      userOrderId = #{record.userorderid,jdbcType=INTEGER},
+      userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      docCommentTime = #{record.doccommenttime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Doctorcomment" >
+    update doctorcomment
+    <set >
+      <if test="doccommentfatherid != null" >
+        docCommentFatherId = #{doccommentfatherid,jdbcType=INTEGER},
+      </if>
+      <if test="doccommentgrade != null" >
+        docCommentGrade = #{doccommentgrade,jdbcType=INTEGER},
+      </if>
+      <if test="doccommentservicelevel != null" >
+        docCommentServiceLevel = #{doccommentservicelevel,jdbcType=INTEGER},
+      </if>
+      <if test="doccommentprofessionallevel != null" >
+        docCommentProfessionalLevel = #{doccommentprofessionallevel,jdbcType=INTEGER},
+      </if>
+      <if test="doccommentpricelevel != null" >
+        docCommentPriceLevel = #{doccommentpricelevel,jdbcType=INTEGER},
+      </if>
+      <if test="doccommentwords != null" >
+        docCommentWords = #{doccommentwords,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginid != null" >
+        docLoginId = #{docloginid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderid != null" >
+        userOrderId = #{userorderid,jdbcType=INTEGER},
+      </if>
+      <if test="userloginid != null" >
+        userLoginId = #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="doccommenttime != null" >
+        docCommentTime = #{doccommenttime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where docCommentId = #{doccommentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Doctorcomment" >
+    update doctorcomment
+    set docCommentFatherId = #{doccommentfatherid,jdbcType=INTEGER},
+      docCommentGrade = #{doccommentgrade,jdbcType=INTEGER},
+      docCommentServiceLevel = #{doccommentservicelevel,jdbcType=INTEGER},
+      docCommentProfessionalLevel = #{doccommentprofessionallevel,jdbcType=INTEGER},
+      docCommentPriceLevel = #{doccommentpricelevel,jdbcType=INTEGER},
+      docCommentWords = #{doccommentwords,jdbcType=VARCHAR},
+      docLoginId = #{docloginid,jdbcType=INTEGER},
+      userOrderId = #{userorderid,jdbcType=INTEGER},
+      userLoginId = #{userloginid,jdbcType=INTEGER},
+      docCommentTime = #{doccommenttime,jdbcType=TIMESTAMP}
+    where docCommentId = #{doccommentid,jdbcType=INTEGER}
+  </update>
+</mapper>

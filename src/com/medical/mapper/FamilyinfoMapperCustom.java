@@ -11,5 +11,5 @@ public interface FamilyinfoMapperCustom {
     int insertReturnId(Familyinfo record);
     List<Familyinfo> findByUserLoginId(int userLoginId);
     List<Familyinfo>  selectByUserLoginIdAndType(int userLoginId,int familyType);
-
+    List<Familyinfo> selectByUserLoginIdAndInfo(Familyinfo familyinfo);
 }

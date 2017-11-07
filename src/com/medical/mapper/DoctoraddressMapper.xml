@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.DoctoraddressMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Doctoraddress" >
+    <id column="docAddressId" property="docaddressid" jdbcType="INTEGER" />
+    <result column="docAddressLocation" property="docaddresslocation" jdbcType="VARCHAR" />
+    <result column="docAddressProvince" property="docaddressprovince" jdbcType="VARCHAR" />
+    <result column="docAddressCity" property="docaddresscity" jdbcType="VARCHAR" />
+    <result column="docAddressArea" property="docaddressarea" jdbcType="VARCHAR" />
+    <result column="docAddressOther" property="docaddressother" jdbcType="VARCHAR" />
+    <result column="docAddressLon" property="docaddresslon" jdbcType="VARCHAR" />
+    <result column="docAddressLat" property="docaddresslat" jdbcType="VARCHAR" />
+    <result column="docLoginId" property="docloginid" jdbcType="INTEGER" />
+    <result column="docAddressType" property="docaddresstype" jdbcType="BIT" />
+    <result column="docAddressChecked" property="docaddresschecked" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    docAddressId, docAddressLocation, docAddressProvince, docAddressCity, docAddressArea, 
+    docAddressOther, docAddressLon, docAddressLat, docLoginId, docAddressType, docAddressChecked
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.DoctoraddressExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from doctoraddress
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from doctoraddress
+    where docAddressId = #{docaddressid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from doctoraddress
+    where docAddressId = #{docaddressid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.DoctoraddressExample" >
+    delete from doctoraddress
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Doctoraddress" >
+    insert into doctoraddress (docAddressId, docAddressLocation, 
+      docAddressProvince, docAddressCity, docAddressArea, 
+      docAddressOther, docAddressLon, docAddressLat, 
+      docLoginId, docAddressType, docAddressChecked
+      )
+    values (#{docaddressid,jdbcType=INTEGER}, #{docaddresslocation,jdbcType=VARCHAR}, 
+      #{docaddressprovince,jdbcType=VARCHAR}, #{docaddresscity,jdbcType=VARCHAR}, #{docaddressarea,jdbcType=VARCHAR}, 
+      #{docaddressother,jdbcType=VARCHAR}, #{docaddresslon,jdbcType=VARCHAR}, #{docaddresslat,jdbcType=VARCHAR}, 
+      #{docloginid,jdbcType=INTEGER}, #{docaddresstype,jdbcType=BIT}, #{docaddresschecked,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Doctoraddress" >
+    insert into doctoraddress
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="docaddressid != null" >
+        docAddressId,
+      </if>
+      <if test="docaddresslocation != null" >
+        docAddressLocation,
+      </if>
+      <if test="docaddressprovince != null" >
+        docAddressProvince,
+      </if>
+      <if test="docaddresscity != null" >
+        docAddressCity,
+      </if>
+      <if test="docaddressarea != null" >
+        docAddressArea,
+      </if>
+      <if test="docaddressother != null" >
+        docAddressOther,
+      </if>
+      <if test="docaddresslon != null" >
+        docAddressLon,
+      </if>
+      <if test="docaddresslat != null" >
+        docAddressLat,
+      </if>
+      <if test="docloginid != null" >
+        docLoginId,
+      </if>
+      <if test="docaddresstype != null" >
+        docAddressType,
+      </if>
+      <if test="docaddresschecked != null" >
+        docAddressChecked,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="docaddressid != null" >
+        #{docaddressid,jdbcType=INTEGER},
+      </if>
+      <if test="docaddresslocation != null" >
+        #{docaddresslocation,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressprovince != null" >
+        #{docaddressprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresscity != null" >
+        #{docaddresscity,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressarea != null" >
+        #{docaddressarea,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressother != null" >
+        #{docaddressother,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslon != null" >
+        #{docaddresslon,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslat != null" >
+        #{docaddresslat,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginid != null" >
+        #{docloginid,jdbcType=INTEGER},
+      </if>
+      <if test="docaddresstype != null" >
+        #{docaddresstype,jdbcType=BIT},
+      </if>
+      <if test="docaddresschecked != null" >
+        #{docaddresschecked,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.DoctoraddressExample" resultType="java.lang.Integer" >
+    select count(*) from doctoraddress
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update doctoraddress
+    <set >
+      <if test="record.docaddressid != null" >
+        docAddressId = #{record.docaddressid,jdbcType=INTEGER},
+      </if>
+      <if test="record.docaddresslocation != null" >
+        docAddressLocation = #{record.docaddresslocation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddressprovince != null" >
+        docAddressProvince = #{record.docaddressprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddresscity != null" >
+        docAddressCity = #{record.docaddresscity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddressarea != null" >
+        docAddressArea = #{record.docaddressarea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddressother != null" >
+        docAddressOther = #{record.docaddressother,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddresslon != null" >
+        docAddressLon = #{record.docaddresslon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddresslat != null" >
+        docAddressLat = #{record.docaddresslat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docloginid != null" >
+        docLoginId = #{record.docloginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.docaddresstype != null" >
+        docAddressType = #{record.docaddresstype,jdbcType=BIT},
+      </if>
+      <if test="record.docaddresschecked != null" >
+        docAddressChecked = #{record.docaddresschecked,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update doctoraddress
+    set docAddressId = #{record.docaddressid,jdbcType=INTEGER},
+      docAddressLocation = #{record.docaddresslocation,jdbcType=VARCHAR},
+      docAddressProvince = #{record.docaddressprovince,jdbcType=VARCHAR},
+      docAddressCity = #{record.docaddresscity,jdbcType=VARCHAR},
+      docAddressArea = #{record.docaddressarea,jdbcType=VARCHAR},
+      docAddressOther = #{record.docaddressother,jdbcType=VARCHAR},
+      docAddressLon = #{record.docaddresslon,jdbcType=VARCHAR},
+      docAddressLat = #{record.docaddresslat,jdbcType=VARCHAR},
+      docLoginId = #{record.docloginid,jdbcType=INTEGER},
+      docAddressType = #{record.docaddresstype,jdbcType=BIT},
+      docAddressChecked = #{record.docaddresschecked,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Doctoraddress" >
+    update doctoraddress
+    <set >
+      <if test="docaddresslocation != null" >
+        docAddressLocation = #{docaddresslocation,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressprovince != null" >
+        docAddressProvince = #{docaddressprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresscity != null" >
+        docAddressCity = #{docaddresscity,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressarea != null" >
+        docAddressArea = #{docaddressarea,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressother != null" >
+        docAddressOther = #{docaddressother,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslon != null" >
+        docAddressLon = #{docaddresslon,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslat != null" >
+        docAddressLat = #{docaddresslat,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginid != null" >
+        docLoginId = #{docloginid,jdbcType=INTEGER},
+      </if>
+      <if test="docaddresstype != null" >
+        docAddressType = #{docaddresstype,jdbcType=BIT},
+      </if>
+      <if test="docaddresschecked != null" >
+        docAddressChecked = #{docaddresschecked,jdbcType=BIT},
+      </if>
+    </set>
+    where docAddressId = #{docaddressid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Doctoraddress" >
+    update doctoraddress
+    set docAddressLocation = #{docaddresslocation,jdbcType=VARCHAR},
+      docAddressProvince = #{docaddressprovince,jdbcType=VARCHAR},
+      docAddressCity = #{docaddresscity,jdbcType=VARCHAR},
+      docAddressArea = #{docaddressarea,jdbcType=VARCHAR},
+      docAddressOther = #{docaddressother,jdbcType=VARCHAR},
+      docAddressLon = #{docaddresslon,jdbcType=VARCHAR},
+      docAddressLat = #{docaddresslat,jdbcType=VARCHAR},
+      docLoginId = #{docloginid,jdbcType=INTEGER},
+      docAddressType = #{docaddresstype,jdbcType=BIT},
+      docAddressChecked = #{docaddresschecked,jdbcType=BIT}
+    where docAddressId = #{docaddressid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.HospitalcommentMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Hospitalcomment" >
+    <id column="hospCommentId" property="hospcommentid" jdbcType="INTEGER" />
+    <result column="hospCommentFatherId" property="hospcommentfatherid" jdbcType="INTEGER" />
+    <result column="hospCommentGrade" property="hospcommentgrade" jdbcType="INTEGER" />
+    <result column="hospCommentServiceLevel" property="hospcommentservicelevel" jdbcType="INTEGER" />
+    <result column="hospCommentEnvironmenLevel" property="hospcommentenvironmenlevel" jdbcType="INTEGER" />
+    <result column="hospCommentPriceLevel" property="hospcommentpricelevel" jdbcType="INTEGER" />
+    <result column="hospCommentWords" property="hospcommentwords" jdbcType="VARCHAR" />
+    <result column="hospLoginId" property="hosploginid" jdbcType="INTEGER" />
+    <result column="userOrderId" property="userorderid" jdbcType="INTEGER" />
+    <result column="userLoginId" property="userloginid" jdbcType="INTEGER" />
+    <result column="hospCommentTime" property="hospcommenttime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    hospCommentId, hospCommentFatherId, hospCommentGrade, hospCommentServiceLevel, hospCommentEnvironmenLevel, 
+    hospCommentPriceLevel, hospCommentWords, hospLoginId, userOrderId, userLoginId, hospCommentTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HospitalcommentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hospitalcomment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from hospitalcomment
+    where hospCommentId = #{hospcommentid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from hospitalcomment
+    where hospCommentId = #{hospcommentid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.HospitalcommentExample" >
+    delete from hospitalcomment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Hospitalcomment" >
+    insert into hospitalcomment (hospCommentId, hospCommentFatherId, 
+      hospCommentGrade, hospCommentServiceLevel, 
+      hospCommentEnvironmenLevel, hospCommentPriceLevel, 
+      hospCommentWords, hospLoginId, userOrderId, 
+      userLoginId, hospCommentTime)
+    values (#{hospcommentid,jdbcType=INTEGER}, #{hospcommentfatherid,jdbcType=INTEGER}, 
+      #{hospcommentgrade,jdbcType=INTEGER}, #{hospcommentservicelevel,jdbcType=INTEGER}, 
+      #{hospcommentenvironmenlevel,jdbcType=INTEGER}, #{hospcommentpricelevel,jdbcType=INTEGER}, 
+      #{hospcommentwords,jdbcType=VARCHAR}, #{hosploginid,jdbcType=INTEGER}, #{userorderid,jdbcType=INTEGER}, 
+      #{userloginid,jdbcType=INTEGER}, #{hospcommenttime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Hospitalcomment" >
+    insert into hospitalcomment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hospcommentid != null" >
+        hospCommentId,
+      </if>
+      <if test="hospcommentfatherid != null" >
+        hospCommentFatherId,
+      </if>
+      <if test="hospcommentgrade != null" >
+        hospCommentGrade,
+      </if>
+      <if test="hospcommentservicelevel != null" >
+        hospCommentServiceLevel,
+      </if>
+      <if test="hospcommentenvironmenlevel != null" >
+        hospCommentEnvironmenLevel,
+      </if>
+      <if test="hospcommentpricelevel != null" >
+        hospCommentPriceLevel,
+      </if>
+      <if test="hospcommentwords != null" >
+        hospCommentWords,
+      </if>
+      <if test="hosploginid != null" >
+        hospLoginId,
+      </if>
+      <if test="userorderid != null" >
+        userOrderId,
+      </if>
+      <if test="userloginid != null" >
+        userLoginId,
+      </if>
+      <if test="hospcommenttime != null" >
+        hospCommentTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hospcommentid != null" >
+        #{hospcommentid,jdbcType=INTEGER},
+      </if>
+      <if test="hospcommentfatherid != null" >
+        #{hospcommentfatherid,jdbcType=INTEGER},
+      </if>
+      <if test="hospcommentgrade != null" >
+        #{hospcommentgrade,jdbcType=INTEGER},
+      </if>
+      <if test="hospcommentservicelevel != null" >
+        #{hospcommentservicelevel,jdbcType=INTEGER},
+      </if>
+      <if test="hospcommentenvironmenlevel != null" >
+        #{hospcommentenvironmenlevel,jdbcType=INTEGER},
+      </if>
+      <if test="hospcommentpricelevel != null" >
+        #{hospcommentpricelevel,jdbcType=INTEGER},
+      </if>
+      <if test="hospcommentwords != null" >
+        #{hospcommentwords,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginid != null" >
+        #{hosploginid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderid != null" >
+        #{userorderid,jdbcType=INTEGER},
+      </if>
+      <if test="userloginid != null" >
+        #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="hospcommenttime != null" >
+        #{hospcommenttime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.HospitalcommentExample" resultType="java.lang.Integer" >
+    select count(*) from hospitalcomment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update hospitalcomment
+    <set >
+      <if test="record.hospcommentid != null" >
+        hospCommentId = #{record.hospcommentid,jdbcType=INTEGER},
+      </if>
+      <if test="record.hospcommentfatherid != null" >
+        hospCommentFatherId = #{record.hospcommentfatherid,jdbcType=INTEGER},
+      </if>
+      <if test="record.hospcommentgrade != null" >
+        hospCommentGrade = #{record.hospcommentgrade,jdbcType=INTEGER},
+      </if>
+      <if test="record.hospcommentservicelevel != null" >
+        hospCommentServiceLevel = #{record.hospcommentservicelevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.hospcommentenvironmenlevel != null" >
+        hospCommentEnvironmenLevel = #{record.hospcommentenvironmenlevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.hospcommentpricelevel != null" >
+        hospCommentPriceLevel = #{record.hospcommentpricelevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.hospcommentwords != null" >
+        hospCommentWords = #{record.hospcommentwords,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hosploginid != null" >
+        hospLoginId = #{record.hosploginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userorderid != null" >
+        userOrderId = #{record.userorderid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userloginid != null" >
+        userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.hospcommenttime != null" >
+        hospCommentTime = #{record.hospcommenttime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update hospitalcomment
+    set hospCommentId = #{record.hospcommentid,jdbcType=INTEGER},
+      hospCommentFatherId = #{record.hospcommentfatherid,jdbcType=INTEGER},
+      hospCommentGrade = #{record.hospcommentgrade,jdbcType=INTEGER},
+      hospCommentServiceLevel = #{record.hospcommentservicelevel,jdbcType=INTEGER},
+      hospCommentEnvironmenLevel = #{record.hospcommentenvironmenlevel,jdbcType=INTEGER},
+      hospCommentPriceLevel = #{record.hospcommentpricelevel,jdbcType=INTEGER},
+      hospCommentWords = #{record.hospcommentwords,jdbcType=VARCHAR},
+      hospLoginId = #{record.hosploginid,jdbcType=INTEGER},
+      userOrderId = #{record.userorderid,jdbcType=INTEGER},
+      userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      hospCommentTime = #{record.hospcommenttime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Hospitalcomment" >
+    update hospitalcomment
+    <set >
+      <if test="hospcommentfatherid != null" >
+        hospCommentFatherId = #{hospcommentfatherid,jdbcType=INTEGER},
+      </if>
+      <if test="hospcommentgrade != null" >
+        hospCommentGrade = #{hospcommentgrade,jdbcType=INTEGER},
+      </if>
+      <if test="hospcommentservicelevel != null" >
+        hospCommentServiceLevel = #{hospcommentservicelevel,jdbcType=INTEGER},
+      </if>
+      <if test="hospcommentenvironmenlevel != null" >
+        hospCommentEnvironmenLevel = #{hospcommentenvironmenlevel,jdbcType=INTEGER},
+      </if>
+      <if test="hospcommentpricelevel != null" >
+        hospCommentPriceLevel = #{hospcommentpricelevel,jdbcType=INTEGER},
+      </if>
+      <if test="hospcommentwords != null" >
+        hospCommentWords = #{hospcommentwords,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginid != null" >
+        hospLoginId = #{hosploginid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderid != null" >
+        userOrderId = #{userorderid,jdbcType=INTEGER},
+      </if>
+      <if test="userloginid != null" >
+        userLoginId = #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="hospcommenttime != null" >
+        hospCommentTime = #{hospcommenttime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where hospCommentId = #{hospcommentid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Hospitalcomment" >
+    update hospitalcomment
+    set hospCommentFatherId = #{hospcommentfatherid,jdbcType=INTEGER},
+      hospCommentGrade = #{hospcommentgrade,jdbcType=INTEGER},
+      hospCommentServiceLevel = #{hospcommentservicelevel,jdbcType=INTEGER},
+      hospCommentEnvironmenLevel = #{hospcommentenvironmenlevel,jdbcType=INTEGER},
+      hospCommentPriceLevel = #{hospcommentpricelevel,jdbcType=INTEGER},
+      hospCommentWords = #{hospcommentwords,jdbcType=VARCHAR},
+      hospLoginId = #{hosploginid,jdbcType=INTEGER},
+      userOrderId = #{userorderid,jdbcType=INTEGER},
+      userLoginId = #{userloginid,jdbcType=INTEGER},
+      hospCommentTime = #{hospcommenttime,jdbcType=TIMESTAMP}
+    where hospCommentId = #{hospcommentid,jdbcType=INTEGER}
+  </update>
+</mapper>

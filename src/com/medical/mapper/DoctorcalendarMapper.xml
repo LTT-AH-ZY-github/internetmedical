@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.DoctorcalendarMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Doctorcalendar" >
+    <id column="docCalendarId" property="doccalendarid" jdbcType="INTEGER" />
+    <result column="docCalendarDay" property="doccalendarday" jdbcType="DATE" />
+    <result column="docCalendarTime" property="doccalendartime" jdbcType="CHAR" />
+    <result column="docCalendarAffair" property="doccalendaraffair" jdbcType="VARCHAR" />
+    <result column="docCalendarAdressId" property="doccalendaradressid" jdbcType="INTEGER" />
+    <result column="docLoginId" property="docloginid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    docCalendarId, docCalendarDay, docCalendarTime, docCalendarAffair, docCalendarAdressId, 
+    docLoginId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.DoctorcalendarExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from doctorcalendar
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from doctorcalendar
+    where docCalendarId = #{doccalendarid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from doctorcalendar
+    where docCalendarId = #{doccalendarid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.DoctorcalendarExample" >
+    delete from doctorcalendar
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Doctorcalendar" >
+    insert into doctorcalendar (docCalendarId, docCalendarDay, docCalendarTime, 
+      docCalendarAffair, docCalendarAdressId, 
+      docLoginId)
+    values (#{doccalendarid,jdbcType=INTEGER}, #{doccalendarday,jdbcType=DATE}, #{doccalendartime,jdbcType=CHAR}, 
+      #{doccalendaraffair,jdbcType=VARCHAR}, #{doccalendaradressid,jdbcType=INTEGER}, 
+      #{docloginid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Doctorcalendar" >
+    insert into doctorcalendar
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="doccalendarid != null" >
+        docCalendarId,
+      </if>
+      <if test="doccalendarday != null" >
+        docCalendarDay,
+      </if>
+      <if test="doccalendartime != null" >
+        docCalendarTime,
+      </if>
+      <if test="doccalendaraffair != null" >
+        docCalendarAffair,
+      </if>
+      <if test="doccalendaradressid != null" >
+        docCalendarAdressId,
+      </if>
+      <if test="docloginid != null" >
+        docLoginId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="doccalendarid != null" >
+        #{doccalendarid,jdbcType=INTEGER},
+      </if>
+      <if test="doccalendarday != null" >
+        #{doccalendarday,jdbcType=DATE},
+      </if>
+      <if test="doccalendartime != null" >
+        #{doccalendartime,jdbcType=CHAR},
+      </if>
+      <if test="doccalendaraffair != null" >
+        #{doccalendaraffair,jdbcType=VARCHAR},
+      </if>
+      <if test="doccalendaradressid != null" >
+        #{doccalendaradressid,jdbcType=INTEGER},
+      </if>
+      <if test="docloginid != null" >
+        #{docloginid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.DoctorcalendarExample" resultType="java.lang.Integer" >
+    select count(*) from doctorcalendar
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update doctorcalendar
+    <set >
+      <if test="record.doccalendarid != null" >
+        docCalendarId = #{record.doccalendarid,jdbcType=INTEGER},
+      </if>
+      <if test="record.doccalendarday != null" >
+        docCalendarDay = #{record.doccalendarday,jdbcType=DATE},
+      </if>
+      <if test="record.doccalendartime != null" >
+        docCalendarTime = #{record.doccalendartime,jdbcType=CHAR},
+      </if>
+      <if test="record.doccalendaraffair != null" >
+        docCalendarAffair = #{record.doccalendaraffair,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doccalendaradressid != null" >
+        docCalendarAdressId = #{record.doccalendaradressid,jdbcType=INTEGER},
+      </if>
+      <if test="record.docloginid != null" >
+        docLoginId = #{record.docloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update doctorcalendar
+    set docCalendarId = #{record.doccalendarid,jdbcType=INTEGER},
+      docCalendarDay = #{record.doccalendarday,jdbcType=DATE},
+      docCalendarTime = #{record.doccalendartime,jdbcType=CHAR},
+      docCalendarAffair = #{record.doccalendaraffair,jdbcType=VARCHAR},
+      docCalendarAdressId = #{record.doccalendaradressid,jdbcType=INTEGER},
+      docLoginId = #{record.docloginid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Doctorcalendar" >
+    update doctorcalendar
+    <set >
+      <if test="doccalendarday != null" >
+        docCalendarDay = #{doccalendarday,jdbcType=DATE},
+      </if>
+      <if test="doccalendartime != null" >
+        docCalendarTime = #{doccalendartime,jdbcType=CHAR},
+      </if>
+      <if test="doccalendaraffair != null" >
+        docCalendarAffair = #{doccalendaraffair,jdbcType=VARCHAR},
+      </if>
+      <if test="doccalendaradressid != null" >
+        docCalendarAdressId = #{doccalendaradressid,jdbcType=INTEGER},
+      </if>
+      <if test="docloginid != null" >
+        docLoginId = #{docloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where docCalendarId = #{doccalendarid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Doctorcalendar" >
+    update doctorcalendar
+    set docCalendarDay = #{doccalendarday,jdbcType=DATE},
+      docCalendarTime = #{doccalendartime,jdbcType=CHAR},
+      docCalendarAffair = #{doccalendaraffair,jdbcType=VARCHAR},
+      docCalendarAdressId = #{doccalendaradressid,jdbcType=INTEGER},
+      docLoginId = #{docloginid,jdbcType=INTEGER}
+    where docCalendarId = #{doccalendarid,jdbcType=INTEGER}
+  </update>
+</mapper>

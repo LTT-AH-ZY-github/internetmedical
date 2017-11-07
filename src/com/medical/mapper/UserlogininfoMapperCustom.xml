@@ -88,8 +88,8 @@
       <if test="userloginpix != null" >
         userLoginPix,
       </if>
-      <if test="userlogincid != null" >
-        userLoginCId,
+      <if test="userloginchannelid != null" >
+        userLoginChannelId,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -100,7 +100,7 @@
         #{userloginname,jdbcType=VARCHAR},
       </if>
       <if test="userloginphone != null" >
-        #{userloginphone,jdbcType=VARCHAR},
+        #{userloginphone,jdbcType=CHAR},
       </if>
       <if test="userloginpwd != null" >
         #{userloginpwd,jdbcType=VARCHAR},
@@ -153,8 +153,8 @@
       <if test="userloginpix != null" >
         #{userloginpix,jdbcType=VARCHAR},
       </if>
-      <if test="userlogincid != null" >
-        #{userlogincid,jdbcType=VARCHAR},
+      <if test="userloginchannelid != null" >
+        #{userloginchannelid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

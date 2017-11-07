@@ -25,7 +25,7 @@
     <result column="docLoginIp" property="docloginip" jdbcType="VARCHAR" />
     <result column="docLoginType" property="doclogintype" jdbcType="BIT" />
     <result column="docLoginPix" property="docloginpix" jdbcType="VARCHAR" />
-    <result column="docLoginCId" property="doclogincid" jdbcType="VARCHAR" />
+    <result column="docLoginChannelId" property="docloginchannelid" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -89,7 +89,7 @@
     docLoginId, docLoginName, docLoginPhone, docLoginPwd, docLoginSalt, docLoginToken, 
     docLoginDld, docLoginTime, docLoginLon, docLoginLat, docLoginLoc, docLoginProvince, 
     docLoginCity, docLoginArea, docLoginOther, docLoginDev, docLoginBVer, docLoginModel, 
-    docLoginPVer, docLoginMac, docLoginIp, docLoginType, docLoginPix, docLoginCId
+    docLoginPVer, docLoginMac, docLoginIp, docLoginType, docLoginPix, docLoginChannelId
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.DoctorlogininfoExample" >
     select
@@ -129,7 +129,7 @@
       docLoginCity, docLoginArea, docLoginOther, 
       docLoginDev, docLoginBVer, docLoginModel, 
       docLoginPVer, docLoginMac, docLoginIp, 
-      docLoginType, docLoginPix, docLoginCId
+      docLoginType, docLoginPix, docLoginChannelId
       )
     values (#{docloginid,jdbcType=INTEGER}, #{docloginname,jdbcType=VARCHAR}, #{docloginphone,jdbcType=VARCHAR}, 
       #{docloginpwd,jdbcType=VARCHAR}, #{docloginsalt,jdbcType=VARCHAR}, #{doclogintoken,jdbcType=VARCHAR}, 
@@ -138,7 +138,7 @@
       #{doclogincity,jdbcType=VARCHAR}, #{docloginarea,jdbcType=VARCHAR}, #{docloginother,jdbcType=VARCHAR}, 
       #{doclogindev,jdbcType=VARCHAR}, #{docloginbver,jdbcType=VARCHAR}, #{docloginmodel,jdbcType=VARCHAR}, 
       #{docloginpver,jdbcType=VARCHAR}, #{docloginmac,jdbcType=VARCHAR}, #{docloginip,jdbcType=VARCHAR}, 
-      #{doclogintype,jdbcType=BIT}, #{docloginpix,jdbcType=VARCHAR}, #{doclogincid,jdbcType=VARCHAR}
+      #{doclogintype,jdbcType=BIT}, #{docloginpix,jdbcType=VARCHAR}, #{docloginchannelid,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Doctorlogininfo" >
@@ -213,8 +213,8 @@
       <if test="docloginpix != null" >
         docLoginPix,
       </if>
-      <if test="doclogincid != null" >
-        docLoginCId,
+      <if test="docloginchannelid != null" >
+        docLoginChannelId,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -287,8 +287,8 @@
       <if test="docloginpix != null" >
         #{docloginpix,jdbcType=VARCHAR},
       </if>
-      <if test="doclogincid != null" >
-        #{doclogincid,jdbcType=VARCHAR},
+      <if test="docloginchannelid != null" >
+        #{docloginchannelid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -370,8 +370,8 @@
       <if test="record.docloginpix != null" >
         docLoginPix = #{record.docloginpix,jdbcType=VARCHAR},
       </if>
-      <if test="record.doclogincid != null" >
-        docLoginCId = #{record.doclogincid,jdbcType=VARCHAR},
+      <if test="record.docloginchannelid != null" >
+        docLoginChannelId = #{record.docloginchannelid,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -403,7 +403,7 @@
       docLoginIp = #{record.docloginip,jdbcType=VARCHAR},
       docLoginType = #{record.doclogintype,jdbcType=BIT},
       docLoginPix = #{record.docloginpix,jdbcType=VARCHAR},
-      docLoginCId = #{record.doclogincid,jdbcType=VARCHAR}
+      docLoginChannelId = #{record.docloginchannelid,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -477,8 +477,8 @@
       <if test="docloginpix != null" >
         docLoginPix = #{docloginpix,jdbcType=VARCHAR},
       </if>
-      <if test="doclogincid != null" >
-        docLoginCId = #{doclogincid,jdbcType=VARCHAR},
+      <if test="docloginchannelid != null" >
+        docLoginChannelId = #{docloginchannelid,jdbcType=VARCHAR},
       </if>
     </set>
     where docLoginId = #{docloginid,jdbcType=INTEGER}
@@ -507,7 +507,7 @@
       docLoginIp = #{docloginip,jdbcType=VARCHAR},
       docLoginType = #{doclogintype,jdbcType=BIT},
       docLoginPix = #{docloginpix,jdbcType=VARCHAR},
-      docLoginCId = #{doclogincid,jdbcType=VARCHAR}
+      docLoginChannelId = #{docloginchannelid,jdbcType=VARCHAR}
     where docLoginId = #{docloginid,jdbcType=INTEGER}
   </update>
 </mapper>

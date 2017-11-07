@@ -43,7 +43,7 @@ public class Userlogininfo {
 
     private String userloginpix;
 
-    private String userlogincid;
+    private String userloginchannelid;
 
     public Integer getUserloginid() {
         return userloginid;
@@ -205,11 +205,11 @@ public class Userlogininfo {
         this.userloginpix = userloginpix == null ? null : userloginpix.trim();
     }
 
-    public String getUserlogincid() {
-        return userlogincid;
+    public String getUserloginchannelid() {
+        return userloginchannelid;
     }
 
-    public void setUserlogincid(String userlogincid) {
-        this.userlogincid = userlogincid == null ? null : userlogincid.trim();
+    public void setUserloginchannelid(String userloginchannelid) {
+        this.userloginchannelid = userloginchannelid == null ? null : userloginchannelid.trim();
     }
 }

@@ -33,8 +33,16 @@
 		</tx:attributes>
 	</tx:advice>
 	<!-- aop -->
-	 <aop:config>
+	 <!-- <aop:config>
 		<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.medical.service.impl.*.*(..))"/>
+	</aop:config> -->
+	<aop:config>  
+	    <aop:pointcut id="TransicationTestService1" expression="execution(* com.medical.service.impl.*.*(..))" />  
+	    <aop:pointcut id="TransicationTestService2" expression="execution(* com.medical.service.impl.user.*.*(..))" />
+	    <aop:pointcut id="TransicationTestService3" expression="execution(* com.medical.service.impl.hospital.*.*(..))" />    
+	   	<aop:advisor pointcut-ref="TransicationTestService1" advice-ref="txAdvice"/>  
+	    <aop:advisor pointcut-ref="TransicationTestService2" advice-ref="txAdvice"/>  
+	    <aop:advisor pointcut-ref="TransicationTestService3" advice-ref="txAdvice"/> 
+	      
 	</aop:config>
-
 </beans>

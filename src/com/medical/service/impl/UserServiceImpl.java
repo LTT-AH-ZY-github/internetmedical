@@ -16,17 +16,22 @@ import org.apache.catalina.User;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.ls.LSInput;
 
 import com.baidu.yun.push.utils.PushToAndroid;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.huanxin.utils.UserManger;
 import com.medical.interceptor.MapTokenManager;
 import com.medical.interceptor.TokenModel;
 import com.medical.mapper.CityMapper;
 import com.medical.mapper.CityMapperCustom;
+import com.medical.mapper.DoctorcommentMapper;
+import com.medical.mapper.DoctorcommentMapperCustom;
 import com.medical.mapper.DoctorinfoMapper;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
@@ -35,6 +40,7 @@ import com.medical.mapper.DoctorskdMapper;
 import com.medical.mapper.DoctorskdMapperCustom;
 import com.medical.mapper.FamilyinfoMapper;
 import com.medical.mapper.FamilyinfoMapperCustom;
+import com.medical.mapper.HospitalcommentMapper;
 import com.medical.mapper.PreorderMapper;
 import com.medical.mapper.PreorderMapperCustom;
 import com.medical.mapper.UserinfoMapper;
@@ -48,10 +54,12 @@ import com.medical.mapper.UserorderMapper;
 import com.medical.mapper.UserorderMapperCustom;
 import com.medical.po.City;
 import com.medical.po.DoctorSearch;
+import com.medical.po.Doctorcomment;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
 import com.medical.po.Doctorskd;
 import com.medical.po.Familyinfo;
+import com.medical.po.Hospitalcomment;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Preorder;
 import com.medical.po.Userinfo;
@@ -61,6 +69,7 @@ import com.medical.po.UserlogininfoCustom;
 import com.medical.po.Userorder;
 import com.medical.po.Usersick;
 import com.medical.po.UsersickCustom;
+import com.medical.service.iface.CommonService;
 import com.medical.service.DoctorService;
 import com.medical.service.UserService;
 import com.medical.utils.CommonUtils;
@@ -116,6 +125,14 @@ public class UserServiceImpl implements UserService {
 	private UserorderMapper userorderMapper;
 	@Autowired
 	private UserorderMapperCustom userorderMapperCustom;
+	@Autowired
+	private DoctorcommentMapper doctorcommentMapper;
+	@Autowired
+	private HospitalcommentMapper hospitalcommentMapper;
+	@Autowired
+	private DoctorcommentMapperCustom doctorcommentMapperCustom;
+	@Autowired
+	private CommonService commonService;
 	
 	Logger logger = Logger.getLogger(UserService.class);
 	
@@ -123,19 +140,25 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int findUserCount(String phone){
 		try {
-			// 查询用户登录表
-			int count = userlogininfoMapperCustom.findUserCountByPhone(phone);
-			if (count== 0) {
+			// 查询医生登录表
+			int doctorCount = doctorlogininfoMapperCustom.findDocCountByPhone(phone);
+			// 查询病人登录表
+			int userCount = userlogininfoMapperCustom.findUserCountByPhone(phone);
+			if (doctorCount == 0 && userCount==0) {
 				// 未注册
 				return 1; 
 			} else {
-				// 已注册
-				return 2; 
+				if (userCount>0) {
+					//在病人端已注册
+					return 2; 
+				} else {
+					// 在医生端已注册
+					return 3; 
+				}
 			}
 		} catch (Exception e) {
-			//  操作异常
-			logger.error("判断手机号码是否注册异常"+e);
-			return 3; 
+			logger.error("验证手机号码异常"+e);
+			return 4; 
 		}
 	}
 
@@ -143,26 +166,34 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int createUser(String phone, String password,String code) throws Exception {
 		try {
-			int count = userlogininfoMapperCustom.findUserCountByPhone(phone);
-			if (count==0) {
+			// 查询医生登录表
+			int doctorCount = doctorlogininfoMapperCustom.findDocCountByPhone(phone);
+			// 查询病人登录表
+			int userCount = userlogininfoMapperCustom.findUserCountByPhone(phone);
+			if (doctorCount==0 && userCount==0) {
 				//if (MsgCode.checkMsg(phone, code)) {
 				if (true) {
 					//用户登录信息
 					Userlogininfo userlogininfo = new Userlogininfo();
 					userlogininfo.setUserloginphone(phone);
 					String[] str = MD5Util.generate(password);
-					userlogininfo.setUserloginpwd(str[0]); //md5值密码
-					userlogininfo.setUserloginsalt(str[1]); //salt值
+					 //md5值密码
+					userlogininfo.setUserloginpwd(str[0]);
+					//salt值
+					userlogininfo.setUserloginsalt(str[1]); 
 					userlogininfo.setUserlogintype(false);
 					userlogininfo.setUserloginpix("1.jpg");
-					userlogininfo.setUserloginname(phone);
+					String phoneNumber = phone.substring(0, 3) + "****" + phone.substring(7, phone.length());
+					userlogininfo.setUserloginname(phoneNumber);
 					// 写入用户登录表
 					int result = userlogininfoMapperCustom.insertSelectiveReturnId(userlogininfo);
+					int i= 1/0;
 					Userinfo userinfo = new Userinfo();
 					userinfo.setUserloginid(userlogininfo.getUserloginid());
 					userinfo.setUserphone(phone);
 					//用户信息表
 					int infoResult = userinfoMapper.insertSelective(userinfo);
+					UserManger.register(phone, password);
 					if (result >0 && infoResult>0) {
 						return 1; // 注册成功
 					} else {
@@ -193,7 +224,6 @@ public class UserServiceImpl implements UserService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		//用户日志表
 		Userlog userlog = new Userlog();
-		//userlog.setUserloginid(userlogininfoCustom.getUserloginid());
 		userlog.setUserlogip(userlogininfoCustom.getUserloginip());
 		userlog.setUserlogtime(new Date());
 		userlog.setUserloglat(userlogininfoCustom.getUserloginlat());
@@ -219,9 +249,11 @@ public class UserServiceImpl implements UserService {
 								mapTokenManager.setTokenTime(new Date().getTime(), 30)); // token 过期时间 30天
 						userlogininfoCustom.setUserlogintoken(tokenModel.getToken());
 						userlogininfoCustom.setUserlogindld(tokenModel.getTime());
+						userlogininfoCustom.setUserlogintime(new Date());
 						// 更新登录信息
-						int upResult = userlogininfoMapper.updateByPrimaryKeySelective(userlogininfoCustom);// 更新登录信息
-						int inResult = userlogMapper.insertSelective(userlog);// 生成登录日志
+						int upResult = userlogininfoMapper.updateByPrimaryKeySelective(userlogininfoCustom);
+						// 生成登录日志
+						int inResult = userlogMapper.insertSelective(userlog);
 						if (upResult == 1 && inResult == 1) {
 							map.put("state", "1");// 登录成功
 							map.put("token", tokenModel.getToken());
@@ -236,9 +268,11 @@ public class UserServiceImpl implements UserService {
 					} else { // 有token 自动登录
 						int result = mapTokenManager.checkToken(acceptedToken);
 						if (result == 1) {
-							map.put("state", "3");// 当前token不存在
+							// 当前token不存在
+							map.put("state", "3");
 						} else if (result == 2) {
-							map.put("state", "4");// token已过期
+							// token已过期
+							map.put("state", "4");
 						} else if (result == 3) {
 							 // token延期30天  
 							long time = mapTokenManager.addTokenTime(acceptedToken, 30);
@@ -248,7 +282,7 @@ public class UserServiceImpl implements UserService {
 							int upResult = userlogininfoMapper.updateByPrimaryKeySelective(userlogininfoCustom);
 							// 生成登录日志
 							int inResult = userlogMapper.insertSelective(userlog);
-							if (upResult == 1 && inResult == 1) {
+							if (upResult > 0 && inResult >0) {
 								map.put("token", acceptedToken);
 								map.put("state", "5"); // 登录成功
 								map.put("username", user.getUserloginname());
@@ -256,21 +290,25 @@ public class UserServiceImpl implements UserService {
 								map.put("type", user.getUserlogintype());
 								map.put("id", user.getUserloginid());
 							} else {
+								// 登录失败
 								TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-								map.put("state", "6"); // 登录失败
+								map.put("state", "6"); 
 							}
 						}
 					}
 				} else {
-					map.put("state", "7"); // 用户账号密码不匹配
+					// 用户账号密码不匹配
+					map.put("state", "7"); 
 				}
 				
 			} else {
-				map.put("state", "8"); // 该号码未注册
+				// 该号码未注册
+				map.put("state", "8"); 
 			}
 		} catch (Exception e) {
+			logger.error("用户登录"+e);
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			map.put("state", "9"); // 操作异常
+			map.put("state", "9"); 
 		}
 		return map;
 	}
@@ -282,13 +320,8 @@ public class UserServiceImpl implements UserService {
 		try {
 				Userlogininfo list = userlogininfoMapper.selectByPrimaryKey(userloginid);
 				if(list!=null) {
-					if (list.getUserlogintoken()!=null && list.getUserlogintoken().trim()!="") {
-						mapTokenManager.deleteToken(list.getUserlogintoken());
-						return 1; //退出成功
-					}else {
-						return 2; // token为空
-					}
-					
+					mapTokenManager.deleteToken(list.getUserlogintoken());
+					return 1;
 				}else {
 					return 3; // 该id对应的记录为空
 				}
@@ -574,16 +607,8 @@ public class UserServiceImpl implements UserService {
 			Integer age =  familyinfo.getFamilyage();
 			String male = familyinfo.getFamilymale();
 			String name =  familyinfo.getFamilyname();
-			List<Familyinfo> lists = familyinfoMapperCustom.selectByUserLoginIdAndType(familyinfo.getUserloginid(), 0);
-			boolean type =  false;
-			for (Familyinfo list :lists) {
-				if (age==list.getFamilyage()&&male.equals(list.getFamilymale())&&name.equals(list.getFamilymale())) {
-					type = true;
-					break;
-				}
-				
-			}
-			if (!type) {
+			List<Familyinfo> lists = familyinfoMapperCustom.selectByUserLoginIdAndInfo(familyinfo);
+			if (lists.size()==0) {
 				int result = familyinfoMapperCustom.insertReturnId(familyinfo);
 				if (result > 0) {
 					return 1;
@@ -663,22 +688,25 @@ public class UserServiceImpl implements UserService {
 		
 	}
 	
-	//获取全部病情
+	//按type获取病情
 	@Override
 	public Map<String, Object> findSicks(Integer userloginid,Integer type) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			List<Map<String, Object>> list = usersickMapperCustom.selectAllInfoByUserLoginId(userloginid,type);
-			if (list!=null) {
+			if (list!=null && list.size()>0) {
+				// 获取成功
 				map.put("state", "1");
-				map.put("data", list);// 获取成功
+				map.put("data", list);
 			}else {
-				map.put("state", "2"); //数据为空
+				//数据为空
+				map.put("state", "2"); 
 			}
 			
 		} catch (Exception e) {
+			logger.error("按type获取病情"+e);
 			e.printStackTrace();
-			map.put("state", "3"); // 异常错误
+			map.put("state", "3"); 
 		}
 		return map;
 	}
@@ -707,26 +735,30 @@ public class UserServiceImpl implements UserService {
 	public int deleteSick(Integer usersickid) throws Exception {
 		try {
 			Usersick usersick = usersickMapper.selectByPrimaryKey(usersickid);
-			Integer stateid =  usersick.getUsersickstateid();
-			if (stateid<3) {
-				//发布状态 删除预订单提交医生
-				if (stateid==2) {
-					preorderMapperCustom.deleteByUserSickId(usersickid);
+			Integer stateid = usersick.getUsersickstateid();
+			if (stateid < 3) {
+				// 发布状态 删除相关医生
+				if (stateid == 2) {
+					preorderMapperCustom.deleteAllByUserSickId(usersickid);
 				}
 				int result = usersickMapper.deleteByPrimaryKey(usersickid);
 				if (result > 0) {
-					return 1; // 删除成功
+					return 1; // 删除病情成功
 				} else {
-					return 2; // 删除失败
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					logger.error("删除病情失败");
+					return 2; // 删除病情失败
 				}
 			} else {
-				//该状态不支持删除
+				// 该状态不支持删除
 				return 3;
-			
+
 			}
-			
 		} catch (Exception e) {
-			return 4; // 操作异常
+			//异常错误
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			logger.error("删除病情异常错误"+e);
+			return 4;
 		}
 	}
 
@@ -761,53 +793,59 @@ public class UserServiceImpl implements UserService {
 			Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
 			if (user!=null) {
 				Usersick usersick = new Usersick();
-				
-				//真实路径
-				String reallyDir ="D:\\\\upload\\\\user\\\\"+userloginid+"\\\\sick\\\\";
-				//保存到数据库的路径
-				String virtualDir = "user/"+userloginid+"/sick/";
-				boolean state = CreateFileUtil.createDir(reallyDir);
-				if (state) {
-					String fileName = "";
-					// 图片重命名及保存
-					for (int i = 0; i < pictureFile.length; i++) {
-						String name = CommonUtils.randomFileName();
-						String ext = "jpg";
-						String file =name + "." + ext;
-						String reallyPath = reallyDir + file;
-						String virtualPath = virtualDir+file;
-					    pictureFile[i].transferTo(new File(reallyPath));
-						if (i != pictureFile.length - 1) {
-							fileName += virtualPath + ",";
-						} else {
-							fileName += virtualPath;
+				boolean type = user.getUserlogintype();
+				//测试
+				if (true) {
+					//真实路径
+					String reallyDir ="D:\\\\upload\\\\user\\\\"+userloginid+"\\\\sick\\\\";
+					//保存到数据库的路径
+					String virtualDir = "user/"+userloginid+"/sick/";
+					boolean state = CreateFileUtil.createDir(reallyDir);
+					if (state) {
+						String fileName = "";
+						// 图片重命名及保存
+						for (int i = 0; i < pictureFile.length; i++) {
+							String name = CommonUtils.randomFileName();
+							String ext = "jpg";
+							String file =name + "." + ext;
+							String reallyPath = reallyDir + file;
+							String virtualPath = virtualDir+file;
+						    pictureFile[i].transferTo(new File(reallyPath));
+							if (i != pictureFile.length - 1) {
+								fileName += virtualPath + ",";
+							} else {
+								fileName += virtualPath;
+							}
 						}
-					}
-					System.out.println("照片"+fileName);
-					usersick.setUsersickpic(fileName);
-					usersick.setFamilyid(usersickCustom.getFamilyid());
-					usersick.setUserloginid(user.getUserloginid());
-					usersick.setUsersickprimarydept(usersickCustom.getUsersickprimarydept());
-					usersick.setUsersickseconddept(usersickCustom.getUsersickseconddept());
-					usersick.setUsersickdesc(usersickCustom.getUsersickdesc());
-					usersick.setUsersicktime(new Date());
-					int result = usersickMapperCustom.insertSelectiveReturnId(usersick);
-					if (result>0) {
-						return 1;
+						System.out.println("照片"+fileName);
+						usersick.setUsersickpic(fileName);
+						usersick.setFamilyid(usersickCustom.getFamilyid());
+						usersick.setUserloginid(user.getUserloginid());
+						usersick.setUsersickprimarydept(usersickCustom.getUsersickprimarydept());
+						usersick.setUsersickseconddept(usersickCustom.getUsersickseconddept());
+						usersick.setUsersickdesc(usersickCustom.getUsersickdesc());
+						usersick.setUsersicktime(new Date());
+						int result = usersickMapperCustom.insertSelectiveReturnId(usersick);
+						if (result>0) {
+							return 1;
+						}else {
+							return 2; //插入失败
+						}
 					}else {
-						return 2; //插入失败
+						//创建路径失败
+						return 3; 
 					}
 				}else {
-					//创建路径失败
-					return 3; 
+					return 4;  // 当前用户未审核，不可发布病情
 				}
 				
+				
 			}else {
-				return 4;  // id对应的记录为空
+				return 5;  // id对应的记录为空
 			}
 		} catch (Exception e) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			return 5; // 异常错误
+			return 6; // 异常错误
 		}
 	}
 	
@@ -817,11 +855,11 @@ public class UserServiceImpl implements UserService {
 		try {
 			int usersickid = usersickCustom.getUsersickid();
 			Usersick sick = usersickMapper.selectByPrimaryKey(usersickid);
+			int userloginid = sick.getUserloginid();
 			// id对应病情不为空
 			if (sick != null) {
 				int userSickStateId = sick.getUsersickstateid();
-				if (userSickStateId == 1) {
-					int userloginid = sick.getUserloginid();
+				if (userSickStateId == 1 ) {
 					Usersick usersick = new Usersick();
 					usersick.setUsersickid(usersickid);
 					if (pictureFile.length != 0) {
@@ -832,7 +870,10 @@ public class UserServiceImpl implements UserService {
 						boolean state = CreateFileUtil.createDir(reallyDir);
 						// 路径创建成功
 						if (state) {
-							String fileName = usersick.getUsersickpic();
+							String fileName = "";
+							if (usersick.getUsersickpic()!=null) {
+								fileName = usersick.getUsersickpic();
+							} 
 							if (fileName!=null) {
 								fileName += ",";
 							}else {
@@ -895,7 +936,7 @@ public class UserServiceImpl implements UserService {
 	
 	//获取医生  列表模式
 	@Override
-	public Map<String, Object> findDoctors(DoctorSearch doctorSearch) throws Exception {
+	public Map<String, Object> listDoctor(DoctorSearch doctorSearch){
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			/*Integer pageNo = pageNo == null ? 1 : pageNo;
@@ -927,26 +968,31 @@ public class UserServiceImpl implements UserService {
 			Map<String, Object> doctor = doctorinfoMapperCustom.findDoctorByDocLoginId(docloginid);
 			if (doctor != null) {
 				Doctorskd doctorskd = doctorskdMapperCustom.selectByDocLoginId((Integer)doctor.get("docloginid"));
-				int[] arr = { doctorskd.getMonam(), doctorskd.getTueam(), doctorskd.getWedam(), doctorskd.getThuam(),
-						doctorskd.getFriam(), doctorskd.getSatam(), doctorskd.getSunam(), doctorskd.getMonpm(),
-						doctorskd.getTuepm(), doctorskd.getWedpm(), doctorskd.getThupm(), doctorskd.getFripm(),
-						doctorskd.getSatpm(), doctorskd.getSunpm() };
-				doctor.put("doctorskd", arr);
+				if (doctorskd!=null) {
+					int[] arr = { doctorskd.getMonam(), doctorskd.getTueam(), doctorskd.getWedam(), doctorskd.getThuam(),
+							doctorskd.getFriam(), doctorskd.getSatam(), doctorskd.getSunam(), doctorskd.getMonpm(),
+							doctorskd.getTuepm(), doctorskd.getWedpm(), doctorskd.getThupm(), doctorskd.getFripm(),
+							doctorskd.getSatpm(), doctorskd.getSunpm() };
+					doctor.put("doctorskd", arr);
+				}else {
+					int[] arr = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+					doctor.put("doctorskd", arr);
+				}
 				map.put("state", "1"); // 获取成功
 				map.put("data", doctor);
 			} else {
 				map.put("state", "2"); // 获取数据为空
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			map.put("state", "3"); //操作异常
-
 		}
 		return map;
 	}
 
 	// 地图模式获取医生信息
 	@Override
-	public Map<String, Object> findDoctorsInMap(String arg1, String arg2, String arg3, String arg4) throws Exception {
+	public Map<String, Object> findDoctorsInMap(double arg1, double arg2, double arg3, double arg4) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			List<Map<String, Object>> resultMap= doctorinfoMapperCustom.findDoctorInfoInMap(arg1, arg2, arg3, arg4);
@@ -987,7 +1033,7 @@ public class UserServiceImpl implements UserService {
 	}*/
 	
 	// 获取单个医生日程安排
-	@Override
+	/*@Override
 	public Map<String, Object> getSchedule(Integer id) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
@@ -1008,14 +1054,14 @@ public class UserServiceImpl implements UserService {
 
 		}
 		return map;
-	}
+	}*/
 
 	
-	// 根据病情推荐医生
+	/*// 根据病情推荐医生
 	@Override
 	public int creatReDoctor(Integer userSickId,Date date ,String desc,String primaryDept,String secondDept) throws Exception {
 		try {
-			preorderMapperCustom.deleteByUserSickId(userSickId);
+			//preorderMapperCustom.deleteByUserSickId(userSickId);
 			DoctorSearch doctorSearch =new DoctorSearch();
 			doctorSearch.setPageNo(1);
 			doctorSearch.setPageSize(5);
@@ -1045,7 +1091,7 @@ public class UserServiceImpl implements UserService {
 			return 3;
 		}
 		
-	}
+	}*/
 	
 	//获取推荐医生
 	@Override
@@ -1083,7 +1129,7 @@ public class UserServiceImpl implements UserService {
 		}
 		return map;
 	}
-	//获取推荐医生详情
+	/*//获取推荐医生详情
 	@Override
 	public Map<String, Object> findReDoctorDetails(Integer preorderid) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -1107,7 +1153,7 @@ public class UserServiceImpl implements UserService {
 			map.put("state", "3"); // 操作异常
 		}
 		return map;
-	}
+	}*/
 	
 	//发布病情
 	@Override
@@ -1117,7 +1163,7 @@ public class UserServiceImpl implements UserService {
 			if (usersick!=null) {
 				int type = usersick.getUsersickstateid();
 				if (type==1) {
-					List<Map<String, Object>> maps = usersickMapperCustom.selectAllInfoByUserLoginId(usersick.getUserloginid(),1);
+					List<Map<String, Object>> maps = usersickMapperCustom.selectAllInfoByUserLoginId(usersick.getUserloginid(),null);
 					int state = 1;
 					for (Map<String, Object> map:maps) {
 						if ((int)map.get("usersickstateid")==2) {
@@ -1134,8 +1180,30 @@ public class UserServiceImpl implements UserService {
 						user.setUsersickstateid(2); // "2"为发布状态
 						user.setUsersickptime(new Date());
 						int result = usersickMapper.updateByPrimaryKeySelective(user);
-						int reDoctor = creatReDoctor(usersickid,usersick.getUsersicktime(),usersick.getUsersickdesc(), usersick.getUsersickprimarydept(),usersick.getUsersickseconddept());
-						if (result>0 && reDoctor>0) {
+						Map<String, Object> resultMap = commonService.listRecommendDoctors(usersick.getUsersickdesc(), usersick.getUsersickprimarydept(), usersick.getUsersickseconddept());
+						boolean flag = false;
+						if ("1".equals(resultMap.get("state"))) {
+							List<Doctorinfo> list = (List<Doctorinfo>) resultMap.get("data");
+							for (Doctorinfo doctorinfo : list) {
+								Preorder preorder = new Preorder();
+								preorder.setPreorderdocloginid(doctorinfo.getDocloginid());
+								preorder.setUsersickid(usersickid);
+								preorder.setPreordertype(1);
+								preorder.setPreordertime(new Date());
+								int preResult = preorderMapper.insertSelective(preorder);
+								if (preResult<=0) {
+									flag =true;
+									break;
+								} 
+							}
+							if (flag) {
+								TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+								
+							}
+						}else {
+							TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+						}
+						if (result>0) {
 							return 1; //请求成功
 						} else {
 							TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -1174,7 +1242,7 @@ public class UserServiceImpl implements UserService {
 					user.setUsersickid(userSickId);
 					user.setUsersickstateid(1); // "1"为草稿
 					int result = usersickMapper.updateByPrimaryKeySelective(user);
-					preorderMapperCustom.deleteByUserSickId(userSickId);
+					preorderMapperCustom.deleteAllByUserSickId(userSickId);
 					if (result>0) {
 						return 1; //请求成功
 					} else {
@@ -1278,9 +1346,11 @@ public class UserServiceImpl implements UserService {
 					usersick.setUsersickid(usersickid);
 					usersick.setUserorderid(userorder.getUserorderid());
 					usersick.setUsersickstateid(3); //已生成订单
+					//删除已生成订单医生的预订单记录
+					int	delResult = preorderMapperCustom.deleteByDocLoginIdAndUserSickId(docloginid, usersickid);
 					// 更新病情信息
 					int upResult =usersickMapper.updateByPrimaryKeySelective(usersick);
-					if (result>0 && upResult>0) {
+					if (result>0 && upResult>0 && delResult>0) {
 						return 1; //成功
 					} else {
 						TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -1318,11 +1388,11 @@ public class UserServiceImpl implements UserService {
 				Integer loginid = user.getUserloginid();
 				if (userLoginId==loginid) {
 					int state = user.getUserorderstateid();
-					if (state<=4) {
+					if (state<=3) {
 						Userorder userorder = new Userorder();
 						userorder.setUserorderid(userOrderId);
 						userorder.setUserorderetime(new Date());
-						userorder.setUserorderstateid(8); //病人取消订单
+						userorder.setUserorderstateid(14); //病人取消订单
 						Usersick usersick = new Usersick();
 						usersick.setUsersickid(user.getUsersickid());
 						usersick.setUserorderid(0); //无订单
@@ -1384,13 +1454,13 @@ public class UserServiceImpl implements UserService {
 	public Map<String, Object> getOrderAllInfo(Integer userOrderId) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			Map<String, Object> order = userorderMapperCustom.selectAllInfoByUserOrderId(userOrderId);
+			/*Map<String, Object> order = userorderMapperCustom.selectAllInfoByUserOrderId(userOrderId);
 			if (order != null) {
 				map.put("state", "1");
 				map.put("data", order);
 			} else {
 				map.put("state", "2");
-			}
+			}*/
 
 		} catch (Exception e) {
 			map.put("state", "3");
@@ -1411,7 +1481,8 @@ public class UserServiceImpl implements UserService {
 				if (state==2) {
 					Userorder userorder = new Userorder();
 		    		userorder.setUserorderid(userOrderId);
-		    		userorder.setUserorderstateid(3); // 待付款
+		    		//userorder.setUserorderstateid(3); // 待付款
+		    		userorder.setUserorderstateid(4); // 等待就诊
 					int result = userorderMapper.updateByPrimaryKeySelective(userorder);
 					if (result>0) {
 						/*Userorder info= userorderMapper.selectByPrimaryKey(userOrderId);
@@ -1493,13 +1564,89 @@ public class UserServiceImpl implements UserService {
 			return 5;
 		}
     }*/
-    //获取历史订单
+
 	@Override
-	public Map<String, Object> listOldOrders(Integer userloginid,Integer pageNo,Integer pageSize) {
+	public int insertEvaluate(Integer userorderid, Integer userloginid, Integer doccommentservicelevel,
+			Integer doccommentprofessionallevel, Integer doccommentpricelevel, String doccommentwords,
+			Integer hospcommentservicelevel, Integer hospcommentenvironmenlevel, Integer hospcommentpricelevel,
+			String hospcommentwords) {
+		try {
+			Userorder userorder = userorderMapperCustom.selectByUserLoginIdAndUserOrderId(userloginid, userorderid);
+			if (userorder!=null) {
+				int userorderstateid = userorder.getUserorderstateid(); 
+				//订单结束，可以评价
+				if (userorderstateid==9) {
+						Boolean userOrderHState = userorder.getUserorderhstate();
+						if (userOrderHState==null) {
+							userOrderHState=false;
+						}
+						Doctorcomment doctorcomment = new Doctorcomment();
+						doctorcomment.setDoccommentpricelevel(doccommentpricelevel);
+						doctorcomment.setDoccommentprofessionallevel(doccommentprofessionallevel);
+						doctorcomment.setDoccommentservicelevel(doccommentservicelevel);
+						doctorcomment.setDoccommentwords(doccommentwords);
+						doctorcomment.setUserorderid(userorderid);
+						doctorcomment.setUserloginid(userloginid);
+						doctorcomment.setDocloginid(userorder.getUserorderdocloginid());
+						doctorcomment.setDoccommenttime(new Date());
+						int docResult = doctorcommentMapper.insertSelective(doctorcomment);
+						if (docResult<=0) {
+							//对医生评论失败
+							return 2;
+						}
+						if(userOrderHState) {
+							Hospitalcomment hospitalcomment = new Hospitalcomment();
+							hospitalcomment.setHospcommentenvironmenlevel(hospcommentenvironmenlevel);
+							hospitalcomment.setHospcommentpricelevel(hospcommentpricelevel);
+							hospitalcomment.setHospcommentservicelevel(hospcommentservicelevel);
+							hospitalcomment.setHospcommentwords(hospcommentwords);
+							hospitalcomment.setHosploginid(userorder.getUserorderhospid());
+							hospitalcomment.setUserloginid(userloginid);
+							hospitalcomment.setUserorderid(userorderid);
+							hospitalcomment.setHospcommenttime(new Date());
+							int hospResult = hospitalcommentMapper.insertSelective(hospitalcomment);
+							if (docResult<=0) {
+								//对医院评论失败
+								TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+								return 3;
+							}
+							
+						}
+						Userorder order = new Userorder();
+						order.setUserorderid(userorderid);
+						order.setUserorderstateid(10);
+						int userResult = userorderMapper.updateByPrimaryKeySelective(order);
+						if (userResult>0) {
+							//评论成功
+							return 1;
+						} else {
+							//更新订单状态失败
+							return 4;
+						}
+				}else {
+					//该订单状态不支持评价
+					return 5;
+				}
+				
+			}else {
+				//该订单不属于该用户
+				return 6;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return 7;
+		}
+		
+	}
+
+	@Override
+	public Map<String, Object> getEvaluation(Integer docloginid,Integer pageNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			PageHelper.startPage(pageNo, pageSize);
-			List<Map<String, Object>> list = userorderMapperCustom.selectByUserLoginId(userloginid);
+		
+			PageHelper.startPage(pageNo,5 );
+			List<Map<String, Object>> list = doctorcommentMapperCustom.selectByDocLoginId(docloginid);
 			PageInfo<Map<String, Object>> page = new PageInfo<Map<String, Object>>(list);
 			if (page.getTotal()>0) {
 				// 获取数据成功
@@ -1509,9 +1656,116 @@ public class UserServiceImpl implements UserService {
 				map.put("state", "2");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			map.put("state", "3");
 		}
 		return map;
+	}
+
+	@Override
+	public int updateLocation(Integer userloginid, String userloginlon, String userloginlat) {
+		try {
+			Userlogininfo userlogininfo = new Userlogininfo();
+			userlogininfo.setUserloginid(userloginid);
+			userlogininfo.setUserloginlat(userloginlat);
+			userlogininfo.setUserloginlon(userloginlon);
+			int result = userlogininfoMapper.updateByPrimaryKeySelective(userlogininfo);
+			if (result>0) {
+				return 1;
+			} else {
+				return 2;
+			}
+		} catch (Exception e) {
+			return 3;
+		}
+	}
+	
+	//重新发布病情
+	@Override
+	public int updateSickToPublishAgain(Integer usersickid ,Integer userloginid) {
+		try {
+			Usersick sick = usersickMapper.selectByPrimaryKey(usersickid);
+			if (sick != null) {
+				int user = sick.getUserloginid();
+				int stateid = sick.getUsersickid();
+				if (userloginid==user) {
+					if (stateid==4) {
+						Usersick usersick = new Usersick();
+						usersick.setUsersickid(usersickid);
+						usersick.setUsersickstateid(2);
+						usersick.setUsersickptime(new Date());
+						preorderMapperCustom.deleteAllByUserSickId(usersickid);
+						int result = usersickMapper.updateByPrimaryKeySelective(usersick);
+						Map<String, Object> resultMap = commonService.listRecommendDoctors(sick.getUsersickdesc(), sick.getUsersickprimarydept(), sick.getUsersickseconddept());
+						boolean flag = false;
+						if ("1".equals(resultMap.get("state"))) {
+							List<Doctorinfo> list = (List<Doctorinfo>) resultMap.get("data");
+							for (Doctorinfo doctorinfo : list) {
+								Preorder preorder = new Preorder();
+								preorder.setPreorderdocloginid(doctorinfo.getDocloginid());
+								preorder.setUsersickid(usersickid);
+								preorder.setPreordertype(1);
+								preorder.setPreordertime(new Date());
+								int preResult = preorderMapper.insertSelective(preorder);
+								if (preResult<=0) {
+									flag =true;
+									break;
+								} 
+							}
+							if (flag) {
+								TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+								return 3; //推荐医生失败
+							}
+						}else {
+							TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+							return 4; //推荐医生失败
+						}
+						if (result>0) {
+							return 1; //操作成功
+						} else {
+							TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+							return 2; // 更新数据错误
+						}
+					} else {
+						return 5; //该病情状态不支持重新发布
+					}
+							
+				} else {
+					return 6; //该病情不属于该用户
+				}
+				
+			}else {
+				return 7; //该病情不存在
+			}
+		} catch (Exception e) {
+			logger.error("病情重新发布出错"+e);
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return 8; //异常错误
+		}
+	}
+	@Override
+	public int updateChannelId(Integer userloginid, String channelid) {
+		try {
+			
+			Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
+			if (userlogininfo != null) {
+				Userlogininfo record = new Userlogininfo();
+				record.setUserloginid(userloginid);
+				record.setUserloginchannelid(channelid);
+				int result = userlogininfoMapper.updateByPrimaryKeySelective(record);
+				if (result>0) {
+					return 1;
+				} else {
+					return 2;
+				}
+				
+			}else {
+				return 3;
+			}
+		} catch (Exception e) {
+			logger.error("更新channelId异常"+e);
+			return 4;
+		}
 		
 	}
 

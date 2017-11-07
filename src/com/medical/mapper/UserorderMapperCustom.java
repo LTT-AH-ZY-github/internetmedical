@@ -12,16 +12,21 @@ public interface UserorderMapperCustom {
 
     int insertSelectiveReturnId(Userorder record);
 
-    List<Map<String, Object>> selectByUserLoginId(int id);
-    Map<String, Object>  selectAllInfoByUserOrderId(int id);
+    //List<Map<String, Object>> selectByUserLoginId(int id);
+    Map<String, Object>  selectAllInfoByUserLoginIdAndUserOrderId(Integer userloginid,Integer userorderid);
     Map<String, Object>  selectByDocLoginId(Integer id);
     //医生查询所有订单
     Map<String, Object> selectAllByDocLoginIdAndOrderType(Integer docLoginId, Integer type);
-    Map<String, Object> selectAllInfoByUserLoginIdAndStateId(Integer docLoginId, Integer type);
+    Map<String, Object> selectAllInfoByUserLoginIdAndStateId(Integer userLoginId, Integer type);
     //查询病人正在进行中的订单
     List<Map<String, Object>> selectAllInfoByUserLoginId(Integer userloginid, Integer type);
     //查询医生所有订单
     List<Map<String, Object>> listByDocLoginId(Integer docLoginId, Integer type);
     //获取医生订单详情
     Map<String, Object> selectAllInfoByUserOrderIdInDoc(Integer docLoginId,Integer userOrderId);
+    Userorder selectByDocLoginIdAndUserOrderId(Integer docLoginId,Integer userOrderId);
+    Userorder selectByUserLoginIdAndUserOrderId(Integer userLoginId,Integer userOrderId);
+
+	List<Map<String, Object>> listByHospLoginIdAnType(Integer hosploginid, Integer type);
+
 }

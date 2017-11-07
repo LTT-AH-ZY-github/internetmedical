@@ -1,6 +1,7 @@
 package com.medical.service;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.medical.po.DoctorCustom;
 import com.medical.po.DoctorSearch;
+import com.medical.po.Doctoraddress;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
 import com.medical.po.Doctorskd;
@@ -19,7 +21,7 @@ import com.medical.po.Userorder;
 public interface DoctorService {
 	
 	//手机号码是否注册
-	int findDocCountByPhone(String docLoginPhone) throws Exception;
+	int findDocCountByPhone(String docLoginPhone);
 	
 	// 医生注册
 	int createDoctor(String docLoginPhone, String magCode, String docLoginPwd);
@@ -49,14 +51,14 @@ public interface DoctorService {
 	Map<String, Object> creatPreOrder(int userSickId, int docLoginId, Double preorderdprice);
 	
 	//医生取消抢单
-	Map<String, Object> deletePreOrder(int preorderid);
+	Map<String, Object> deletePreOrder(Integer docloginid, Integer preorderid);
 	
 
 	Map<String, Object> updateOrderConfirm(Userorder userorder);
 
 	
 
-	int updateOrder(Userorder userorder) throws Exception;
+	//int updateOrder(Userorder userorder) throws Exception;
 
 	Map<String, Object> getSicks(SickSearch sickSearch) throws Exception;
 
@@ -115,6 +117,47 @@ public interface DoctorService {
 			String olddoctitlephoto, MultipartFile[] doctitlephoto, String olddocqualphoto,
 			MultipartFile[] docqualphoto, String olddocworkcardphoto, MultipartFile[] docworkcardphoto,
 			String olddocotherphoto, MultipartFile[] docotherphoto);
+	//医生结束订单
+	Map<String, Object> finishOrder(Integer docloginid, Integer userorderid, Boolean userorderhstate,
+			Integer userorderhospid);
+	//根据医生姓名获取医生
+	Map<String, Object> getDoctorByName(String docname);
+	//医生获取常用地址
+	Map<String, Object> getAddress(Integer docloginid, Integer page);
+	//医生添加常用地址
+	int addAddress(Doctoraddress doctoraddress);
+	//医生修改常用地址
+	int editAddress(Doctoraddress doctoraddress);
+	//医生删除常用地址
+	int delAddress(Integer docloginid, Integer docaddressid);
+	//医生获取日程表
+	Map<String, Object> getCalendar(Integer docloginid, Integer page);
+	//医生设置日程表
+	int addCalendar(Integer docloginid, Date doccalendarday, String doccalendartime, String doccalendaraffair,
+			Integer doccalendaradressid);
+	//医生更新日程表
+	int editCalendar(Integer doccalendarid, Integer docloginid, Date doccalendarday, String doccalendartime,
+			String doccalendaraffair, Integer doccalendaradressid);
+	//医生删除日程表
+	int deleteCalendar(Integer doccalendarid, Integer docloginid);
+	//医生设置坐诊地点
+	int updateAddress(Integer docloginid, Integer docaddressid);
+	//更新channelId
+	int updateChannelId(Integer docloginid, String channelid);
+
+	Map<String, Object> getDoctorDept(Integer docLoginId);
+
+	int setLocation(String time);
+
+	
+
+	
+
+	
+
+	
+
+	
 
 	
 

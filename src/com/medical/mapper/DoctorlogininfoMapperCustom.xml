@@ -26,6 +26,9 @@
       <if test="docloginpwd != null" >
         docLoginPwd,
       </if>
+      <if test="docloginsalt != null" >
+        docLoginSalt,
+      </if>
       <if test="doclogintoken != null" >
         docLoginToken,
       </if>
@@ -43,6 +46,18 @@
       </if>
       <if test="docloginloc != null" >
         docLoginLoc,
+      </if>
+      <if test="docloginprovince != null" >
+        docLoginProvince,
+      </if>
+      <if test="doclogincity != null" >
+        docLoginCity,
+      </if>
+      <if test="docloginarea != null" >
+        docLoginArea,
+      </if>
+      <if test="docloginother != null" >
+        docLoginOther,
       </if>
       <if test="doclogindev != null" >
         docLoginDev,
@@ -68,11 +83,8 @@
       <if test="docloginpix != null" >
         docLoginPix,
       </if>
-      <if test="doclogincid != null" >
-        docLoginCId,
-      </if>
-      <if test="docloginsalt != null" >
-        docLoginSalt,
+      <if test="docloginchannelid != null" >
+        docLoginChannelId,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -87,6 +99,9 @@
       </if>
       <if test="docloginpwd != null" >
         #{docloginpwd,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginsalt != null" >
+        #{docloginsalt,jdbcType=VARCHAR},
       </if>
       <if test="doclogintoken != null" >
         #{doclogintoken,jdbcType=VARCHAR},
@@ -105,6 +120,18 @@
       </if>
       <if test="docloginloc != null" >
         #{docloginloc,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginprovince != null" >
+        #{docloginprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogincity != null" >
+        #{doclogincity,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginarea != null" >
+        #{docloginarea,jdbcType=VARCHAR},
+      </if>
+      <if test="docloginother != null" >
+        #{docloginother,jdbcType=VARCHAR},
       </if>
       <if test="doclogindev != null" >
         #{doclogindev,jdbcType=VARCHAR},
@@ -130,11 +157,8 @@
       <if test="docloginpix != null" >
         #{docloginpix,jdbcType=VARCHAR},
       </if>
-      <if test="doclogincid != null" >
-        #{doclogincid,jdbcType=VARCHAR},
-      </if>
-      <if test="docloginsalt != null" >
-        #{docloginsalt,jdbcType=VARCHAR},
+      <if test="docloginchannelid != null" >
+        #{docloginchannelid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

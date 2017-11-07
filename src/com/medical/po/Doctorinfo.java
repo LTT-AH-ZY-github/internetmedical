@@ -57,19 +57,19 @@ public class Doctorinfo {
 
     private String docabs;
 
-    private String docloc;
+    private String docaddresslocation;
 
-    private String docadrprovince;
+    private String docaddressprovince;
 
-    private String docadrcity;
+    private String docaddresscity;
 
-    private String docadrarea;
+    private String docaddressarea;
 
-    private String docadrother;
+    private String docaddressother;
 
-    private String doclat;
+    private String docaddresslon;
 
-    private String doclon;
+    private String docaddresslat;
 
     private Integer docloginid;
 
@@ -289,60 +289,60 @@ public class Doctorinfo {
         this.docabs = docabs == null ? null : docabs.trim();
     }
 
-    public String getDocloc() {
-        return docloc;
+    public String getDocaddresslocation() {
+        return docaddresslocation;
     }
 
-    public void setDocloc(String docloc) {
-        this.docloc = docloc == null ? null : docloc.trim();
+    public void setDocaddresslocation(String docaddresslocation) {
+        this.docaddresslocation = docaddresslocation == null ? null : docaddresslocation.trim();
     }
 
-    public String getDocadrprovince() {
-        return docadrprovince;
+    public String getDocaddressprovince() {
+        return docaddressprovince;
     }
 
-    public void setDocadrprovince(String docadrprovince) {
-        this.docadrprovince = docadrprovince == null ? null : docadrprovince.trim();
+    public void setDocaddressprovince(String docaddressprovince) {
+        this.docaddressprovince = docaddressprovince == null ? null : docaddressprovince.trim();
     }
 
-    public String getDocadrcity() {
-        return docadrcity;
+    public String getDocaddresscity() {
+        return docaddresscity;
     }
 
-    public void setDocadrcity(String docadrcity) {
-        this.docadrcity = docadrcity == null ? null : docadrcity.trim();
+    public void setDocaddresscity(String docaddresscity) {
+        this.docaddresscity = docaddresscity == null ? null : docaddresscity.trim();
     }
 
-    public String getDocadrarea() {
-        return docadrarea;
+    public String getDocaddressarea() {
+        return docaddressarea;
     }
 
-    public void setDocadrarea(String docadrarea) {
-        this.docadrarea = docadrarea == null ? null : docadrarea.trim();
+    public void setDocaddressarea(String docaddressarea) {
+        this.docaddressarea = docaddressarea == null ? null : docaddressarea.trim();
     }
 
-    public String getDocadrother() {
-        return docadrother;
+    public String getDocaddressother() {
+        return docaddressother;
     }
 
-    public void setDocadrother(String docadrother) {
-        this.docadrother = docadrother == null ? null : docadrother.trim();
+    public void setDocaddressother(String docaddressother) {
+        this.docaddressother = docaddressother == null ? null : docaddressother.trim();
     }
 
-    public String getDoclat() {
-        return doclat;
+    public String getDocaddresslon() {
+        return docaddresslon;
     }
 
-    public void setDoclat(String doclat) {
-        this.doclat = doclat == null ? null : doclat.trim();
+    public void setDocaddresslon(String docaddresslon) {
+        this.docaddresslon = docaddresslon == null ? null : docaddresslon.trim();
     }
 
-    public String getDoclon() {
-        return doclon;
+    public String getDocaddresslat() {
+        return docaddresslat;
     }
 
-    public void setDoclon(String doclon) {
-        this.doclon = doclon == null ? null : doclon.trim();
+    public void setDocaddresslat(String docaddresslat) {
+        this.docaddresslat = docaddresslat == null ? null : docaddresslat.trim();
     }
 
     public Integer getDocloginid() {

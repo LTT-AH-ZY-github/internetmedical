@@ -29,13 +29,13 @@
     <result column="docOtherPhoto" property="docotherphoto" jdbcType="VARCHAR" />
     <result column="docAllDay" property="docallday" jdbcType="BIT" />
     <result column="docAbs" property="docabs" jdbcType="VARCHAR" />
-    <result column="docLoc" property="docloc" jdbcType="VARCHAR" />
-    <result column="docAdrProvince" property="docadrprovince" jdbcType="VARCHAR" />
-    <result column="docAdrCity" property="docadrcity" jdbcType="VARCHAR" />
-    <result column="docAdrArea" property="docadrarea" jdbcType="VARCHAR" />
-    <result column="docAdrOther" property="docadrother" jdbcType="VARCHAR" />
-    <result column="docLat" property="doclat" jdbcType="VARCHAR" />
-    <result column="docLon" property="doclon" jdbcType="VARCHAR" />
+    <result column="docAddressLocation" property="docaddresslocation" jdbcType="VARCHAR" />
+    <result column="docAddressProvince" property="docaddressprovince" jdbcType="VARCHAR" />
+    <result column="docAddressCity" property="docaddresscity" jdbcType="VARCHAR" />
+    <result column="docAddressArea" property="docaddressarea" jdbcType="VARCHAR" />
+    <result column="docAddressOther" property="docaddressother" jdbcType="VARCHAR" />
+    <result column="docAddressLon" property="docaddresslon" jdbcType="VARCHAR" />
+    <result column="docAddressLat" property="docaddresslat" jdbcType="VARCHAR" />
     <result column="docLoginId" property="docloginid" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -100,8 +100,8 @@
     docId, docName, docMale, docAge, docTitle, docCardNum, docCardPhoto, docBirthDate, 
     docNation, docHosp, hospLevel, docHospProvince, docHospCity, docHospArea, docHospOther, 
     docHospLon, docHospLat, docPrimaryDept, docSecondDept, docDept, docTitlePhoto, docWorkCardPhoto, 
-    docQualPhoto, docExpert, docOtherPhoto, docAllDay, docAbs, docLoc, docAdrProvince, 
-    docAdrCity, docAdrArea, docAdrOther, docLat, docLon, docLoginId
+    docQualPhoto, docExpert, docOtherPhoto, docAllDay, docAbs, docAddressLocation, docAddressProvince, 
+    docAddressCity, docAddressArea, docAddressOther, docAddressLon, docAddressLat, docLoginId
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.DoctorinfoExample" >
     select
@@ -143,9 +143,10 @@
       docSecondDept, docDept, docTitlePhoto, 
       docWorkCardPhoto, docQualPhoto, docExpert, 
       docOtherPhoto, docAllDay, docAbs, 
-      docLoc, docAdrProvince, docAdrCity, 
-      docAdrArea, docAdrOther, docLat, 
-      docLon, docLoginId)
+      docAddressLocation, docAddressProvince, 
+      docAddressCity, docAddressArea, docAddressOther, 
+      docAddressLon, docAddressLat, docLoginId
+      )
     values (#{docid,jdbcType=INTEGER}, #{docname,jdbcType=VARCHAR}, #{docmale,jdbcType=CHAR}, 
       #{docage,jdbcType=INTEGER}, #{doctitle,jdbcType=VARCHAR}, #{doccardnum,jdbcType=CHAR}, 
       #{doccardphoto,jdbcType=VARCHAR}, #{docbirthdate,jdbcType=DATE}, #{docnation,jdbcType=CHAR}, 
@@ -155,9 +156,10 @@
       #{docseconddept,jdbcType=VARCHAR}, #{docdept,jdbcType=VARCHAR}, #{doctitlephoto,jdbcType=VARCHAR}, 
       #{docworkcardphoto,jdbcType=VARCHAR}, #{docqualphoto,jdbcType=VARCHAR}, #{docexpert,jdbcType=VARCHAR}, 
       #{docotherphoto,jdbcType=VARCHAR}, #{docallday,jdbcType=BIT}, #{docabs,jdbcType=VARCHAR}, 
-      #{docloc,jdbcType=VARCHAR}, #{docadrprovince,jdbcType=VARCHAR}, #{docadrcity,jdbcType=VARCHAR}, 
-      #{docadrarea,jdbcType=VARCHAR}, #{docadrother,jdbcType=VARCHAR}, #{doclat,jdbcType=VARCHAR}, 
-      #{doclon,jdbcType=VARCHAR}, #{docloginid,jdbcType=INTEGER})
+      #{docaddresslocation,jdbcType=VARCHAR}, #{docaddressprovince,jdbcType=VARCHAR}, 
+      #{docaddresscity,jdbcType=VARCHAR}, #{docaddressarea,jdbcType=VARCHAR}, #{docaddressother,jdbcType=VARCHAR}, 
+      #{docaddresslon,jdbcType=VARCHAR}, #{docaddresslat,jdbcType=VARCHAR}, #{docloginid,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Doctorinfo" >
     insert into doctorinfo
@@ -243,26 +245,26 @@
       <if test="docabs != null" >
         docAbs,
       </if>
-      <if test="docloc != null" >
-        docLoc,
+      <if test="docaddresslocation != null" >
+        docAddressLocation,
       </if>
-      <if test="docadrprovince != null" >
-        docAdrProvince,
+      <if test="docaddressprovince != null" >
+        docAddressProvince,
       </if>
-      <if test="docadrcity != null" >
-        docAdrCity,
+      <if test="docaddresscity != null" >
+        docAddressCity,
       </if>
-      <if test="docadrarea != null" >
-        docAdrArea,
+      <if test="docaddressarea != null" >
+        docAddressArea,
       </if>
-      <if test="docadrother != null" >
-        docAdrOther,
+      <if test="docaddressother != null" >
+        docAddressOther,
       </if>
-      <if test="doclat != null" >
-        docLat,
+      <if test="docaddresslon != null" >
+        docAddressLon,
       </if>
-      <if test="doclon != null" >
-        docLon,
+      <if test="docaddresslat != null" >
+        docAddressLat,
       </if>
       <if test="docloginid != null" >
         docLoginId,
@@ -350,26 +352,26 @@
       <if test="docabs != null" >
         #{docabs,jdbcType=VARCHAR},
       </if>
-      <if test="docloc != null" >
-        #{docloc,jdbcType=VARCHAR},
+      <if test="docaddresslocation != null" >
+        #{docaddresslocation,jdbcType=VARCHAR},
       </if>
-      <if test="docadrprovince != null" >
-        #{docadrprovince,jdbcType=VARCHAR},
+      <if test="docaddressprovince != null" >
+        #{docaddressprovince,jdbcType=VARCHAR},
       </if>
-      <if test="docadrcity != null" >
-        #{docadrcity,jdbcType=VARCHAR},
+      <if test="docaddresscity != null" >
+        #{docaddresscity,jdbcType=VARCHAR},
       </if>
-      <if test="docadrarea != null" >
-        #{docadrarea,jdbcType=VARCHAR},
+      <if test="docaddressarea != null" >
+        #{docaddressarea,jdbcType=VARCHAR},
       </if>
-      <if test="docadrother != null" >
-        #{docadrother,jdbcType=VARCHAR},
+      <if test="docaddressother != null" >
+        #{docaddressother,jdbcType=VARCHAR},
       </if>
-      <if test="doclat != null" >
-        #{doclat,jdbcType=VARCHAR},
+      <if test="docaddresslon != null" >
+        #{docaddresslon,jdbcType=VARCHAR},
       </if>
-      <if test="doclon != null" >
-        #{doclon,jdbcType=VARCHAR},
+      <if test="docaddresslat != null" >
+        #{docaddresslat,jdbcType=VARCHAR},
       </if>
       <if test="docloginid != null" >
         #{docloginid,jdbcType=INTEGER},
@@ -466,26 +468,26 @@
       <if test="record.docabs != null" >
         docAbs = #{record.docabs,jdbcType=VARCHAR},
       </if>
-      <if test="record.docloc != null" >
-        docLoc = #{record.docloc,jdbcType=VARCHAR},
+      <if test="record.docaddresslocation != null" >
+        docAddressLocation = #{record.docaddresslocation,jdbcType=VARCHAR},
       </if>
-      <if test="record.docadrprovince != null" >
-        docAdrProvince = #{record.docadrprovince,jdbcType=VARCHAR},
+      <if test="record.docaddressprovince != null" >
+        docAddressProvince = #{record.docaddressprovince,jdbcType=VARCHAR},
       </if>
-      <if test="record.docadrcity != null" >
-        docAdrCity = #{record.docadrcity,jdbcType=VARCHAR},
+      <if test="record.docaddresscity != null" >
+        docAddressCity = #{record.docaddresscity,jdbcType=VARCHAR},
       </if>
-      <if test="record.docadrarea != null" >
-        docAdrArea = #{record.docadrarea,jdbcType=VARCHAR},
+      <if test="record.docaddressarea != null" >
+        docAddressArea = #{record.docaddressarea,jdbcType=VARCHAR},
       </if>
-      <if test="record.docadrother != null" >
-        docAdrOther = #{record.docadrother,jdbcType=VARCHAR},
+      <if test="record.docaddressother != null" >
+        docAddressOther = #{record.docaddressother,jdbcType=VARCHAR},
       </if>
-      <if test="record.doclat != null" >
-        docLat = #{record.doclat,jdbcType=VARCHAR},
+      <if test="record.docaddresslon != null" >
+        docAddressLon = #{record.docaddresslon,jdbcType=VARCHAR},
       </if>
-      <if test="record.doclon != null" >
-        docLon = #{record.doclon,jdbcType=VARCHAR},
+      <if test="record.docaddresslat != null" >
+        docAddressLat = #{record.docaddresslat,jdbcType=VARCHAR},
       </if>
       <if test="record.docloginid != null" >
         docLoginId = #{record.docloginid,jdbcType=INTEGER},
@@ -524,13 +526,13 @@
       docOtherPhoto = #{record.docotherphoto,jdbcType=VARCHAR},
       docAllDay = #{record.docallday,jdbcType=BIT},
       docAbs = #{record.docabs,jdbcType=VARCHAR},
-      docLoc = #{record.docloc,jdbcType=VARCHAR},
-      docAdrProvince = #{record.docadrprovince,jdbcType=VARCHAR},
-      docAdrCity = #{record.docadrcity,jdbcType=VARCHAR},
-      docAdrArea = #{record.docadrarea,jdbcType=VARCHAR},
-      docAdrOther = #{record.docadrother,jdbcType=VARCHAR},
-      docLat = #{record.doclat,jdbcType=VARCHAR},
-      docLon = #{record.doclon,jdbcType=VARCHAR},
+      docAddressLocation = #{record.docaddresslocation,jdbcType=VARCHAR},
+      docAddressProvince = #{record.docaddressprovince,jdbcType=VARCHAR},
+      docAddressCity = #{record.docaddresscity,jdbcType=VARCHAR},
+      docAddressArea = #{record.docaddressarea,jdbcType=VARCHAR},
+      docAddressOther = #{record.docaddressother,jdbcType=VARCHAR},
+      docAddressLon = #{record.docaddresslon,jdbcType=VARCHAR},
+      docAddressLat = #{record.docaddresslat,jdbcType=VARCHAR},
       docLoginId = #{record.docloginid,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -617,26 +619,26 @@
       <if test="docabs != null" >
         docAbs = #{docabs,jdbcType=VARCHAR},
       </if>
-      <if test="docloc != null" >
-        docLoc = #{docloc,jdbcType=VARCHAR},
+      <if test="docaddresslocation != null" >
+        docAddressLocation = #{docaddresslocation,jdbcType=VARCHAR},
       </if>
-      <if test="docadrprovince != null" >
-        docAdrProvince = #{docadrprovince,jdbcType=VARCHAR},
+      <if test="docaddressprovince != null" >
+        docAddressProvince = #{docaddressprovince,jdbcType=VARCHAR},
       </if>
-      <if test="docadrcity != null" >
-        docAdrCity = #{docadrcity,jdbcType=VARCHAR},
+      <if test="docaddresscity != null" >
+        docAddressCity = #{docaddresscity,jdbcType=VARCHAR},
       </if>
-      <if test="docadrarea != null" >
-        docAdrArea = #{docadrarea,jdbcType=VARCHAR},
+      <if test="docaddressarea != null" >
+        docAddressArea = #{docaddressarea,jdbcType=VARCHAR},
       </if>
-      <if test="docadrother != null" >
-        docAdrOther = #{docadrother,jdbcType=VARCHAR},
+      <if test="docaddressother != null" >
+        docAddressOther = #{docaddressother,jdbcType=VARCHAR},
       </if>
-      <if test="doclat != null" >
-        docLat = #{doclat,jdbcType=VARCHAR},
+      <if test="docaddresslon != null" >
+        docAddressLon = #{docaddresslon,jdbcType=VARCHAR},
       </if>
-      <if test="doclon != null" >
-        docLon = #{doclon,jdbcType=VARCHAR},
+      <if test="docaddresslat != null" >
+        docAddressLat = #{docaddresslat,jdbcType=VARCHAR},
       </if>
       <if test="docloginid != null" >
         docLoginId = #{docloginid,jdbcType=INTEGER},
@@ -672,13 +674,13 @@
       docOtherPhoto = #{docotherphoto,jdbcType=VARCHAR},
       docAllDay = #{docallday,jdbcType=BIT},
       docAbs = #{docabs,jdbcType=VARCHAR},
-      docLoc = #{docloc,jdbcType=VARCHAR},
-      docAdrProvince = #{docadrprovince,jdbcType=VARCHAR},
-      docAdrCity = #{docadrcity,jdbcType=VARCHAR},
-      docAdrArea = #{docadrarea,jdbcType=VARCHAR},
-      docAdrOther = #{docadrother,jdbcType=VARCHAR},
-      docLat = #{doclat,jdbcType=VARCHAR},
-      docLon = #{doclon,jdbcType=VARCHAR},
+      docAddressLocation = #{docaddresslocation,jdbcType=VARCHAR},
+      docAddressProvince = #{docaddressprovince,jdbcType=VARCHAR},
+      docAddressCity = #{docaddresscity,jdbcType=VARCHAR},
+      docAddressArea = #{docaddressarea,jdbcType=VARCHAR},
+      docAddressOther = #{docaddressother,jdbcType=VARCHAR},
+      docAddressLon = #{docaddresslon,jdbcType=VARCHAR},
+      docAddressLat = #{docaddresslat,jdbcType=VARCHAR},
       docLoginId = #{docloginid,jdbcType=INTEGER}
     where docId = #{docid,jdbcType=INTEGER}
   </update>

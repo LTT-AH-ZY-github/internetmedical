@@ -3,17 +3,24 @@
 <mapper namespace="com.medical.mapper.UserorderMapper" >
   <resultMap id="BaseResultMap" type="com.medical.po.Userorder" >
     <id column="userOrderId" property="userorderid" jdbcType="INTEGER" />
+    <result column="userOrderStateId" property="userorderstateid" jdbcType="INTEGER" />
     <result column="userOrderPTime" property="userorderptime" jdbcType="TIMESTAMP" />
-    <result column="userOrderRTime" property="userorderrtime" jdbcType="TIMESTAMP" />
-    <result column="userOrderETime" property="userorderetime" jdbcType="TIMESTAMP" />
-    <result column="userOrderAppointment" property="userorderappointment" jdbcType="VARCHAR" />
     <result column="userOrderDocLoginId" property="userorderdocloginid" jdbcType="INTEGER" />
     <result column="userOrderRecDocLoginId" property="userorderrecdocloginid" jdbcType="INTEGER" />
-    <result column="userOrderStateId" property="userorderstateid" jdbcType="INTEGER" />
-    <result column="userOrderHospId" property="userorderhospid" jdbcType="INTEGER" />
+    <result column="userOrderRTime" property="userorderrtime" jdbcType="TIMESTAMP" />
     <result column="userOrderDPrice" property="userorderdprice" jdbcType="DECIMAL" />
+    <result column="userOrderAppointment" property="userorderappointment" jdbcType="VARCHAR" />
+    <result column="userOrderETime" property="userorderetime" jdbcType="TIMESTAMP" />
     <result column="userOrderHState" property="userorderhstate" jdbcType="BIT" />
+    <result column="userOrderChoseHospTime" property="userorderchosehosptime" jdbcType="TIMESTAMP" />
+    <result column="userOrderHospConfirmTime" property="userorderhospconfirmtime" jdbcType="TIMESTAMP" />
+    <result column="userOrderLeaveHospTime" property="userorderleavehosptime" jdbcType="TIMESTAMP" />
+    <result column="userOrderHospId" property="userorderhospid" jdbcType="INTEGER" />
+    <result column="userOrderDeposit" property="userorderdeposit" jdbcType="DECIMAL" />
+    <result column="userOrderTotalDeposit" property="userordertotaldeposit" jdbcType="DECIMAL" />
     <result column="userOrderHPrice" property="userorderhprice" jdbcType="DECIMAL" />
+    <result column="userOrderHospPrimaryDept" property="userorderhospprimarydept" jdbcType="VARCHAR" />
+    <result column="userOrderHospSecondDept" property="userorderhospseconddept" jdbcType="VARCHAR" />
     <result column="userOrderTPriceType" property="userordertpricetype" jdbcType="INTEGER" />
     <result column="userOrderTPrice" property="userordertprice" jdbcType="DECIMAL" />
     <result column="userOrderAPriceType" property="userorderapricetype" jdbcType="INTEGER" />
@@ -21,9 +28,9 @@
     <result column="userOrderEPriceType" property="userorderepricetype" jdbcType="INTEGER" />
     <result column="userOrderEPrice" property="userordereprice" jdbcType="DECIMAL" />
     <result column="userOrderPrice" property="userorderprice" jdbcType="DECIMAL" />
-    <result column="userOrderDeposit" property="userorderdeposit" jdbcType="DECIMAL" />
     <result column="userSickId" property="usersickid" jdbcType="INTEGER" />
     <result column="userLoginId" property="userloginid" jdbcType="INTEGER" />
+    <result column="userOrderFinishTime" property="userorderfinishtime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -84,11 +91,13 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    userOrderId, userOrderPTime, userOrderRTime, userOrderETime, userOrderAppointment, 
-    userOrderDocLoginId, userOrderRecDocLoginId, userOrderStateId, userOrderHospId, userOrderDPrice, 
-    userOrderHState, userOrderHPrice, userOrderTPriceType, userOrderTPrice, userOrderAPriceType, 
-    userOrderAPrice, userOrderEPriceType, userOrderEPrice, userOrderPrice, userOrderDeposit, 
-    userSickId, userLoginId
+    userOrderId, userOrderStateId, userOrderPTime, userOrderDocLoginId, userOrderRecDocLoginId, 
+    userOrderRTime, userOrderDPrice, userOrderAppointment, userOrderETime, userOrderHState, 
+    userOrderChoseHospTime, userOrderHospConfirmTime, userOrderLeaveHospTime, userOrderHospId, 
+    userOrderDeposit, userOrderTotalDeposit, userOrderHPrice, userOrderHospPrimaryDept, 
+    userOrderHospSecondDept, userOrderTPriceType, userOrderTPrice, userOrderAPriceType, 
+    userOrderAPrice, userOrderEPriceType, userOrderEPrice, userOrderPrice, userSickId, 
+    userLoginId, userOrderFinishTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.UserorderExample" >
     select
@@ -121,23 +130,29 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.medical.po.Userorder" >
-    insert into userorder (userOrderId, userOrderPTime, userOrderRTime, 
-      userOrderETime, userOrderAppointment, 
+    insert into userorder (userOrderId, userOrderStateId, userOrderPTime, 
       userOrderDocLoginId, userOrderRecDocLoginId, 
-      userOrderStateId, userOrderHospId, userOrderDPrice, 
-      userOrderHState, userOrderHPrice, userOrderTPriceType, 
+      userOrderRTime, userOrderDPrice, userOrderAppointment, 
+      userOrderETime, userOrderHState, userOrderChoseHospTime, 
+      userOrderHospConfirmTime, userOrderLeaveHospTime, 
+      userOrderHospId, userOrderDeposit, userOrderTotalDeposit, 
+      userOrderHPrice, userOrderHospPrimaryDept, 
+      userOrderHospSecondDept, userOrderTPriceType, 
       userOrderTPrice, userOrderAPriceType, userOrderAPrice, 
       userOrderEPriceType, userOrderEPrice, userOrderPrice, 
-      userOrderDeposit, userSickId, userLoginId
+      userSickId, userLoginId, userOrderFinishTime
       )
-    values (#{userorderid,jdbcType=INTEGER}, #{userorderptime,jdbcType=TIMESTAMP}, #{userorderrtime,jdbcType=TIMESTAMP}, 
-      #{userorderetime,jdbcType=TIMESTAMP}, #{userorderappointment,jdbcType=VARCHAR}, 
+    values (#{userorderid,jdbcType=INTEGER}, #{userorderstateid,jdbcType=INTEGER}, #{userorderptime,jdbcType=TIMESTAMP}, 
       #{userorderdocloginid,jdbcType=INTEGER}, #{userorderrecdocloginid,jdbcType=INTEGER}, 
-      #{userorderstateid,jdbcType=INTEGER}, #{userorderhospid,jdbcType=INTEGER}, #{userorderdprice,jdbcType=DECIMAL}, 
-      #{userorderhstate,jdbcType=BIT}, #{userorderhprice,jdbcType=DECIMAL}, #{userordertpricetype,jdbcType=INTEGER}, 
+      #{userorderrtime,jdbcType=TIMESTAMP}, #{userorderdprice,jdbcType=DECIMAL}, #{userorderappointment,jdbcType=VARCHAR}, 
+      #{userorderetime,jdbcType=TIMESTAMP}, #{userorderhstate,jdbcType=BIT}, #{userorderchosehosptime,jdbcType=TIMESTAMP}, 
+      #{userorderhospconfirmtime,jdbcType=TIMESTAMP}, #{userorderleavehosptime,jdbcType=TIMESTAMP}, 
+      #{userorderhospid,jdbcType=INTEGER}, #{userorderdeposit,jdbcType=DECIMAL}, #{userordertotaldeposit,jdbcType=DECIMAL}, 
+      #{userorderhprice,jdbcType=DECIMAL}, #{userorderhospprimarydept,jdbcType=VARCHAR}, 
+      #{userorderhospseconddept,jdbcType=VARCHAR}, #{userordertpricetype,jdbcType=INTEGER}, 
       #{userordertprice,jdbcType=DECIMAL}, #{userorderapricetype,jdbcType=INTEGER}, #{userorderaprice,jdbcType=DECIMAL}, 
       #{userorderepricetype,jdbcType=INTEGER}, #{userordereprice,jdbcType=DECIMAL}, #{userorderprice,jdbcType=DECIMAL}, 
-      #{userorderdeposit,jdbcType=DECIMAL}, #{usersickid,jdbcType=INTEGER}, #{userloginid,jdbcType=INTEGER}
+      #{usersickid,jdbcType=INTEGER}, #{userloginid,jdbcType=INTEGER}, #{userorderfinishtime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Userorder" >
@@ -146,17 +161,11 @@
       <if test="userorderid != null" >
         userOrderId,
       </if>
+      <if test="userorderstateid != null" >
+        userOrderStateId,
+      </if>
       <if test="userorderptime != null" >
         userOrderPTime,
-      </if>
-      <if test="userorderrtime != null" >
-        userOrderRTime,
-      </if>
-      <if test="userorderetime != null" >
-        userOrderETime,
-      </if>
-      <if test="userorderappointment != null" >
-        userOrderAppointment,
       </if>
       <if test="userorderdocloginid != null" >
         userOrderDocLoginId,
@@ -164,20 +173,47 @@
       <if test="userorderrecdocloginid != null" >
         userOrderRecDocLoginId,
       </if>
-      <if test="userorderstateid != null" >
-        userOrderStateId,
-      </if>
-      <if test="userorderhospid != null" >
-        userOrderHospId,
+      <if test="userorderrtime != null" >
+        userOrderRTime,
       </if>
       <if test="userorderdprice != null" >
         userOrderDPrice,
       </if>
+      <if test="userorderappointment != null" >
+        userOrderAppointment,
+      </if>
+      <if test="userorderetime != null" >
+        userOrderETime,
+      </if>
       <if test="userorderhstate != null" >
         userOrderHState,
       </if>
+      <if test="userorderchosehosptime != null" >
+        userOrderChoseHospTime,
+      </if>
+      <if test="userorderhospconfirmtime != null" >
+        userOrderHospConfirmTime,
+      </if>
+      <if test="userorderleavehosptime != null" >
+        userOrderLeaveHospTime,
+      </if>
+      <if test="userorderhospid != null" >
+        userOrderHospId,
+      </if>
+      <if test="userorderdeposit != null" >
+        userOrderDeposit,
+      </if>
+      <if test="userordertotaldeposit != null" >
+        userOrderTotalDeposit,
+      </if>
       <if test="userorderhprice != null" >
         userOrderHPrice,
+      </if>
+      <if test="userorderhospprimarydept != null" >
+        userOrderHospPrimaryDept,
+      </if>
+      <if test="userorderhospseconddept != null" >
+        userOrderHospSecondDept,
       </if>
       <if test="userordertpricetype != null" >
         userOrderTPriceType,
@@ -200,31 +236,25 @@
       <if test="userorderprice != null" >
         userOrderPrice,
       </if>
-      <if test="userorderdeposit != null" >
-        userOrderDeposit,
-      </if>
       <if test="usersickid != null" >
         userSickId,
       </if>
       <if test="userloginid != null" >
         userLoginId,
       </if>
+      <if test="userorderfinishtime != null" >
+        userOrderFinishTime,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userorderid != null" >
         #{userorderid,jdbcType=INTEGER},
       </if>
+      <if test="userorderstateid != null" >
+        #{userorderstateid,jdbcType=INTEGER},
+      </if>
       <if test="userorderptime != null" >
         #{userorderptime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="userorderrtime != null" >
-        #{userorderrtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="userorderetime != null" >
-        #{userorderetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="userorderappointment != null" >
-        #{userorderappointment,jdbcType=VARCHAR},
       </if>
       <if test="userorderdocloginid != null" >
         #{userorderdocloginid,jdbcType=INTEGER},
@@ -232,20 +262,47 @@
       <if test="userorderrecdocloginid != null" >
         #{userorderrecdocloginid,jdbcType=INTEGER},
       </if>
-      <if test="userorderstateid != null" >
-        #{userorderstateid,jdbcType=INTEGER},
-      </if>
-      <if test="userorderhospid != null" >
-        #{userorderhospid,jdbcType=INTEGER},
+      <if test="userorderrtime != null" >
+        #{userorderrtime,jdbcType=TIMESTAMP},
       </if>
       <if test="userorderdprice != null" >
         #{userorderdprice,jdbcType=DECIMAL},
       </if>
+      <if test="userorderappointment != null" >
+        #{userorderappointment,jdbcType=VARCHAR},
+      </if>
+      <if test="userorderetime != null" >
+        #{userorderetime,jdbcType=TIMESTAMP},
+      </if>
       <if test="userorderhstate != null" >
         #{userorderhstate,jdbcType=BIT},
       </if>
+      <if test="userorderchosehosptime != null" >
+        #{userorderchosehosptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderhospconfirmtime != null" >
+        #{userorderhospconfirmtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderleavehosptime != null" >
+        #{userorderleavehosptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderhospid != null" >
+        #{userorderhospid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderdeposit != null" >
+        #{userorderdeposit,jdbcType=DECIMAL},
+      </if>
+      <if test="userordertotaldeposit != null" >
+        #{userordertotaldeposit,jdbcType=DECIMAL},
+      </if>
       <if test="userorderhprice != null" >
         #{userorderhprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userorderhospprimarydept != null" >
+        #{userorderhospprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="userorderhospseconddept != null" >
+        #{userorderhospseconddept,jdbcType=VARCHAR},
       </if>
       <if test="userordertpricetype != null" >
         #{userordertpricetype,jdbcType=INTEGER},
@@ -268,14 +325,14 @@
       <if test="userorderprice != null" >
         #{userorderprice,jdbcType=DECIMAL},
       </if>
-      <if test="userorderdeposit != null" >
-        #{userorderdeposit,jdbcType=DECIMAL},
-      </if>
       <if test="usersickid != null" >
         #{usersickid,jdbcType=INTEGER},
       </if>
       <if test="userloginid != null" >
         #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderfinishtime != null" >
+        #{userorderfinishtime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -291,17 +348,11 @@
       <if test="record.userorderid != null" >
         userOrderId = #{record.userorderid,jdbcType=INTEGER},
       </if>
+      <if test="record.userorderstateid != null" >
+        userOrderStateId = #{record.userorderstateid,jdbcType=INTEGER},
+      </if>
       <if test="record.userorderptime != null" >
         userOrderPTime = #{record.userorderptime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.userorderrtime != null" >
-        userOrderRTime = #{record.userorderrtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.userorderetime != null" >
-        userOrderETime = #{record.userorderetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.userorderappointment != null" >
-        userOrderAppointment = #{record.userorderappointment,jdbcType=VARCHAR},
       </if>
       <if test="record.userorderdocloginid != null" >
         userOrderDocLoginId = #{record.userorderdocloginid,jdbcType=INTEGER},
@@ -309,20 +360,47 @@
       <if test="record.userorderrecdocloginid != null" >
         userOrderRecDocLoginId = #{record.userorderrecdocloginid,jdbcType=INTEGER},
       </if>
-      <if test="record.userorderstateid != null" >
-        userOrderStateId = #{record.userorderstateid,jdbcType=INTEGER},
-      </if>
-      <if test="record.userorderhospid != null" >
-        userOrderHospId = #{record.userorderhospid,jdbcType=INTEGER},
+      <if test="record.userorderrtime != null" >
+        userOrderRTime = #{record.userorderrtime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.userorderdprice != null" >
         userOrderDPrice = #{record.userorderdprice,jdbcType=DECIMAL},
       </if>
+      <if test="record.userorderappointment != null" >
+        userOrderAppointment = #{record.userorderappointment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userorderetime != null" >
+        userOrderETime = #{record.userorderetime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.userorderhstate != null" >
         userOrderHState = #{record.userorderhstate,jdbcType=BIT},
       </if>
+      <if test="record.userorderchosehosptime != null" >
+        userOrderChoseHospTime = #{record.userorderchosehosptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userorderhospconfirmtime != null" >
+        userOrderHospConfirmTime = #{record.userorderhospconfirmtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userorderleavehosptime != null" >
+        userOrderLeaveHospTime = #{record.userorderleavehosptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userorderhospid != null" >
+        userOrderHospId = #{record.userorderhospid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userorderdeposit != null" >
+        userOrderDeposit = #{record.userorderdeposit,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userordertotaldeposit != null" >
+        userOrderTotalDeposit = #{record.userordertotaldeposit,jdbcType=DECIMAL},
+      </if>
       <if test="record.userorderhprice != null" >
         userOrderHPrice = #{record.userorderhprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userorderhospprimarydept != null" >
+        userOrderHospPrimaryDept = #{record.userorderhospprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userorderhospseconddept != null" >
+        userOrderHospSecondDept = #{record.userorderhospseconddept,jdbcType=VARCHAR},
       </if>
       <if test="record.userordertpricetype != null" >
         userOrderTPriceType = #{record.userordertpricetype,jdbcType=INTEGER},
@@ -345,14 +423,14 @@
       <if test="record.userorderprice != null" >
         userOrderPrice = #{record.userorderprice,jdbcType=DECIMAL},
       </if>
-      <if test="record.userorderdeposit != null" >
-        userOrderDeposit = #{record.userorderdeposit,jdbcType=DECIMAL},
-      </if>
       <if test="record.usersickid != null" >
         userSickId = #{record.usersickid,jdbcType=INTEGER},
       </if>
       <if test="record.userloginid != null" >
         userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userorderfinishtime != null" >
+        userOrderFinishTime = #{record.userorderfinishtime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -362,17 +440,24 @@
   <update id="updateByExample" parameterType="map" >
     update userorder
     set userOrderId = #{record.userorderid,jdbcType=INTEGER},
+      userOrderStateId = #{record.userorderstateid,jdbcType=INTEGER},
       userOrderPTime = #{record.userorderptime,jdbcType=TIMESTAMP},
-      userOrderRTime = #{record.userorderrtime,jdbcType=TIMESTAMP},
-      userOrderETime = #{record.userorderetime,jdbcType=TIMESTAMP},
-      userOrderAppointment = #{record.userorderappointment,jdbcType=VARCHAR},
       userOrderDocLoginId = #{record.userorderdocloginid,jdbcType=INTEGER},
       userOrderRecDocLoginId = #{record.userorderrecdocloginid,jdbcType=INTEGER},
-      userOrderStateId = #{record.userorderstateid,jdbcType=INTEGER},
-      userOrderHospId = #{record.userorderhospid,jdbcType=INTEGER},
+      userOrderRTime = #{record.userorderrtime,jdbcType=TIMESTAMP},
       userOrderDPrice = #{record.userorderdprice,jdbcType=DECIMAL},
+      userOrderAppointment = #{record.userorderappointment,jdbcType=VARCHAR},
+      userOrderETime = #{record.userorderetime,jdbcType=TIMESTAMP},
       userOrderHState = #{record.userorderhstate,jdbcType=BIT},
+      userOrderChoseHospTime = #{record.userorderchosehosptime,jdbcType=TIMESTAMP},
+      userOrderHospConfirmTime = #{record.userorderhospconfirmtime,jdbcType=TIMESTAMP},
+      userOrderLeaveHospTime = #{record.userorderleavehosptime,jdbcType=TIMESTAMP},
+      userOrderHospId = #{record.userorderhospid,jdbcType=INTEGER},
+      userOrderDeposit = #{record.userorderdeposit,jdbcType=DECIMAL},
+      userOrderTotalDeposit = #{record.userordertotaldeposit,jdbcType=DECIMAL},
       userOrderHPrice = #{record.userorderhprice,jdbcType=DECIMAL},
+      userOrderHospPrimaryDept = #{record.userorderhospprimarydept,jdbcType=VARCHAR},
+      userOrderHospSecondDept = #{record.userorderhospseconddept,jdbcType=VARCHAR},
       userOrderTPriceType = #{record.userordertpricetype,jdbcType=INTEGER},
       userOrderTPrice = #{record.userordertprice,jdbcType=DECIMAL},
       userOrderAPriceType = #{record.userorderapricetype,jdbcType=INTEGER},
@@ -380,9 +465,9 @@
       userOrderEPriceType = #{record.userorderepricetype,jdbcType=INTEGER},
       userOrderEPrice = #{record.userordereprice,jdbcType=DECIMAL},
       userOrderPrice = #{record.userorderprice,jdbcType=DECIMAL},
-      userOrderDeposit = #{record.userorderdeposit,jdbcType=DECIMAL},
       userSickId = #{record.usersickid,jdbcType=INTEGER},
-      userLoginId = #{record.userloginid,jdbcType=INTEGER}
+      userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      userOrderFinishTime = #{record.userorderfinishtime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -390,17 +475,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Userorder" >
     update userorder
     <set >
+      <if test="userorderstateid != null" >
+        userOrderStateId = #{userorderstateid,jdbcType=INTEGER},
+      </if>
       <if test="userorderptime != null" >
         userOrderPTime = #{userorderptime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="userorderrtime != null" >
-        userOrderRTime = #{userorderrtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="userorderetime != null" >
-        userOrderETime = #{userorderetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="userorderappointment != null" >
-        userOrderAppointment = #{userorderappointment,jdbcType=VARCHAR},
       </if>
       <if test="userorderdocloginid != null" >
         userOrderDocLoginId = #{userorderdocloginid,jdbcType=INTEGER},
@@ -408,20 +487,47 @@
       <if test="userorderrecdocloginid != null" >
         userOrderRecDocLoginId = #{userorderrecdocloginid,jdbcType=INTEGER},
       </if>
-      <if test="userorderstateid != null" >
-        userOrderStateId = #{userorderstateid,jdbcType=INTEGER},
-      </if>
-      <if test="userorderhospid != null" >
-        userOrderHospId = #{userorderhospid,jdbcType=INTEGER},
+      <if test="userorderrtime != null" >
+        userOrderRTime = #{userorderrtime,jdbcType=TIMESTAMP},
       </if>
       <if test="userorderdprice != null" >
         userOrderDPrice = #{userorderdprice,jdbcType=DECIMAL},
       </if>
+      <if test="userorderappointment != null" >
+        userOrderAppointment = #{userorderappointment,jdbcType=VARCHAR},
+      </if>
+      <if test="userorderetime != null" >
+        userOrderETime = #{userorderetime,jdbcType=TIMESTAMP},
+      </if>
       <if test="userorderhstate != null" >
         userOrderHState = #{userorderhstate,jdbcType=BIT},
       </if>
+      <if test="userorderchosehosptime != null" >
+        userOrderChoseHospTime = #{userorderchosehosptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderhospconfirmtime != null" >
+        userOrderHospConfirmTime = #{userorderhospconfirmtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderleavehosptime != null" >
+        userOrderLeaveHospTime = #{userorderleavehosptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderhospid != null" >
+        userOrderHospId = #{userorderhospid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderdeposit != null" >
+        userOrderDeposit = #{userorderdeposit,jdbcType=DECIMAL},
+      </if>
+      <if test="userordertotaldeposit != null" >
+        userOrderTotalDeposit = #{userordertotaldeposit,jdbcType=DECIMAL},
+      </if>
       <if test="userorderhprice != null" >
         userOrderHPrice = #{userorderhprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userorderhospprimarydept != null" >
+        userOrderHospPrimaryDept = #{userorderhospprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="userorderhospseconddept != null" >
+        userOrderHospSecondDept = #{userorderhospseconddept,jdbcType=VARCHAR},
       </if>
       <if test="userordertpricetype != null" >
         userOrderTPriceType = #{userordertpricetype,jdbcType=INTEGER},
@@ -444,31 +550,38 @@
       <if test="userorderprice != null" >
         userOrderPrice = #{userorderprice,jdbcType=DECIMAL},
       </if>
-      <if test="userorderdeposit != null" >
-        userOrderDeposit = #{userorderdeposit,jdbcType=DECIMAL},
-      </if>
       <if test="usersickid != null" >
         userSickId = #{usersickid,jdbcType=INTEGER},
       </if>
       <if test="userloginid != null" >
         userLoginId = #{userloginid,jdbcType=INTEGER},
       </if>
+      <if test="userorderfinishtime != null" >
+        userOrderFinishTime = #{userorderfinishtime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where userOrderId = #{userorderid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.medical.po.Userorder" >
     update userorder
-    set userOrderPTime = #{userorderptime,jdbcType=TIMESTAMP},
-      userOrderRTime = #{userorderrtime,jdbcType=TIMESTAMP},
-      userOrderETime = #{userorderetime,jdbcType=TIMESTAMP},
-      userOrderAppointment = #{userorderappointment,jdbcType=VARCHAR},
+    set userOrderStateId = #{userorderstateid,jdbcType=INTEGER},
+      userOrderPTime = #{userorderptime,jdbcType=TIMESTAMP},
       userOrderDocLoginId = #{userorderdocloginid,jdbcType=INTEGER},
       userOrderRecDocLoginId = #{userorderrecdocloginid,jdbcType=INTEGER},
-      userOrderStateId = #{userorderstateid,jdbcType=INTEGER},
-      userOrderHospId = #{userorderhospid,jdbcType=INTEGER},
+      userOrderRTime = #{userorderrtime,jdbcType=TIMESTAMP},
       userOrderDPrice = #{userorderdprice,jdbcType=DECIMAL},
+      userOrderAppointment = #{userorderappointment,jdbcType=VARCHAR},
+      userOrderETime = #{userorderetime,jdbcType=TIMESTAMP},
       userOrderHState = #{userorderhstate,jdbcType=BIT},
+      userOrderChoseHospTime = #{userorderchosehosptime,jdbcType=TIMESTAMP},
+      userOrderHospConfirmTime = #{userorderhospconfirmtime,jdbcType=TIMESTAMP},
+      userOrderLeaveHospTime = #{userorderleavehosptime,jdbcType=TIMESTAMP},
+      userOrderHospId = #{userorderhospid,jdbcType=INTEGER},
+      userOrderDeposit = #{userorderdeposit,jdbcType=DECIMAL},
+      userOrderTotalDeposit = #{userordertotaldeposit,jdbcType=DECIMAL},
       userOrderHPrice = #{userorderhprice,jdbcType=DECIMAL},
+      userOrderHospPrimaryDept = #{userorderhospprimarydept,jdbcType=VARCHAR},
+      userOrderHospSecondDept = #{userorderhospseconddept,jdbcType=VARCHAR},
       userOrderTPriceType = #{userordertpricetype,jdbcType=INTEGER},
       userOrderTPrice = #{userordertprice,jdbcType=DECIMAL},
       userOrderAPriceType = #{userorderapricetype,jdbcType=INTEGER},
@@ -476,9 +589,9 @@
       userOrderEPriceType = #{userorderepricetype,jdbcType=INTEGER},
       userOrderEPrice = #{userordereprice,jdbcType=DECIMAL},
       userOrderPrice = #{userorderprice,jdbcType=DECIMAL},
-      userOrderDeposit = #{userorderdeposit,jdbcType=DECIMAL},
       userSickId = #{usersickid,jdbcType=INTEGER},
-      userLoginId = #{userloginid,jdbcType=INTEGER}
+      userLoginId = #{userloginid,jdbcType=INTEGER},
+      userOrderFinishTime = #{userorderfinishtime,jdbcType=TIMESTAMP}
     where userOrderId = #{userorderid,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.medical.mapper.UsersickMapperCustom" >
   
+  <select id="selectCountByFamilyId" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+     select count(* )from   usersick    
+     where familyId= #{0,jdbcType=INTEGER}
+  </select>
   <select id="selectAllInfoByUserLoginId" resultType="map" parameterType="java.lang.Integer" >
      select   a.usersickstateid,a.usersickid, a.usersickdesc, a.usersickpic, a.usersickprimarydept,a.usersickseconddept, a.userorderid,
       a.usersickpic,a.usersicktime, a.familyid,b.familyname,b.familymale,b.familyage  
@@ -236,7 +240,7 @@
   	  left join userlogininfo as b on a.userLoginId =b.userLoginId 
   	  left join familyinfo as c on a.familyId =c.familyId
   where a.userSickStateId=2 
-  ORDER BY a.userSickPTime ASC
+  ORDER BY a.userSickPTime DESC
  </select>
   <!--获取按时间排序的病情  -->
   <select id="paginationSickSortByTime" parameterType="com.medical.po.SickSearch" resultType="map">
@@ -308,7 +312,7 @@
 	  <if test="area!=null">
 	    b.userLoginArea=#{area}
 	  </if>
-	 ORDER BY distance ASC
+	ORDER BY distance ASC
  </select>	
  <!--查看病情详情  -->
   <select id="selectAllInfoByUserSickId" parameterType="java.lang.Integer" resultType="map">
@@ -348,4 +352,5 @@
   ORDER BY distance ASC
 	<!-- limit #{startPage},#{pageSize}; -->
   </select>
+  
 </mapper>

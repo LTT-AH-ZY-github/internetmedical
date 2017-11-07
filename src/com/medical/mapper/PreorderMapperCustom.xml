@@ -10,34 +10,14 @@
   	select  a.preordertype,a.preorderid,a.preorderprice,
   			b.docloginid,c.docloginpix,b.docname,b.doctitle,b.dochosp,b.hosplevel,b.docprimarydept,b.docseconddept,
   			b.docallday,b.docexpert,
-  			d.docname as redocname,d.doctitle as redoctitle
-  	 <!-- 
-  	 ROUND(
-			     6378.138 * 2 * ASIN(
-			            SQRT(
-			                POW(
-			                    SIN(
-			                        (
-			                        
-			                           #{lat} * PI() / 180 - b.docLat * PI() / 180
-			                        ) / 2
-			                    ),
-			                    2
-			                ) + COS(#{lat} * PI() / 180) * COS(b.docLat * PI() / 180) * POW(
-			                    SIN(
-			                        (
-			                            #{lon} * PI() / 180 - b.docLon * PI() / 180
-			                        ) / 2
-			                    ),
-			                    2
-			                )
-			            )
-			        ) * 1000
-			    ) AS distance -->
+  			d.docname as redocname,d.doctitle as redoctitle,
+  			e.preordertypename
+  	 
   	from preorder as a 
   		left join doctorinfo as b  on a.preOrderDocLoginId=b.docLoginId
   		left join doctorlogininfo as c on a.preOrderDocLoginId = c.docLoginId 
   		left join doctorinfo as d on a.preOrderReDocLoginId = c.docLoginId
+  		left join preordertype as e on a.preOrderType=e.preOrderTypeId
   	where  a.userSickId =#{0}
   	<if test="param2!=null">
     	 and a.preOrderType=#{1}
@@ -120,4 +100,16 @@
   	   left join familyinfo as d on b.familyId =d.familyId
 	 where preOrderId = #{0}
 	</select>
+	<delete id="deleteByDocLoginIdAndUserSickId" parameterType="java.lang.Integer" >
+    delete from preorder
+    where preOrderDocLoginId = #{0,jdbcType=INTEGER} and userSickId=#{1,jdbcType=INTEGER} 
+  </delete>
+  <delete id="deleteByDocLoginIdAndPreOrderType" parameterType="java.lang.Integer" >
+    delete from preorder
+    where preOrderDocLoginId = #{0,jdbcType=INTEGER} and preOrderType=#{1,jdbcType=INTEGER} 
+  </delete>
+  <delete id="deleteAllByUserSickId" parameterType="java.lang.Integer" >
+    delete from preorder
+    where  userSickId=#{0,jdbcType=INTEGER}
+  </delete>
 </mapper>

@@ -11,8 +11,26 @@
 	<!-- 配置Service扫描 -->
 	
 	<bean id="doctorService" class="com.medical.service.impl.DoctorServiceImpl"/>
-     <bean id="userService" class="com.medical.service.impl.UserServiceImpl"/>
-      <bean id="hospitalService" class="com.medical.service.impl.HospitalServiceImpl"/>
+    <bean id="userService" class="com.medical.service.impl.UserServiceImpl"/>
+    <bean id="hospitalService" class="com.medical.service.impl.HospitalServiceImpl"/>
+    <bean id="commonService" class="com.medical.service.impl.CommonServiceImpl"/>
+    <!--用户接口  -->
+    <bean id="userAccountService" class="com.medical.service.impl.user.UserAccountServiceImpl"/>
+    <bean id="userInfoService" class="com.medical.service.impl.user.UserInfoServiceImpl"/>
+    <bean id="userHomeService" class="com.medical.service.impl.user.UserHomeServiceImpl"/>
+    <bean id="userSickService" class="com.medical.service.impl.user.UserSickServiceImpl"/>
+    <bean id="userOrderService" class="com.medical.service.impl.user.UserOrderServiceImpl"/>
+    <!--医生接口  -->
+    <bean id="doctorAccountService" class="com.medical.service.impl.doctor.DoctorAccountServiceImpl"/>
+    <bean id="doctorInfoService" class="com.medical.service.impl.doctor.DoctorInfoServiceImpl"/>
+     <bean id="doctorHomeService" class="com.medical.service.impl.doctor.DoctorHomeServiceImpl"/>
+    <bean id="doctorOrderService" class="com.medical.service.impl.doctor.DoctorOrderServiceImpl"/>
+    <!--医院接口  -->
+   	<bean id="hospitalAccountService" class="com.medical.service.impl.hospital.HospitalAccountServiceImpl"/>
+    <bean id="hospitalInfoService" class="com.medical.service.impl.hospital.HospitalInfoServiceImpl"/>
+    <bean id="hospitalOrderService" class="com.medical.service.impl.hospital.HospitalOrderServiceImpl"/>
+    
+    
 
 
 

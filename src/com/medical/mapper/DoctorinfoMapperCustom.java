@@ -18,10 +18,10 @@ public interface DoctorinfoMapperCustom {
 	//医生信息列表模式
 	List<Map<String, Object>> findDoctorInfoInList(DoctorSearch doctorSearch)throws Exception;
 	//医生信息列表模式
-	List<Map<String, Object>> findDoctorInfoInListByLoc(DoctorSearch doctorSearch)throws Exception;
+	//List<Map<String, Object>> findDoctorInfoInListByLoc(DoctorSearch doctorSearch)throws Exception;
 	
 	//医生信息地图模式
-	List<Map<String, Object>> findDoctorInfoInMap(String arg1,String arg2,String arg3,String arg4)throws Exception;
+	List<Map<String, Object>> findDoctorInfoInMap(double arg1,double arg2,double arg3,double arg4)throws Exception;
 	
 	//根据登录Id查询医生
 	Doctorinfo findDoctorinfoByDocLoginId(Integer docloginid);
@@ -33,6 +33,7 @@ public interface DoctorinfoMapperCustom {
 	
 	//查询第一页信息
 	Map<String, Object> selectFirstInfoByDocLoginId(Integer id);
+	Map<String, Object> selectFirstInfoDeptByDocLoginId(Integer id);
 	
 	//查询第二页信息
 	Map<String, Object> selectSecondInfoByDocLoginId(Integer id);
@@ -46,5 +47,8 @@ public interface DoctorinfoMapperCustom {
 	//根据登录Id查询医生
 	Doctorinfo selectByDocLoginId(Integer docloginid);
 	
-	
+	List<Doctorinfo> selectByDept(String docPrimaryDept,String docSecondDept );
+	//根据医生姓名获取医生
+	List<Map<String, Object>> selectByName(String docname);
+	int updateInfoByPrimaryKey(Doctorinfo doctorinfo);
 }
