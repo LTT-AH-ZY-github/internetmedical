@@ -775,6 +775,66 @@ public class HosplogininfoExample {
             return (Criteria) this;
         }
 
+        public Criteria andHosploginsubchecktimeIsNull() {
+            addCriterion("hospLoginSubCheckTime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsubchecktimeIsNotNull() {
+            addCriterion("hospLoginSubCheckTime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsubchecktimeEqualTo(Date value) {
+            addCriterion("hospLoginSubCheckTime =", value, "hosploginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsubchecktimeNotEqualTo(Date value) {
+            addCriterion("hospLoginSubCheckTime <>", value, "hosploginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsubchecktimeGreaterThan(Date value) {
+            addCriterion("hospLoginSubCheckTime >", value, "hosploginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsubchecktimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("hospLoginSubCheckTime >=", value, "hosploginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsubchecktimeLessThan(Date value) {
+            addCriterion("hospLoginSubCheckTime <", value, "hosploginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsubchecktimeLessThanOrEqualTo(Date value) {
+            addCriterion("hospLoginSubCheckTime <=", value, "hosploginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsubchecktimeIn(List<Date> values) {
+            addCriterion("hospLoginSubCheckTime in", values, "hosploginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsubchecktimeNotIn(List<Date> values) {
+            addCriterion("hospLoginSubCheckTime not in", values, "hosploginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsubchecktimeBetween(Date value1, Date value2) {
+            addCriterion("hospLoginSubCheckTime between", value1, value2, "hosploginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsubchecktimeNotBetween(Date value1, Date value2) {
+            addCriterion("hospLoginSubCheckTime not between", value1, value2, "hosploginsubchecktime");
+            return (Criteria) this;
+        }
+
         public Criteria andHosploginphoneIsNull() {
             addCriterion("hospLoginPhone is null");
             return (Criteria) this;
@@ -912,6 +972,76 @@ public class HosplogininfoExample {
 
         public Criteria andHosploginpixNotBetween(String value1, String value2) {
             addCriterion("hospLoginPix not between", value1, value2, "hosploginpix");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosphuanxinaccountIsNull() {
+            addCriterion("hospHuanXinAccount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosphuanxinaccountIsNotNull() {
+            addCriterion("hospHuanXinAccount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosphuanxinaccountEqualTo(String value) {
+            addCriterion("hospHuanXinAccount =", value, "hosphuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosphuanxinaccountNotEqualTo(String value) {
+            addCriterion("hospHuanXinAccount <>", value, "hosphuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosphuanxinaccountGreaterThan(String value) {
+            addCriterion("hospHuanXinAccount >", value, "hosphuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosphuanxinaccountGreaterThanOrEqualTo(String value) {
+            addCriterion("hospHuanXinAccount >=", value, "hosphuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosphuanxinaccountLessThan(String value) {
+            addCriterion("hospHuanXinAccount <", value, "hosphuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosphuanxinaccountLessThanOrEqualTo(String value) {
+            addCriterion("hospHuanXinAccount <=", value, "hosphuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosphuanxinaccountLike(String value) {
+            addCriterion("hospHuanXinAccount like", value, "hosphuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosphuanxinaccountNotLike(String value) {
+            addCriterion("hospHuanXinAccount not like", value, "hosphuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosphuanxinaccountIn(List<String> values) {
+            addCriterion("hospHuanXinAccount in", values, "hosphuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosphuanxinaccountNotIn(List<String> values) {
+            addCriterion("hospHuanXinAccount not in", values, "hosphuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosphuanxinaccountBetween(String value1, String value2) {
+            addCriterion("hospHuanXinAccount between", value1, value2, "hosphuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosphuanxinaccountNotBetween(String value1, String value2) {
+            addCriterion("hospHuanXinAccount not between", value1, value2, "hosphuanxinaccount");
             return (Criteria) this;
         }
     }

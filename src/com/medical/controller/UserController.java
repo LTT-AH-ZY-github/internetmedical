@@ -1,5 +1,7 @@
+
 package com.medical.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +10,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Null;
 
 import org.apache.commons.lang3.StringUtils;
+import org.aspectj.internal.lang.annotation.ajcPrivileged;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.huanxin.utils.UserManger;
 import com.mangofactory.swagger.annotations.ApiIgnore;
@@ -35,10 +39,12 @@ import com.medical.service.iface.user.UserHomeService;
 import com.medical.service.iface.user.UserInfoService;
 import com.medical.service.iface.user.UserOrderService;
 import com.medical.service.iface.user.UserSickService;
+import com.medical.utils.CheckUtils;
 import com.medical.utils.result.DataResult;
 import com.medical.utils.result.Result;
 import com.netease.code.MsgCode;
-
+import com.sun.org.apache.xerces.internal.impl.dv.xs.DecimalDV;
+import com.sun.xml.internal.bind.v2.model.core.TypeRef;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -53,8 +59,8 @@ import com.wordnik.swagger.annotations.ApiParam;
 @RequestMapping(value = "/user")
 public class UserController {
 
-	@Autowired
-	private UserService userService;
+	/*@Autowired
+	private UserService userService;*/
 	@Autowired
 	private CommonService commonService;
 	@Autowired
@@ -77,15 +83,10 @@ public class UserController {
 			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam(value = "userloginphone") String userloginphone)
 			throws Exception {
 		if (StringUtils.isNotBlank(userloginphone)) {
-			if (userloginphone.trim().length() != 11) {
-				return Result.error("该手机号码不是11位");
+			if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
+				return Result.error("手机号码格式错误");
 			}
-			boolean result = commonService.findAccountExit(userloginphone);
-			if (result) {
-				return Result.error("该号码已注册");
-			} else {
-				return Result.success("该号码未注册");
-			}
+			return commonService.findAccountExit(userloginphone);
 		} else {
 			return Result.error("手机号码为空");
 		}
@@ -97,18 +98,13 @@ public class UserController {
 	public String getCode(
 			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam String userloginphone)
 			throws Exception {
-		if (StringUtils.isNotBlank(userloginphone)) {
-			if (userloginphone.trim().length() != 11) {
-				return Result.error("该手机号码不是11位");
-			}
-			boolean result = commonService.getMsgCode(userloginphone);
-			if (result) {
-				return Result.success("获取验证码成功");
-			} else {
-				return Result.error("获取短信验证码失败");
-			}
-		} else {
+		if (StringUtils.isBlank(userloginphone)) {
 			return Result.error("手机号码为空");
+		}else {
+			if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
+				return Result.error("手机号码格式错误");
+			}
+			return commonService.getMsgCode(userloginphone);	
 		}
 	}
 	
@@ -119,51 +115,20 @@ public class UserController {
 			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam(value = "userloginphone") String userloginphone,
 			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam(value = "userloginpwd") String userloginpwd,
 			@ApiParam(name = "code", required = true, value = "短信验证码") @RequestParam String code) throws Exception {
-		if (StringUtils.isNotBlank(userloginphone) && StringUtils.isNotBlank(userloginpwd)&& StringUtils.isNotBlank(code)) {
-			if (userloginphone.trim().length() != 11) {
-				return Result.error("该手机号码不是11位");
-			}
-			boolean accountExit = commonService.findAccountExit(userloginphone);
-			if (!accountExit) {
-				//boolean codeResult = commonService.getCodeValidity(userloginphone, code);
-				if (true) {
-					/*int result = userService.createUser(userloginphone, userloginpwd, code);
-					if (1 == result) {
-						return Result.success("注册成功");
-					} else if (2 == result) {
-						return Result.error("注册失败，未知错误");
-					} else if (3 == result) {
-						return Result.error("注册失败，验证码错误");
-					} else if (4 == result) {
-						return Result.error("注册失败，该用户已注册");
-					} else {
-						return Result.error("注册失败，异常错误");
-					}*/
-					boolean result = userAccountService.createUserAccount(userloginphone, userloginpwd);
-					if (result) {
-						return Result.success("注册成功");
-					} else {
-						return Result.error("注册失败，未知错误");
-					}
-				} else {
-					return Result.error("验证码错误");
-				}
-			} else {
-				return Result.error("该号码已注册");
-			}
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (StringUtils.isBlank(userloginpwd)) {
-				errList.add("密码为空"); 
-			}
 			if (StringUtils.isBlank(userloginphone)) {
-				errList.add("手机号码为空");
+				return Result.error("手机号码为空");
+			}
+			if (StringUtils.isNotBlank(userloginphone) &&!CheckUtils.isChinaPhoneLegal(userloginphone)) {
+				return Result.error("手机号码格式错误");
+			}
+			if (StringUtils.isBlank(userloginpwd)) {
+				return DataResult.error("密码为空");
 			}
 			if (StringUtils.isBlank(code)) {
-				errList.add("短信验证码为空");
+				return DataResult.error("验证码为空");
 			}
-			return Result.error(errList.toString().replace("[", "").replace("]", ""));
-		}
+			return userAccountService.createUserAccount(userloginphone, userloginpwd,code);
+		
 	}
 	
 	//环信注册
@@ -172,46 +137,38 @@ public class UserController {
 	public String huanXinRegister(@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam(value = "userloginid") Integer userloginid,
 			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam(value = "userloginpwd") String userloginpwd
 			) throws Exception {
-		if (userloginid != null) {
-			boolean result = userAccountService.addHuanXinAccout(userloginid,userloginpwd);
-			if (result) {
-				return DataResult.success("注册成功");
-			} else {
-				return DataResult.error("注册失败");
-			}
-		}else {
+		if (userloginid == null) {
 			return DataResult.error("id为空");
 		}
-		
+		return userAccountService.addHuanXinAccout(userloginid,userloginpwd);
 	}
+	
 	// 用户登录
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "用户登录", httpMethod = "POST", consumes = "application/x-www-form-urlencoded", notes = "用户登录")
 	public String userLogin(
 			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam(value = "userloginphone") String userloginphone,
 			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam(value = "userloginpwd") String userloginpwd,
+			@ApiParam(name = "userlogindev", value = "登录设备，1为安卓设置，2为IOS设备") @RequestParam(required=false) Integer userlogindev,
 			@ApiParam(name = "userlogintoken", value = "token") @RequestParam(required=false) String userlogintoken)
 			throws Exception {
-		if (StringUtils.isNotBlank(userloginphone) && StringUtils.isNotBlank(userloginpwd)) {
-			Map<String, Object> result = userAccountService.updateUserToLogin(userloginphone, userloginpwd,
-					userlogintoken);
-			if (result!=null) {
-				return DataResult.success("登录成功",result);
-			} else {
-				return DataResult.error("登录失败");
-			}
-
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (StringUtils.isBlank(userloginpwd)) {
-				errList.add("密码为空"); 
-			}
-			if (StringUtils.isBlank(userloginphone)) {
-				errList.add("手机号码为空"); 
-			}
-			return Result.error(errList.toString().replace("[", "").replace("]", ""));
+		if (StringUtils.isBlank(userloginphone)) {
+			return Result.error("手机号码为空");
 		}
-		
+		/*if (StringUtils.isNotBlank(userloginphone) &&!CheckUtils.isChinaPhoneLegal(userloginphone)) {
+			return Result.error("手机号码格式错误");
+		}*/
+		if (StringUtils.isBlank(userloginpwd)) {
+			return DataResult.error("密码为空");
+		}
+		if (userlogindev==null) {
+			userlogindev=1;
+		}
+		if (StringUtils.isBlank(userlogintoken)) {
+			return userAccountService.updateUserToNormalLogin(userloginphone, userloginpwd,userlogindev);
+		}else {
+			return userAccountService.updateUserToAutoLogin(userloginphone, userloginpwd, userlogintoken,userlogindev);
+		}
 	}
 
 	// 用户退出登陆
@@ -220,16 +177,10 @@ public class UserController {
 	public String exitUserLoginInfo(
 			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam(value = "userloginid") Integer userloginid)
 			throws Exception {
-		if (userloginid != null) {
-			boolean result = userAccountService.updateUserToExit(userloginid);
-			if (result) {
-				return DataResult.success("退出登录成功");
-			} else {
-				return DataResult.error("退出登录失败");
-			}
-		} else {
+		if (userloginid == null) {
 			return DataResult.error("id为空");
 		}
+		return  userAccountService.updateUserToExit(userloginid);
 	}
 	
 	// 修改密码
@@ -238,39 +189,21 @@ public class UserController {
 	public String editPassword(
 			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam(value = "userloginphone") String userloginphone,
 			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam(value = "userloginpwd") String userloginpwd,
-			@ApiParam(name = "code", required = true, value = "短信验证码") @RequestParam(value = "userloginpwd") String code)
+			@ApiParam(name = "code", required = true, value = "短信验证码") @RequestParam String code)
 			throws Exception {
-		if (userloginphone.trim().length() != 11) {
-			return Result.error("该手机号码不是11位");
+		if (StringUtils.isBlank(userloginphone)) {
+			return Result.error("手机号码为空");
 		}
-		if (StringUtils.isNotBlank(userloginphone) && StringUtils.isNotBlank(userloginpwd) && code != null
-				&& StringUtils.isNotBlank(code)) {
-			// boolean codeResult = commonService.getCodeValidity(userloginphone, code);
-			if (true) {
-				boolean result = userAccountService.updatePassword(userloginphone, userloginpwd);
-				if (result) {
-					return DataResult.success("修改成功");
-				} else {
-					return DataResult.error("修改失败");
-				}
-			} else {
-				return DataResult.error("短信验证码错误");
-			}
-
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (StringUtils.isBlank(userloginphone)) {
-				errList.add("手机号码为空");
-			}
-			if (StringUtils.isNotBlank(userloginpwd)) {
-				errList.add("密码为空");
-			}
-			if (StringUtils.isNotBlank(code)) {
-				errList.add("验证码为空");
-			}
-			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
+		if (StringUtils.isNotBlank(userloginphone) &&!CheckUtils.isChinaPhoneLegal(userloginphone)) {
+			return Result.error("手机号码格式错误");
 		}
-
+		if (StringUtils.isBlank(userloginpwd)) {
+			return DataResult.error("密码为空");
+		}
+		if (StringUtils.isBlank(code)) {
+			return DataResult.error("验证码为空");
+		}
+		return userAccountService.updatePassword(userloginphone, userloginpwd,code);
 	}
 	
 	
@@ -282,27 +215,16 @@ public class UserController {
 			@ApiParam(name = "userloginlon", value = "精度") @RequestParam(value = "userloginlon") String userloginlon,
 			@ApiParam(name = "userloginlat", value = "纬度") @RequestParam(value = "userloginlat") String userloginlat)
 			throws Exception {
-		if (userloginid != null && StringUtils.isNotBlank(userloginlon) && StringUtils.isNotBlank(userloginlat)) {
-			boolean result = userInfoService.updateLocation(userloginid,userloginlon,userloginlat);
-			if (result) {
-				return DataResult.success("更新位置信息成功");
-			} else {
-				return DataResult.error("更新位置信息失败");
-			} 
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (userloginid!=null) {
-				errList.add("用户登陆id为空"); 
-			}
-			if (StringUtils.isBlank(userloginlon)) {
-				errList.add("精度为空"); 
-			}
-			if (StringUtils.isBlank(userloginlat)) {
-				errList.add("纬度为空"); 
-			}
-			return Result.error(errList.toString().replace("[", "").replace("]", ""));
-			
+		if (userloginid == null) {
+			return DataResult.error("用户登陆id为空");
 		}
+		if (StringUtils.isBlank(userloginlon)) {
+			return DataResult.error("精度为空");
+		}
+		if (StringUtils.isBlank(userloginlat)) {
+			return DataResult.error("纬度为空");
+		}
+		return  userInfoService.updateLocation(userloginid,userloginlon,userloginlat);
 	}
 
 	// 更新channelId
@@ -310,23 +232,13 @@ public class UserController {
 	@ApiOperation(value = "更新channelId", httpMethod = "POST", notes = "更新channelId")
 	public String updateChannelId(@ApiParam(name = "userloginid", value = "病人登录id") @RequestParam Integer userloginid,
 			@ApiParam(name = "channelid", value = "channelid") @RequestParam String channelid) throws Exception {
-		if (userloginid != null && StringUtils.isNotBlank(channelid)) {
-			boolean result = userInfoService.updateChannelId(userloginid, channelid);
-			if (result) {
-				return DataResult.success("更新成功");
-			} else {
-				return DataResult.error("更新失败");
-			} 
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (userloginid == null) {
-				errList.add("登录id为空");
-			}
-			if (StringUtils.isNotBlank(channelid)) {
-				errList.add("channelid为空");
-			}
-			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
+		if (userloginid == null) {
+			return DataResult.error("用户登陆id为空");
 		}
+		if (StringUtils.isBlank(channelid)) {
+			return DataResult.error("channelid为空");
+		}
+		return  userInfoService.updateChannelId(userloginid, channelid);
 	}
 
 	
@@ -339,30 +251,13 @@ public class UserController {
 			@ApiParam(name = "userloginname", required = false, value = "昵称") @RequestParam(required = false) String userloginname,
 			@ApiParam(name = "userloginid", required = true, value = "登录id") @RequestParam Integer userloginid)
 			throws Exception {
-		boolean state = (pictureFile != null || (userloginname != null && userloginname.trim().length() != 0))
-				&& userloginid != null;
-		if (state) {
-			String result = userInfoService.updateUserPixAndUserName(pictureFile, userloginid, userloginname);
-			if (StringUtils.isNotBlank(result)) {
-				return DataResult.success("修改成功",result);
-			} else {
-				return DataResult.error("修改失败");
-			}
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (pictureFile == null) {
-				errList.add("图片为空");
-			}
-			if (userloginid == null) {
-				errList.add("用户登录id为空");
-			}
-			if (StringUtils.isNotBlank(userloginname
-					) ) {
-				errList.add("用户昵称为空");
-			}
-			return Result.error(errList.toString().replace("[", "").replace("]", ""));
+		if (userloginid == null) {
+			return DataResult.error("用户登陆id为空");
 		}
-
+		if (StringUtils.isBlank(userloginname) && (pictureFile==null||pictureFile.isEmpty())) {
+			return DataResult.error("头像和昵称不可同时为空");
+		}
+		return userInfoService.updateUserPixAndUserName(pictureFile, userloginid, userloginname);
 	}
 
 	
@@ -373,16 +268,10 @@ public class UserController {
 	public String findUserInfo(
 			@ApiParam(name = "userloginid", required = true, value = "登录id") @RequestParam(value = "userloginid") Integer userloginid)
 			throws Exception {
-		if (userloginid!=null) {
-			Map<String, Object> reslutMap = userInfoService.findUserInfo(userloginid);
-			if (reslutMap!=null) {
-				return DataResult.success("获取成功", reslutMap);
-			} else {
-				return DataResult.success("个人信息为空");
-			}
-		} else {
+		if (userloginid==null) {
 			return DataResult.error("登录id为空");
 		}
+		return userInfoService.findUserInfo(userloginid);
 	}
 
 	// 修改用户信息
@@ -400,36 +289,36 @@ public class UserController {
 			@ApiParam(name = "userage", value = "年龄") @RequestParam(required = false) Integer userage,
 			@ApiParam(name = "userloginid", value = "登录id") @RequestParam(required = true) Integer userloginid)
 			throws Exception {
-		if (userloginid != null) {
-			boolean result = userInfoService.updateUserInfo(userloginid, username, usermale, usercardnum, useradrprovince,
-					useradrcity, userage, useradrarea, useradrother, pictureFile);
-			if (result) {
-				return DataResult.success("信息修改成功");
-			} else {
-				return DataResult.error("信息修改失败");
-			}
-			
-		} else {
-			return DataResult.error("该用户的id为空");
+		if (userloginid == null) {
+			return DataResult.error("该用户的id为空");	
 		}
+		return userInfoService.updateUserInfo(userloginid, username, usermale, usercardnum, useradrprovince,
+					useradrcity, userage, useradrarea, useradrother, pictureFile);
+		
 	}
-
+	
+	@RequestMapping(value = "/reviewinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "提交审核", httpMethod = "POST", notes = "提交审核")
+	public String reviewInfo(
+			@ApiParam(name = "userloginid", value = "登录id") @RequestParam(required = true) Integer userloginid
+			) throws Exception {
+		if (userloginid==null) {
+			return DataResult.error("id为空");
+		}
+		return userInfoService.updateInfoToReview(userloginid);
+	}
+	
 	// 查询亲属信息
 	@RequestMapping(value = "/findfamily", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "查询亲属信息", httpMethod = "POST", notes = "查询亲属信息")
 	public String findFamily(
 			@ApiParam(name = "userloginid", required = false, value = "用户登录id") @RequestParam Integer userloginid)
 			throws Exception {
-		if (userloginid != null) {
-			List<Familyinfo> list = userInfoService.findFamily(userloginid);
-			if (list!=null && list.size()>0) {
-				return DataResult.success("查询成功", list);
-			} else {
-				return DataResult.success("查询成功，但亲属为空");
-			} 
-		} else {
+		if (userloginid == null) {
 			return DataResult.error("id为空");
 		}
+		return userInfoService.findFamily(userloginid);
+			
 	}
 
 	// 添加亲属信息
@@ -440,36 +329,27 @@ public class UserController {
 			@ApiParam(name = "familyname", value = "姓名") @RequestParam String familyname,
 			@ApiParam(name = "familymale", value = "性别") @RequestParam String familymale,
 			@ApiParam(name = "familyage", value = "年龄") @RequestParam Integer familyage) throws Exception {
-		if (userloginid!=null&& StringUtils.isNotBlank(familyname) && StringUtils.isNotBlank(familymale) && familyage!=null ) {
-			Familyinfo familyinfo = new Familyinfo();
-			familyinfo.setFamilyage(familyage);
-			familyinfo.setFamilymale(familymale);
-			familyinfo.setFamilyname(familyname); 
-			familyinfo.setUserloginid(userloginid);
-			familyinfo.setFamilytype(false);
-			boolean result = userInfoService.addFamily(familyinfo);
-			if (result) {
-				return DataResult.success("添加成功");
-			} else {
-				return DataResult.error("添加失败");
-			} 
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (userloginid == null) {
-				errList.add("登录id为空");
-			}
-			if (StringUtils.isBlank(familyname) ) {
-				errList.add("亲属姓名为空");
-			}
-			if (StringUtils.isBlank(familymale) ) {
-				errList.add("亲属性别为空");
-			}
-			if (familyage == null) {
-				errList.add("亲属年龄为空");
-			}
-			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
+		if (userloginid == null) {
+			return DataResult.error("id为空");
 		}
-		
+		if (StringUtils.isBlank(familyname)) {
+			return DataResult.error("亲属姓名为空");
+		}
+		if (StringUtils.isBlank(familymale)) {
+			return DataResult.error("亲属性别为空");
+		}
+		if (familyage == null) {
+			return DataResult.error("亲属年龄为空");
+		}
+
+		Familyinfo familyinfo = new Familyinfo();
+		familyinfo.setFamilyage(familyage);
+		familyinfo.setFamilymale(familymale);
+		familyinfo.setFamilyname(familyname);
+		familyinfo.setUserloginid(userloginid);
+		familyinfo.setFamilytype(false);
+		return userInfoService.addFamily(familyinfo);
+
 	}
 
 	// 修改亲属信息
@@ -526,11 +406,17 @@ public class UserController {
 		}
 	}
 
+	// 获取科室
+	@RequestMapping(value = "/getdept", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取科室", httpMethod = "GET", notes = "获取科室")
+	public String getDept() throws Exception {
+		return commonService.getDept();
+	}
 	// 获取医生列表模式
 	@RequestMapping(value = "/listdoctors", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取医生列表模式", httpMethod = "POST", consumes = "multipart/form-data", notes = "获取医生列表模式")
 	public @ResponseBody String findDoctors(@ApiParam(name = "page", value = "当前页") @RequestParam Integer page,
-			@ApiParam(name = "userloginlon", value = "精度") @RequestParam(value = "userloginlon") String userloginlon,
+			@ApiParam(name = "userloginlon", value = "经度") @RequestParam(value = "userloginlon") String userloginlon,
 			@ApiParam(name = "userloginlat", value = "纬度") @RequestParam(value = "userloginlat") String userloginlat,
 			@ApiParam(name = "dochospprovince", value = "省") @RequestParam(required = false) String dochospprovince,
 			@ApiParam(name = "dochospcity", value = "市") @RequestParam(required = false) String dochospcity,
@@ -539,35 +425,30 @@ public class UserController {
 			@ApiParam(name = "docprimarydept", value = "一级部门") @RequestParam(required = false) String docprimarydept,
 			@ApiParam(name = "docseconddept", value = "二级部门") @RequestParam(required = false) String docseconddept)
 			throws Exception {
-		if(page!=null && page >0) {
-			DoctorSearch doctorSearch = new DoctorSearch();
-			doctorSearch.setPageNo(page);
-			doctorSearch.setPageSize(10);
-			doctorSearch.setLat(userloginlat);
-			doctorSearch.setLon(userloginlon);
-			doctorSearch.setTime(date);
-			doctorSearch.setProvince(dochospprovince);
-			doctorSearch.setCity(dochosparea);
-			doctorSearch.setArea(dochosparea);
-			doctorSearch.setPrimaryDept(docprimarydept);
-			doctorSearch.setSecondDept(docseconddept);
-			//Map<String, Object> resultMap = userService.listDoctor(doctorSearch);
-			PageInfo<Map<String, Object>> list = userHomeService.listDoctor(doctorSearch);
-			if (list != null && list.getTotal()>0) {
-				return DataResult.success("获取成功",list.getList());
-			}else {
-				return DataResult.success("数据为空");
-			}
-		}else {
-			if (page==null) {
-				return DataResult.error("当前页不可为空");	
-			} else {
-				return DataResult.error("当前页应为大于0的整数");
-			}
-			
+		if (page==null) {
+			return DataResult.error("当前页为空");
 		}
-		
-
+		if (page!=null && page<1) {
+			return DataResult.error("当前页应为大于0的整数");
+		}
+		if (userloginlat==null) {
+			return DataResult.error("纬度为空");
+		}
+		if (userloginlon==null) {
+			return DataResult.error("经度为空");
+		}
+		DoctorSearch doctorSearch = new DoctorSearch();
+		doctorSearch.setPageNo(page);
+		doctorSearch.setPageSize(10);
+		doctorSearch.setLat(userloginlat);
+		doctorSearch.setLon(userloginlon);
+		doctorSearch.setTime(date);
+		doctorSearch.setProvince(dochospprovince);
+		doctorSearch.setCity(dochosparea);
+		doctorSearch.setArea(dochosparea);
+		doctorSearch.setPrimaryDept(docprimarydept);
+		doctorSearch.setSecondDept(docseconddept);
+		return  userHomeService.listDoctor(doctorSearch);
 	}
 
 	// 获取医生地图模式
@@ -577,41 +458,14 @@ public class UserController {
 			@ApiParam(name = "userloginlon", value = "精度") @RequestParam(value = "userloginlon") String userloginlon,
 			@ApiParam(name = "userloginlat", value = "纬度") @RequestParam(value = "userloginlat") String userloginlat
 			) throws Exception {
-		if (userloginlat != null && userloginlat.trim() != "" && userloginlon != null
-				&& userloginlon.trim() != "" ) {
-			List<Map<String, Object>> map = userHomeService.findDoctorsInMap(userloginlat, userloginlon);
-			if (map != null && map.size()>0) {
-				return DataResult.success("获取成功",map);
-			}else {
-				return DataResult.success("数据为空");
-			}
-			/*//先计算查询点的经纬度范围  
-			double latitude = Double.parseDouble(userloginlat);
-			double longitude = Double.parseDouble(userloginlon);
-			//地球半径千米 
-			double r = 6371; 
-			//5千米距离  
-	        double dis = 50;
-	        double dlng =  2*Math.asin(Math.sin(dis/(2*r))/Math.cos(latitude*Math.PI/180));  
-	        //角度转为弧度  
-	        dlng = dlng*180/Math.PI;
-	        double dlat = dis/r;  
-	        dlat = dlat*180/Math.PI;          
-	        double minlat =latitude-dlat;  
-	        double maxlat = latitude+dlat;  
-	        double minlng = longitude -dlng;  
-	        double maxlng = longitude + dlng;  
-			Map<String, Object> resultMap = userService.findDoctorsInMap(minlat, maxlat, minlng, maxlng);
-			if ("1".equals(resultMap.get("state"))) {
-				return DataResult.success("获取成功",resultMap.get("data"));
-			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.success("数据为空");
-			} else{
-				return DataResult.error("异常错误");
-			}*/
-		} else {
-			return DataResult.error("位置信息不完整");
+		if (StringUtils.isBlank(userloginlon)) {
+			return DataResult.error("精度为空");
 		}
+		if (StringUtils.isBlank(userloginlat)) {
+			return DataResult.error("纬度为空");
+		}
+		return userHomeService.findDoctorsInMap(userloginlat, userloginlon);
+		
 		
 	}
 
@@ -620,38 +474,47 @@ public class UserController {
 	@ApiOperation(value = "获取医生详细信息", httpMethod = "POST", notes = "获取医生详细信息")
 	public String findDoctor(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
 			throws Exception {
-		if (docloginid != null) {
-			Map<String, Object> resultMap = userHomeService.findDoctorDetail(docloginid);
-			if (resultMap != null) {
-				return DataResult.success("获取成功", resultMap);
-			}else {
-				return DataResult.success("数据为空");
-			}
-		} else {
+		if (docloginid == null) {
 			return DataResult.error("医生id为空");
+		
+		}
+		return  userHomeService.findDoctorDetail(docloginid);
+	}
+	
+	//获取医生日程
+	@RequestMapping(value = "/getcalendar", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取医生当天后30天内日程", httpMethod = "POST", notes = "获取医生当天后30天内日程", produces = "application/json")
+	public String getCalendarbymonth(
+				@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid,
+				@ApiParam(name = "page", value = "当前页") @RequestParam Integer page
+				) throws Exception {
+			return userHomeService.listCalendar(docloginid,page);
+	}
+
+	// 获取医生评价
+	@RequestMapping(value = "/getevaluation", produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取医生评价", httpMethod = "POST", notes = "获取医生评价")
+	public String getEvaluation(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
+			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page) throws Exception {
+		if (docloginid != null && page != null) {
+			if (page < 0) {
+				return DataResult.error("当前页应大于0");
+			}
+			return userHomeService.getEvaluation(docloginid, page);
+
+		} else {
+			List<String> errList = new ArrayList<String>();
+			if (docloginid == null) {
+				errList.add("医生登录id为空");
+			}
+			if (page == null) {
+				errList.add("当前页为空");
+			}
+			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
 		}
 
 	}
-
-	/*// 获取医生日程
-	@RequestMapping(value = "/getschedule", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "获取医生日程", httpMethod = "POST", notes = "获取医生日程")
-	public String findSchedule(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
-			throws Exception {
-		if (docloginid != null) {
-			Map<String, Object> resultMap = userService.getSchedule(docloginid);
-			if ("1".equals(resultMap.get("state"))) {
-				return DataResult.success("获取成功", resultMap.get("data"));
-			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.success("请求成功,数据为空");
-			} else {
-				return DataResult.error("请求异常");
-			}
-		} else {
-			return DataResult.error(" 请求的id为空"); // 请求的id为空
-		}
-
-	}*/
+	
 
 	/*// 获取省市区县
 	@RequestMapping(value = "/findcities", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -699,27 +562,7 @@ public class UserController {
 			}
 			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
 		} else {
-			boolean result = userSickService.addSick(pictureFile, usersickCustom);
-			if (result) {
-				return DataResult.success("新增病情成功");
-			}else {
-				return DataResult.error("新增病情失败");
-			}
-			/*int result = userService.addSick(pictureFile, usersickCustom);
-			if (1 == result) {
-				return DataResult.success("新增病情成功");
-			} else if (2 == result) {
-				return DataResult.error("新增病情失败");
-			} else if (3 == result) {
-				return DataResult.error("创建路径失败");
-			} else if (4 == result) {
-				return DataResult.error("当前用户未审核，不可发布病情");
-			} else if (5 == result) {
-				return DataResult.error("id对应的记录为空");
-			} else {
-				return DataResult.error("异常错误");
-			}*/
-
+			return  userSickService.addSick(pictureFile, usersickCustom);
 		}
 
 	}
@@ -729,28 +572,19 @@ public class UserController {
 	@ApiOperation(value = "获取病情", httpMethod = "POST", notes = "获取病情")
 	public @ResponseBody String getSick(
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
+			@ApiParam(name = "page", value = "当前页") @RequestParam(required=false) Integer page,
 			@ApiParam(name = "type", value = "病情类型,不填获取全部 ,1是未发布的病情 ,2是已发布和生成订单的") @RequestParam(required=false) Integer type) throws Exception {
-		if (userloginid != null) {
-			if (type!=null && type >2) {
-				return DataResult.error("type超出范围");
-			}
-			List<Map<String, Object>> list = userSickService.listSicks(userloginid, type);
-			if (list != null && list.size()>0) {
-				return DataResult.success("获取成功", list);
-			}else {
-				return DataResult.success("数据为空",null);
-			}
-			/*Map<String, Object> resultMap = userService.findSicks(userloginid,type);
-			if ("1".equals(resultMap.get("state"))) {
-				return DataResult.success("获取成功", resultMap.get("data"));
-			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.success("请求成功,数据为空");
-			} else {
-				return DataResult.error("请求异常");
-			}*/
-		} else {
+		if (userloginid == null) {
 			return DataResult.error("用户id为空");
 		}
+		if (type!=null && (type<1||type>2)) {
+			return DataResult.error("type超出范围");
+		}
+		if (page==null) {
+			page=1;
+		}
+		return  userSickService.listSicks(userloginid, type,page);
+		
 
 	}
 
@@ -761,25 +595,10 @@ public class UserController {
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam(required=false) Integer userloginid,
 			@ApiParam(name = "usersickid", value = "病情id") @RequestParam Integer usersickid)
 			throws Exception {
-		if (usersickid != null) {
-			Map<String, Object> resultMap = userSickService.getSickDetail(usersickid);
-			if (resultMap != null) {
-				return DataResult.success("获取成功", resultMap);
-			}else {
-				return DataResult.success("数据为空",null);
-			}
-			/*Map<String, Object> resultMap = userService.getSickInfo(usersickid);
-			if ("1".equals(resultMap.get("state"))) {
-				return DataResult.success("获取成功", resultMap.get("data"));
-			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.success("请求成功,数据为空");
-			} else {
-				return DataResult.error("请求异常");
-			}*/
-		} else {
+		if (usersickid == null) {
 			return DataResult.error("病情id为空");
 		}
-
+		return userSickService.getSickDetail(userloginid,usersickid);
 	}
 
 	// 删除病情
@@ -789,30 +608,12 @@ public class UserController {
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam(required=false) Integer userloginid,
 			@ApiParam(name = "usersickid", value = "病情id") @RequestParam Integer usersickid)
 			throws Exception {
-		if (usersickid != null) {
-			boolean result = userSickService.deleteSick(null, usersickid);
-			if (result) {
-				return DataResult.success("删除成功");
-			} else {
-				return DataResult.error("删除失败");
-			}
-			/*int result = userService.deleteSick(usersickid);
-			if (1 == result) {
-				return DataResult.success("删除成功");
-			} else if (2 == result) {
-				return DataResult.error("删除失败");
-			} else if (3 == result) {
-				return DataResult.error("该状态不支持删除");
-			} else {
-				return DataResult.error("操作异常");
-			}
-*/
-		} else {
+		if (usersickid == null) {
 			return DataResult.error("病情id为空");
 		}
-
+		return  userSickService.deleteSick(null, usersickid);
 	}
-
+	
 	// 修改病情
 	@RequestMapping(value = "/editsick", method = RequestMethod.POST, consumes = "multipart/form-data", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "修改病情", httpMethod = "POST", consumes = "multipart/form-data", notes = "修改病情")
@@ -829,33 +630,10 @@ public class UserController {
 			@ApiIgnore  UsersickCustom usersickCustom) throws Exception {
 		// 获取校验错误信息
 		Integer usersickid = usersickCustom.getUsersickid();
-		if (usersickid!=null) {
-			boolean result = userSickService.editSick(pictureFile, usersickCustom);
-			if (result) {
-				return DataResult.success("修改病情成功");
-			} else {
-				return DataResult.error("修改病情失败");
-			}
-			/*int result = userService.updateSick(pictureFile, usersickCustom);
-			if (1 == result) {
-				return DataResult.success("修改病情成功");
-			} else if (2 == result) {
-				return DataResult.error("修改病情失败");
-			} else if (3 == result) {
-				return DataResult.error("创建路径失败");
-			} else if (4 == result) {
-				return DataResult.error("已发布状态,不可修改");
-			} else if (5 == result) {
-				return DataResult.error("订单状态,不可修改");
-			} else if (6 == result) {
-				return DataResult.error("id对应记录为空");
-			} else {
-				return DataResult.error("异常错误");
-			}*/
-		} else {
-			return DataResult.error("病情id为空");
+		if (usersickid==null) {
+			return DataResult.error("病情id为空");	
 		}
-
+		return  userSickService.editSick(pictureFile, usersickCustom);
 	}
 	
 	// 发布病情
@@ -865,32 +643,11 @@ public class UserController {
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam(required=false) Integer userloginid,
 			@ApiParam(name = "usersickid", value = "病情id") @RequestParam Integer usersickid)
 			throws Exception {
-		if (usersickid != null) {
-			boolean result = userSickService.updateSickStateToPublish(null, usersickid);
-			if (result) {
-				return DataResult.success("发布成功");
-			} else {
-				return DataResult.error("发布失败");
-			}
-			/*int result = userService.updateSickToPublish(usersickid);
-			if (1 == result) {
-				return DataResult.success("发布成功");
-			} else if (2 == result) {
-				return DataResult.error("发布失败");
-			} else if (3 == result) {
-				return DataResult.error("有病情处于发布状态");
-			} else if (4 == result) {
-				return DataResult.error("有病情处于订单状态");
-			} else if (5 == result) {
-				return DataResult.error("病情不可重复发布");
-			} else if (6 == result) {
-				return DataResult.error("id对应记录为空");
-			} else {
-				return DataResult.error("异常错误");
-			}*/
-		} else {
-			return DataResult.error("id为空");
+		if (usersickid == null) {
+			return DataResult.error("病情id为空");
 		}
+		return userSickService.updateSickStateToPublish(userloginid, usersickid);
+		
 
 	}
 
@@ -901,133 +658,44 @@ public class UserController {
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam(required=false) Integer userloginid,
 			@ApiParam(name = "usersickid", value = "病情id") @RequestParam Integer usersickid)
 			throws Exception {
-		if (usersickid != null) {
-			boolean result = userSickService.updateSickStateToCancel(null, usersickid);
-			if (result) {
-				return DataResult.success("取消发布成功");
-			} else {
-				return DataResult.error("取消发布失败");
-			}
-			/*int result = userService.updateSickToCancel(usersickid);
-			if (1 == result) {
-				return DataResult.success("取消发布成功");
-			} else if (2 == result) {
-				return DataResult.error("取消发布失败");
-			} else if (3 == result) {
-				return DataResult.error("该病情处于未发布状态");
-			} else if (4 == result) {
-				return DataResult.error("该病情处于订单状态");
-			} else if (5 == result) {
-				return DataResult.error("该病情已结束");
-			} else if (6 == result) {
-				return DataResult.error("id对应记录为空");
-			} else {
-				return DataResult.error("异常错误");
-			}*/
-		} else {
-			return DataResult.error("id为空");
+		if (usersickid == null) {
+			return DataResult.error("病情id为空");
 		}
-
+		return  userSickService.updateSickStateToCancel(userloginid, usersickid);
 	}
 
 	// 获取当前发布病情相关医生
 	@RequestMapping(value = "/getredoctor", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取当前发布病情相关医生", httpMethod = "POST", notes = "获取推荐医生")
-	public String getrReDoctor(@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
+	public String getrReDoctor(
+			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
+			@ApiParam(name = "page", value = "当前页") @RequestParam(required=false) Integer page,
 			@ApiParam(name = "type", value = "医生类型,不填为所有医生,1为系统推荐医生，2为抢单医生，3为其他医生推荐医生，4为预选医生") @RequestParam(required=false) Integer type)
 			throws Exception {
-		if (userloginid != null) {
-			if (type!=null&&(type>4 || type<1)) {
-				return DataResult.error("preordertype超出范围");
-			}
-			List<Map<String, Object>> resultMap = userSickService.listRelatedDoctor(userloginid, type);
-			if (resultMap != null && resultMap.size()>0) {
-				return DataResult.success("获取成功", resultMap);
-			}else {
-				return DataResult.success("获取成功,获取的数据为空",null);
-			}
-			/*Map<String, Object> resultMap = userService.findReDoctor(userloginid,type);
-			if ("1".equals(resultMap.get("state"))) {
-				return DataResult.success("获取成功", resultMap.get("data"));
-
-			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.success("获取成功,获取的数据为空");
-
-			} else if ("3".equals(resultMap.get("state"))) {
-				return DataResult.error("系统错误，发布的病情超过一个");
-
-			}else if ("4".equals(resultMap.get("state"))) {
-				return DataResult.success("当前无正在发布的病情");
-
-			} else {
-				return DataResult.error("操作异常");
-			}*/
-		} else {
-			return DataResult.error("id为空");
+		if (userloginid == null) {
+			return DataResult.error("用户登录id为空");
 		}
-
+		if (type!=null&&(type>4 || type<1)) {
+			return DataResult.error("preordertype超出范围");
+		}
+		if (page==null) {
+			page=1;
+		}
+		return  userSickService.listRelatedDoctor(userloginid, type,page);
 	}
-
-	/*// 获取推荐医生详情
-	@RequestMapping(value = "/getredoctordetail", produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "获取推荐医生详情", httpMethod = "POST", notes = "获取推荐医生")
-	public String getrReDoctorInfo(@ApiParam(name = "preorderid", value = "预订单id") @RequestParam Integer preorderid)
-			throws Exception {
-		if (preorderid != null) {
-			Map<String, Object> resultMap = userService.findReDoctorDetails(preorderid);
-			if ("1".equals(resultMap.get("state"))) {
-				return DataResult.success("获取成功", resultMap.get("data"));
-
-			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.error("获取的数据为空");
-
-			} else {
-				return DataResult.error("操作异常");
-			}
-		} else {
-			return DataResult.error("id为空");
-		}
-
-	}*/
 
 	// 预选医生
 	@RequestMapping(value = "/optdoctor", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "预选医生", httpMethod = "POST", notes = "预选医生")
 	public String optDoctor(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid) throws Exception {
-		if (docloginid!=null && userloginid!=null) {
-			boolean result = userSickService.addRelatedDoctor(docloginid, userloginid);
-			if (result) {
-				return DataResult.success("成功");
-			} else {
-				return DataResult.error("失败");
-			}
-			/*int result = userService.addOptDoctor(docloginid, userloginid);
-			if (1 == result) {
-				return DataResult.success("成功");
-			} else if (2 == result) {
-				return DataResult.error("失败");
-			} else if (3 == result) {
-				return DataResult.error("该医生已被选");
-			} else if (4 == result) {
-				return DataResult.error("系统错误，发布的病情超过一个");
-			} else if (5 == result) {
-				return DataResult.error("没有发布的病情");
-			} else {
-				return DataResult.error("异常错误");
-			}*/
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (userloginid == null) {
-				errList.add("用户登录id为空");
-			}
-			if (docloginid == null) {
-				errList.add("医生登录id为空");
-			}
-			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
+		if (userloginid==null) {
+			return DataResult.error("用户登录id为空");
 		}
-		
-
+		if (docloginid==null ) {
+			return DataResult.error("医生登录id为空");
+		}
+		return  userSickService.addRelatedDoctor(docloginid, userloginid);
 	}
 
 	// 生成订单
@@ -1036,43 +704,16 @@ public class UserController {
 	public String createOrder(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
 			@ApiParam(name = "userorderappointment", value = "预约时间") @RequestParam String userorderappointment) throws Exception {
-		if (docloginid!= null && userloginid!=null && StringUtils.isNotBlank(userorderappointment)) {
-			boolean result = userOrderService.createOrder(docloginid, userloginid, userorderappointment);
-			if (result) {
-				return DataResult.success("选择成功");
-			} else {
-				return DataResult.error("选择"
-						+ "失败");
-			}
-			/*int result = userService.createOrder(docloginid, userloginid, userorderappointment);
-			if (1 == result) {
-				return DataResult.success("选择成功");
-			} else if (2 == result) {
-				return DataResult.error("失败");
-			} else if (3 == result) {
-				return DataResult.error("该医生未加入候选");
-			} else if (4 == result) {
-				return DataResult.error("系统错误，发布的病情超过一个");
-			} else if (5 == result) {
-				return DataResult.error("没有发布的病情");
-			} else {
-				return DataResult.error("异常错误");
-			}*/
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (userloginid == null) {
-				errList.add("用户登录id为空");
-			}
-			if (docloginid == null) {
-				errList.add("医生登录id为空");
-			}
-			if (StringUtils.isBlank(userorderappointment)) {
-				errList.add("预约时间为空");
-			}
-			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
+		if (userloginid==null ) {
+			return DataResult.error("用户登录id为空");
 		}
-		
-
+		if (docloginid== null ) {
+			return DataResult.error("医生登录id为空");
+		}
+		if (StringUtils.isBlank(userorderappointment)) {
+			return DataResult.error("预约时间为空");
+		}
+		return  userOrderService.createOrder(docloginid, userloginid, userorderappointment);
 	}
 
 	// 取消订单
@@ -1081,39 +722,14 @@ public class UserController {
 	public String cancleOrder(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
 			                  @ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid)
 			throws Exception {
-		if (userorderid!=null && userloginid!=null) {
-			boolean result = userOrderService.updateOrderStateToCancel(userorderid, userloginid);
-			if (result) {
-				return DataResult.success("取消成功");
-			} else {
-				return DataResult.error("取消失败");
-			}
-			/*int result = userService.updateOrderToCancel(userorderid,userloginid);
-			if (1 == result) {
-				return DataResult.success("成功");
-			} else if (2 == result) {
-				return DataResult.error("失败");
-			} else if (3 == result) {
-				return DataResult.error("该状态订单不支持取消");
-			} else if (4 == result) {
-				return DataResult.error("用户登录id和订单不匹配");
-			} else if (5 == result) {
-				return DataResult.error("无对应订单");
-			} else {
-				return DataResult.error("异常错误");
-			}*/
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (userloginid == null) {
-				errList.add("用户登录id为空");
-			}
-			if (userorderid == null) {
-				errList.add("订单id为空");
-			}
-			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
+		if (userorderid==null ) {
+			return DataResult.error("订单id为空");
 		}
+		if ( userloginid==null) {
+			return DataResult.error("用户登录id为空");
+		}
+		return userOrderService.updateOrderStateToCancel(userorderid, userloginid);
 		
-
 	}
 
 	// 获取订单
@@ -1124,29 +740,34 @@ public class UserController {
 			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page,
 			@ApiParam(name = "type", value = "订单类型，为空获取全部,1代表等待确认的订单，2代表正在进行的,3为待评价的") @RequestParam(required=false) Integer type)
 			throws Exception {
-		if (userloginid!=null && page!=null) {
-			if (type!=null&&type>3) {
-				return DataResult.error("type超出范围");
-			}
-			PageInfo<Map<String, Object>>  pageInfo = userOrderService.listOrders(userloginid, page, type);
-			if (pageInfo!=null && pageInfo.getTotal()>0) {
-				return DataResult.success("获取成功", pageInfo.getList());
-			} else {
-				return DataResult.success("获取的数据为空",null);
-			}
-			/*Map<String, Object> resultMap = userService.getOrders(userloginid,page,type);
-			if ("1".equals(resultMap.get("state"))) {
-				return DataResult.success("获取成功", resultMap.get("data"));
-			} else if ("2".equals(resultMap.get("state"))) {
-				return DataResult.success("获取的数据为空");
-			} else {
-				return DataResult.error("操作异常");
-			}*/
-		} else {
+		if (userloginid==null ) {
 			return DataResult.error("用户登录id为空");
 		}
+		if (page==null) {
+			return DataResult.error("page为空");
+		}
+		if (type!=null&&(type<1||type>3)) {
+			return DataResult.error("type超出范围");
+		}
+		return  userOrderService.listOrders(userloginid, page, type);
 	}
 
+	// 获取订单
+	@RequestMapping(value = "/gethistoryorder", produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取历史订单", httpMethod = "POST", notes = "获取历史订单")
+	public String gethistoryorder(@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
+			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page)
+
+			throws Exception {
+		if (userloginid == null) {
+			return DataResult.error("用户登录id为空");
+		}
+		if (page == null) {
+			return DataResult.error("page为空");
+		}
+
+		return userOrderService.listOrders(userloginid, page, 4);
+	}
 	// 获取订单详细信息
 	@RequestMapping(value = "/orderdetail", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取订单详细信息", httpMethod = "POST", notes = "获取订单详细信息")
@@ -1171,39 +792,13 @@ public class UserController {
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid
 			)
 			throws Exception {
-		if (userloginid != null && userorderid!=null) {
-			boolean result = userOrderService.updateOrderStateToConfirm(userloginid, userorderid);
-			if (result) {
-				return DataResult.success("确认成功");
-			} else {
-				return DataResult.error("确认失败，请重试");
-			}
-			/*int result = userService.updateOrderToConfirm(userorderid,userloginid);
-			if (1 == result) {
-				return DataResult.success("成功");
-			} else if (2 == result) {
-				return DataResult.error("失败");
-			} else if (3 == result) {
-				return DataResult.error("该状态不支持用户确认");
-			} else if (4 == result) {
-				return DataResult.error("用户和订单不匹配");
-			} else if (5 == result) {
-				return DataResult.error("无对应订单");
-			} else {
-				return DataResult.error("异常错误");
-			}*/
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (userloginid == null) {
-				errList.add("用户登录id为空");
-			}
-			if (userorderid == null) {
-				errList.add("订单id为空");
-			}
-			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
+		if (userloginid == null ) {
+			return DataResult.error("用户登录id为空");
 		}
-		
-
+		if ( userorderid==null) {
+			return DataResult.error("订单id为空");
+		}
+		return userOrderService.updateOrderStateToConfirm(userloginid, userorderid);
 	}
 
 	// 支付医生费用
@@ -1257,37 +852,19 @@ public class UserController {
 
 	}
 
-	// 确认是否住院
-	@RequestMapping(value = "/confirmohospital", produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "确认是否住院", httpMethod = "POST", notes = "确认是否住院")
-	public String confirmohospital(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
-			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid) throws Exception {
-		if (userloginid != null && userorderid != null) {
-			boolean result = userOrderService.updateOrderStateToConfirm(userloginid, userorderid);
-			if (result) {
-				return DataResult.success("确认成功");
-			} else {
-				return DataResult.error("确认失败，请重试");
-			}
-			/*
-			 * int result = userService.updateOrderToConfirm(userorderid,userloginid); if (1
-			 * == result) { return DataResult.success("成功"); } else if (2 == result) {
-			 * return DataResult.error("失败"); } else if (3 == result) { return
-			 * DataResult.error("该状态不支持用户确认"); } else if (4 == result) { return
-			 * DataResult.error("用户和订单不匹配"); } else if (5 == result) { return
-			 * DataResult.error("无对应订单"); } else { return DataResult.error("异常错误"); }
-			 */
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (userloginid == null) {
-				errList.add("用户登录id为空");
-			}
-			if (userorderid == null) {
-				errList.add("订单id为空");
-			}
-			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
+	// 取消住院
+	@RequestMapping(value = "/cancelhospital", produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "取消住院", httpMethod = "POST", notes = "取消住院")
+	public String cancelhospital(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
+			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid
+			) throws Exception {
+		if (userloginid == null ) {
+			return DataResult.error("用户登录id为空");
 		}
-
+		if (userorderid == null) {
+			return DataResult.error("订单id为空");
+		}
+		return  userOrderService.updateOrderStateToCancelHospital(userloginid, userorderid);
 	}
 	
 	//评价
@@ -1307,7 +884,7 @@ public class UserController {
 			)
 			throws Exception {
 		if (userloginid != null && userorderid!=null) {
-			int result = userService.insertEvaluate(userorderid,userloginid,doccommentservicelevel,doccommentprofessionallevel,doccommentpricelevel,doccommentwords,hospcommentservicelevel,hospcommentenvironmenlevel,hospcommentpricelevel,hospcommentwords);
+			int result = userOrderService.insertEvaluate(userorderid,userloginid,doccommentservicelevel,doccommentprofessionallevel,doccommentpricelevel,doccommentwords,hospcommentservicelevel,hospcommentenvironmenlevel,hospcommentpricelevel,hospcommentwords);
 			if (1 == result) {
 				return DataResult.success("评论成功");
 			} else if (2 == result) {
@@ -1336,36 +913,108 @@ public class UserController {
 		
 
 	}
-
-	// 获取医生评价
-	@RequestMapping(value = "/getevaluation", produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "获取医生评价", httpMethod = "POST", notes = "获取医生评价")
-	public String getEvaluation(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
-			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page) throws Exception {
-		if (docloginid != null && page != null) {
-			if (page < 0) {
-				return DataResult.error("当前页应大于0");
+	
+	@RequestMapping(value="/listreceivenotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value="获取需要接收的通知",httpMethod="psot",notes="获取其他发送的通知")
+	public @ResponseBody String listreceivenotification(
+			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
+			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page,
+			@ApiParam(name = "type", value = "当type为空时获取全部通知，为1时获取已读通知，2为时获取未读通知") @RequestParam(required=false) Integer type
+			)throws Exception{
+		if (userloginid != null  && page!=null) {
+			if ( type!=null && (!(type==1||type==2))) {
+				return DataResult.error("type值超出范围");
+			}
+			if (page<0) {
+				return DataResult.error("page值超出范围");
+			}
+			PageInfo<Map<String, Object>> pageInfo = commonService.listReceiveNotification(userloginid, 3, page, type);
+			if (pageInfo != null && pageInfo.getTotal()>0) {
+				return DataResult.success("获取数据成功", pageInfo.getList());
+			}else {
+				return DataResult.success("获取数据为空", null);
+			}
+		}else {
+			return DataResult.error("信息不完整");
+		}
+		
+	}
+	@RequestMapping(value="/listsendernotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value="获取发送的通知",httpMethod="psot",notes="获取发送的通知")
+	public @ResponseBody String listsendernotification(
+			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
+			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page,
+			@ApiParam(name = "type", value = "当type为空时获取全部通知，为1时获取已读通知，2为时获取未读通知") @RequestParam(required=false) Integer type
+			)throws Exception{
+		if (userloginid != null) {
+			if ( type!=null && (!(type==1||type==2))) {
+				return DataResult.error("type值超出范围");
+			}
+			if (page<0) {
+				return DataResult.error("page值超出范围");
+			}
+			PageInfo<Map<String, Object>> pageInfo = commonService.listSenderNotification(userloginid, 3, page, type);
+			if (pageInfo != null && pageInfo.getTotal()>0) {
+				return DataResult.success("获取数据成功", pageInfo.getList());
+			}else {
+				return DataResult.success("获取数据为空", null);
+			}
+		}else {
+			return DataResult.error("信息不完整");
+		}
+		
+	}
+	@RequestMapping(value="/updatenotificationtoread", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value="将通知置为已读",httpMethod="psot",notes="将通知置为已读")
+	public @ResponseBody String updateNotificationToRead(
+			@ApiParam(name = "notificationid", required = true, value = "通知id") @RequestParam Integer notificationid,
+			@ApiParam(name = "userloginid", required = true, value = "用户登陆id") @RequestParam Integer userloginid
+			)throws Exception{
+		if (userloginid != null) {
+			boolean result= commonService.updateNotificationToRead(notificationid, userloginid);
+			if (result) {
+				return DataResult.success("已读成功");
+			}else {
+				return DataResult.success("已读失败");
+			}
+		}else {
+			List<String> errList = new ArrayList<String>();
+			if (notificationid == null) {
+				errList.add("通知id为空");
+			}
+			if (userloginid == null) {
+				errList.add("用户登录id为空");
 			}
 			
-			Map<String, Object> result = userService.getEvaluation(docloginid, page);
-			if ("1".equals(result.get("state"))) {
-				return DataResult.success("获取数据成功", result.get("data"));
-			} else if ("2".equals(result.get("state"))) {
-				return DataResult.success("获取数据成功,但数据为空");
-			} else {
-				return DataResult.error("异常错误");
-			}
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (docloginid == null) {
-				errList.add("医生登录id为空");
-			}
-			if (page == null) {
-				errList.add("当前页为空");
-			}
 			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
 		}
-
+		
+	}
+	@RequestMapping(value="/deletereceivenotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value="删除接收的通知",httpMethod="psot",notes="删除接收的通知")
+	public @ResponseBody String deleteNotification(
+			@ApiParam(name = "notificationid", required = true, value = "通知id") @RequestParam Integer notificationid,
+			@ApiParam(name = "userloginid", required = true, value = "用户登陆id") @RequestParam Integer userloginid
+			)throws Exception{
+		if (userloginid != null) {
+			boolean result= commonService.deleteNotification(notificationid, userloginid);
+			if (result) {
+				return DataResult.success("删除成功");
+			}else {
+				return DataResult.error("删除失败");
+			}
+		}else {
+			List<String> errList = new ArrayList<String>();
+			if (notificationid == null) {
+				errList.add("通知id为空");
+			}
+			if (userloginid == null) {
+				errList.add("用户登录id为空");
+			}
+			
+			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
+		}
+		
 	}
 	
 

@@ -31,6 +31,9 @@
       <if test="userloginid != null" >
         userLoginId,
       </if>
+      <if test="userhuanxinaccount != null" >
+        userHuanXinAccount,
+      </if>
       <if test="userloginname != null" >
         userLoginName,
       </if>
@@ -91,10 +94,16 @@
       <if test="userloginchannelid != null" >
         userLoginChannelId,
       </if>
+      <if test="userlogindev != null" >
+        userLoginDev,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userloginid != null" >
         #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="userhuanxinaccount != null" >
+        #{userhuanxinaccount,jdbcType=VARCHAR},
       </if>
       <if test="userloginname != null" >
         #{userloginname,jdbcType=VARCHAR},
@@ -148,13 +157,16 @@
         #{userloginip,jdbcType=VARCHAR},
       </if>
       <if test="userlogintype != null" >
-        #{userlogintype,jdbcType=BIT},
+        #{userlogintype,jdbcType=INTEGER},
       </if>
       <if test="userloginpix != null" >
         #{userloginpix,jdbcType=VARCHAR},
       </if>
       <if test="userloginchannelid != null" >
         #{userloginchannelid,jdbcType=VARCHAR},
+      </if>
+      <if test="userlogindev != null" >
+        #{userlogindev,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>

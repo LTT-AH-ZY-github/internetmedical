@@ -6,10 +6,13 @@
      select count(* )from   usersick    
      where familyId= #{0,jdbcType=INTEGER}
   </select>
+  <!--用户获取不同状态的病情  -->
   <select id="selectAllInfoByUserLoginId" resultType="map" parameterType="java.lang.Integer" >
-     select   a.usersickstateid,a.usersickid, a.usersickdesc, a.usersickpic, a.usersickprimarydept,a.usersickseconddept, a.userorderid,
-      a.usersickpic,a.usersicktime, a.familyid,b.familyname,b.familymale,b.familyage  
-     from   usersick as a   left   join   familyinfo as b     on   a.familyId=b.familyId      
+     select   a.usersickid,a.usersickstateid,c.usersickstatename,a.usersickdesc, a.usersickpic, a.usersickprimarydept,a.usersickseconddept,
+      a.usersicktime,a.usersickptime,a.familyid,b.familyname,b.familymale,b.familyage  
+     from   usersick as a   
+     		left   join   familyinfo as b     on   a.familyId=b.familyId  
+     		left join     usersickstate as c on a.usersickstateid= c.usersickstateid
      where a.userLoginId = #{0,jdbcType=INTEGER}
      <if test="param2==1">
     	 and  a.userSickStateId = 1
@@ -17,19 +20,23 @@
      <if test="param2==2">
     	 and  a.userSickStateId >= 2 and a.userSickStateId <![CDATA[<=]]> 3
      </if>
-   	 order by userSickStateId desc, userSickTime  desc ;
+   	 order by userSickStateId desc, userSickTime  desc 
+  </select>
+  <!--用户获取病情详情  -->
+  <select id="selectById" resultType="map" parameterType="java.lang.Integer" >
+     select   a.usersickid,a.usersickstateid,c.usersickstatename,a.usersickdesc, a.usersickpic, a.usersickprimarydept,a.usersickseconddept,
+     a.usersicktime,a.usersickptime,a.familyid,b.familyname,b.familymale,b.familyage  
+     from   usersick as a   
+     		left   join   familyinfo as b     on   a.familyId=b.familyId  
+     		left join     usersickstate as c on a.usersickstateid= c.usersickstateid   
+     where  a.usersickid = #{userSickId,jdbcType=INTEGER}
   </select>
   <!--根据登录id及病情状态查询用户的所有病情  -->
   <select id="selectByUserLoginIdAndState" resultType="com.medical.po.Usersick" parameterType="java.lang.Integer" >
      select *  from   usersick    
      where userLoginId= #{0,jdbcType=INTEGER}  and userSickStateId= #{1,jdbcType=INTEGER} 
   </select>
-   <select id="selectById" resultType="map" parameterType="java.lang.Integer" >
-     select   a.usersickstateid,a.usersickid, a.usersickdesc, a.usersickpic, a.usersickprimarydept,a.usersickseconddept,a.userorderid, a.usersicktime,
-     a.usersickpic, a.familyid,b.familyname,b.familymale,b.familyage,a.usersickptime
-     from   usersick as a   left   join   familyinfo as b     on   a.familyId=b.familyId      
-     where  a.usersickid = #{userSickId,jdbcType=INTEGER}
-  </select>
+   
     <select id="selectByPhone" parameterType="String" resultType="com.medical.po.Usersick" >
      select * from   usersick    
      where usersick= #{userLoginId,jdbcType=INTEGER}
@@ -211,9 +218,12 @@
   ORDER BY distance ASC
 	limit #{startPage},#{pageSize};
   </select>
-  <!--获取推荐病情  -->
+  <!--医生获取推荐病情  -->
   <select id="paginationReSickSortByDistance" parameterType="com.medical.po.SickSearch" resultType="map">
-    select a.usersickid,a.usersickdesc,a.usersickptime,b.userloginpix,c.familyname,c.familyage,c.familymale,a.usersickpic,a.usersickprimarydept,a.usersickseconddept,
+    select 	c.familyname,c.familyage,c.familymale,
+    		a.usersickid,a.usersickdesc,a.usersickptime,
+    		b.userloginpix,b.userhuanxinaccount,
+    		
   		ROUND(
 			    6378.138 * 2 * ASIN(
 			          SQRT(
@@ -242,9 +252,11 @@
   where a.userSickStateId=2 
   ORDER BY a.userSickPTime DESC
  </select>
-  <!--获取按时间排序的病情  -->
+  <!--医生获取按时间排序的病情  -->
   <select id="paginationSickSortByTime" parameterType="com.medical.po.SickSearch" resultType="map">
-    select a.usersickid,a.usersickdesc,a.usersickptime,b.userloginpix,c.familyname,c.familyage,c.familymale,,a.usersickpic,a.usersickprimarydept,a.usersickseconddept,
+    select c.familyname,c.familyage,c.familymale,
+    		a.usersickid,a.usersickdesc,a.usersickptime,
+    		b.userloginpix,b.userhuanxinaccount,
   		ROUND(
 			    6378.138 * 2 * ASIN(
 			          SQRT(
@@ -274,9 +286,11 @@
   ORDER BY distance ASC
 	
   </select>
-  <!--获取按位置排序的病情  -->
+  <!--医生获取按位置排序的病情  -->
    <select id="paginationSickSortByLoc" parameterType="com.medical.po.SickSearch" resultType="map">
-    select a.usersickid,a.usersickdesc,a.usersickptime,b.userloginpix,c.familyname,c.familyage,c.familymale,a.usersickpic,a.usersickprimarydept,a.usersickseconddept,
+    select c.familyname,c.familyage,c.familymale,
+    		a.usersickid,a.usersickdesc,a.usersickptime,
+    		b.userloginpix,b.userhuanxinaccount,
   		ROUND(
 			    6378.138 * 2 * ASIN(
 			          SQRT(
@@ -304,19 +318,22 @@
   	  left join familyinfo as c on a.familyId =c.familyId
   where a.userSickStateId=2 
 	  <if test="province!=null">
-	  	b.userLoginProvince=#{province}
+		  and 	b.userLoginProvince=#{province}
 	  </if>
 	  <if test="city!=null">
-	 	 b.userLoginCity=#{city}
+	 	and  b.userLoginCity=#{city}
 	  </if>
 	  <if test="area!=null">
-	    b.userLoginArea=#{area}
+	    and  b.userLoginArea=#{area}
 	  </if>
 	ORDER BY distance ASC
  </select>	
- <!--查看病情详情  -->
+ <!--医生查看病情详情  -->
   <select id="selectAllInfoByUserSickId" parameterType="java.lang.Integer" resultType="map">
-    select a.usersickid,a.usersickdesc,a.usersickptime,b.userloginpix,c.familyname,c.familyage,c.familymale,a.usersickpic,a.usersickprimarydept,a.usersickseconddept
+    select c.familyname,c.familyage,c.familymale,
+    	a.usersickid,a.usersickdesc,a.usersickptime,
+    	b.userloginpix,b.userhuanxinaccount,
+    	a.usersickpic,a.usersickprimarydept,a.usersickseconddept
   	from usersick as a 
   	  left join userlogininfo as b on a.userLoginId =b.userLoginId 
   	  left join familyinfo as c on a.familyId =c.familyId
@@ -352,5 +369,11 @@
   ORDER BY distance ASC
 	<!-- limit #{startPage},#{pageSize}; -->
   </select>
-  
+  <update id="updateDeptByPrimaryKey" parameterType="com.medical.po.Usersick" >
+    update usersick
+    set 
+      userSickPrimaryDept = #{usersickprimarydept,jdbcType=VARCHAR},
+      userSickSecondDept = #{usersickseconddept,jdbcType=VARCHAR}
+     where userSickId = #{usersickid,jdbcType=INTEGER}
+  </update>
 </mapper>

@@ -38,7 +38,7 @@ public class DataResult extends Result {
      */
     @Override
     public String toJson() {
-        return String.format("{\"code\": %d, \"msg\": \"%s\", \"data\": %s}", code, msg, new GsonBuilder().serializeNulls().create().toJson(data));
+        return String.format("{\"code\": %d, \"msg\": \"%s\", \"data\": %s}", code, msg, new GsonBuilder().serializeNulls().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(data));
     }
 
 }

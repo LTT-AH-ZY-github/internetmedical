@@ -165,6 +165,76 @@ public class UserlogininfoExample {
             return (Criteria) this;
         }
 
+        public Criteria andUserhuanxinaccountIsNull() {
+            addCriterion("userHuanXinAccount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserhuanxinaccountIsNotNull() {
+            addCriterion("userHuanXinAccount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserhuanxinaccountEqualTo(String value) {
+            addCriterion("userHuanXinAccount =", value, "userhuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserhuanxinaccountNotEqualTo(String value) {
+            addCriterion("userHuanXinAccount <>", value, "userhuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserhuanxinaccountGreaterThan(String value) {
+            addCriterion("userHuanXinAccount >", value, "userhuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserhuanxinaccountGreaterThanOrEqualTo(String value) {
+            addCriterion("userHuanXinAccount >=", value, "userhuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserhuanxinaccountLessThan(String value) {
+            addCriterion("userHuanXinAccount <", value, "userhuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserhuanxinaccountLessThanOrEqualTo(String value) {
+            addCriterion("userHuanXinAccount <=", value, "userhuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserhuanxinaccountLike(String value) {
+            addCriterion("userHuanXinAccount like", value, "userhuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserhuanxinaccountNotLike(String value) {
+            addCriterion("userHuanXinAccount not like", value, "userhuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserhuanxinaccountIn(List<String> values) {
+            addCriterion("userHuanXinAccount in", values, "userhuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserhuanxinaccountNotIn(List<String> values) {
+            addCriterion("userHuanXinAccount not in", values, "userhuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserhuanxinaccountBetween(String value1, String value2) {
+            addCriterion("userHuanXinAccount between", value1, value2, "userhuanxinaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserhuanxinaccountNotBetween(String value1, String value2) {
+            addCriterion("userHuanXinAccount not between", value1, value2, "userhuanxinaccount");
+            return (Criteria) this;
+        }
+
         public Criteria andUserloginnameIsNull() {
             addCriterion("userLoginName is null");
             return (Criteria) this;
@@ -1345,53 +1415,113 @@ public class UserlogininfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserlogintypeEqualTo(Boolean value) {
+        public Criteria andUserlogintypeEqualTo(Integer value) {
             addCriterion("userLoginType =", value, "userlogintype");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogintypeNotEqualTo(Boolean value) {
+        public Criteria andUserlogintypeNotEqualTo(Integer value) {
             addCriterion("userLoginType <>", value, "userlogintype");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogintypeGreaterThan(Boolean value) {
+        public Criteria andUserlogintypeGreaterThan(Integer value) {
             addCriterion("userLoginType >", value, "userlogintype");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogintypeGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andUserlogintypeGreaterThanOrEqualTo(Integer value) {
             addCriterion("userLoginType >=", value, "userlogintype");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogintypeLessThan(Boolean value) {
+        public Criteria andUserlogintypeLessThan(Integer value) {
             addCriterion("userLoginType <", value, "userlogintype");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogintypeLessThanOrEqualTo(Boolean value) {
+        public Criteria andUserlogintypeLessThanOrEqualTo(Integer value) {
             addCriterion("userLoginType <=", value, "userlogintype");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogintypeIn(List<Boolean> values) {
+        public Criteria andUserlogintypeIn(List<Integer> values) {
             addCriterion("userLoginType in", values, "userlogintype");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogintypeNotIn(List<Boolean> values) {
+        public Criteria andUserlogintypeNotIn(List<Integer> values) {
             addCriterion("userLoginType not in", values, "userlogintype");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogintypeBetween(Boolean value1, Boolean value2) {
+        public Criteria andUserlogintypeBetween(Integer value1, Integer value2) {
             addCriterion("userLoginType between", value1, value2, "userlogintype");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogintypeNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andUserlogintypeNotBetween(Integer value1, Integer value2) {
             addCriterion("userLoginType not between", value1, value2, "userlogintype");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserloginsubchecktimeIsNull() {
+            addCriterion("userLoginSubCheckTime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserloginsubchecktimeIsNotNull() {
+            addCriterion("userLoginSubCheckTime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserloginsubchecktimeEqualTo(Date value) {
+            addCriterion("userLoginSubCheckTime =", value, "userloginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserloginsubchecktimeNotEqualTo(Date value) {
+            addCriterion("userLoginSubCheckTime <>", value, "userloginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserloginsubchecktimeGreaterThan(Date value) {
+            addCriterion("userLoginSubCheckTime >", value, "userloginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserloginsubchecktimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("userLoginSubCheckTime >=", value, "userloginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserloginsubchecktimeLessThan(Date value) {
+            addCriterion("userLoginSubCheckTime <", value, "userloginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserloginsubchecktimeLessThanOrEqualTo(Date value) {
+            addCriterion("userLoginSubCheckTime <=", value, "userloginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserloginsubchecktimeIn(List<Date> values) {
+            addCriterion("userLoginSubCheckTime in", values, "userloginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserloginsubchecktimeNotIn(List<Date> values) {
+            addCriterion("userLoginSubCheckTime not in", values, "userloginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserloginsubchecktimeBetween(Date value1, Date value2) {
+            addCriterion("userLoginSubCheckTime between", value1, value2, "userloginsubchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserloginsubchecktimeNotBetween(Date value1, Date value2) {
+            addCriterion("userLoginSubCheckTime not between", value1, value2, "userloginsubchecktime");
             return (Criteria) this;
         }
 
@@ -1532,6 +1662,66 @@ public class UserlogininfoExample {
 
         public Criteria andUserloginchannelidNotBetween(String value1, String value2) {
             addCriterion("userLoginChannelId not between", value1, value2, "userloginchannelid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserlogindevIsNull() {
+            addCriterion("userLoginDev is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserlogindevIsNotNull() {
+            addCriterion("userLoginDev is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserlogindevEqualTo(Integer value) {
+            addCriterion("userLoginDev =", value, "userlogindev");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserlogindevNotEqualTo(Integer value) {
+            addCriterion("userLoginDev <>", value, "userlogindev");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserlogindevGreaterThan(Integer value) {
+            addCriterion("userLoginDev >", value, "userlogindev");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserlogindevGreaterThanOrEqualTo(Integer value) {
+            addCriterion("userLoginDev >=", value, "userlogindev");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserlogindevLessThan(Integer value) {
+            addCriterion("userLoginDev <", value, "userlogindev");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserlogindevLessThanOrEqualTo(Integer value) {
+            addCriterion("userLoginDev <=", value, "userlogindev");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserlogindevIn(List<Integer> values) {
+            addCriterion("userLoginDev in", values, "userlogindev");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserlogindevNotIn(List<Integer> values) {
+            addCriterion("userLoginDev not in", values, "userlogindev");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserlogindevBetween(Integer value1, Integer value2) {
+            addCriterion("userLoginDev between", value1, value2, "userlogindev");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserlogindevNotBetween(Integer value1, Integer value2) {
+            addCriterion("userLoginDev not between", value1, value2, "userlogindev");
             return (Criteria) this;
         }
     }

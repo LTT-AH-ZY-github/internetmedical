@@ -8,17 +8,11 @@
       <if test="userorderid != null" >
         userOrderId,
       </if>
+      <if test="userorderstateid != null" >
+        userOrderStateId,
+      </if>
       <if test="userorderptime != null" >
         userOrderPTime,
-      </if>
-      <if test="userorderrtime != null" >
-        userOrderRTime,
-      </if>
-      <if test="userorderetime != null" >
-        userOrderETime,
-      </if>
-      <if test="userorderappointment != null" >
-        userOrderAppointment,
       </if>
       <if test="userorderdocloginid != null" >
         userOrderDocLoginId,
@@ -26,20 +20,50 @@
       <if test="userorderrecdocloginid != null" >
         userOrderRecDocLoginId,
       </if>
-      <if test="userorderstateid != null" >
-        userOrderStateId,
-      </if>
-      <if test="userorderhospid != null" >
-        userOrderHospId,
+      <if test="userorderrtime != null" >
+        userOrderRTime,
       </if>
       <if test="userorderdprice != null" >
         userOrderDPrice,
       </if>
+      <if test="userorderappointment != null" >
+        userOrderAppointment,
+      </if>
+      <if test="userorderetime != null" >
+        userOrderETime,
+      </if>
+      <if test="userorderactualhospitalizationid != null" >
+        userOrderActualHospitalizationId,
+      </if>
       <if test="userorderhstate != null" >
         userOrderHState,
       </if>
+      <if test="userorderchosehosptime != null" >
+        userOrderChoseHospTime,
+      </if>
+      <if test="userorderhospconfirmtime != null" >
+        userOrderHospConfirmTime,
+      </if>
+      <if test="userorderleavehosptime != null" >
+        userOrderLeaveHospTime,
+      </if>
+      <if test="userorderhospid != null" >
+        userOrderHospId,
+      </if>
+      <if test="userorderdeposit != null" >
+        userOrderDeposit,
+      </if>
+      <if test="userordertotaldeposit != null" >
+        userOrderTotalDeposit,
+      </if>
       <if test="userorderhprice != null" >
         userOrderHPrice,
+      </if>
+      <if test="userorderhospprimarydept != null" >
+        userOrderHospPrimaryDept,
+      </if>
+      <if test="userorderhospseconddept != null" >
+        userOrderHospSecondDept,
       </if>
       <if test="userordertpricetype != null" >
         userOrderTPriceType,
@@ -62,31 +86,25 @@
       <if test="userorderprice != null" >
         userOrderPrice,
       </if>
-      <if test="userorderdeposit != null" >
-        userOrderDeposit,
-      </if>
       <if test="usersickid != null" >
         userSickId,
       </if>
       <if test="userloginid != null" >
         userLoginId,
       </if>
+      <if test="userorderfinishtime != null" >
+        userOrderFinishTime,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userorderid != null" >
         #{userorderid,jdbcType=INTEGER},
       </if>
+      <if test="userorderstateid != null" >
+        #{userorderstateid,jdbcType=INTEGER},
+      </if>
       <if test="userorderptime != null" >
         #{userorderptime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="userorderrtime != null" >
-        #{userorderrtime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="userorderetime != null" >
-        #{userorderetime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="userorderappointment != null" >
-        #{userorderappointment,jdbcType=VARCHAR},
       </if>
       <if test="userorderdocloginid != null" >
         #{userorderdocloginid,jdbcType=INTEGER},
@@ -94,20 +112,50 @@
       <if test="userorderrecdocloginid != null" >
         #{userorderrecdocloginid,jdbcType=INTEGER},
       </if>
-      <if test="userorderstateid != null" >
-        #{userorderstateid,jdbcType=INTEGER},
-      </if>
-      <if test="userorderhospid != null" >
-        #{userorderhospid,jdbcType=INTEGER},
+      <if test="userorderrtime != null" >
+        #{userorderrtime,jdbcType=TIMESTAMP},
       </if>
       <if test="userorderdprice != null" >
         #{userorderdprice,jdbcType=DECIMAL},
       </if>
+      <if test="userorderappointment != null" >
+        #{userorderappointment,jdbcType=VARCHAR},
+      </if>
+      <if test="userorderetime != null" >
+        #{userorderetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderactualhospitalizationid != null" >
+        #{userorderactualhospitalizationid,jdbcType=INTEGER},
+      </if>
       <if test="userorderhstate != null" >
-        #{userorderhstate,jdbcType=TINYINT},
+        #{userorderhstate,jdbcType=BIT},
+      </if>
+      <if test="userorderchosehosptime != null" >
+        #{userorderchosehosptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderhospconfirmtime != null" >
+        #{userorderhospconfirmtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderleavehosptime != null" >
+        #{userorderleavehosptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderhospid != null" >
+        #{userorderhospid,jdbcType=INTEGER},
+      </if>
+      <if test="userorderdeposit != null" >
+        #{userorderdeposit,jdbcType=DECIMAL},
+      </if>
+      <if test="userordertotaldeposit != null" >
+        #{userordertotaldeposit,jdbcType=DECIMAL},
       </if>
       <if test="userorderhprice != null" >
         #{userorderhprice,jdbcType=DECIMAL},
+      </if>
+      <if test="userorderhospprimarydept != null" >
+        #{userorderhospprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="userorderhospseconddept != null" >
+        #{userorderhospseconddept,jdbcType=VARCHAR},
       </if>
       <if test="userordertpricetype != null" >
         #{userordertpricetype,jdbcType=INTEGER},
@@ -130,36 +178,33 @@
       <if test="userorderprice != null" >
         #{userorderprice,jdbcType=DECIMAL},
       </if>
-      <if test="userorderdeposit != null" >
-        #{userorderdeposit,jdbcType=DECIMAL},
-      </if>
       <if test="usersickid != null" >
         #{usersickid,jdbcType=INTEGER},
       </if>
       <if test="userloginid != null" >
         #{userloginid,jdbcType=INTEGER},
       </if>
+      <if test="userorderfinishtime != null" >
+        #{userorderfinishtime,jdbcType=TIMESTAMP},
+      </if>
     </trim>
   </insert>
  
-  <!--用户查询订单  -->
-    <select id="selectAllInfoByUserLoginId" parameterType="int" resultType="map">
- 	select a.userorderid,a.userorderstateid,a.userorderptime,a.userorderrtime,a.userorderdprice,a.userorderhstate,a.userorderhprice,a.userorderappointment,
- 			a.userordertpricetype,a.userordertprice,a.userorderapricetype,a.userorderaprice,a.userorderepricetype,a.userordereprice,a.userorderdeposit,
- 			g.docname as redocname,g.doctitle as redoctitle,g.docprimarydept as redocprimarydept,g.docseconddept as redocseconddept,
-	 		d.docloginpix,b.docname,b.docmale,b.docage,b.doctitle,b.docprimarydept,b.docseconddept,b.docexpert,b.docabs,b.dochosp,b.hosplevel,
-	 		f.familyname,f.familymale,f.familyage,
+  <!--用户查询不同状态订单  -->
+  <select id="selectAllInfoByUserLoginId" parameterType="int" resultType="map">
+ 		select  a.userorderid,a.userorderstateid,j.userorderstatename,a.userorderprice,a.userorderdeposit,a.userorderappointment,
+	 		f.familyname,f.familymale,f.familyage,a.userorderactualhospitalizationid,
 	 		e.usersickdesc,e.usersickpic,
-	 		a.userorderhospid,n.hospname,h.hospLevelName as hospgrade,n.hospadrprovince,n.hospadrcity,n.hospadrarea,n.hospadrother
+	 		b.docname,b.doctitle,b.docaddresslocation,d.docloginid,d.docloginpix,d.dochuanxinaccount,
+	 		k.hosploginpix as inhosploginpix,n.hospname as inhospname
 	  from userorder  as a 
 	  		left join doctorinfo as b on a.userOrderDocLoginId=b.docLoginId 
-	  		left join hospinfo as c on a.userOrderHospId=c.hospLoginId
 	  		left join doctorlogininfo as d on a.userOrderDocLoginId= d.docLoginId
 	  		left join usersick as e on a.userSickId = e.userSickId
 	  		left join familyinfo as f on e.familyId = f.familyId
-	  		left join doctorinfo as g on a.userOrderRecDocLoginId=b.docLoginId 
-	  		left join hospinfo as n on a.userOrderHospId = n.hospLoginId
-	  		left join hosplevel as h on n.hospGrade = h.hospLevelId
+	  		left join userorderstate as j  on  a.userorderstateid= j.userorderstateid
+	  		left join hosplogininfo as k on a.userOrderHospId = k.hospLoginId
+	  		left join hospinfo as n on k.hospLoginId = n.hospLoginId
 	 where a.userLoginId=#{0} 
 	 <if test="param2==1">
 	 	and a.userOrderStateId=2
@@ -168,64 +213,143 @@
 	 	and a.userOrderStateId<![CDATA[ > ]]>2  and a.userOrderStateId<![CDATA[ < ]]>9
 	 </if>
 	 <if test="param2==3">
-	 	and a.userOrderStateId<![CDATA[ >=]]>9 and  a.userOrderStateId<![CDATA[ <=]]>11
+	 	and a.userOrderStateId = 9 
+	 </if>
+	  <if test="param2==4">
+	 	and a.userOrderStateId <![CDATA[ > ]]>9
 	 </if>
 	 ORDER BY a.userorderptime DESC
-	</select>
-  <!-- 用户查询单个订单详情 -->
+  </select>
+  
+  <!-- 用户查询订单详情 -->
   <select id="selectAllInfoByUserLoginIdAndUserOrderId" parameterType="int" resultType="map">
- 	select  a.userorderid,a.userorderstateid,a.userorderptime,a.userorderrtime,a.userorderdprice,a.userorderhstate,a.userorderhprice,
- 			a.userordertpricetype,a.userordertprice,a.userorderapricetype,a.userorderaprice,a.userorderepricetype,a.userordereprice,a.userorderdeposit,
- 			g.docname as redocname,g.doctitle as redoctitle,g.docprimarydept as redocprimarydept,g.docseconddept as redocseconddept,
-	 		d.docloginpix,b.docname,b.docmale,b.docage,b.doctitle,b.docprimarydept,b.docseconddept,b.docexpert,b.docabs,b.dochosp,b.hosplevel,
-	 		b.dochospprovince,b.dochospcity,b.dochosparea,b.dochospother,
-	 		f.familyname,f.familymale,f.familyage,
-	 		e.usersickdesc,e.usersickpic,
-	 		a.userorderhospid,n.hospname,h.hospLevelName as hospgrade,n.hospadrprovince,n.hospadrcity,n.hospadrarea,n.hospadrother,n.hospabs,n.hospfeature
+ 		select  a.userorderid,a.userorderstateid,j.userorderstatename,a.userorderappointment,
+ 			a.userorderprice,a.userorderdprice,
+ 			a.userordertpricetype,g.pricetypename as userordertpricetypename,a.userordertprice,
+	 		a.userorderapricetype,l.pricetypename as userorderapricetypename,a.userorderaprice,
+	 		a.userorderepricetype,m.pricetypename as userorderepricetypename,a.userordereprice,
+	 		e.familyname,e.familymale,e.familyage,
+	 		d.usersickdesc,d.usersickpic,d.usersickprimarydept,d.usersickseconddept,
+	 		b.docname,c.docloginpix,b.docage,b.docmale,
+	 		b.doctitle,b.docloginid,c.dochuanxinaccount,
+	 		b.docaddresslocation,b.docaddressprovince,b.docaddresscity,b.docaddressarea,b.docaddressother,b.docaddresslon,b.docaddresslat,
+	 		b.dochosp,b.hosplevel as dochosplevle,
+	 		a.userorderhstate,a.userorderactualhospitalizationid,n.actualhospitalizationstatename as userorderactualhospitalizationname,
+	 		a.userorderdeposit,a.userordertotaldeposit,a.userorderhprice,
+	 		p.hosploginid as inhosploginid,p.hospname as inhospname,p.hospabs as inhospabs,p.hospfeature as inhospfeature,z.hosplevelname as inhospgrade,p.hospadrprovince as inhospadrprovince,p.hospadrcity as inhospadrcity,p.hospadrarea  as inhospadrarea,p.hospadrother as inhospadrother,p.hospadrlon as inhospadrlon,p.hospadrlat as inhospadrlat
 	  from userorder  as a 
 	  		left join doctorinfo as b on a.userOrderDocLoginId=b.docLoginId 
-	  		left join hospinfo as c on a.userOrderHospId=c.hospLoginId
-	  		left join doctorlogininfo as d on a.userOrderDocLoginId= d.docLoginId
-	  		left join usersick as e on a.userSickId = e.userSickId
-	  		left join familyinfo as f on e.familyId = f.familyId
-	  		left join doctorinfo as g on a.userOrderRecDocLoginId=b.docLoginId 
-	  		left join hospinfo as n on a.userOrderHospId = n.hospLoginId
-	  		left join hosplevel as h on n.hospGrade = h.hospLevelId
+	  		left join doctorlogininfo as c on a.userOrderDocLoginId= c.docLoginId
+	  		left join usersick as d on a.userSickId = d.userSickId
+	  		left join familyinfo as e on e.familyId = d.familyId
+	  		left join userorderstate as j  on  a.userorderstateid= j.userorderstateid
+	  		left join pricetype as g on a.userOrderTPriceType = g.priceTypeId
+	  		left join pricetype as l on a.userOrderAPriceType = l.priceTypeId
+	  		left join pricetype as m on a.userOrderEPriceType = m.priceTypeId
+	  		left join actualhospitalizationstate as n on n.ActualHospitalizationStateId = a.userOrderActualHospitalizationId
+	  		left join hospinfo as p on a.userOrderHospId = p.hosploginid 
+	  		left join hosplevel as z on z.hospLevelId = p.hospgrade
 	  where a.userLoginId = #{0} and a.userOrderId=#{1} 
 	</select>
-   <select id="selectAllByDocLoginIdAndOrderType" parameterType="int" resultType="map">
-  select a.userorderid,a.userorderstateid,a.userorderptime,a.userorderrtime,a.userorderetime,a.userorderdprice,
-  			a.userorderhprice,a.userorderprice,c.hospname,
-  			e.usersickdesc,e.usersickpic,f.familyname,f.familymale,f.familyage
-  from userorder  as a left join doctorinfo as b on a.userOrderDocLoginId=b.docLoginId 
-  	left join hospinfo as c on a.userOrderHospId=c.hospLoginId
-  	left join doctorlogininfo as d on a.userOrderDocLoginId= d.docLoginId
-  	left join usersick as e on a.userSickId = e.userSickId
-  	left join familyinfo as f on e.familyId=f.familyId
-  where a.userOrderDocLoginId=#{0}
-  <if test="param2!=null">
-  	and a.userOrderStateId=#{1}
-  </if>
-   ORDER BY a.userorderptime DESC
+ 
+  <!-- 医生查询不同状态订单 -->
+ <!--  <select id="selectAllByDocLoginIdAndOrderType" parameterType="int" resultType="map">
+	  select a.userorderid,a.userorderstateid,a.userorderptime,a.userorderrtime,a.userorderetime,a.userorderdprice,
+	  			a.userorderhprice,a.userorderprice,c.hospname,
+	  			e.usersickdesc,e.usersickpic,f.familyname,f.familymale,f.familyage
+	  from userorder  as a left join doctorinfo as b on a.userOrderDocLoginId=b.docLoginId 
+	  	left join hospinfo as c on a.userOrderHospId=c.hospLoginId
+	  	left join doctorlogininfo as d on a.userOrderDocLoginId= d.docLoginId
+	  	left join usersick as e on a.userSickId = e.userSickId
+	  	left join familyinfo as f on e.familyId=f.familyId
+	  where a.userOrderDocLoginId=#{0}
+	  <if test="param2!=null">
+	  	and a.userOrderStateId=#{1}
+	  </if>
+	   ORDER BY a.userorderptime DESC
+  </select> -->
+  
+  <!--医生查找处于等待自己确认的订单-->
+  <select id="listOrderToConfirmByDocLoginId" parameterType="int" resultType="map">
+	select a.userorderid,a.userorderptime,
+			b.usersickdesc,b.usersickid,
+			c.familyname,c.familymale,c.familyage,
+			d.userloginpix,d.userhuanxinaccount
+	from  userorder  as a 
+	  		left join usersick as b on a.userSickId = b.userSickId
+	  		left join familyinfo as c on c.familyId = b.familyId
+	  		left join userlogininfo as d on a.userLoginId=d.userLoginId 
+	 where a.userOrderDocLoginId=#{0}  and a.userOrderStateId=1
+	 ORDER BY a.userOrderPTime DESC
   </select>
-   <!--医生查找订单-->
+  <!--医生查找不同状态的订单-->
+   <select id="listByDocLoginIdAndState" parameterType="int" resultType="map">
+	select  a.userorderid,a.userorderappointment,a.userorderstateid,e.userorderstatename,f.docaddresslocation,a.userorderprice,
+			d.userloginpix,d.userhuanxinaccount,
+			b.usersickdesc,
+			c.familyname,c.familymale,c.familyage
+		from userorder  as a 
+	  	    left join usersick as b on a.userSickId = b.userSickId
+	  		left join familyinfo as c on b.familyId = c.familyId
+	  		left join userlogininfo as d on a.userLoginId=d.userLoginId 
+	  		left join userorderstate as e on e.userorderstateid= a.userorderstateid
+	  		left join doctorinfo as f on a.userOrderDocLoginId= f.docLoginId
+	  where a.userOrderDocLoginId=#{0}
+	  <if test="param2==1">
+	  	and a.userOrderStateId=2
+	  </if>
+	  <if test="param2==2">
+	  	and a.userOrderStateId<![CDATA[>]]>2 and a.userOrderStateId<![CDATA[<]]>5
+	  </if>
+	   ORDER BY a.userOrderPTime DESC
+  </select>
+  <!--获取历史订单  -->
+   <select id="listHistortOrderByDocLoginId" parameterType="int" resultType="map">
+	select a.userorderid,a.userorderetime,a.userorderstateid,e.userorderstatename,
+			b.usersickdesc,
+			c.familyname,c.familymale,c.familyage,
+			d.userloginpix,d.userhuanxinaccount
+	from  userorder  as a 
+	  		left join usersick as b on a.userSickId = b.userSickId
+	  		left join familyinfo as c on c.familyId = b.familyId
+	  		left join userlogininfo as d on a.userLoginId=d.userLoginId 
+	  		left join userorderstate as e on e.userorderstateid= a.userorderstateid
+	 where a.userOrderDocLoginId=#{0}  and a.userOrderStateId<![CDATA[>]]>8 
+	 ORDER BY a.userOrderETime DESC
+  </select>
+  <!--医生获取订单详情  -->
+  <select id="selectAllInfoByUserOrderId" parameterType="int" resultType="map">
+	 select  d.userloginpix,d.userhuanxinaccount,c.familyname,c.familymale,c.familyage,
+	 		a.userorderid,a.userorderappointment,a.userorderstateid,e.userorderstatename,
+	 		a.userorderprice,a.userorderdprice,
+	 		a.userordertpricetype,g.pricetypename as userordertpricetypename,a.userordertprice,
+	 		a.userorderapricetype,l.pricetypename as userorderapricetypename,a.userorderaprice,
+	 		a.userorderepricetype,m.pricetypename as userorderepricetypename,a.userordereprice,
+	 		a.userorderptime,a.userorderrtime,a.userorderetime,
+	 		f.docaddresslocation,f.docaddressprovince,f.docaddresscity,f.docaddressarea,f.docaddressother,f.docaddresslon,f.docaddresslat,
+			b.usersickdesc,b.usersickpic,b.usersickprimarydept,b.usersickseconddept
+		from userorder  as a 
+	  	    left join usersick as b on a.userSickId = b.userSickId
+	  		left join familyinfo as c on b.familyId = c.familyId
+	  		left join userlogininfo as d on a.userLoginId=d.userLoginId 
+	  		left join userorderstate as e on e.userorderstateid= a.userorderstateid
+	  		left join doctorinfo as f on a.userOrderDocLoginId= f.docLoginId
+	  		left join pricetype as g on a.userOrderTPriceType = g.priceTypeId
+	  		left join pricetype as l on a.userOrderAPriceType = l.priceTypeId
+	  		left join pricetype as m on a.userOrderEPriceType = m.priceTypeId
+	  where a.userOrderId=#{1} and a.userOrderDocLoginId=#{0}
+ </select>
+ 
+  <!-- 作废 -->
   <select id="listByDocLoginId" parameterType="int" resultType="map">
-	<!--   select a.userorderid,a.userorderstateid,a.userorderptime,a.userorderappointment,
-	  		f.familyname,f.familymale,f.familyage,e.usersickdesc,
-	  		c.userloginpix
-	  from userorder  as a 
-	  		left join doctorinfo as b on a.userOrderDocLoginId=b.docLoginId 
-	  		left join userlogininfo as c on a.userLoginId=c.userLoginId 
-	  		left join usersick as e on a.userSickId = e.userSickId
-	  		left join familyinfo as f on e.familyId = f.familyId -->
-	  select a.userorderid,a.userorderstateid,a.userorderptime,a.userorderappointment,a.userorderrtime,a.userorderetime,a.userorderdprice,
+	select a.userorderid,a.userorderstateid,a.userorderptime,a.userorderappointment,a.userorderrtime,a.userorderetime,a.userorderdprice,
 	  		a.userorderhstate,a.userorderhprice,a.userordertpricetype,a.userordertprice,a.userorderapricetype,a.userorderaprice,
 	  		a.userorderepricetype,a.userordereprice,a.userorderdeposit,a.userorderprice,
 	  		a.userorderrecdocloginid,e.docname as redocname,e.doctitle as redoctitle,e.docprimarydept as redocprimarydept,e.docseconddept as redocseconddept,
-	  		a.userorderhospid,f.hospname,h.hospLevelName as hospgrade,f.hospadrprovince,f.hospadrcity,f.hospadrarea,f.hospadrother,
+	  		a.userorderhospid,f.hospname,h.hosplevelname as hospgrade,f.hospadrprovince,f.hospadrcity,f.hospadrarea,f.hospadrother,
 	  		d.familyname,d.familymale,d.familyage,
-	  		c.usersickdesc,c.usersickpic,c.usersickprimarydept,usersickseconddept,usersickptime,
-	  		g.userloginpix
+	  		c.usersickdesc,c.usersickpic,c.usersickprimarydept,usersickseconddept,usersickptime,c.usersickid,
+	  		g.userloginpix,g.userhuanxinaccount
 	  		
 	  from userorder  as a 
 	  		left join doctorinfo as b on a.userOrderDocLoginId=b.docLoginId 
@@ -247,16 +371,17 @@
 	  </if>
 	   ORDER BY a.userOrderPTime DESC
   </select>
-    <!--医生获取的订单详情-->
+  <!--作废  -->
+  <!--医生获取的订单详情-->
   <select id="selectAllInfoByUserOrderIdInDoc" parameterType="int" resultType="map">
 	  select a.userorderid,a.userorderstateid,a.userorderptime,a.userorderappointment,a.userorderrtime,a.userorderetime,a.userorderdprice,
 	  		a.userorderhstate,a.userorderhprice,a.userordertpricetype,a.userordertprice,a.userorderapricetype,a.userorderaprice,
 	  		a.userorderepricetype,a.userordereprice,a.userorderdeposit,a.userorderprice,
 	  		a.userorderrecdocloginid,e.docname as redocname,e.doctitle as redoctitle,e.docprimarydept as redocprimarydept,e.docseconddept as redocseconddept,
-	  		a.userorderhospid,f.hospname,h.hospLevelName as hospgrade,f.hospadrprovince,f.hospadrcity,f.hospadrarea,f.hospadrother,
+	  		a.userorderhospid,f.hospname,h.hosplevelname as hospgrade,f.hospadrprovince,f.hospadrcity,f.hospadrarea,f.hospadrother,
 	  		d.familyname,d.familymale,d.familyage,
 	  		c.usersickdesc,c.usersickpic,c.usersickprimarydept,usersickseconddept,usersickptime,
-	  		g.userloginpix
+	  		g.userloginpix,g.userhuanxinaccount
 	  		
 	  from userorder  as a 
 	  		left join doctorinfo as b on a.userOrderDocLoginId=b.docLoginId 
@@ -268,15 +393,21 @@
 	  		left join hosplevel as h on f.hospGrade = h.hospLevelId
 	  where a.userOrderId=#{1} and userOrderDocLoginId=#{0}
  </select>
+  
+  <!--根据医生登录id和订单id查找订单-->
   <select id="selectByDocLoginIdAndUserOrderId" parameterType="int" resultType="com.medical.po.Userorder">
 	  select  * from userorder 
 	  where userOrderDocLoginId=#{0} and userOrderId=#{1} 
- </select>
- <select id="selectByUserLoginIdAndUserOrderId" parameterType="int" resultType="com.medical.po.Userorder">
+  </select>
+ 
+  <!--根据病人登录id和订单id查找订单-->
+  <select id="selectByUserLoginIdAndUserOrderId" parameterType="int" resultType="com.medical.po.Userorder">
 	  select  * from userorder 
 	  where userLoginId=#{0} and userOrderId=#{1} 
- </select>
- 	<select id="listByHospLoginIdAnType" parameterType="int" resultType="map">
+  </select>
+  
+  <!--医院查找不同状态订单-->
+  <select id="listByHospLoginIdAnType" parameterType="int" resultType="map">
 		  select  a.userorderid,a.userorderchosehosptime,a.userorderhospconfirmtime,a.userorderleavehosptime,
 		  		a.userorderdeposit,a.userordertotaldeposit,a.userorderhprice,a.userorderstateid,c.userorderstatename,
 		  		a.userorderdocloginid,b.docname,
@@ -301,7 +432,7 @@
 		  	and a.userOrderStateId=8 
 		  </if>
 		  <if test="param2==5">
-		  	and a.userOrderStateId=11 
+		  	and a.userOrderStateId=9
 		  </if>
 	</select>
 	

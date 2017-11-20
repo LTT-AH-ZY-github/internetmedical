@@ -171,7 +171,7 @@ public class DoctorServiceImpl implements DoctorService {
 					//salt值
 					doctorLogininfo.setDocloginsalt(str[1]); 
 					//未审核用户
-					doctorLogininfo.setDoclogintype(false);
+					doctorLogininfo.setDoclogintype(1);
 					doctorLogininfo.setDocloginpix("1.jpg");
 					//插入登录信息表
 					int result = doctorlogininfoMapperCustom.insertSelectiveReturnId(doctorLogininfo);
@@ -395,7 +395,7 @@ public class DoctorServiceImpl implements DoctorService {
 		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
 		//该id对应的医生不为空
 		if (doctorlogininfo!=null) {
-			boolean type = doctorlogininfo.getDoclogintype();
+			int type = doctorlogininfo.getDoclogintype();
 			//该医生信息未被审核
 			if (true) {
 				 Doctorinfo doctorinfo = new Doctorinfo();
@@ -457,7 +457,7 @@ public class DoctorServiceImpl implements DoctorService {
 			Doctorinfo info = doctorinfoMapperCustom.findDoctorinfoByDocLoginId(docloginid);
 			// 该id对应的医生不为空
 			if (doctorlogininfo != null && info != null) {
-				boolean type = doctorlogininfo.getDoclogintype();
+				int type = doctorlogininfo.getDoclogintype();
 				// 该医生信息未被审核
 				if (true) {
 						String cardPhotoPath = PictureTool.SavePictures(doccardphoto);
@@ -1787,7 +1787,7 @@ public class DoctorServiceImpl implements DoctorService {
 	@Override
 	public Map<String, Object> getCalendar(Integer docloginid, Integer page) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		try {
+		/*try {
 			PageHelper.startPage(page, 5);
 			List<Map<String, Object>> result = doctorcalendarMapperCustom.selectAllInfoByDocloginid(docloginid);
 		    PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(result);
@@ -1801,7 +1801,7 @@ public class DoctorServiceImpl implements DoctorService {
 			e.printStackTrace();
 			logger.error("查询日程表异常"+e);
 			map.put("state", "3");
-		}
+		}*/
 		return map;
 	}
 

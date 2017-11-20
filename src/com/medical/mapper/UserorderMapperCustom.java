@@ -11,22 +11,62 @@ public interface UserorderMapperCustom {
     
 
     int insertSelectiveReturnId(Userorder record);
-
-    //List<Map<String, Object>> selectByUserLoginId(int id);
-    Map<String, Object>  selectAllInfoByUserLoginIdAndUserOrderId(Integer userloginid,Integer userorderid);
-    Map<String, Object>  selectByDocLoginId(Integer id);
-    //医生查询所有订单
-    Map<String, Object> selectAllByDocLoginIdAndOrderType(Integer docLoginId, Integer type);
-    Map<String, Object> selectAllInfoByUserLoginIdAndStateId(Integer userLoginId, Integer type);
-    //查询病人正在进行中的订单
+    
+    //用户查询不同状态订单
+    //Map<String, Object> selectAllInfoByUserLoginIdAndStateId(Integer userLoginId, Integer type);
     List<Map<String, Object>> selectAllInfoByUserLoginId(Integer userloginid, Integer type);
-    //查询医生所有订单
-    List<Map<String, Object>> listByDocLoginId(Integer docLoginId, Integer type);
-    //获取医生订单详情
-    Map<String, Object> selectAllInfoByUserOrderIdInDoc(Integer docLoginId,Integer userOrderId);
-    Userorder selectByDocLoginIdAndUserOrderId(Integer docLoginId,Integer userOrderId);
-    Userorder selectByUserLoginIdAndUserOrderId(Integer userLoginId,Integer userOrderId);
 
+    //用户查询订单详情
+    Map<String, Object>  selectAllInfoByUserLoginIdAndUserOrderId(Integer userloginid,Integer userorderid);
+   
+    //医生查找不同状态订单
+    List<Map<String, Object>> listByDocLoginId(Integer docLoginId, Integer type);
+    
+    //获取医生订单详情
+    Map<String, Object> selectAllInfoByUserOrderIdInDoc(Integer docloginid,Integer userOrderId);
+    
+   // Map<String, Object>  selectByDocLoginId(Integer id);
+    //医生查询所有订单
+   /* Map<String, Object> selectAllByDocLoginIdAndOrderType(Integer docLoginId, Integer type);*/
+    
+    
+   
+    
+    //根据医生登录id和订单id查找订单
+    Userorder selectByDocLoginIdAndUserOrderId(Integer docLoginId,Integer userOrderId);
+    
+    //根据病人登录id和订单id查找订单
+    Userorder selectByUserLoginIdAndUserOrderId(Integer userLoginId,Integer userOrderId);
+   
+    //医院查找不同状态订单
 	List<Map<String, Object>> listByHospLoginIdAnType(Integer hosploginid, Integer type);
+	/**
+	 * 医生查找处于等待自己确认的订单
+	 * @param
+	 * @return
+	 * 
+	 * */
+	List<Map<String, Object>> listOrderToConfirmByDocLoginId(Integer docloginid);
+	/**
+	 * 医生查找不同状态的订单
+	 * @param
+	 * @return
+	 * 
+	 * */
+	List<Map<String, Object>> listByDocLoginIdAndState(Integer docLoginId, Integer type);
+	/**
+	 * 医生获取订单详情
+	 * @param
+	 * @return
+	 * 
+	 * */
+	Map<String, Object>  selectAllInfoByUserOrderId(Integer docloginid,Integer userOrderId);
+	/**
+	 * 医生获取历史订单
+	 * @param
+	 * @return
+	 * 
+	 * */
+	List<Map<String, Object>> listHistortOrderByDocLoginId(Integer docloginid);
 
 }

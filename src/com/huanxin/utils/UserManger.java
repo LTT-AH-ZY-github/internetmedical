@@ -4,6 +4,8 @@ package com.huanxin.utils;
 import com.google.gson.Gson;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.http.HttpStatus;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -18,15 +20,16 @@ public class UserManger {
     public static boolean register(String name, String password) {
         Document document = null;
         try {
-            document = Jsoup.connect("https://a1.easemob.com/wangjiang/medicalclient/users")
+            document = Jsoup.connect("https://a1.easemob.com/1133171107115421/medicalclient/users")
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + TokenManager.getToken())
                     .ignoreContentType(true)
                     .requestBody(new Gson().toJson(new UserRequest(name, password)))
                     .post();
-
+       	 
         } catch (IOException e) {
-        	
+        
+        	System.out.println();
             e.printStackTrace();
             return false;
         }
@@ -36,11 +39,38 @@ public class UserManger {
         }
         return false;
     }
-
-    public static void main(String args[]) {
-        register("cs004", "cs004");
+    
+    /**
+     * 向环信注册一个用户
+     */
+    public static boolean updatePassword(String name, String password) {
+        Document document = null;
+        try {
+            document = Jsoup.connect("https://a1.easemob.com/1133171107115421/medicalclient/users/"+name+"/password")
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + TokenManager.getToken())
+                    .ignoreContentType(true)
+                    .requestBody(new Gson().toJson(new PasswordRequest(password)))
+                    .post();
+       	 
+        } catch (IOException e) {
+        
+        	System.out.println();
+            e.printStackTrace();
+            return false;
+        }
+        if (document != null) {
+            //UserResponse userResponse = new Gson().fromJson(document.body().html(), UserResponse.class);
+            return true;
+        }
+        return false;
     }
-
+    public static void main(String args[]) {
+    	updatePassword("cs00", "cs004222");
+    }
+    
+    
+    
     private static class UserRequest {
         String username;
         String password;
@@ -213,5 +243,18 @@ public class UserManger {
             }
         }
     }
-
+    
+    private static class PasswordRequest{
+    	String newpassword;
+    	public PasswordRequest(String newpassword) {
+            this.newpassword = newpassword;
+        }
+	}
+    
+    private static class PasswordResponse{
+    	String newpassword;
+    	public PasswordResponse(String newpassword) {
+            this.newpassword = newpassword;
+        }
+	}
 }

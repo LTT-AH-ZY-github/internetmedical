@@ -25,6 +25,8 @@ public class Hospitalcomment {
 
     private Date hospcommenttime;
 
+    private String hospcommentpatientname;
+
     public Integer getHospcommentid() {
         return hospcommentid;
     }
@@ -111,5 +113,13 @@ public class Hospitalcomment {
 
     public void setHospcommenttime(Date hospcommenttime) {
         this.hospcommenttime = hospcommenttime;
+    }
+
+    public String getHospcommentpatientname() {
+        return hospcommentpatientname;
+    }
+
+    public void setHospcommentpatientname(String hospcommentpatientname) {
+        this.hospcommentpatientname = hospcommentpatientname == null ? null : hospcommentpatientname.trim();
     }
 }

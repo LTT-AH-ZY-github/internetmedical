@@ -1,40 +1,45 @@
 package com.medical.service.iface.doctor;
 
 
-import java.util.Map;
 
+import com.medical.exception.custom.MyException;
 import com.medical.po.Doctorlogininfo;
 
 public interface DoctorAccountService {
 
 	
 
-	
-
-	
 	/**
 	 *  新增医生账号
 	 * @Title: createDoctor 
 	 * @Description: TODO
-	 * @return: int
+	 * @return: String
 	 */
-	int createDoctor(String docLoginPhone, String magCode, String docLoginPwd) throws Exception;
+	String createDoctor(String docLoginPhone, String magCode, String docLoginPwd) throws Exception;
 	
 	/**
-	 *  医生登录
-	 * @Title: updateDoctorToLogin 
+	 *  医生自动登录
+	 * @Title: 
 	 * @Description: TODO
-	 * @return: Map<String, Object>
+	 * @return: String
 	 */
-	Map<String, Object> updateDoctorToLogin(Doctorlogininfo doctor) throws Exception;
+	String updateDoctorToAutoLogin(Doctorlogininfo doctor) throws Exception;
+	
+	/**
+	 *  医生普通登录
+	 * @Title: 
+	 * @Description: TODO
+	 * @return: String
+	 */
+	String updateDoctorToNormalLogin(Doctorlogininfo doctor) throws Exception;
 	
 	/**
 	 *  更新百度云ChannelId
 	 * @Title: updateChannelId 
 	 * @Description: TODO
-	 * @return: int
+	 * @return: String
 	 */
-	int updateChannelId(Integer docloginid, String channelid);
+	String updateChannelId(Integer docloginid, String channelid) throws Exception;
 	/**
 	 *  注册环信
 	 * @Title: addHuanXinAccout 
@@ -42,5 +47,44 @@ public interface DoctorAccountService {
 	 * @return: boolean
 	 */
 	boolean addHuanXinAccout(Integer docloginid, String password) throws Exception;
+	
+	/**
+	 *  修改密码
+	 * @Title:
+	 * @Description: TODO
+	 * @return: String
+	 * 
+	 */
+	String updatePassword(String docloginphone, String docloginpwd, String msgCode) throws Exception;
+	
+	/**
+	 *  退出登录
+	 * @Title:
+	 * @Description: TODO
+	 * @return: 
+	 * 
+	 */
+	String updateAccountToExit(Integer docloginid) throws Exception;
+	
+	/**
+	 *  提交审核
+	 * @Title:
+	 * @Description: TODO
+	 * @return: 
+	 * 
+	 */
+	String updateInfoToReview(Integer docloginid) throws Exception;
+	/**
+	 *  修改环信密码
+	 * @Title:
+	 * @Description: TODO
+	 * @return: 
+	 * 
+	 */
+	String editHuanXinPassword(Integer docloginid, String password) throws Exception;
+
+	
+
+	
 
 }

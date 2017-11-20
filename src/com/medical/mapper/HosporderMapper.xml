@@ -11,7 +11,23 @@
     <result column="OrderPTime" property="orderptime" jdbcType="TIMESTAMP" />
     <result column="OrderRTime" property="orderrtime" jdbcType="TIMESTAMP" />
     <result column="OrderETime" property="orderetime" jdbcType="TIMESTAMP" />
-    <result column="OrderSTime" property="orderstime" jdbcType="TIMESTAMP" />
+    <result column="OrderSTime" property="orderstime" jdbcType="VARCHAR" />
+    <result column="OrderHospPrice" property="orderhospprice" jdbcType="DECIMAL" />
+    <result column="OrderDoctorPrice" property="orderdoctorprice" jdbcType="DECIMAL" />
+    <result column="OrderHospTPriceType" property="orderhosptpricetype" jdbcType="INTEGER" />
+    <result column="OrderHospTPrice" property="orderhosptprice" jdbcType="DECIMAL" />
+    <result column="OrderDoctorTPriceType" property="orderdoctortpricetype" jdbcType="INTEGER" />
+    <result column="OrderDoctorTPrice" property="orderdoctortprice" jdbcType="DECIMAL" />
+    <result column="OrderHospAPriceType" property="orderhospapricetype" jdbcType="INTEGER" />
+    <result column="OrderHospAPrice" property="orderhospaprice" jdbcType="DECIMAL" />
+    <result column="OrderDoctorAPriceType" property="orderdoctorapricetype" jdbcType="INTEGER" />
+    <result column="OrderDoctorAPrice" property="orderdoctoraprice" jdbcType="DECIMAL" />
+    <result column="OrderHospEPriceType" property="orderhospepricetype" jdbcType="INTEGER" />
+    <result column="OrderHospEPrice" property="orderhospeprice" jdbcType="DECIMAL" />
+    <result column="OrderDoctorEPriceType" property="orderdoctorepricetype" jdbcType="INTEGER" />
+    <result column="OrderDoctorEPrice" property="orderdoctoreprice" jdbcType="DECIMAL" />
+    <result column="OrderTotalHospPrice" property="ordertotalhospprice" jdbcType="DECIMAL" />
+    <result column="OrderTotalDoctorPrice" property="ordertotaldoctorprice" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -73,7 +89,10 @@
   </sql>
   <sql id="Base_Column_List" >
     HospOrderId, HospId, DoctorId, OrderPrice, OrderAbs, OrderState, OrderPTime, OrderRTime, 
-    OrderETime, OrderSTime
+    OrderETime, OrderSTime, OrderHospPrice, OrderDoctorPrice, OrderHospTPriceType, OrderHospTPrice, 
+    OrderDoctorTPriceType, OrderDoctorTPrice, OrderHospAPriceType, OrderHospAPrice, OrderDoctorAPriceType, 
+    OrderDoctorAPrice, OrderHospEPriceType, OrderHospEPrice, OrderDoctorEPriceType, OrderDoctorEPrice, 
+    OrderTotalHospPrice, OrderTotalDoctorPrice
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HosporderExample" >
     select
@@ -109,11 +128,25 @@
     insert into hosporder (HospOrderId, HospId, DoctorId, 
       OrderPrice, OrderAbs, OrderState, 
       OrderPTime, OrderRTime, OrderETime, 
-      OrderSTime)
+      OrderSTime, OrderHospPrice, OrderDoctorPrice, 
+      OrderHospTPriceType, OrderHospTPrice, OrderDoctorTPriceType, 
+      OrderDoctorTPrice, OrderHospAPriceType, 
+      OrderHospAPrice, OrderDoctorAPriceType, 
+      OrderDoctorAPrice, OrderHospEPriceType, 
+      OrderHospEPrice, OrderDoctorEPriceType, 
+      OrderDoctorEPrice, OrderTotalHospPrice, 
+      OrderTotalDoctorPrice)
     values (#{hosporderid,jdbcType=INTEGER}, #{hospid,jdbcType=INTEGER}, #{doctorid,jdbcType=INTEGER}, 
       #{orderprice,jdbcType=DECIMAL}, #{orderabs,jdbcType=VARCHAR}, #{orderstate,jdbcType=INTEGER}, 
       #{orderptime,jdbcType=TIMESTAMP}, #{orderrtime,jdbcType=TIMESTAMP}, #{orderetime,jdbcType=TIMESTAMP}, 
-      #{orderstime,jdbcType=TIMESTAMP})
+      #{orderstime,jdbcType=VARCHAR}, #{orderhospprice,jdbcType=DECIMAL}, #{orderdoctorprice,jdbcType=DECIMAL}, 
+      #{orderhosptpricetype,jdbcType=INTEGER}, #{orderhosptprice,jdbcType=DECIMAL}, #{orderdoctortpricetype,jdbcType=INTEGER}, 
+      #{orderdoctortprice,jdbcType=DECIMAL}, #{orderhospapricetype,jdbcType=INTEGER}, 
+      #{orderhospaprice,jdbcType=DECIMAL}, #{orderdoctorapricetype,jdbcType=INTEGER}, 
+      #{orderdoctoraprice,jdbcType=DECIMAL}, #{orderhospepricetype,jdbcType=INTEGER}, 
+      #{orderhospeprice,jdbcType=DECIMAL}, #{orderdoctorepricetype,jdbcType=INTEGER}, 
+      #{orderdoctoreprice,jdbcType=DECIMAL}, #{ordertotalhospprice,jdbcType=DECIMAL}, 
+      #{ordertotaldoctorprice,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Hosporder" >
     insert into hosporder
@@ -148,6 +181,54 @@
       <if test="orderstime != null" >
         OrderSTime,
       </if>
+      <if test="orderhospprice != null" >
+        OrderHospPrice,
+      </if>
+      <if test="orderdoctorprice != null" >
+        OrderDoctorPrice,
+      </if>
+      <if test="orderhosptpricetype != null" >
+        OrderHospTPriceType,
+      </if>
+      <if test="orderhosptprice != null" >
+        OrderHospTPrice,
+      </if>
+      <if test="orderdoctortpricetype != null" >
+        OrderDoctorTPriceType,
+      </if>
+      <if test="orderdoctortprice != null" >
+        OrderDoctorTPrice,
+      </if>
+      <if test="orderhospapricetype != null" >
+        OrderHospAPriceType,
+      </if>
+      <if test="orderhospaprice != null" >
+        OrderHospAPrice,
+      </if>
+      <if test="orderdoctorapricetype != null" >
+        OrderDoctorAPriceType,
+      </if>
+      <if test="orderdoctoraprice != null" >
+        OrderDoctorAPrice,
+      </if>
+      <if test="orderhospepricetype != null" >
+        OrderHospEPriceType,
+      </if>
+      <if test="orderhospeprice != null" >
+        OrderHospEPrice,
+      </if>
+      <if test="orderdoctorepricetype != null" >
+        OrderDoctorEPriceType,
+      </if>
+      <if test="orderdoctoreprice != null" >
+        OrderDoctorEPrice,
+      </if>
+      <if test="ordertotalhospprice != null" >
+        OrderTotalHospPrice,
+      </if>
+      <if test="ordertotaldoctorprice != null" >
+        OrderTotalDoctorPrice,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="hosporderid != null" >
@@ -178,7 +259,55 @@
         #{orderetime,jdbcType=TIMESTAMP},
       </if>
       <if test="orderstime != null" >
-        #{orderstime,jdbcType=TIMESTAMP},
+        #{orderstime,jdbcType=VARCHAR},
+      </if>
+      <if test="orderhospprice != null" >
+        #{orderhospprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderdoctorprice != null" >
+        #{orderdoctorprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderhosptpricetype != null" >
+        #{orderhosptpricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderhosptprice != null" >
+        #{orderhosptprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderdoctortpricetype != null" >
+        #{orderdoctortpricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderdoctortprice != null" >
+        #{orderdoctortprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderhospapricetype != null" >
+        #{orderhospapricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderhospaprice != null" >
+        #{orderhospaprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderdoctorapricetype != null" >
+        #{orderdoctorapricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderdoctoraprice != null" >
+        #{orderdoctoraprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderhospepricetype != null" >
+        #{orderhospepricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderhospeprice != null" >
+        #{orderhospeprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderdoctorepricetype != null" >
+        #{orderdoctorepricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderdoctoreprice != null" >
+        #{orderdoctoreprice,jdbcType=DECIMAL},
+      </if>
+      <if test="ordertotalhospprice != null" >
+        #{ordertotalhospprice,jdbcType=DECIMAL},
+      </if>
+      <if test="ordertotaldoctorprice != null" >
+        #{ordertotaldoctorprice,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -219,7 +348,55 @@
         OrderETime = #{record.orderetime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.orderstime != null" >
-        OrderSTime = #{record.orderstime,jdbcType=TIMESTAMP},
+        OrderSTime = #{record.orderstime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderhospprice != null" >
+        OrderHospPrice = #{record.orderhospprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orderdoctorprice != null" >
+        OrderDoctorPrice = #{record.orderdoctorprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orderhosptpricetype != null" >
+        OrderHospTPriceType = #{record.orderhosptpricetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderhosptprice != null" >
+        OrderHospTPrice = #{record.orderhosptprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orderdoctortpricetype != null" >
+        OrderDoctorTPriceType = #{record.orderdoctortpricetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderdoctortprice != null" >
+        OrderDoctorTPrice = #{record.orderdoctortprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orderhospapricetype != null" >
+        OrderHospAPriceType = #{record.orderhospapricetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderhospaprice != null" >
+        OrderHospAPrice = #{record.orderhospaprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orderdoctorapricetype != null" >
+        OrderDoctorAPriceType = #{record.orderdoctorapricetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderdoctoraprice != null" >
+        OrderDoctorAPrice = #{record.orderdoctoraprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orderhospepricetype != null" >
+        OrderHospEPriceType = #{record.orderhospepricetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderhospeprice != null" >
+        OrderHospEPrice = #{record.orderhospeprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.orderdoctorepricetype != null" >
+        OrderDoctorEPriceType = #{record.orderdoctorepricetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderdoctoreprice != null" >
+        OrderDoctorEPrice = #{record.orderdoctoreprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.ordertotalhospprice != null" >
+        OrderTotalHospPrice = #{record.ordertotalhospprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.ordertotaldoctorprice != null" >
+        OrderTotalDoctorPrice = #{record.ordertotaldoctorprice,jdbcType=DECIMAL},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -237,7 +414,23 @@
       OrderPTime = #{record.orderptime,jdbcType=TIMESTAMP},
       OrderRTime = #{record.orderrtime,jdbcType=TIMESTAMP},
       OrderETime = #{record.orderetime,jdbcType=TIMESTAMP},
-      OrderSTime = #{record.orderstime,jdbcType=TIMESTAMP}
+      OrderSTime = #{record.orderstime,jdbcType=VARCHAR},
+      OrderHospPrice = #{record.orderhospprice,jdbcType=DECIMAL},
+      OrderDoctorPrice = #{record.orderdoctorprice,jdbcType=DECIMAL},
+      OrderHospTPriceType = #{record.orderhosptpricetype,jdbcType=INTEGER},
+      OrderHospTPrice = #{record.orderhosptprice,jdbcType=DECIMAL},
+      OrderDoctorTPriceType = #{record.orderdoctortpricetype,jdbcType=INTEGER},
+      OrderDoctorTPrice = #{record.orderdoctortprice,jdbcType=DECIMAL},
+      OrderHospAPriceType = #{record.orderhospapricetype,jdbcType=INTEGER},
+      OrderHospAPrice = #{record.orderhospaprice,jdbcType=DECIMAL},
+      OrderDoctorAPriceType = #{record.orderdoctorapricetype,jdbcType=INTEGER},
+      OrderDoctorAPrice = #{record.orderdoctoraprice,jdbcType=DECIMAL},
+      OrderHospEPriceType = #{record.orderhospepricetype,jdbcType=INTEGER},
+      OrderHospEPrice = #{record.orderhospeprice,jdbcType=DECIMAL},
+      OrderDoctorEPriceType = #{record.orderdoctorepricetype,jdbcType=INTEGER},
+      OrderDoctorEPrice = #{record.orderdoctoreprice,jdbcType=DECIMAL},
+      OrderTotalHospPrice = #{record.ordertotalhospprice,jdbcType=DECIMAL},
+      OrderTotalDoctorPrice = #{record.ordertotaldoctorprice,jdbcType=DECIMAL}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -270,7 +463,55 @@
         OrderETime = #{orderetime,jdbcType=TIMESTAMP},
       </if>
       <if test="orderstime != null" >
-        OrderSTime = #{orderstime,jdbcType=TIMESTAMP},
+        OrderSTime = #{orderstime,jdbcType=VARCHAR},
+      </if>
+      <if test="orderhospprice != null" >
+        OrderHospPrice = #{orderhospprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderdoctorprice != null" >
+        OrderDoctorPrice = #{orderdoctorprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderhosptpricetype != null" >
+        OrderHospTPriceType = #{orderhosptpricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderhosptprice != null" >
+        OrderHospTPrice = #{orderhosptprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderdoctortpricetype != null" >
+        OrderDoctorTPriceType = #{orderdoctortpricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderdoctortprice != null" >
+        OrderDoctorTPrice = #{orderdoctortprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderhospapricetype != null" >
+        OrderHospAPriceType = #{orderhospapricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderhospaprice != null" >
+        OrderHospAPrice = #{orderhospaprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderdoctorapricetype != null" >
+        OrderDoctorAPriceType = #{orderdoctorapricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderdoctoraprice != null" >
+        OrderDoctorAPrice = #{orderdoctoraprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderhospepricetype != null" >
+        OrderHospEPriceType = #{orderhospepricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderhospeprice != null" >
+        OrderHospEPrice = #{orderhospeprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderdoctorepricetype != null" >
+        OrderDoctorEPriceType = #{orderdoctorepricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderdoctoreprice != null" >
+        OrderDoctorEPrice = #{orderdoctoreprice,jdbcType=DECIMAL},
+      </if>
+      <if test="ordertotalhospprice != null" >
+        OrderTotalHospPrice = #{ordertotalhospprice,jdbcType=DECIMAL},
+      </if>
+      <if test="ordertotaldoctorprice != null" >
+        OrderTotalDoctorPrice = #{ordertotaldoctorprice,jdbcType=DECIMAL},
       </if>
     </set>
     where HospOrderId = #{hosporderid,jdbcType=INTEGER}
@@ -285,7 +526,23 @@
       OrderPTime = #{orderptime,jdbcType=TIMESTAMP},
       OrderRTime = #{orderrtime,jdbcType=TIMESTAMP},
       OrderETime = #{orderetime,jdbcType=TIMESTAMP},
-      OrderSTime = #{orderstime,jdbcType=TIMESTAMP}
+      OrderSTime = #{orderstime,jdbcType=VARCHAR},
+      OrderHospPrice = #{orderhospprice,jdbcType=DECIMAL},
+      OrderDoctorPrice = #{orderdoctorprice,jdbcType=DECIMAL},
+      OrderHospTPriceType = #{orderhosptpricetype,jdbcType=INTEGER},
+      OrderHospTPrice = #{orderhosptprice,jdbcType=DECIMAL},
+      OrderDoctorTPriceType = #{orderdoctortpricetype,jdbcType=INTEGER},
+      OrderDoctorTPrice = #{orderdoctortprice,jdbcType=DECIMAL},
+      OrderHospAPriceType = #{orderhospapricetype,jdbcType=INTEGER},
+      OrderHospAPrice = #{orderhospaprice,jdbcType=DECIMAL},
+      OrderDoctorAPriceType = #{orderdoctorapricetype,jdbcType=INTEGER},
+      OrderDoctorAPrice = #{orderdoctoraprice,jdbcType=DECIMAL},
+      OrderHospEPriceType = #{orderhospepricetype,jdbcType=INTEGER},
+      OrderHospEPrice = #{orderhospeprice,jdbcType=DECIMAL},
+      OrderDoctorEPriceType = #{orderdoctorepricetype,jdbcType=INTEGER},
+      OrderDoctorEPrice = #{orderdoctoreprice,jdbcType=DECIMAL},
+      OrderTotalHospPrice = #{ordertotalhospprice,jdbcType=DECIMAL},
+      OrderTotalDoctorPrice = #{ordertotaldoctorprice,jdbcType=DECIMAL}
     where HospOrderId = #{hosporderid,jdbcType=INTEGER}
   </update>
 </mapper>

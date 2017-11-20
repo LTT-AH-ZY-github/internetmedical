@@ -26,4 +26,9 @@ public interface PreorderMapperCustom {
 	int deleteByDocLoginIdAndUserSickId(Integer docloginid, Integer usersickid);
 	int deleteByDocLoginIdAndPreOrderType(Integer docloginid, Integer preOrderType);
 	int deleteAllByUserSickId(Integer usersickid);
+	/**
+	 * 根据病情和类型删除相关医生
+	 * 
+	 * */
+	int deleteByUserSickIdAndPreOrderType(Integer usersickid, Integer preordertype);
 }

@@ -5,6 +5,8 @@ import java.util.Date;
 public class Userlogininfo {
     private Integer userloginid;
 
+    private String userhuanxinaccount;
+
     private String userloginname;
 
     private String userloginphone;
@@ -39,11 +41,15 @@ public class Userlogininfo {
 
     private String userloginip;
 
-    private Boolean userlogintype;
+    private Integer userlogintype;
+
+    private Date userloginsubchecktime;
 
     private String userloginpix;
 
     private String userloginchannelid;
+
+    private Integer userlogindev;
 
     public Integer getUserloginid() {
         return userloginid;
@@ -51,6 +57,14 @@ public class Userlogininfo {
 
     public void setUserloginid(Integer userloginid) {
         this.userloginid = userloginid;
+    }
+
+    public String getUserhuanxinaccount() {
+        return userhuanxinaccount;
+    }
+
+    public void setUserhuanxinaccount(String userhuanxinaccount) {
+        this.userhuanxinaccount = userhuanxinaccount == null ? null : userhuanxinaccount.trim();
     }
 
     public String getUserloginname() {
@@ -189,12 +203,20 @@ public class Userlogininfo {
         this.userloginip = userloginip == null ? null : userloginip.trim();
     }
 
-    public Boolean getUserlogintype() {
+    public Integer getUserlogintype() {
         return userlogintype;
     }
 
-    public void setUserlogintype(Boolean userlogintype) {
+    public void setUserlogintype(Integer userlogintype) {
         this.userlogintype = userlogintype;
+    }
+
+    public Date getUserloginsubchecktime() {
+        return userloginsubchecktime;
+    }
+
+    public void setUserloginsubchecktime(Date userloginsubchecktime) {
+        this.userloginsubchecktime = userloginsubchecktime;
     }
 
     public String getUserloginpix() {
@@ -211,5 +233,13 @@ public class Userlogininfo {
 
     public void setUserloginchannelid(String userloginchannelid) {
         this.userloginchannelid = userloginchannelid == null ? null : userloginchannelid.trim();
+    }
+
+    public Integer getUserlogindev() {
+        return userlogindev;
+    }
+
+    public void setUserlogindev(Integer userlogindev) {
+        this.userlogindev = userlogindev;
     }
 }

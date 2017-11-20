@@ -18,10 +18,10 @@ public class TokenManager {
         Document document = null;
         TokenResponseBody tokenResponseBody = null;
         try {
-            document = Jsoup.connect("https://a1.easemob.com/wangjiang/medicalclient/token")
+            document = Jsoup.connect("https://a1.easemob.com/1133171107115421/medicalclient/token")
                     .header("Content-Type", "application/json")
                     .ignoreContentType(true)
-                    .requestBody("{\"grant_type\": \"client_credentials\",\"client_id\": \"YXA6wUQm8LvFEeepwDfM1UApZA\",\"client_secret\": \"YXA6vKDN-44zGfcQ-tkipeDj_xEdhkA\"}")
+                    .requestBody("{\"grant_type\": \"client_credentials\",\"client_id\": \"YXA6L0vBUMhnEeeTs2X1rGMrkA\",\"client_secret\": \"YXA6y2ZWuFaapzFnNGfK90Tzz9eeA6c\"}")
                     .post();
             
         } catch (IOException e) {

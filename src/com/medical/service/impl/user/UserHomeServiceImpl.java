@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.mapper.CityMapperCustom;
+import com.medical.mapper.DoctorcalendarMapperCustom;
 import com.medical.mapper.DoctorcommentMapper;
 import com.medical.mapper.DoctorcommentMapperCustom;
 import com.medical.mapper.DoctorinfoMapper;
@@ -32,11 +33,15 @@ import com.medical.mapper.UserorderMapperCustom;
 import com.medical.mapper.UsersickMapper;
 import com.medical.mapper.UsersickMapperCustom;
 import com.medical.po.DoctorSearch;
+import com.medical.po.Doctorcalendar;
 import com.medical.po.Doctorskd;
 import com.medical.service.iface.user.UserHomeService;
 import com.medical.utils.GeographyScope;
+import com.medical.utils.result.DataResult;
+import com.medical.utils.result.DataResult2;
 
 public class UserHomeServiceImpl implements UserHomeService {
+	
 	@Autowired
 	private UserinfoMapper userinfoMapper;
 	@Autowired
@@ -83,45 +88,75 @@ public class UserHomeServiceImpl implements UserHomeService {
 	private HospitalcommentMapper hospitalcommentMapper;
 	@Autowired
 	private DoctorcommentMapperCustom doctorcommentMapperCustom;
+	@Autowired
+	private DoctorcalendarMapperCustom doctorcalendarMapperCustom;
 
 	// 获取医生 列表模式
 	@Override
-	public PageInfo<Map<String, Object>> listDoctor(DoctorSearch doctorSearch) throws Exception {
+	public String listDoctor(DoctorSearch doctorSearch) throws Exception {
 		PageHelper.startPage(doctorSearch.getPageNo(), doctorSearch.getPageSize());
 		List<Map<String, Object>> list = doctorinfoMapperCustom.findDoctorInfoInList(doctorSearch);
-		return new PageInfo<Map<String, Object>>(list);
+		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
+		if (pageInfo != null && !pageInfo.getList().isEmpty()) {
+			return DataResult.success("获取数据成功", pageInfo.getList());
+		}else {
+			return DataResult.success("获取数据为空", null);
+		}
 	}
 
 	// 地图模式获取医生信息
 	@Override
-	public List<Map<String, Object>> findDoctorsInMap(String userloginlat, String userloginlon) throws Exception {
+	public String findDoctorsInMap(String userloginlat, String userloginlon) throws Exception {
 		double latitude = Double.parseDouble(userloginlat);
 		double longitude = Double.parseDouble(userloginlon);
 		// 5千米距离
 		int dis = 50;
 		Map<String, Object> map = GeographyScope.getAround(latitude, longitude, dis);
-		return doctorinfoMapperCustom.findDoctorInfoInMap((double) map.get("minLat"), (double) map.get("maxLat"),
+		List<Map<String, Object>> list =  doctorinfoMapperCustom.findDoctorInfoInMap((double) map.get("minLat"), (double) map.get("maxLat"),
 				(double) map.get("minLon"), (double) map.get("maxLon"));
+		if (list != null && list.size()>0) {
+			return DataResult.success("获取成功", list);
+		}else {
+			return DataResult.success("获取为空", null);
+		}
 
 	}
 
 	// 获取医生信息
 	@Override
-	public Map<String, Object> findDoctorDetail(Integer docloginid) throws Exception {
-		Map<String, Object> doctor = doctorinfoMapperCustom.findDoctorByDocLoginId(docloginid);
-		if (doctor != null) {
-			Doctorskd doctorskd = doctorskdMapperCustom.selectByDocLoginId((Integer) doctor.get("docloginid"));
-			if (doctorskd != null) {
-				int[] arr = { doctorskd.getMonam(), doctorskd.getTueam(), doctorskd.getWedam(), doctorskd.getThuam(),
-						doctorskd.getFriam(), doctorskd.getSatam(), doctorskd.getSunam(), doctorskd.getMonpm(),
-						doctorskd.getTuepm(), doctorskd.getWedpm(), doctorskd.getThupm(), doctorskd.getFripm(),
-						doctorskd.getSatpm(), doctorskd.getSunpm() };
-				doctor.put("doctorskd", arr);
-			} else {
-				int[] arr = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-				doctor.put("doctorskd", arr);
-			}
+	public String findDoctorDetail(Integer docloginid) throws Exception {
+		Map<String, Object> map =  doctorinfoMapperCustom.findDoctorByDocLoginId(docloginid);
+		if (map != null && !map.isEmpty()) {
+			return DataResult.success("获取成功", map);
+		}else {
+			return DataResult.success("获取为空", null);
 		}
-		return doctor;
+	}
+	
+	//获取医生日程
+	@Override
+	public String listCalendar(Integer docloginid,Integer page) throws Exception {
+		PageHelper.startPage(page, 5);
+		List<Map<String, Object>> list =  doctorcalendarMapperCustom.selectAllInfoByDocloginidInUser(docloginid);
+		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
+		if (pageInfo != null && !pageInfo.getList().isEmpty()) {
+			return DataResult2.success("获取数据成功", pageInfo.getList());
+		}else {
+			return DataResult2.success("获取数据为空", null);
+		}
+	}
+	
+	//获取对医生评价
+	@Override
+	public String getEvaluation(Integer docloginid,Integer pageNo) {
+		PageHelper.startPage(pageNo,5 );
+		List<Map<String, Object>> list = doctorcommentMapperCustom.selectByDocLoginId(docloginid);
+		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
+		if (pageInfo != null && !pageInfo.getList().isEmpty()) {
+			return DataResult.success("获取数据成功", pageInfo.getList());
+		}else {
+			return DataResult.success("获取数据为空", null);
+		}
+		
 	}
 }

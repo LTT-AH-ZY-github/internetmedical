@@ -3,8 +3,9 @@
 <mapper namespace="com.medical.mapper.DoctorlogininfoMapper" >
   <resultMap id="BaseResultMap" type="com.medical.po.Doctorlogininfo" >
     <id column="docLoginId" property="docloginid" jdbcType="INTEGER" />
+    <result column="docHuanXinAccount" property="dochuanxinaccount" jdbcType="VARCHAR" />
     <result column="docLoginName" property="docloginname" jdbcType="VARCHAR" />
-    <result column="docLoginPhone" property="docloginphone" jdbcType="VARCHAR" />
+    <result column="docLoginPhone" property="docloginphone" jdbcType="CHAR" />
     <result column="docLoginPwd" property="docloginpwd" jdbcType="VARCHAR" />
     <result column="docLoginSalt" property="docloginsalt" jdbcType="VARCHAR" />
     <result column="docLoginToken" property="doclogintoken" jdbcType="VARCHAR" />
@@ -17,15 +18,16 @@
     <result column="docLoginCity" property="doclogincity" jdbcType="VARCHAR" />
     <result column="docLoginArea" property="docloginarea" jdbcType="VARCHAR" />
     <result column="docLoginOther" property="docloginother" jdbcType="VARCHAR" />
-    <result column="docLoginDev" property="doclogindev" jdbcType="VARCHAR" />
     <result column="docLoginBVer" property="docloginbver" jdbcType="VARCHAR" />
     <result column="docLoginModel" property="docloginmodel" jdbcType="VARCHAR" />
     <result column="docLoginPVer" property="docloginpver" jdbcType="VARCHAR" />
     <result column="docLoginMac" property="docloginmac" jdbcType="VARCHAR" />
     <result column="docLoginIp" property="docloginip" jdbcType="VARCHAR" />
-    <result column="docLoginType" property="doclogintype" jdbcType="BIT" />
+    <result column="docLoginType" property="doclogintype" jdbcType="INTEGER" />
+    <result column="docLoginSubCheckTime" property="docloginsubchecktime" jdbcType="TIMESTAMP" />
     <result column="docLoginPix" property="docloginpix" jdbcType="VARCHAR" />
     <result column="docLoginChannelId" property="docloginchannelid" jdbcType="VARCHAR" />
+    <result column="docLoginDev" property="doclogindev" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -86,10 +88,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    docLoginId, docLoginName, docLoginPhone, docLoginPwd, docLoginSalt, docLoginToken, 
-    docLoginDld, docLoginTime, docLoginLon, docLoginLat, docLoginLoc, docLoginProvince, 
-    docLoginCity, docLoginArea, docLoginOther, docLoginDev, docLoginBVer, docLoginModel, 
-    docLoginPVer, docLoginMac, docLoginIp, docLoginType, docLoginPix, docLoginChannelId
+    docLoginId, docHuanXinAccount, docLoginName, docLoginPhone, docLoginPwd, docLoginSalt, 
+    docLoginToken, docLoginDld, docLoginTime, docLoginLon, docLoginLat, docLoginLoc, 
+    docLoginProvince, docLoginCity, docLoginArea, docLoginOther, docLoginBVer, docLoginModel, 
+    docLoginPVer, docLoginMac, docLoginIp, docLoginType, docLoginSubCheckTime, docLoginPix, 
+    docLoginChannelId, docLoginDev
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.DoctorlogininfoExample" >
     select
@@ -122,30 +125,33 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.medical.po.Doctorlogininfo" >
-    insert into doctorlogininfo (docLoginId, docLoginName, docLoginPhone, 
-      docLoginPwd, docLoginSalt, docLoginToken, 
-      docLoginDld, docLoginTime, docLoginLon, 
-      docLoginLat, docLoginLoc, docLoginProvince, 
-      docLoginCity, docLoginArea, docLoginOther, 
-      docLoginDev, docLoginBVer, docLoginModel, 
+    insert into doctorlogininfo (docLoginId, docHuanXinAccount, docLoginName, 
+      docLoginPhone, docLoginPwd, docLoginSalt, 
+      docLoginToken, docLoginDld, docLoginTime, 
+      docLoginLon, docLoginLat, docLoginLoc, 
+      docLoginProvince, docLoginCity, docLoginArea, 
+      docLoginOther, docLoginBVer, docLoginModel, 
       docLoginPVer, docLoginMac, docLoginIp, 
-      docLoginType, docLoginPix, docLoginChannelId
-      )
-    values (#{docloginid,jdbcType=INTEGER}, #{docloginname,jdbcType=VARCHAR}, #{docloginphone,jdbcType=VARCHAR}, 
-      #{docloginpwd,jdbcType=VARCHAR}, #{docloginsalt,jdbcType=VARCHAR}, #{doclogintoken,jdbcType=VARCHAR}, 
-      #{doclogindld,jdbcType=BIGINT}, #{doclogintime,jdbcType=TIMESTAMP}, #{docloginlon,jdbcType=VARCHAR}, 
-      #{docloginlat,jdbcType=VARCHAR}, #{docloginloc,jdbcType=VARCHAR}, #{docloginprovince,jdbcType=VARCHAR}, 
-      #{doclogincity,jdbcType=VARCHAR}, #{docloginarea,jdbcType=VARCHAR}, #{docloginother,jdbcType=VARCHAR}, 
-      #{doclogindev,jdbcType=VARCHAR}, #{docloginbver,jdbcType=VARCHAR}, #{docloginmodel,jdbcType=VARCHAR}, 
+      docLoginType, docLoginSubCheckTime, docLoginPix, 
+      docLoginChannelId, docLoginDev)
+    values (#{docloginid,jdbcType=INTEGER}, #{dochuanxinaccount,jdbcType=VARCHAR}, #{docloginname,jdbcType=VARCHAR}, 
+      #{docloginphone,jdbcType=CHAR}, #{docloginpwd,jdbcType=VARCHAR}, #{docloginsalt,jdbcType=VARCHAR}, 
+      #{doclogintoken,jdbcType=VARCHAR}, #{doclogindld,jdbcType=BIGINT}, #{doclogintime,jdbcType=TIMESTAMP}, 
+      #{docloginlon,jdbcType=VARCHAR}, #{docloginlat,jdbcType=VARCHAR}, #{docloginloc,jdbcType=VARCHAR}, 
+      #{docloginprovince,jdbcType=VARCHAR}, #{doclogincity,jdbcType=VARCHAR}, #{docloginarea,jdbcType=VARCHAR}, 
+      #{docloginother,jdbcType=VARCHAR}, #{docloginbver,jdbcType=VARCHAR}, #{docloginmodel,jdbcType=VARCHAR}, 
       #{docloginpver,jdbcType=VARCHAR}, #{docloginmac,jdbcType=VARCHAR}, #{docloginip,jdbcType=VARCHAR}, 
-      #{doclogintype,jdbcType=BIT}, #{docloginpix,jdbcType=VARCHAR}, #{docloginchannelid,jdbcType=VARCHAR}
-      )
+      #{doclogintype,jdbcType=INTEGER}, #{docloginsubchecktime,jdbcType=TIMESTAMP}, #{docloginpix,jdbcType=VARCHAR}, 
+      #{docloginchannelid,jdbcType=VARCHAR}, #{doclogindev,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Doctorlogininfo" >
     insert into doctorlogininfo
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="docloginid != null" >
         docLoginId,
+      </if>
+      <if test="dochuanxinaccount != null" >
+        docHuanXinAccount,
       </if>
       <if test="docloginname != null" >
         docLoginName,
@@ -189,9 +195,6 @@
       <if test="docloginother != null" >
         docLoginOther,
       </if>
-      <if test="doclogindev != null" >
-        docLoginDev,
-      </if>
       <if test="docloginbver != null" >
         docLoginBVer,
       </if>
@@ -210,22 +213,31 @@
       <if test="doclogintype != null" >
         docLoginType,
       </if>
+      <if test="docloginsubchecktime != null" >
+        docLoginSubCheckTime,
+      </if>
       <if test="docloginpix != null" >
         docLoginPix,
       </if>
       <if test="docloginchannelid != null" >
         docLoginChannelId,
       </if>
+      <if test="doclogindev != null" >
+        docLoginDev,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="docloginid != null" >
         #{docloginid,jdbcType=INTEGER},
       </if>
+      <if test="dochuanxinaccount != null" >
+        #{dochuanxinaccount,jdbcType=VARCHAR},
+      </if>
       <if test="docloginname != null" >
         #{docloginname,jdbcType=VARCHAR},
       </if>
       <if test="docloginphone != null" >
-        #{docloginphone,jdbcType=VARCHAR},
+        #{docloginphone,jdbcType=CHAR},
       </if>
       <if test="docloginpwd != null" >
         #{docloginpwd,jdbcType=VARCHAR},
@@ -263,9 +275,6 @@
       <if test="docloginother != null" >
         #{docloginother,jdbcType=VARCHAR},
       </if>
-      <if test="doclogindev != null" >
-        #{doclogindev,jdbcType=VARCHAR},
-      </if>
       <if test="docloginbver != null" >
         #{docloginbver,jdbcType=VARCHAR},
       </if>
@@ -282,13 +291,19 @@
         #{docloginip,jdbcType=VARCHAR},
       </if>
       <if test="doclogintype != null" >
-        #{doclogintype,jdbcType=BIT},
+        #{doclogintype,jdbcType=INTEGER},
+      </if>
+      <if test="docloginsubchecktime != null" >
+        #{docloginsubchecktime,jdbcType=TIMESTAMP},
       </if>
       <if test="docloginpix != null" >
         #{docloginpix,jdbcType=VARCHAR},
       </if>
       <if test="docloginchannelid != null" >
         #{docloginchannelid,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogindev != null" >
+        #{doclogindev,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -304,11 +319,14 @@
       <if test="record.docloginid != null" >
         docLoginId = #{record.docloginid,jdbcType=INTEGER},
       </if>
+      <if test="record.dochuanxinaccount != null" >
+        docHuanXinAccount = #{record.dochuanxinaccount,jdbcType=VARCHAR},
+      </if>
       <if test="record.docloginname != null" >
         docLoginName = #{record.docloginname,jdbcType=VARCHAR},
       </if>
       <if test="record.docloginphone != null" >
-        docLoginPhone = #{record.docloginphone,jdbcType=VARCHAR},
+        docLoginPhone = #{record.docloginphone,jdbcType=CHAR},
       </if>
       <if test="record.docloginpwd != null" >
         docLoginPwd = #{record.docloginpwd,jdbcType=VARCHAR},
@@ -346,9 +364,6 @@
       <if test="record.docloginother != null" >
         docLoginOther = #{record.docloginother,jdbcType=VARCHAR},
       </if>
-      <if test="record.doclogindev != null" >
-        docLoginDev = #{record.doclogindev,jdbcType=VARCHAR},
-      </if>
       <if test="record.docloginbver != null" >
         docLoginBVer = #{record.docloginbver,jdbcType=VARCHAR},
       </if>
@@ -365,13 +380,19 @@
         docLoginIp = #{record.docloginip,jdbcType=VARCHAR},
       </if>
       <if test="record.doclogintype != null" >
-        docLoginType = #{record.doclogintype,jdbcType=BIT},
+        docLoginType = #{record.doclogintype,jdbcType=INTEGER},
+      </if>
+      <if test="record.docloginsubchecktime != null" >
+        docLoginSubCheckTime = #{record.docloginsubchecktime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.docloginpix != null" >
         docLoginPix = #{record.docloginpix,jdbcType=VARCHAR},
       </if>
       <if test="record.docloginchannelid != null" >
         docLoginChannelId = #{record.docloginchannelid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.doclogindev != null" >
+        docLoginDev = #{record.doclogindev,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -381,8 +402,9 @@
   <update id="updateByExample" parameterType="map" >
     update doctorlogininfo
     set docLoginId = #{record.docloginid,jdbcType=INTEGER},
+      docHuanXinAccount = #{record.dochuanxinaccount,jdbcType=VARCHAR},
       docLoginName = #{record.docloginname,jdbcType=VARCHAR},
-      docLoginPhone = #{record.docloginphone,jdbcType=VARCHAR},
+      docLoginPhone = #{record.docloginphone,jdbcType=CHAR},
       docLoginPwd = #{record.docloginpwd,jdbcType=VARCHAR},
       docLoginSalt = #{record.docloginsalt,jdbcType=VARCHAR},
       docLoginToken = #{record.doclogintoken,jdbcType=VARCHAR},
@@ -395,15 +417,16 @@
       docLoginCity = #{record.doclogincity,jdbcType=VARCHAR},
       docLoginArea = #{record.docloginarea,jdbcType=VARCHAR},
       docLoginOther = #{record.docloginother,jdbcType=VARCHAR},
-      docLoginDev = #{record.doclogindev,jdbcType=VARCHAR},
       docLoginBVer = #{record.docloginbver,jdbcType=VARCHAR},
       docLoginModel = #{record.docloginmodel,jdbcType=VARCHAR},
       docLoginPVer = #{record.docloginpver,jdbcType=VARCHAR},
       docLoginMac = #{record.docloginmac,jdbcType=VARCHAR},
       docLoginIp = #{record.docloginip,jdbcType=VARCHAR},
-      docLoginType = #{record.doclogintype,jdbcType=BIT},
+      docLoginType = #{record.doclogintype,jdbcType=INTEGER},
+      docLoginSubCheckTime = #{record.docloginsubchecktime,jdbcType=TIMESTAMP},
       docLoginPix = #{record.docloginpix,jdbcType=VARCHAR},
-      docLoginChannelId = #{record.docloginchannelid,jdbcType=VARCHAR}
+      docLoginChannelId = #{record.docloginchannelid,jdbcType=VARCHAR},
+      docLoginDev = #{record.doclogindev,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -411,11 +434,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Doctorlogininfo" >
     update doctorlogininfo
     <set >
+      <if test="dochuanxinaccount != null" >
+        docHuanXinAccount = #{dochuanxinaccount,jdbcType=VARCHAR},
+      </if>
       <if test="docloginname != null" >
         docLoginName = #{docloginname,jdbcType=VARCHAR},
       </if>
       <if test="docloginphone != null" >
-        docLoginPhone = #{docloginphone,jdbcType=VARCHAR},
+        docLoginPhone = #{docloginphone,jdbcType=CHAR},
       </if>
       <if test="docloginpwd != null" >
         docLoginPwd = #{docloginpwd,jdbcType=VARCHAR},
@@ -453,9 +479,6 @@
       <if test="docloginother != null" >
         docLoginOther = #{docloginother,jdbcType=VARCHAR},
       </if>
-      <if test="doclogindev != null" >
-        docLoginDev = #{doclogindev,jdbcType=VARCHAR},
-      </if>
       <if test="docloginbver != null" >
         docLoginBVer = #{docloginbver,jdbcType=VARCHAR},
       </if>
@@ -472,7 +495,10 @@
         docLoginIp = #{docloginip,jdbcType=VARCHAR},
       </if>
       <if test="doclogintype != null" >
-        docLoginType = #{doclogintype,jdbcType=BIT},
+        docLoginType = #{doclogintype,jdbcType=INTEGER},
+      </if>
+      <if test="docloginsubchecktime != null" >
+        docLoginSubCheckTime = #{docloginsubchecktime,jdbcType=TIMESTAMP},
       </if>
       <if test="docloginpix != null" >
         docLoginPix = #{docloginpix,jdbcType=VARCHAR},
@@ -480,13 +506,17 @@
       <if test="docloginchannelid != null" >
         docLoginChannelId = #{docloginchannelid,jdbcType=VARCHAR},
       </if>
+      <if test="doclogindev != null" >
+        docLoginDev = #{doclogindev,jdbcType=INTEGER},
+      </if>
     </set>
     where docLoginId = #{docloginid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.medical.po.Doctorlogininfo" >
     update doctorlogininfo
-    set docLoginName = #{docloginname,jdbcType=VARCHAR},
-      docLoginPhone = #{docloginphone,jdbcType=VARCHAR},
+    set docHuanXinAccount = #{dochuanxinaccount,jdbcType=VARCHAR},
+      docLoginName = #{docloginname,jdbcType=VARCHAR},
+      docLoginPhone = #{docloginphone,jdbcType=CHAR},
       docLoginPwd = #{docloginpwd,jdbcType=VARCHAR},
       docLoginSalt = #{docloginsalt,jdbcType=VARCHAR},
       docLoginToken = #{doclogintoken,jdbcType=VARCHAR},
@@ -499,15 +529,16 @@
       docLoginCity = #{doclogincity,jdbcType=VARCHAR},
       docLoginArea = #{docloginarea,jdbcType=VARCHAR},
       docLoginOther = #{docloginother,jdbcType=VARCHAR},
-      docLoginDev = #{doclogindev,jdbcType=VARCHAR},
       docLoginBVer = #{docloginbver,jdbcType=VARCHAR},
       docLoginModel = #{docloginmodel,jdbcType=VARCHAR},
       docLoginPVer = #{docloginpver,jdbcType=VARCHAR},
       docLoginMac = #{docloginmac,jdbcType=VARCHAR},
       docLoginIp = #{docloginip,jdbcType=VARCHAR},
-      docLoginType = #{doclogintype,jdbcType=BIT},
+      docLoginType = #{doclogintype,jdbcType=INTEGER},
+      docLoginSubCheckTime = #{docloginsubchecktime,jdbcType=TIMESTAMP},
       docLoginPix = #{docloginpix,jdbcType=VARCHAR},
-      docLoginChannelId = #{docloginchannelid,jdbcType=VARCHAR}
+      docLoginChannelId = #{docloginchannelid,jdbcType=VARCHAR},
+      docLoginDev = #{doclogindev,jdbcType=INTEGER}
     where docLoginId = #{docloginid,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -1,15 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.medical.mapper.HospinfoMapperCustom" >
-   <select id="selectByHospName" resultType="map" parameterType="String" >
-    select a.hosploginid,a.hospname,b.hosplevelname
+	<!--管理员获取医院列表信息  -->
+    <select id="selectByHospTypeInAdmin" resultType="map" parameterType="java.lang.Integer" >
+	    select a.hosploginid,c.hosphuanxinaccount,c.hosploginpix,c.hosplogintype,d.accounttypename as hosplogintypename,
+	   		c.hosploginphone,a.hospname,b.hosplevelname
+	 	from hospinfo as a 
+	 			left join hospLevel  as b on a.hospGrade = b.hospLevelId
+	 			left join hosplogininfo as c on a.hosploginid = c.hosploginid
+	 			left join accounttype as d on c.hospLoginType= d.accounttypeid
+	 	<if test="param1!=null">
+	  		where	b.userLoginType = #{0}
+	  	</if>	
+	</select>
+   <select id="selectInfoByHospLoginIdInAdmin" resultType="map" parameterType="java.lang.Integer" >
+    select a.hosploginid,c.hosphuanxinaccount,c.hosploginpix,c.hosplogintype,d.accounttypename as hosplogintypename,c.hosploginphone,
+    		a.hospphone,a.hospname,b.hosplevelname,a.hospregidcard,a.hospadrprovince,a.hospadrcity,a.hospadrarea,a.hospadrother,
+    		a.hospadr,a.hospfeature,a.hospregdocquacer,a.hosporgcodecer,a.hosppraclicense,a.hosplegalcer
+    		
  	from hospinfo as a 
  			left join hospLevel  as b on a.hospGrade = b.hospLevelId
-    where a.hospName like #{0}
+ 			left join hosplogininfo as c on a.hosploginid = c.hosploginid
+ 			left join accounttype as d on c.hospLoginType= d.accounttypeid
+    where a.HospLoginId = #{0}
   </select>
   <select id="selectByHospLoginId" resultType="com.medical.po.Hospinfo" parameterType="java.lang.Integer" >
     select *
  	from hospinfo
  	where hospLoginId=#{0}
+  </select>
+  <!--医生端获取医院信息  -->
+  <select id="selectAllInfoByHospLoginIdInDoctor" resultType="map" parameterType="java.lang.Integer" >
+    select a.hospname,a.hospabs,a.hospfeature,a.hospadrprovince,a.hospadrcity,a.hospadrarea,a.hospadrother,a.hospadrlon,a.hospadrlat,
+    	b.hosplevelname,c.hosploginpix,c.hosphuanxinaccount
+ 	from hospinfo as a 
+ 	left join hosplevel as b on a.hospGrade= b.hospLevelId
+ 	 left join hosplogininfo as c on a.hospLoginId = c.hospLoginId
+ 	where a.hospLoginId=#{0}
   </select>
 </mapper>

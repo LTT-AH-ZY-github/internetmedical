@@ -51,4 +51,14 @@ public interface DoctorinfoMapperCustom {
 	//根据医生姓名获取医生
 	List<Map<String, Object>> selectByName(String docname);
 	int updateInfoByPrimaryKey(Doctorinfo doctorinfo);
+	/**
+	 * 管理员获取医生列表
+	 * @param 用户账号类型
+	 * */
+	List<Map<String, Object>> selectByDocLoginTypeInAdmin(Integer type);
+	/**
+	 * 管理员获取医生详细信息
+	 * @param 医生登录id
+	 * */
+	Map<String, Object>selectInfoByDocLoginIdInAdmin(Integer docloginid);
 }

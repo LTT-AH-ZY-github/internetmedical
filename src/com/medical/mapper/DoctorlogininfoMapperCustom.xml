@@ -12,10 +12,13 @@
     select * from doctorlogininfo where docLoginPhone=#{0} and docLoginPwd = #{1}
   </select>
   <insert id="insertSelectiveReturnId" parameterType="com.medical.po.Doctorlogininfo" useGeneratedKeys="true" keyProperty="docloginid">
-   insert into doctorlogininfo
+  insert into doctorlogininfo
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="docloginid != null" >
         docLoginId,
+      </if>
+      <if test="dochuanxinaccount != null" >
+        docHuanXinAccount,
       </if>
       <if test="docloginname != null" >
         docLoginName,
@@ -59,9 +62,6 @@
       <if test="docloginother != null" >
         docLoginOther,
       </if>
-      <if test="doclogindev != null" >
-        docLoginDev,
-      </if>
       <if test="docloginbver != null" >
         docLoginBVer,
       </if>
@@ -86,16 +86,22 @@
       <if test="docloginchannelid != null" >
         docLoginChannelId,
       </if>
+      <if test="doclogindev != null" >
+        docLoginDev,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="docloginid != null" >
         #{docloginid,jdbcType=INTEGER},
       </if>
+      <if test="dochuanxinaccount != null" >
+        #{dochuanxinaccount,jdbcType=VARCHAR},
+      </if>
       <if test="docloginname != null" >
         #{docloginname,jdbcType=VARCHAR},
       </if>
       <if test="docloginphone != null" >
-        #{docloginphone,jdbcType=VARCHAR},
+        #{docloginphone,jdbcType=CHAR},
       </if>
       <if test="docloginpwd != null" >
         #{docloginpwd,jdbcType=VARCHAR},
@@ -133,9 +139,6 @@
       <if test="docloginother != null" >
         #{docloginother,jdbcType=VARCHAR},
       </if>
-      <if test="doclogindev != null" >
-        #{doclogindev,jdbcType=VARCHAR},
-      </if>
       <if test="docloginbver != null" >
         #{docloginbver,jdbcType=VARCHAR},
       </if>
@@ -152,13 +155,16 @@
         #{docloginip,jdbcType=VARCHAR},
       </if>
       <if test="doclogintype != null" >
-        #{doclogintype,jdbcType=BIT},
+        #{doclogintype,jdbcType=INTEGER},
       </if>
       <if test="docloginpix != null" >
         #{docloginpix,jdbcType=VARCHAR},
       </if>
       <if test="docloginchannelid != null" >
         #{docloginchannelid,jdbcType=VARCHAR},
+      </if>
+      <if test="doclogindev != null" >
+        #{doclogindev,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>

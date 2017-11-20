@@ -11,6 +11,7 @@
     <result column="userOrderDPrice" property="userorderdprice" jdbcType="DECIMAL" />
     <result column="userOrderAppointment" property="userorderappointment" jdbcType="VARCHAR" />
     <result column="userOrderETime" property="userorderetime" jdbcType="TIMESTAMP" />
+    <result column="userOrderActualHospitalizationId" property="userorderactualhospitalizationid" jdbcType="INTEGER" />
     <result column="userOrderHState" property="userorderhstate" jdbcType="BIT" />
     <result column="userOrderChoseHospTime" property="userorderchosehosptime" jdbcType="TIMESTAMP" />
     <result column="userOrderHospConfirmTime" property="userorderhospconfirmtime" jdbcType="TIMESTAMP" />
@@ -92,9 +93,9 @@
   </sql>
   <sql id="Base_Column_List" >
     userOrderId, userOrderStateId, userOrderPTime, userOrderDocLoginId, userOrderRecDocLoginId, 
-    userOrderRTime, userOrderDPrice, userOrderAppointment, userOrderETime, userOrderHState, 
-    userOrderChoseHospTime, userOrderHospConfirmTime, userOrderLeaveHospTime, userOrderHospId, 
-    userOrderDeposit, userOrderTotalDeposit, userOrderHPrice, userOrderHospPrimaryDept, 
+    userOrderRTime, userOrderDPrice, userOrderAppointment, userOrderETime, userOrderActualHospitalizationId, 
+    userOrderHState, userOrderChoseHospTime, userOrderHospConfirmTime, userOrderLeaveHospTime, 
+    userOrderHospId, userOrderDeposit, userOrderTotalDeposit, userOrderHPrice, userOrderHospPrimaryDept, 
     userOrderHospSecondDept, userOrderTPriceType, userOrderTPrice, userOrderAPriceType, 
     userOrderAPrice, userOrderEPriceType, userOrderEPrice, userOrderPrice, userSickId, 
     userLoginId, userOrderFinishTime
@@ -133,7 +134,8 @@
     insert into userorder (userOrderId, userOrderStateId, userOrderPTime, 
       userOrderDocLoginId, userOrderRecDocLoginId, 
       userOrderRTime, userOrderDPrice, userOrderAppointment, 
-      userOrderETime, userOrderHState, userOrderChoseHospTime, 
+      userOrderETime, userOrderActualHospitalizationId, 
+      userOrderHState, userOrderChoseHospTime, 
       userOrderHospConfirmTime, userOrderLeaveHospTime, 
       userOrderHospId, userOrderDeposit, userOrderTotalDeposit, 
       userOrderHPrice, userOrderHospPrimaryDept, 
@@ -145,7 +147,8 @@
     values (#{userorderid,jdbcType=INTEGER}, #{userorderstateid,jdbcType=INTEGER}, #{userorderptime,jdbcType=TIMESTAMP}, 
       #{userorderdocloginid,jdbcType=INTEGER}, #{userorderrecdocloginid,jdbcType=INTEGER}, 
       #{userorderrtime,jdbcType=TIMESTAMP}, #{userorderdprice,jdbcType=DECIMAL}, #{userorderappointment,jdbcType=VARCHAR}, 
-      #{userorderetime,jdbcType=TIMESTAMP}, #{userorderhstate,jdbcType=BIT}, #{userorderchosehosptime,jdbcType=TIMESTAMP}, 
+      #{userorderetime,jdbcType=TIMESTAMP}, #{userorderactualhospitalizationid,jdbcType=INTEGER}, 
+      #{userorderhstate,jdbcType=BIT}, #{userorderchosehosptime,jdbcType=TIMESTAMP}, 
       #{userorderhospconfirmtime,jdbcType=TIMESTAMP}, #{userorderleavehosptime,jdbcType=TIMESTAMP}, 
       #{userorderhospid,jdbcType=INTEGER}, #{userorderdeposit,jdbcType=DECIMAL}, #{userordertotaldeposit,jdbcType=DECIMAL}, 
       #{userorderhprice,jdbcType=DECIMAL}, #{userorderhospprimarydept,jdbcType=VARCHAR}, 
@@ -184,6 +187,9 @@
       </if>
       <if test="userorderetime != null" >
         userOrderETime,
+      </if>
+      <if test="userorderactualhospitalizationid != null" >
+        userOrderActualHospitalizationId,
       </if>
       <if test="userorderhstate != null" >
         userOrderHState,
@@ -273,6 +279,9 @@
       </if>
       <if test="userorderetime != null" >
         #{userorderetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderactualhospitalizationid != null" >
+        #{userorderactualhospitalizationid,jdbcType=INTEGER},
       </if>
       <if test="userorderhstate != null" >
         #{userorderhstate,jdbcType=BIT},
@@ -372,6 +381,9 @@
       <if test="record.userorderetime != null" >
         userOrderETime = #{record.userorderetime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.userorderactualhospitalizationid != null" >
+        userOrderActualHospitalizationId = #{record.userorderactualhospitalizationid,jdbcType=INTEGER},
+      </if>
       <if test="record.userorderhstate != null" >
         userOrderHState = #{record.userorderhstate,jdbcType=BIT},
       </if>
@@ -448,6 +460,7 @@
       userOrderDPrice = #{record.userorderdprice,jdbcType=DECIMAL},
       userOrderAppointment = #{record.userorderappointment,jdbcType=VARCHAR},
       userOrderETime = #{record.userorderetime,jdbcType=TIMESTAMP},
+      userOrderActualHospitalizationId = #{record.userorderactualhospitalizationid,jdbcType=INTEGER},
       userOrderHState = #{record.userorderhstate,jdbcType=BIT},
       userOrderChoseHospTime = #{record.userorderchosehosptime,jdbcType=TIMESTAMP},
       userOrderHospConfirmTime = #{record.userorderhospconfirmtime,jdbcType=TIMESTAMP},
@@ -498,6 +511,9 @@
       </if>
       <if test="userorderetime != null" >
         userOrderETime = #{userorderetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userorderactualhospitalizationid != null" >
+        userOrderActualHospitalizationId = #{userorderactualhospitalizationid,jdbcType=INTEGER},
       </if>
       <if test="userorderhstate != null" >
         userOrderHState = #{userorderhstate,jdbcType=BIT},
@@ -572,6 +588,7 @@
       userOrderDPrice = #{userorderdprice,jdbcType=DECIMAL},
       userOrderAppointment = #{userorderappointment,jdbcType=VARCHAR},
       userOrderETime = #{userorderetime,jdbcType=TIMESTAMP},
+      userOrderActualHospitalizationId = #{userorderactualhospitalizationid,jdbcType=INTEGER},
       userOrderHState = #{userorderhstate,jdbcType=BIT},
       userOrderChoseHospTime = #{userorderchosehosptime,jdbcType=TIMESTAMP},
       userOrderHospConfirmTime = #{userorderhospconfirmtime,jdbcType=TIMESTAMP},

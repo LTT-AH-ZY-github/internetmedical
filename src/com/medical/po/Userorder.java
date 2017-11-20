@@ -22,6 +22,8 @@ public class Userorder {
 
     private Date userorderetime;
 
+    private Integer userorderactualhospitalizationid;
+
     private Boolean userorderhstate;
 
     private Date userorderchosehosptime;
@@ -132,6 +134,14 @@ public class Userorder {
 
     public void setUserorderetime(Date userorderetime) {
         this.userorderetime = userorderetime;
+    }
+
+    public Integer getUserorderactualhospitalizationid() {
+        return userorderactualhospitalizationid;
+    }
+
+    public void setUserorderactualhospitalizationid(Integer userorderactualhospitalizationid) {
+        this.userorderactualhospitalizationid = userorderactualhospitalizationid;
     }
 
     public Boolean getUserorderhstate() {

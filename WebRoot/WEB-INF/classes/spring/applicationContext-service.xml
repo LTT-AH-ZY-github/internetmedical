@@ -27,9 +27,11 @@
     <bean id="doctorOrderService" class="com.medical.service.impl.doctor.DoctorOrderServiceImpl"/>
     <!--医院接口  -->
    	<bean id="hospitalAccountService" class="com.medical.service.impl.hospital.HospitalAccountServiceImpl"/>
+   	<bean id="hospitalHomeService" class="com.medical.service.impl.hospital.HospitalHomeServiceImpl"/>
     <bean id="hospitalInfoService" class="com.medical.service.impl.hospital.HospitalInfoServiceImpl"/>
     <bean id="hospitalOrderService" class="com.medical.service.impl.hospital.HospitalOrderServiceImpl"/>
-    
+    <!--管理员接口  -->
+    <bean id="adminFunctionService" class="com.medical.service.impl.admin.AdminFunctionServiceImpl"/>
     
 
 

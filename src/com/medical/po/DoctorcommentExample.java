@@ -715,6 +715,76 @@ public class DoctorcommentExample {
             return (Criteria) this;
         }
 
+        public Criteria andDoccommentpatientnameIsNull() {
+            addCriterion("docCommentPatientName is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccommentpatientnameIsNotNull() {
+            addCriterion("docCommentPatientName is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccommentpatientnameEqualTo(String value) {
+            addCriterion("docCommentPatientName =", value, "doccommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccommentpatientnameNotEqualTo(String value) {
+            addCriterion("docCommentPatientName <>", value, "doccommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccommentpatientnameGreaterThan(String value) {
+            addCriterion("docCommentPatientName >", value, "doccommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccommentpatientnameGreaterThanOrEqualTo(String value) {
+            addCriterion("docCommentPatientName >=", value, "doccommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccommentpatientnameLessThan(String value) {
+            addCriterion("docCommentPatientName <", value, "doccommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccommentpatientnameLessThanOrEqualTo(String value) {
+            addCriterion("docCommentPatientName <=", value, "doccommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccommentpatientnameLike(String value) {
+            addCriterion("docCommentPatientName like", value, "doccommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccommentpatientnameNotLike(String value) {
+            addCriterion("docCommentPatientName not like", value, "doccommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccommentpatientnameIn(List<String> values) {
+            addCriterion("docCommentPatientName in", values, "doccommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccommentpatientnameNotIn(List<String> values) {
+            addCriterion("docCommentPatientName not in", values, "doccommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccommentpatientnameBetween(String value1, String value2) {
+            addCriterion("docCommentPatientName between", value1, value2, "doccommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccommentpatientnameNotBetween(String value1, String value2) {
+            addCriterion("docCommentPatientName not between", value1, value2, "doccommentpatientname");
+            return (Criteria) this;
+        }
+
         public Criteria andDoccommenttimeIsNull() {
             addCriterion("docCommentTime is null");
             return (Criteria) this;

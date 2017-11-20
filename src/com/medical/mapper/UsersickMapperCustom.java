@@ -31,5 +31,6 @@ public interface UsersickMapperCustom {
 	List<Map<String, Object>> paginationSickSortByLoc(DoctorSearch doctorSearch);
 	//获取病情详情
 	Map<String, Object> selectAllInfoByUserSickId(Integer usersickid);
+	int updateDeptByPrimaryKey(Usersick usersick);
    
 }

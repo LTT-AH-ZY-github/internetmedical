@@ -7,11 +7,10 @@
   </delete>
   <!--根据病情获取相关医生  -->
   <select id="selectByUserSickId" parameterType="java.lang.Integer" resultType="map">
-  	select  a.preordertype,a.preorderid,a.preorderprice,
-  			b.docloginid,c.docloginpix,b.docname,b.doctitle,b.dochosp,b.hosplevel,b.docprimarydept,b.docseconddept,
-  			b.docallday,b.docexpert,
-  			d.docname as redocname,d.doctitle as redoctitle,
-  			e.preordertypename
+  	select  a.preordertype,e.preordertypename,a.preorderid,a.preorderprice,a.preordertime,
+  			b.docloginid,c.docloginpix,c.dochuanxinaccount,b.docname,b.doctitle,b.dochosp,b.hosplevel,b.docprimarydept,b.docseconddept,
+  			b.docallday,b.docexpert,b.docaddresslocation,b.docaddressprovince,b.docaddresscity,b.docaddressarea,b.docaddressother,
+  			a.preorderredocloginid,d.docname as redocname,d.doctitle as redoctitle
   	 
   	from preorder as a 
   		left join doctorinfo as b  on a.preOrderDocLoginId=b.docLoginId
@@ -28,7 +27,7 @@
    <select id="selectAllInfoByPreOrderId" parameterType="int" resultType="map">
   	select  a.preordertype,a.preordertime,a.preorderprice,
   			d.docname as redocname,d.doctitle as redoctitle,d.docprimarydept as redocprimarydept,d.docseconddept as redocseconddept,
-  			b.docloginid,c.docloginpix,b.docname,b.docmale,b.docage,b.doctitle,b.docallday,b.docexpert,b.docabs,b.docprimarydept,b.docseconddept,
+  			b.docloginid,c.docloginpix,c.dochuanxinaccount,b.docname,b.docmale,b.docage,b.doctitle,b.docallday,b.docexpert,b.docabs,b.docprimarydept,b.docseconddept,
   			b.dochosp,b.hosplevel,b.dochospprovince,b.dochospcity,b.dochosparea,b.dochospother
   			
   	 <!-- 
@@ -79,21 +78,21 @@
 	 where preOrderDocLoginId = #{0}  and preOrderType=#{1}
 	 	  
   </select>
-  <!--获取医生已抢订单  -->
+  <!--医生获取已抢订单  -->
   <select id="listByDocLoginId" parameterType="java.lang.Integer" resultType="map">
- 	 select a.preorderid,a.preordertime,b.usersickdesc,
- 	 		c.userloginpix,d.familyname,d.familyage,d.familymale
+ 	 select b.usersickid,c.userloginpix,d.familyname,d.familyage,d.familymale,
+ 	 		a.preorderid,a.preordertime,b.usersickdesc,c.userhuanxinaccount,a.preorderprice
 	 from preorder as a
 	 	left join usersick as b on a.userSickId=b.userSickId
 	 	left join userlogininfo as c on a.preOrderUserLoginId =c.userLoginId 
-  	   left join familyinfo as d on b.familyId =d.familyId
+  	    left join familyinfo as d on b.familyId =d.familyId
 	 where preOrderDocLoginId = #{0}  and preOrderType=2
 	</select>
-	<!--获取已抢订单详情  -->
+	<!--医生获取已抢订单详情  -->
 	 <select id="selectAllInfoByPreOrderIdInDoc" parameterType="java.lang.Integer" resultType="map">
  	 select a.preorderid,a.preordertime,a.preOrderPrice,
  	 		b.usersickdesc,b.usersickid,b.usersickptime,b.usersickpic,b.usersickprimarydept,b.usersickseconddept,
- 	 		c.userloginpix,d.familyname,d.familyage,d.familymale
+ 	 		c.userloginpix,c.userhuanxinaccount,d.familyname,d.familyage,d.familymale
 	 from preorder as a
 	 	left join usersick as b on a.userSickId=b.userSickId
 	 	left join userlogininfo as c on a.preOrderUserLoginId =c.userLoginId 
@@ -111,5 +110,10 @@
   <delete id="deleteAllByUserSickId" parameterType="java.lang.Integer" >
     delete from preorder
     where  userSickId=#{0,jdbcType=INTEGER}
+  </delete>
+  <!--根据病情和类型删除相关医生  -->
+  <delete id="deleteByUserSickIdAndPreOrderType" parameterType="java.lang.Integer" >
+    delete from preorder
+    where userSickId= #{0,jdbcType=INTEGER} and preOrderType=#{1,jdbcType=INTEGER} 
   </delete>
 </mapper>

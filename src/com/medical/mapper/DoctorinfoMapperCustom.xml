@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.medical.mapper.DoctorinfoMapperCustom" >
+	
+	<!--管理员查询医生列表  -->
+  	<select id="selectByDocLoginTypeInAdmin" parameterType="java.lang.Integer" resultType="map">
+  		select a.docloginid,b.dochuanxinaccount,b.docloginphone,a.docname,a.docmale,a.doctitle,a.dochosp,b.doclogintype,c.accounttypename as doclogintypename
+  		from doctorinfo as a 
+  			left join  doctorlogininfo as b on a.docloginid= b.docloginid
+  			left join accounttype as c on c.accounttypeid =b.docLoginType
+  		<if test="param1!=null">
+	  		where	b.doclogintype = #{0}
+	  	</if>
+	  	Order by b.docLoginSubCheckTime DESC
+  	</select>
+  	
+  	<!--管理员查询医生详细信息  -->
+  	<select id="selectInfoByDocLoginIdInAdmin" parameterType="java.lang.Integer" resultType="map">
+  		select a.docloginid,b.dochuanxinaccount,b.docloginphone,b.doclogintype,c.accounttypename as doclogintypename,
+  			a.docname,a.doccardnum,a.docmale,a.docage,a.dochosp,a.docallday,a.doctitle,a.docprimarydept,a.docseconddept,a.hosplevel,
+  			a.dochospprovince,a.dochospcity,a.dochosparea,a.dochospother,a.dochosplon,a.dochosplat,
+  			a.doccardphoto,a.doctitlephoto,a.docqualphoto,a.docworkcardphoto,a.docotherphoto
+  		from doctorinfo as a 
+  			left join  doctorlogininfo as b on a.docloginid= b.docloginid
+  			left join accounttype as c on c.accounttypeid =b.docLoginType
+  		where  a.docloginid = #{0}
+	</select>
+  	
 	<!-- 医生信息列表查询 -->
  	<select id="findDoctorInfoInList" parameterType="com.medical.po.DoctorSearch" 
   						resultType="map">
-  		 SELECT	a.docloginid,e.docloginpix,a.docname,a.doctitle,a.dochosp,a.hosplevel,a.docprimarydept,a.docseconddept,
-  					a.docallday,a.docexpert,
+  		 SELECT	a.docloginid,e.dochuanxinaccount,e.docloginpix,a.docname,a.doctitle,a.dochosp,a.hosplevel,a.docprimarydept,a.docseconddept,
+  					a.docallday,a.docexpert,a.docaddresslocation,a.docaddressprovince,a.docaddresscity,a.docaddressarea,a.docaddressother,
 	  		     ROUND(
 			        6378.138 * 2 * ASIN(
 			            SQRT(
@@ -48,93 +73,32 @@
 	  		   <if test="secondDept!=null">
 	  		   	  and a.docSecondDept=#{secondDept}
 	  		   </if>
-	  		   <if test="time!=null">
-	  		   	<if test="time==1">
-	  		   	   and d.monAm=1
-	  		   	</if>
-	  		   	<if test="time==2">
-	  		   	   and d.monPm=1
-	  		   	</if>
-	  		   	<if test="time==3">
-	  		   	   and d.tueAm=1
-	  		   	</if>
-	  		   	<if test="time==4">
-	  		   	   and d.tuePm=1
-	  		   	</if>
-	  		   	<if test="time==5">
-	  		   	   and d.wedAm=1
-	  		   	</if>
-	  		   	<if test="time==6">
-	  		   	   and d.wedPm=1
-	  		   	</if>
-	  		   	<if test="time==7">
-	  		   	   and d.thuAm=1
-	  		   	</if>
-	  		   	<if test="time==8">
-	  		   	  and d.thuPm=1
-	  		   	</if>
-	  		   	<if test="time==9">
-	  		   	   and d.friAm=1
-	  		   	</if>
-	  		   	<if test="time==10">
-	  		   	   and d.friPm=1
-	  		   	</if>
-	  		   	<if test="time==11">
-	  		   	  and d.satAm=1
-	  		   	</if>
-	  		   	<if test="time==12">
-	  		   	   and d.satPm=1
-	  		   	</if>
-	  		   	<if test="time==13">
-	  		   	   and d.sunAm=1
-	  		   	</if>
-	  		   	<if test="time==14">
-	  		   	   and d.sunPm=1
-	  		   	</if>
-	  		   </if>
-	  		   
-  		   </where>
+	  		 </where>
   		   ORDER BY distance ASC
   	</select>
-  <!-- 	<select id="findDoctorInfoInListByLoc" parameterType="com.medical.po.DoctorSearch" 
-  						resultType="map">
-  		   SELECT a.docname,a.docmale,a.docage,a.doctitle,a.dochosp,a.docdept,a.docallday,a.docloginid,a.docexpert,a.docabs,a.hosplevel,
-  		   e.docloginprovince,e.doclogincity,e.docloginarea,e.docloginother
-	  		    
-  		   FROM doctorinfo as a  
-  		   		left join  doctorskd as d on a.docLoginId = d.docLoginId 
-  		   		left join doctorlogininfo as e on a.docLoginId = e.docLoginId 
-  		   where  e.docLoginType=1 
-				<if test="province!=null">
-	  		   	  and e.docLoginProvince=#{province}
-	  		   </if>
-	  		   <if test="city!=null">
-	  		   	  and e.docLoginCity=#{city}
-	  		   </if>
-	  		   <if test="area!=null">
-	  		   	  and e.docLoginArea=#{area}
-	  		   </if>
-	  		ORDER BY distance ASC
-  		   limit #{pageNo},#{pageSize}; 
-  	</select> -->
+  
  	<!--医生信息地图模式  -->
   	<select id="findDoctorInfoInMap" parameterType="double" resultType="map">
-  		   SELECT a.docloginid,b.docloginpix,a.docAddressLat as dochosplat, a.docAddressLon as dochosplon,a.docprimarydept,docseconddept,docname
+  		   SELECT a.docloginid,b.docloginpix,a.docAddressLat as dochosplat, a.docAddressLon as dochosplon,a.docprimarydept,docseconddept,docname,b.dochuanxinaccount
   		  	FROM doctorinfo as a
   		   	  left join doctorlogininfo as b on a.docLoginId = b.docLoginId
-  		   where  (a.docHospLat BETWEEN #{0} AND #{1}) AND (a.docHospLon BETWEEN #{2} AND #{3});
+  		   where  (a.docAddressLat BETWEEN #{0} AND #{1}) AND (a.docAddressLon BETWEEN #{2} AND #{3});
   	</select>
   	<select id="findDoctorinfoByDocLoginId" parameterType="java.lang.Integer" resultType="com.medical.po.Doctorinfo">
   			select * from doctorinfo where docLoginId = #{id}
   	</select>
+  	
    <!--查找单个医生详细信息  -->
   	<select id="findDoctorByDocLoginId" parameterType="java.lang.Integer" resultType="map">
-  			select a.docloginid,b.docloginpix,a.docname,a.docmale,a.docage,a.doctitle,a.docexpert,a.docabs,a.docprimarydept,a.docseconddept,a.docallday,
-  				a.dochosp,a.hosplevel,a.dochospprovince,a.dochospcity,a.dochosparea,a.dochospother
+  			select a.docloginid,b.docloginpix,b.dochuanxinaccount,
+  				a.docname,a.docmale,a.docage,a.doctitle,a.docexpert,a.docabs,a.docprimarydept,a.docseconddept,a.docallday,
+  				a.dochosp,a.hosplevel,a.dochospprovince,a.dochospcity,a.dochosparea,a.dochospother,a.docaddresslocation,a.docaddressprovince,a.docaddresscity,a.docaddressarea,a.docaddressother,
+  				a.docaddresslon,a.docaddresslat
   			 from doctorinfo as a 
   				left join doctorlogininfo as b on a.docLoginId = b.docLoginId 
   			where a.docLoginId = #{id}
   	</select>
+  	
   	<select id="findDoctorByInfo" parameterType="com.medical.po.DoctorSearch" 
   						resultType="map">
   		   SELECT *
@@ -214,6 +178,7 @@
   		FROM doctorinfo 
   		where docName=#{0} 
   	</select>
+  
   	<update id="updateInfoByPrimaryKey" parameterType="com.medical.po.Doctorinfo" >
     update doctorinfo
     set 
@@ -227,4 +192,5 @@
       
     where docId = #{docid,jdbcType=INTEGER}
   </update>
+  
   </mapper>

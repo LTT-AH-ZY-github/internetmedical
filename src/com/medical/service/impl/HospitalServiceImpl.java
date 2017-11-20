@@ -12,9 +12,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.baidu.yun.push.exception.PushClientException;
+import com.baidu.yun.push.exception.PushServerException;
 import com.baidu.yun.push.utils.PushToAndroid;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.medical.exception.custom.MyException;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.DoctortitleMapper;
@@ -39,6 +42,7 @@ import com.medical.po.Userlogininfo;
 import com.medical.po.Userorder;
 import com.medical.service.DoctorService;
 import com.medical.service.HospitalService;
+import com.medical.utils.result.DataResult;
 
 public class HospitalServiceImpl implements HospitalService{
 	@Autowired 
@@ -101,54 +105,50 @@ public class HospitalServiceImpl implements HospitalService{
 	}
 
 	@Override
-	public Map<String, Object> preorderrequest(Integer docloginid, Integer hosploginid, Double orderprice) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		try {
-			Doctorlogininfo doc  =doctorlogininfoMapper.selectByPrimaryKey(docloginid);
-			if (doc!=null) {
-				Hosporder hosporder = new Hosporder();
-				hosporder.setDoctorid(docloginid);
-				hosporder.setHospid(hosploginid);
-				hosporder.setOrderptime(new Date());
-				hosporder.setOrderprice(new BigDecimal(orderprice));
-				int result = hosporderMapper.insertSelective(hosporder);
-				if (result>0) {
-					Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(hosploginid);
-					if (hospinfo!=null ) {
-						String[] tags = {doc.getDocloginphone(),"doctor"};
-						String title = "通知";
-						String msg = hospinfo.getHospname()+"发送会诊请求";
-						String sign = "3"; //等待病人再确认
-						//消息推送
-						Map<String, Object> push = PushToAndroid.PushMsgToSmartTag(tags, title, msg,sign);
-						if ("1".equals(push.get("state"))) {
-							//取消订单成功，且消息发送成功
-							map.put("state", "1");
-						} else {
-							//取消订单成功，且消息发送失败
-							map.put("state", "2");
-							map.put("msg", push.get("msg"));
-						}
-					}else {
-						map.put("state", "2");
-						map.put("msg", "创建会诊成功,消息发送失败，因获取医院信息不成功");
-					}
-					
-				} else {
-					//创建会诊失败
-					map.put("state", "3");
-				}
-			} else {
-				//创建会诊失败,因医生id对于医生信息为空
-				map.put("state", "4");
-			}
-			
-		}catch (Exception e) {
-			//异常错误
-			map.put("state", "5");
+	public String preorderrequest(Integer docloginid, Integer hosploginid, Double orderhospprice,
+			Integer orderhosptpricetype, Double orderhosptprice, Integer orderhospapricetype, Double orderhospaprice,
+			Integer orderhospepricetype, Double orderhospeprice) throws Exception {
+		Doctorlogininfo doc = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doc == null) {
+			return DataResult.error("创建会诊失败,因医生不存在");
 		}
-		
-		return map; 
+		Hosporder hosporder = new Hosporder();
+		hosporder.setDoctorid(docloginid);
+		hosporder.setHospid(hosploginid);
+		hosporder.setOrderptime(new Date());
+		hosporder.setOrderhospprice(new BigDecimal(orderhospprice));
+		hosporder.setOrderhosptpricetype(orderhosptpricetype);
+		double total = orderhospprice;
+		if ("2".equals(orderhosptpricetype)) {
+			hosporder.setOrderhosptprice(new BigDecimal(orderhosptprice));
+			total += orderhosptprice;
+		}
+		hosporder.setOrderhospapricetype(orderhospapricetype);
+		if ("2".equals(orderhospapricetype)) {
+			hosporder.setOrderhospaprice(new BigDecimal(orderhospaprice));
+			total += orderhospaprice;
+		}
+		hosporder.setOrderhospepricetype(orderhosptpricetype);
+		if ("2".equals(orderhospepricetype)) {
+			hosporder.setOrderhospeprice(new BigDecimal(orderhospeprice));
+			total += orderhospeprice;
+		}
+		hosporder.setOrdertotalhospprice(new BigDecimal(total));
+		int result = hosporderMapper.insertSelective(hosporder);
+		if (result > 0) {
+			Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(hosploginid);
+			String msg = hospinfo.getHospname() + "发送会诊请求";
+			String channelid = doctorlogininfoMapper.selectByPrimaryKey(docloginid).getDocloginchannelid();
+			boolean pushResult = PushToAndroid.pushMsgToSingleDevice(channelid, "等待确认", msg);
+			if (pushResult) {
+				return DataResult.success("创建会诊成功，且消息发送成功");
+			} else {
+				return DataResult.success("创建会诊成功，但消息发送失败");
+			}
+		} else {
+			return DataResult.error("创建会诊失败");
+		}
+
 	}
 	//医院获取需要住院的病人订单
 	@Override

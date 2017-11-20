@@ -12,8 +12,10 @@
     <result column="hospLoginMac" property="hosploginmac" jdbcType="VARCHAR" />
     <result column="hospLoginIp" property="hosploginip" jdbcType="VARCHAR" />
     <result column="hospLoginType" property="hosplogintype" jdbcType="INTEGER" />
+    <result column="hospLoginSubCheckTime" property="hosploginsubchecktime" jdbcType="TIMESTAMP" />
     <result column="hospLoginPhone" property="hosploginphone" jdbcType="VARCHAR" />
     <result column="hospLoginPix" property="hosploginpix" jdbcType="VARCHAR" />
+    <result column="hospHuanXinAccount" property="hosphuanxinaccount" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -75,7 +77,8 @@
   </sql>
   <sql id="Base_Column_List" >
     hospLoginId, hospLoginName, hospLoginPwd, hospLoginToken, hospLoginTime, hospLoginLoc, 
-    hospLoginBVer, hospLoginMac, hospLoginIp, hospLoginType, hospLoginPhone, hospLoginPix
+    hospLoginBVer, hospLoginMac, hospLoginIp, hospLoginType, hospLoginSubCheckTime, hospLoginPhone, 
+    hospLoginPix, hospHuanXinAccount
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HosplogininfoExample" >
     select
@@ -111,12 +114,14 @@
     insert into hosplogininfo (hospLoginId, hospLoginName, hospLoginPwd, 
       hospLoginToken, hospLoginTime, hospLoginLoc, 
       hospLoginBVer, hospLoginMac, hospLoginIp, 
-      hospLoginType, hospLoginPhone, hospLoginPix
+      hospLoginType, hospLoginSubCheckTime, 
+      hospLoginPhone, hospLoginPix, hospHuanXinAccount
       )
     values (#{hosploginid,jdbcType=INTEGER}, #{hosploginname,jdbcType=VARCHAR}, #{hosploginpwd,jdbcType=VARCHAR}, 
       #{hosplogintoken,jdbcType=VARCHAR}, #{hosplogintime,jdbcType=TIMESTAMP}, #{hosploginloc,jdbcType=VARCHAR}, 
       #{hosploginbver,jdbcType=VARCHAR}, #{hosploginmac,jdbcType=VARCHAR}, #{hosploginip,jdbcType=VARCHAR}, 
-      #{hosplogintype,jdbcType=INTEGER}, #{hosploginphone,jdbcType=VARCHAR}, #{hosploginpix,jdbcType=VARCHAR}
+      #{hosplogintype,jdbcType=INTEGER}, #{hosploginsubchecktime,jdbcType=TIMESTAMP}, 
+      #{hosploginphone,jdbcType=VARCHAR}, #{hosploginpix,jdbcType=VARCHAR}, #{hosphuanxinaccount,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Hosplogininfo" >
@@ -152,11 +157,17 @@
       <if test="hosplogintype != null" >
         hospLoginType,
       </if>
+      <if test="hosploginsubchecktime != null" >
+        hospLoginSubCheckTime,
+      </if>
       <if test="hosploginphone != null" >
         hospLoginPhone,
       </if>
       <if test="hosploginpix != null" >
         hospLoginPix,
+      </if>
+      <if test="hosphuanxinaccount != null" >
+        hospHuanXinAccount,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -190,11 +201,17 @@
       <if test="hosplogintype != null" >
         #{hosplogintype,jdbcType=INTEGER},
       </if>
+      <if test="hosploginsubchecktime != null" >
+        #{hosploginsubchecktime,jdbcType=TIMESTAMP},
+      </if>
       <if test="hosploginphone != null" >
         #{hosploginphone,jdbcType=VARCHAR},
       </if>
       <if test="hosploginpix != null" >
         #{hosploginpix,jdbcType=VARCHAR},
+      </if>
+      <if test="hosphuanxinaccount != null" >
+        #{hosphuanxinaccount,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -237,11 +254,17 @@
       <if test="record.hosplogintype != null" >
         hospLoginType = #{record.hosplogintype,jdbcType=INTEGER},
       </if>
+      <if test="record.hosploginsubchecktime != null" >
+        hospLoginSubCheckTime = #{record.hosploginsubchecktime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.hosploginphone != null" >
         hospLoginPhone = #{record.hosploginphone,jdbcType=VARCHAR},
       </if>
       <if test="record.hosploginpix != null" >
         hospLoginPix = #{record.hosploginpix,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hosphuanxinaccount != null" >
+        hospHuanXinAccount = #{record.hosphuanxinaccount,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -260,8 +283,10 @@
       hospLoginMac = #{record.hosploginmac,jdbcType=VARCHAR},
       hospLoginIp = #{record.hosploginip,jdbcType=VARCHAR},
       hospLoginType = #{record.hosplogintype,jdbcType=INTEGER},
+      hospLoginSubCheckTime = #{record.hosploginsubchecktime,jdbcType=TIMESTAMP},
       hospLoginPhone = #{record.hosploginphone,jdbcType=VARCHAR},
-      hospLoginPix = #{record.hosploginpix,jdbcType=VARCHAR}
+      hospLoginPix = #{record.hosploginpix,jdbcType=VARCHAR},
+      hospHuanXinAccount = #{record.hosphuanxinaccount,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -296,11 +321,17 @@
       <if test="hosplogintype != null" >
         hospLoginType = #{hosplogintype,jdbcType=INTEGER},
       </if>
+      <if test="hosploginsubchecktime != null" >
+        hospLoginSubCheckTime = #{hosploginsubchecktime,jdbcType=TIMESTAMP},
+      </if>
       <if test="hosploginphone != null" >
         hospLoginPhone = #{hosploginphone,jdbcType=VARCHAR},
       </if>
       <if test="hosploginpix != null" >
         hospLoginPix = #{hosploginpix,jdbcType=VARCHAR},
+      </if>
+      <if test="hosphuanxinaccount != null" >
+        hospHuanXinAccount = #{hosphuanxinaccount,jdbcType=VARCHAR},
       </if>
     </set>
     where hospLoginId = #{hosploginid,jdbcType=INTEGER}
@@ -316,8 +347,10 @@
       hospLoginMac = #{hosploginmac,jdbcType=VARCHAR},
       hospLoginIp = #{hosploginip,jdbcType=VARCHAR},
       hospLoginType = #{hosplogintype,jdbcType=INTEGER},
+      hospLoginSubCheckTime = #{hosploginsubchecktime,jdbcType=TIMESTAMP},
       hospLoginPhone = #{hosploginphone,jdbcType=VARCHAR},
-      hospLoginPix = #{hosploginpix,jdbcType=VARCHAR}
+      hospLoginPix = #{hosploginpix,jdbcType=VARCHAR},
+      hospHuanXinAccount = #{hosphuanxinaccount,jdbcType=VARCHAR}
     where hospLoginId = #{hosploginid,jdbcType=INTEGER}
   </update>
 </mapper>

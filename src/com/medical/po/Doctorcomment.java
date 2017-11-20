@@ -23,6 +23,8 @@ public class Doctorcomment {
 
     private Integer userloginid;
 
+    private String doccommentpatientname;
+
     private Date doccommenttime;
 
     public Integer getDoccommentid() {
@@ -103,6 +105,14 @@ public class Doctorcomment {
 
     public void setUserloginid(Integer userloginid) {
         this.userloginid = userloginid;
+    }
+
+    public String getDoccommentpatientname() {
+        return doccommentpatientname;
+    }
+
+    public void setDoccommentpatientname(String doccommentpatientname) {
+        this.doccommentpatientname = doccommentpatientname == null ? null : doccommentpatientname.trim();
     }
 
     public Date getDoccommenttime() {

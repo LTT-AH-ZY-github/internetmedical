@@ -656,6 +656,66 @@ public class UserorderExample {
             return (Criteria) this;
         }
 
+        public Criteria andUserorderactualhospitalizationidIsNull() {
+            addCriterion("userOrderActualHospitalizationId is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderactualhospitalizationidIsNotNull() {
+            addCriterion("userOrderActualHospitalizationId is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderactualhospitalizationidEqualTo(Integer value) {
+            addCriterion("userOrderActualHospitalizationId =", value, "userorderactualhospitalizationid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderactualhospitalizationidNotEqualTo(Integer value) {
+            addCriterion("userOrderActualHospitalizationId <>", value, "userorderactualhospitalizationid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderactualhospitalizationidGreaterThan(Integer value) {
+            addCriterion("userOrderActualHospitalizationId >", value, "userorderactualhospitalizationid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderactualhospitalizationidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("userOrderActualHospitalizationId >=", value, "userorderactualhospitalizationid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderactualhospitalizationidLessThan(Integer value) {
+            addCriterion("userOrderActualHospitalizationId <", value, "userorderactualhospitalizationid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderactualhospitalizationidLessThanOrEqualTo(Integer value) {
+            addCriterion("userOrderActualHospitalizationId <=", value, "userorderactualhospitalizationid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderactualhospitalizationidIn(List<Integer> values) {
+            addCriterion("userOrderActualHospitalizationId in", values, "userorderactualhospitalizationid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderactualhospitalizationidNotIn(List<Integer> values) {
+            addCriterion("userOrderActualHospitalizationId not in", values, "userorderactualhospitalizationid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderactualhospitalizationidBetween(Integer value1, Integer value2) {
+            addCriterion("userOrderActualHospitalizationId between", value1, value2, "userorderactualhospitalizationid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserorderactualhospitalizationidNotBetween(Integer value1, Integer value2) {
+            addCriterion("userOrderActualHospitalizationId not between", value1, value2, "userorderactualhospitalizationid");
+            return (Criteria) this;
+        }
+
         public Criteria andUserorderhstateIsNull() {
             addCriterion("userOrderHState is null");
             return (Criteria) this;

@@ -10,7 +10,11 @@ import org.springframework.stereotype.Component;
 import com.huanxin.utils.TokenManager;
 import com.huanxin.utils.UserManger;
 import com.medical.service.DoctorService;
-
+/**
+ * @author xyh
+ * @version 1.0
+ * 
+ * */
 @Component
 public class TimerController {
 	@Autowired

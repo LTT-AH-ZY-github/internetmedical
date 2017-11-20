@@ -774,6 +774,76 @@ public class HospitalcommentExample {
             addCriterion("hospCommentTime not between", value1, value2, "hospcommenttime");
             return (Criteria) this;
         }
+
+        public Criteria andHospcommentpatientnameIsNull() {
+            addCriterion("hospCommentPatientName is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospcommentpatientnameIsNotNull() {
+            addCriterion("hospCommentPatientName is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospcommentpatientnameEqualTo(String value) {
+            addCriterion("hospCommentPatientName =", value, "hospcommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospcommentpatientnameNotEqualTo(String value) {
+            addCriterion("hospCommentPatientName <>", value, "hospcommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospcommentpatientnameGreaterThan(String value) {
+            addCriterion("hospCommentPatientName >", value, "hospcommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospcommentpatientnameGreaterThanOrEqualTo(String value) {
+            addCriterion("hospCommentPatientName >=", value, "hospcommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospcommentpatientnameLessThan(String value) {
+            addCriterion("hospCommentPatientName <", value, "hospcommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospcommentpatientnameLessThanOrEqualTo(String value) {
+            addCriterion("hospCommentPatientName <=", value, "hospcommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospcommentpatientnameLike(String value) {
+            addCriterion("hospCommentPatientName like", value, "hospcommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospcommentpatientnameNotLike(String value) {
+            addCriterion("hospCommentPatientName not like", value, "hospcommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospcommentpatientnameIn(List<String> values) {
+            addCriterion("hospCommentPatientName in", values, "hospcommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospcommentpatientnameNotIn(List<String> values) {
+            addCriterion("hospCommentPatientName not in", values, "hospcommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospcommentpatientnameBetween(String value1, String value2) {
+            addCriterion("hospCommentPatientName between", value1, value2, "hospcommentpatientname");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospcommentpatientnameNotBetween(String value1, String value2) {
+            addCriterion("hospCommentPatientName not between", value1, value2, "hospcommentpatientname");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

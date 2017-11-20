@@ -13,6 +13,7 @@
     <result column="userOrderId" property="userorderid" jdbcType="INTEGER" />
     <result column="userLoginId" property="userloginid" jdbcType="INTEGER" />
     <result column="hospCommentTime" property="hospcommenttime" jdbcType="TIMESTAMP" />
+    <result column="hospCommentPatientName" property="hospcommentpatientname" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -74,7 +75,8 @@
   </sql>
   <sql id="Base_Column_List" >
     hospCommentId, hospCommentFatherId, hospCommentGrade, hospCommentServiceLevel, hospCommentEnvironmenLevel, 
-    hospCommentPriceLevel, hospCommentWords, hospLoginId, userOrderId, userLoginId, hospCommentTime
+    hospCommentPriceLevel, hospCommentWords, hospLoginId, userOrderId, userLoginId, hospCommentTime, 
+    hospCommentPatientName
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HospitalcommentExample" >
     select
@@ -111,12 +113,14 @@
       hospCommentGrade, hospCommentServiceLevel, 
       hospCommentEnvironmenLevel, hospCommentPriceLevel, 
       hospCommentWords, hospLoginId, userOrderId, 
-      userLoginId, hospCommentTime)
+      userLoginId, hospCommentTime, hospCommentPatientName
+      )
     values (#{hospcommentid,jdbcType=INTEGER}, #{hospcommentfatherid,jdbcType=INTEGER}, 
       #{hospcommentgrade,jdbcType=INTEGER}, #{hospcommentservicelevel,jdbcType=INTEGER}, 
       #{hospcommentenvironmenlevel,jdbcType=INTEGER}, #{hospcommentpricelevel,jdbcType=INTEGER}, 
       #{hospcommentwords,jdbcType=VARCHAR}, #{hosploginid,jdbcType=INTEGER}, #{userorderid,jdbcType=INTEGER}, 
-      #{userloginid,jdbcType=INTEGER}, #{hospcommenttime,jdbcType=TIMESTAMP})
+      #{userloginid,jdbcType=INTEGER}, #{hospcommenttime,jdbcType=TIMESTAMP}, #{hospcommentpatientname,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Hospitalcomment" >
     insert into hospitalcomment
@@ -154,6 +158,9 @@
       <if test="hospcommenttime != null" >
         hospCommentTime,
       </if>
+      <if test="hospcommentpatientname != null" >
+        hospCommentPatientName,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="hospcommentid != null" >
@@ -188,6 +195,9 @@
       </if>
       <if test="hospcommenttime != null" >
         #{hospcommenttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hospcommentpatientname != null" >
+        #{hospcommentpatientname,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -233,6 +243,9 @@
       <if test="record.hospcommenttime != null" >
         hospCommentTime = #{record.hospcommenttime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.hospcommentpatientname != null" >
+        hospCommentPatientName = #{record.hospcommentpatientname,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -250,7 +263,8 @@
       hospLoginId = #{record.hosploginid,jdbcType=INTEGER},
       userOrderId = #{record.userorderid,jdbcType=INTEGER},
       userLoginId = #{record.userloginid,jdbcType=INTEGER},
-      hospCommentTime = #{record.hospcommenttime,jdbcType=TIMESTAMP}
+      hospCommentTime = #{record.hospcommenttime,jdbcType=TIMESTAMP},
+      hospCommentPatientName = #{record.hospcommentpatientname,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -288,6 +302,9 @@
       <if test="hospcommenttime != null" >
         hospCommentTime = #{hospcommenttime,jdbcType=TIMESTAMP},
       </if>
+      <if test="hospcommentpatientname != null" >
+        hospCommentPatientName = #{hospcommentpatientname,jdbcType=VARCHAR},
+      </if>
     </set>
     where hospCommentId = #{hospcommentid,jdbcType=INTEGER}
   </update>
@@ -302,7 +319,8 @@
       hospLoginId = #{hosploginid,jdbcType=INTEGER},
       userOrderId = #{userorderid,jdbcType=INTEGER},
       userLoginId = #{userloginid,jdbcType=INTEGER},
-      hospCommentTime = #{hospcommenttime,jdbcType=TIMESTAMP}
+      hospCommentTime = #{hospcommenttime,jdbcType=TIMESTAMP},
+      hospCommentPatientName = #{hospcommentpatientname,jdbcType=VARCHAR}
     where hospCommentId = #{hospcommentid,jdbcType=INTEGER}
   </update>
 </mapper>

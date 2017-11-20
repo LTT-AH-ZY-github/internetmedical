@@ -12,6 +12,7 @@
     <result column="docLoginId" property="docloginid" jdbcType="INTEGER" />
     <result column="userOrderId" property="userorderid" jdbcType="INTEGER" />
     <result column="userLoginId" property="userloginid" jdbcType="INTEGER" />
+    <result column="docCommentPatientName" property="doccommentpatientname" jdbcType="VARCHAR" />
     <result column="docCommentTime" property="doccommenttime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -74,7 +75,8 @@
   </sql>
   <sql id="Base_Column_List" >
     docCommentId, docCommentFatherId, docCommentGrade, docCommentServiceLevel, docCommentProfessionalLevel, 
-    docCommentPriceLevel, docCommentWords, docLoginId, userOrderId, userLoginId, docCommentTime
+    docCommentPriceLevel, docCommentWords, docLoginId, userOrderId, userLoginId, docCommentPatientName, 
+    docCommentTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.DoctorcommentExample" >
     select
@@ -111,12 +113,14 @@
       docCommentGrade, docCommentServiceLevel, 
       docCommentProfessionalLevel, docCommentPriceLevel, 
       docCommentWords, docLoginId, userOrderId, 
-      userLoginId, docCommentTime)
+      userLoginId, docCommentPatientName, docCommentTime
+      )
     values (#{doccommentid,jdbcType=INTEGER}, #{doccommentfatherid,jdbcType=INTEGER}, 
       #{doccommentgrade,jdbcType=INTEGER}, #{doccommentservicelevel,jdbcType=INTEGER}, 
       #{doccommentprofessionallevel,jdbcType=INTEGER}, #{doccommentpricelevel,jdbcType=INTEGER}, 
       #{doccommentwords,jdbcType=VARCHAR}, #{docloginid,jdbcType=INTEGER}, #{userorderid,jdbcType=INTEGER}, 
-      #{userloginid,jdbcType=INTEGER}, #{doccommenttime,jdbcType=TIMESTAMP})
+      #{userloginid,jdbcType=INTEGER}, #{doccommentpatientname,jdbcType=VARCHAR}, #{doccommenttime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Doctorcomment" >
     insert into doctorcomment
@@ -150,6 +154,9 @@
       </if>
       <if test="userloginid != null" >
         userLoginId,
+      </if>
+      <if test="doccommentpatientname != null" >
+        docCommentPatientName,
       </if>
       <if test="doccommenttime != null" >
         docCommentTime,
@@ -185,6 +192,9 @@
       </if>
       <if test="userloginid != null" >
         #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="doccommentpatientname != null" >
+        #{doccommentpatientname,jdbcType=VARCHAR},
       </if>
       <if test="doccommenttime != null" >
         #{doccommenttime,jdbcType=TIMESTAMP},
@@ -230,6 +240,9 @@
       <if test="record.userloginid != null" >
         userLoginId = #{record.userloginid,jdbcType=INTEGER},
       </if>
+      <if test="record.doccommentpatientname != null" >
+        docCommentPatientName = #{record.doccommentpatientname,jdbcType=VARCHAR},
+      </if>
       <if test="record.doccommenttime != null" >
         docCommentTime = #{record.doccommenttime,jdbcType=TIMESTAMP},
       </if>
@@ -250,6 +263,7 @@
       docLoginId = #{record.docloginid,jdbcType=INTEGER},
       userOrderId = #{record.userorderid,jdbcType=INTEGER},
       userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      docCommentPatientName = #{record.doccommentpatientname,jdbcType=VARCHAR},
       docCommentTime = #{record.doccommenttime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -285,6 +299,9 @@
       <if test="userloginid != null" >
         userLoginId = #{userloginid,jdbcType=INTEGER},
       </if>
+      <if test="doccommentpatientname != null" >
+        docCommentPatientName = #{doccommentpatientname,jdbcType=VARCHAR},
+      </if>
       <if test="doccommenttime != null" >
         docCommentTime = #{doccommenttime,jdbcType=TIMESTAMP},
       </if>
@@ -302,6 +319,7 @@
       docLoginId = #{docloginid,jdbcType=INTEGER},
       userOrderId = #{userorderid,jdbcType=INTEGER},
       userLoginId = #{userloginid,jdbcType=INTEGER},
+      docCommentPatientName = #{doccommentpatientname,jdbcType=VARCHAR},
       docCommentTime = #{doccommenttime,jdbcType=TIMESTAMP}
     where docCommentId = #{doccommentid,jdbcType=INTEGER}
   </update>

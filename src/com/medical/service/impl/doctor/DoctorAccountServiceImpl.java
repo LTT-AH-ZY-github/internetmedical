@@ -8,27 +8,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import com.huanxin.utils.UserManger;
-import com.medical.interceptor.MapTokenManager;
-import com.medical.interceptor.TokenModel;
+import com.medical.mapper.AccounttypeMapper;
 import com.medical.mapper.DoctorinfoMapper;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogMapper;
 import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.DoctorlogininfoMapperCustom;
 import com.medical.mapper.DoctorskdMapper;
+import com.medical.mapper.UserlogininfoMapperCustom;
+import com.medical.po.Accounttype;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlog;
 import com.medical.po.Doctorlogininfo;
 import com.medical.po.Doctorskd;
+import com.medical.po.Userlogininfo;
 import com.medical.service.iface.doctor.DoctorAccountService;
+import com.medical.utils.Global;
 import com.medical.utils.MD5Util;
+import com.medical.utils.TokeManager;
+import com.medical.utils.result.DataResult;
+import com.netease.code.MsgCode;
 @Service
 public class DoctorAccountServiceImpl implements DoctorAccountService {
+	
 	@Autowired
 	private DoctorlogininfoMapper doctorlogininfoMapper;
 	@Autowired
 	private DoctorinfoMapperCustom doctorinfoMapperCustom;
-
 	@Autowired
 	private DoctorlogininfoMapperCustom doctorlogininfoMapperCustom;
 	@Autowired
@@ -37,189 +43,315 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 	private DoctorlogMapper doctorlogMapper;
 	@Autowired
 	private DoctorskdMapper doctorskdMapper;
+	@Autowired
+	private AccounttypeMapper accounttypeMapper;
+	@Autowired
+	private UserlogininfoMapperCustom userlogininfoMapperCustom;
 	
 	// 注册
 	@Override
-	public int createDoctor(String docLoginPhone, String magCode, String docLoginPwd) throws Exception {
-
-		/* if (MsgCode.checkMsg(docLoginPhone, magCode)) { */
-		if (true) {
-			int count = doctorlogininfoMapperCustom.findDocCountByPhone(docLoginPhone);
-			// 判断是否注册过
-			if (count == 0) { // 未注册
-				Doctorlogininfo doctorLogininfo = new Doctorlogininfo();
-				doctorLogininfo.setDocloginphone(docLoginPhone);
-				doctorLogininfo.setDocloginname(docLoginPhone);
-				String[] str = MD5Util.generate(docLoginPwd);
-				// md5值密码
-				doctorLogininfo.setDocloginpwd(str[0]);
-				// salt值
-				doctorLogininfo.setDocloginsalt(str[1]);
-				// 未审核用户
-				doctorLogininfo.setDoclogintype(false);
-				doctorLogininfo.setDocloginpix("1.jpg");
-				// 插入登录信息表
-				int result = doctorlogininfoMapperCustom.insertSelectiveReturnId(doctorLogininfo);
-				Doctorinfo doctorinfo = new Doctorinfo();
-				doctorinfo.setDocloginid(doctorLogininfo.getDocloginid());
-				// 创建信息表
-				int infoResult = doctorinfoMapper.insertSelective(doctorinfo);
-				// 创建日程表
-				Doctorskd doctorskd = new Doctorskd();
-				doctorskd.setDocloginid(doctorLogininfo.getDocloginid());
-				int skdResult = doctorskdMapper.insertSelective(doctorskd);
-				// 操作成功
-				if (result > 0 && infoResult > 0 && skdResult > 0) {
-					addHuanXinAccout(doctorLogininfo.getDocloginid(), docLoginPwd);
-					return 1;
-				} else {
-
-					// 操作失败，回滚
-					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-					return 2;
-				}
-			} else {
-				// 该号码已经注册过
-				return 3;
-			}
-
+	public String createDoctor(String docloginphone, String magCode, String docLoginPwd) throws Exception {
+		boolean msgResult = MsgCode.checkMsg(docloginphone, magCode);
+		if (!msgResult) {
+			return DataResult.error("验证码错误");
+		}
+		// 查询医生登录表
+	   int doctorCount = doctorlogininfoMapperCustom.findDocCountByPhone(docloginphone);
+	   // 查询病人登录表
+	   int userCount = userlogininfoMapperCustom.findUserCountByPhone(docloginphone);
+	   if (doctorCount>0 || userCount>0) {
+			return DataResult.error("该号码已注册");
+		}
+		Doctorlogininfo doctorlogininfo = new Doctorlogininfo();
+	
+		doctorlogininfo.setDocloginphone(docloginphone);
+		doctorlogininfo.setDocloginname(docloginphone);
+		String[] str = MD5Util.generate(docLoginPwd);
+		// md5值密码
+		doctorlogininfo.setDocloginpwd(str[0]);
+		// salt值
+		doctorlogininfo.setDocloginsalt(str[1]);
+		// 未审核用户
+		doctorlogininfo.setDoclogintype(1);
+		doctorlogininfo.setDocloginpix("http://oytv6cmyw.bkt.clouddn.com/20171103064014944735.jpg");
+		// 插入登录信息表
+		int result = doctorlogininfoMapperCustom.insertSelectiveReturnId(doctorlogininfo);
+		Doctorinfo doctorinfo = new Doctorinfo();
+		doctorinfo.setDocloginid(doctorlogininfo.getDocloginid());
+		// 创建信息表
+		int infoResult = doctorinfoMapper.insertSelective(doctorinfo);
+		// 创建日程表
+		Doctorskd doctorskd = new Doctorskd();
+		doctorskd.setDocloginid(doctorlogininfo.getDocloginid());
+		int skdResult = doctorskdMapper.insertSelective(doctorskd);
+		// 操作成功
+		if (result > 0 && infoResult > 0 && skdResult > 0) {
+			addHuanXinAccout(doctorlogininfo.getDocloginid(), docLoginPwd);
+			return DataResult.success("注册成功");
 		} else {
-			return 4;
+			// 操作失败，回滚
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return DataResult.error("注册失败");
 		}
 
 	}
 
-	// 登录
+	// 普通登录
 	@Override
-	public Map<String, Object> updateDoctorToLogin(Doctorlogininfo doctor) throws Exception {
-		Map<String, Object> map = new HashMap<String, Object>();
-		try {
-			MapTokenManager mapTokenManager = new MapTokenManager();
-			// 登录信息
-			Doctorlogininfo doctorlogininfo = new Doctorlogininfo();
-			doctorlogininfo.setDocloginip(doctor.getDocloginip());
-			doctorlogininfo.setDocloginpver(doctor.getDocloginpver());
-			doctorlogininfo.setDocloginloc(doctor.getDocloginloc());
-			doctorlogininfo.setDocloginlat(doctor.getDocloginlat());
-			doctorlogininfo.setDocloginlon(doctor.getDocloginlon());
-			doctorlogininfo.setDocloginmac(doctor.getDocloginmac());
-			doctorlogininfo.setDoclogintime(new Date());
-			doctorlogininfo.setDocloginphone(doctor.getDocloginphone());
-			// doctorlogininfo.setDocloginpwd(doctor.getDocloginpwd());
-			// 登录日志信息
-			Doctorlog doctorlog = new Doctorlog();
-			doctorlog.setDoclogip(doctorlogininfo.getDocloginip());
-			doctorlog.setDoclogtime(new Date());
-			doctorlog.setDocloglat(doctorlogininfo.getDocloginlat());
-			doctorlog.setDocloglon(doctorlogininfo.getDocloginlon());
-			doctorlog.setDoclogmac(doctorlogininfo.getDocloginmac());
-			doctorlog.setDoclogmodel(doctorlogininfo.getDocloginmodel());
-			doctorlog.setDoclogpver(doctorlogininfo.getDocloginpver());
-			// 检查账号密码是否正确
-			Doctorlogininfo doctorinfo = doctorlogininfoMapperCustom
-					.selectDoctorByPhone(doctorlogininfo.getDocloginphone());
-			if (doctorinfo != null) { // 登录成功
-				boolean state = MD5Util.verify(doctor.getDocloginpwd(), doctorinfo.getDocloginsalt(),
-						doctorinfo.getDocloginpwd());
-				System.out.println("密码" + state);
-				if (state) {
-					// 医生登录id
-					doctorlogininfo.setDocloginid(doctorinfo.getDocloginid());
-					doctorlog.setDocloginid(doctorinfo.getDocloginid());
-					// 获取登录Id
-					String acceptedToken = doctorlogininfo.getDoclogintoken();
-					if (acceptedToken == null) { // 没有token重新登录
-						TokenModel tokenModel = mapTokenManager.createToken(doctorlogininfo.getDocloginphone(),
-								mapTokenManager.setTokenTime(new Date().getTime(), 30)); // token 过期时间 30天
-						doctorlogininfo.setDoclogintoken(tokenModel.getToken());
-						doctorlogininfo.setDoclogindld(tokenModel.getTime());
-						// 更新登录信息
+	public String updateDoctorToNormalLogin(Doctorlogininfo doctor) throws Exception {
 
-						int upResult = doctorlogininfoMapper.updateByPrimaryKeySelective(doctorlogininfo);// 更新登录信息
-						int inResult = doctorlogMapper.insertSelective(doctorlog);// 生成登录日志
-						Map<String, Object> info = doctorinfoMapperCustom
-								.selectNameAndTitleByDocLoginId(doctorinfo.getDocloginid());
-						if (upResult == 1 && inResult == 1) {
-							map.put("state", "1"); // 操作成功
-							map.put("token", tokenModel.getToken());
-							map.put("id", doctorinfo.getDocloginid());
-							map.put("pix", doctorinfo.getDocloginpix());
-							map.put("name", info.get("docname"));
-							map.put("title", info.get("doctitlename"));
-							map.put("type", doctorinfo.getDoclogintype());
-						} else {
-							map.put("state", "2"); // 操作失败
-						}
+		// 登录信息
+		Doctorlogininfo logininfoRecord = new Doctorlogininfo();
+		logininfoRecord.setDocloginip(doctor.getDocloginip());
+		logininfoRecord.setDocloginpver(doctor.getDocloginpver());
+		logininfoRecord.setDocloginloc(doctor.getDocloginloc());
+		logininfoRecord.setDocloginlat(doctor.getDocloginlat());
+		logininfoRecord.setDocloginlon(doctor.getDocloginlon());
+		logininfoRecord.setDocloginmac(doctor.getDocloginmac());
+		logininfoRecord.setDoclogintime(new Date());
+		logininfoRecord.setDoclogindev(doctor.getDoclogindev());
+		logininfoRecord.setDocloginphone(doctor.getDocloginphone());
 
-					} else { // 有token 自动登录
-						int result = mapTokenManager.checkToken(acceptedToken);
-						if (result == 1) {
-							map.put("state", "3");// 当前token不存在
-						} else if (result == 2) {
-							map.put("state", "4");// token已过期
-						} else if (result == 3) {
-							long time = mapTokenManager.addTokenTime(acceptedToken, 30); // token延期30天
-							doctorlogininfo.setDoclogindld(time);
+		// 登录日志信息
+		Doctorlog logRecord = new Doctorlog();
+		logRecord.setDoclogip(doctor.getDocloginip());
+		logRecord.setDoclogtime(new Date());
+		logRecord.setDocloglat(doctor.getDocloginlat());
+		logRecord.setDocloglon(doctor.getDocloginlon());
+		logRecord.setDoclogmac(doctor.getDocloginmac());
+		logRecord.setDoclogmodel(doctor.getDocloginmodel());
+		logRecord.setDoclogpver(doctor.getDocloginpver());
 
-							int upResult = doctorlogininfoMapper.updateByPrimaryKeySelective(doctorlogininfo);// 更新登录信息
-							int inResult = doctorlogMapper.insertSelective(doctorlog);// 生成登录日志
-							Map<String, Object> info = doctorinfoMapperCustom
-									.selectNameAndTitleByDocLoginId(doctorinfo.getDocloginid());
-							if (upResult == 1 && inResult == 1) {
-								map.put("state", "5"); // 操作成功
-								map.put("id", doctorinfo.getDocloginid());
-								map.put("token", acceptedToken);
-								map.put("pix", doctorinfo.getDocloginpix());
-								map.put("name", info.get("docname"));
-								map.put("title", info.get("doctitlename"));
-								map.put("type", doctorinfo.getDoclogintype());
-							} else {
-								map.put("state", "6"); // 操作失败
-							}
-
-						}
-					}
-				} else {
-					map.put("state", "7"); // 用户名密码不匹配
-				}
-
-			} else {
-				map.put("state", "8"); // 该号码未注册
+		// 检查账号密码是否正确
+		Doctorlogininfo doctorinfo = doctorlogininfoMapperCustom.selectDoctorByPhone(doctor.getDocloginphone());
+		if (doctorinfo == null) {
+			return DataResult.error("该号码未注册");
+		}
+		boolean state = MD5Util.verify(doctor.getDocloginpwd(), doctorinfo.getDocloginsalt(),
+				doctorinfo.getDocloginpwd());
+		if (!state) {
+			return DataResult.error("密码错误");
+		} else {
+			// 医生登录id
+			logininfoRecord.setDocloginid(doctorinfo.getDocloginid());
+			logRecord.setDocloginid(doctorinfo.getDocloginid());
+			String token = TokeManager.createToken(doctorinfo.getDocloginid(), doctorinfo.getDocloginphone());
+			long expireTime = (long) Global.globalToken.get(token);
+			logininfoRecord.setDoclogintoken(token);
+			logininfoRecord.setDoclogindld(expireTime);
+			// 更新登录信息
+			int upResult = doctorlogininfoMapper.updateByPrimaryKeySelective(logininfoRecord);
+			// 生成登录日志
+			int inResult = doctorlogMapper.insertSelective(logRecord);
+			Doctorinfo info = doctorinfoMapperCustom.selectByDocLoginId(doctorinfo.getDocloginid());
+			Accounttype accounttype = accounttypeMapper.selectByPrimaryKey(doctorinfo.getDoclogintype());
+			String typename = "";
+			if (accounttype != null) {
+				typename = accounttype.getAccounttypename();
 			}
-		} catch (Exception e) {
-			map.put("state", "9"); // 异常错误
+			if (upResult == 1 && inResult == 1) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("token", token);
+				map.put("id", doctorinfo.getDocloginid());
+				map.put("pix", doctorinfo.getDocloginpix());
+				map.put("name", info.getDocname());
+				map.put("title", info.getDoctitle());
+				map.put("type", doctorinfo.getDoclogintype());
+				map.put("typename", typename);
+				map.put("huanxinaccount", doctorinfo.getDochuanxinaccount());
+				return DataResult.success("登录成功", map);
+			} else {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				return DataResult.error("登录失败");
+			}
 		}
 
-		return map;
+	}
 
+	// 自动登录
+	@Override
+	public String updateDoctorToAutoLogin(Doctorlogininfo doctor) throws Exception {
+		// 登录信息
+		Doctorlogininfo logininfoRecord = new Doctorlogininfo();
+		logininfoRecord.setDocloginip(doctor.getDocloginip());
+		logininfoRecord.setDocloginpver(doctor.getDocloginpver());
+		logininfoRecord.setDocloginloc(doctor.getDocloginloc());
+		logininfoRecord.setDocloginlat(doctor.getDocloginlat());
+		logininfoRecord.setDocloginlon(doctor.getDocloginlon());
+		logininfoRecord.setDocloginmac(doctor.getDocloginmac());
+		logininfoRecord.setDoclogindev(doctor.getDoclogindev());
+		logininfoRecord.setDoclogintime(new Date());
+		logininfoRecord.setDocloginphone(doctor.getDocloginphone());
+		// 登录日志信息
+		Doctorlog logRecord = new Doctorlog();
+		logRecord.setDoclogip(doctor.getDocloginip());
+		logRecord.setDoclogtime(new Date());
+		logRecord.setDocloglat(doctor.getDocloginlat());
+		logRecord.setDocloglon(doctor.getDocloginlon());
+		logRecord.setDoclogmac(doctor.getDocloginmac());
+		logRecord.setDoclogmodel(doctor.getDocloginmodel());
+		logRecord.setDoclogpver(doctor.getDocloginpver());
+		// 检查账号密码是否正确
+		Doctorlogininfo doctorinfo = doctorlogininfoMapperCustom.selectDoctorByPhone(doctor.getDocloginphone());
+		if (doctorinfo == null) {
+			return DataResult.error("该号码未注册");
+		} // 登录成功
+		boolean state = MD5Util.verify(doctor.getDocloginpwd(), doctorinfo.getDocloginsalt(),
+				doctorinfo.getDocloginpwd());
+		if (!state) {
+			return DataResult.error("密码错误");
+		}
+		// 医生登录id
+		logininfoRecord.setDocloginid(doctorinfo.getDocloginid());
+		logRecord.setDocloginid(doctorinfo.getDocloginid());
+		String doctorlogintoken = doctor.getDoclogintoken();
+		boolean result = TokeManager.isTokenEnable(doctorlogintoken);
+		if (result) {
+			long expireTime = TokeManager.addTokenTime(doctorlogintoken);
+			logininfoRecord.setDoclogindld(expireTime);
+			// 更新登录信息
+			int upResult = doctorlogininfoMapper.updateByPrimaryKeySelective(logininfoRecord);
+			// 生成登录日志
+			int inResult = doctorlogMapper.insertSelective(logRecord);
+			Doctorinfo info = doctorinfoMapperCustom.selectByDocLoginId(doctorinfo.getDocloginid());
+			Accounttype accounttype = accounttypeMapper.selectByPrimaryKey(doctorinfo.getDoclogintype());
+			String typename = "";
+			if (accounttype != null) {
+				typename = accounttype.getAccounttypename();
+			}
+			if (upResult == 1 && inResult == 1) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("id", doctorinfo.getDocloginid());
+				map.put("token", doctorlogintoken);
+				map.put("pix", doctorinfo.getDocloginpix());
+				map.put("name", info.getDocname());
+				map.put("title", info.getDoctitle());
+				map.put("type", doctorinfo.getDoclogintype());
+				map.put("typename", typename);
+				map.put("huanxinaccount", doctorinfo.getDochuanxinaccount());
+				return DataResult.success("自动登录成功", map);
+			} else {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				return DataResult.error("自动登录失败");
+			}
+		} else {
+			return DataResult.error("账号过期");
+		}
 	}
 	
+	// 更新百度云ChannelId
 	@Override
-	public int updateChannelId(Integer docloginid, String channelid) {
-		
-			Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
-			if (doctorlogininfo != null) {
-				Doctorlogininfo record = new Doctorlogininfo();
-				record.setDocloginid(docloginid);
-				record.setDocloginchannelid(channelid);
-				int result = doctorlogininfoMapper.updateByPrimaryKeySelective(record);
-				if (result>0) {
-					return 1;
-				} else {
-					return 2;
-				}
-				
-			}else {
-				return 3;
-			}
-		
-		
+	public String updateChannelId(Integer docloginid, String channelid) throws Exception{
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo == null) {
+			return DataResult.error("用户不存在");
+		}
+		Doctorlogininfo record = new Doctorlogininfo();
+		record.setDocloginid(docloginid);
+		record.setDocloginchannelid(channelid);
+		boolean result = doctorlogininfoMapper.updateByPrimaryKeySelective(record) > 0;
+		if (result) {
+			return DataResult.success("更新成功");
+		} else {
+			return DataResult.error("更新失败");
+		}
+
 	}
 	
 	// 注册环信
 	@Override
 	public boolean addHuanXinAccout(Integer docloginid, String password) throws Exception {
-		return UserManger.register("doc_" + docloginid, password);
+		boolean registerResult =  UserManger.register("doc_" + docloginid, password);
+		if (registerResult) {
+			Doctorlogininfo doctorlogininfo = new Doctorlogininfo();
+			doctorlogininfo.setDocloginid(docloginid);
+			doctorlogininfo.setDochuanxinaccount("doc_" + docloginid);
+			doctorlogininfoMapper.updateByPrimaryKeySelective(doctorlogininfo);
+			return true;
+			
+		} else {
+			return false;
+		}
 
+	}
+
+	// 修改环信密码
+	@Override
+	public String editHuanXinPassword(Integer docloginid, String password) throws Exception {
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo == null) {
+			return DataResult.error("账号不存在");
+		} else {
+			boolean registerResult = UserManger.register(doctorlogininfo.getDochuanxinaccount(), password);
+			if (registerResult) {
+				return DataResult.success("修改成功");
+			} else {
+				return DataResult.error("修改失败");
+			}
+		}
+	}
+	// 修改密码
+	@Override
+	public String updatePassword(String docloginphone, String docloginpwd,String msgCode) throws Exception {
+		boolean msgResult = MsgCode.checkMsg(docloginphone, msgCode);
+		if (!msgResult) {
+			return DataResult.error("验证码错误");
+		}
+		Doctorlogininfo doctorlogininfo = new Doctorlogininfo();
+		Doctorlogininfo logininfo = doctorlogininfoMapperCustom.selectDoctorByPhone(docloginphone);
+		if (logininfo == null) {
+			return DataResult.error("号码未注册");
+		}
+		doctorlogininfo.setDocloginid(logininfo.getDocloginid());
+		String[] str = MD5Util.generate(docloginpwd);
+		doctorlogininfo.setDocloginpwd(str[0]);
+		doctorlogininfo.setDocloginsalt(str[1]);
+		boolean result = doctorlogininfoMapper.updateByPrimaryKeySelective(doctorlogininfo) > 0;
+		if (result) {
+			editHuanXinPassword(logininfo.getDocloginid(),docloginpwd);
+			return DataResult.success("修改成功");
+		} else {
+			return DataResult.error("修改失败");
+		}
+
+	}
+	
+	//退出登录
+	@Override
+	public String updateAccountToExit(Integer docloginid) throws Exception {
+		Doctorlogininfo list = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (list != null) {
+			TokeManager.deleteToken(list.getDoclogintoken());
+			return DataResult.success("退出登录成功");
+		} else {
+			return DataResult.error("该用户不存在");
+		}
+	}
+	
+	//提交审核
+	@Override
+	public String updateInfoToReview(Integer docloginid)throws Exception{
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo == null) {
+			return DataResult.error("该用户不存在");
+		}
+		int type = doctorlogininfo.getDoclogintype();
+		if (type==2) {
+			return DataResult.error("已提交审核");
+		}
+		if (type==3) {
+			return DataResult.error("已通过审核");
+		}
+		Doctorlogininfo record = new Doctorlogininfo();
+		record.setDocloginid(docloginid);
+		record.setDocloginsubchecktime(new Date());
+		//等待审核
+		record.setDoclogintype(2);
+		boolean result = doctorlogininfoMapper.updateByPrimaryKeySelective(record)>0;
+		if (result) {
+			return DataResult.success("提交审核成功");
+		} else {
+			return DataResult.error("提交审核失败");
+		}
 	}
 }

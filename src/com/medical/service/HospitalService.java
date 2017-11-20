@@ -23,7 +23,7 @@ public interface HospitalService {
 	Map<String, Object> listDoctor(Integer pageNo, Integer pageSize, HospSearchDocTerm hospSearchDocTerm)
 			throws Exception;
 
-	Map<String, Object> preorderrequest(Integer docloginid, Integer hosploginid, Double orderprice);
+	String preorderrequest(Integer docloginid, Integer hosploginid, Double orderhospprice, Integer orderhosptpricetype, Double orderhosptprice, Integer orderhospapricetype, Double orderhospaprice, Integer orderhospepricetype, Double orderhospeprice) throws Exception;
 	//医院获取需要住院的病人订单
 	Map<String, Object> listUserOrder(Integer hosploginid, Integer type, Integer limit, Integer offset);
 	//医院确认需要住院的病人订单

@@ -1,22 +1,57 @@
 package com.medical.service.iface.user;
 
-import java.util.Map;
 
-import com.medical.po.Userlogininfo;
 
 public interface UserAccountService {
 	
-	//用户注册
-	boolean createUserAccount(String phone, String password) throws Exception;
+	/**
+	 * 新增账号
+	 * @return
+	 * @param
+	 * */
+	String createUserAccount(String phone, String password, String code) throws Exception;
 	
-	//用户登录
-	Map<String, Object> updateUserToLogin(String userloginphone, String userloginpwd, String userlogintoken) throws Exception;
-
-	boolean updateUserToExit(Integer userloginid) throws Exception;
-
-	boolean updatePassword(String phone, String password) throws Exception;
-
+	/**
+	 * 普通登录
+	 * @return
+	 * @param
+	 * */
+	String updateUserToNormalLogin(String userloginphone, String userloginpwd, Integer userlogindev) throws Exception;
 	
-	boolean addHuanXinAccout(Integer userloginid, String password) throws Exception;
+	/**
+	 * 自动登录
+	 * @param userlogindev 
+	 * @return
+	 * @param
+	 * */
+	String updateUserToAutoLogin(String userloginphone, String userloginpwd, String userlogintoken, Integer userlogindev) throws Exception;
+	
+	/**
+	 * 退出登录
+	 * @return
+	 * @param
+	 * */
+	String updateUserToExit(Integer userloginid) throws Exception;
+	
+	/**
+	 * 修改密码
+	 * @return
+	 * @param
+	 * */
+	String updatePassword(String phone, String password, String code) throws Exception;
 
+	/**
+	 * 注册环信账号
+	 * @return
+	 * @param
+	 * */
+	String addHuanXinAccout(Integer userloginid, String password) throws Exception;
+	
+	/**
+	 * 修改环信密码
+	 * @return
+	 * @param
+	 * */
+	String editHuanXinPassword(Integer userloginid, String password) throws Exception;
+	
 }

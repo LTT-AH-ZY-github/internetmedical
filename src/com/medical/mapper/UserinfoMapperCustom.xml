@@ -7,9 +7,29 @@
   		 resultType="map">
   		SELECT username,usermale,usercardnum,usercardphoto,useradrprovince,useradrcity,useradrarea,useradrother,userage FROM userinfo WHERE userLoginId=#{id}
   	</select>
-  	 <select id="selectByLoginId" parameterType="int"
+  	<select id="selectByLoginId" parameterType="int"
   		 resultType="com.medical.po.Userinfo">
   		SELECT * FROM userinfo WHERE userLoginId=#{id}
   	</select>
-  	
+  	<!--管理员根据用户账号类型查询用户  -->
+  	<select id="selectByUserLoginType" parameterType="java.lang.Integer"
+  		 resultType="map">
+  		SELECT b.userloginid,b.userloginphone,a.username,a.usermale,a.usercardnum,b.userlogintype,c.accounttypename as userlogintypename 
+  		FROM userinfo as a 
+  			left join userlogininfo as b on b.userloginid = a.userloginid
+  			left join accounttype as c  on b.userLoginType= c.accounttypeid
+  		<if test="param1!=null">
+	  		where	b.userLoginType = #{0}
+	  	</if>	
+  	</select>
+  	<!--管理员查询用户详细信息 -->
+  	<select id="selectInfoByLoginId" parameterType="int"
+  		 resultType="map">
+  		SELECT a.username,a.usermale,a.usercardnum,a.usercardphoto,a.useradrprovince,a.useradrcity,a.useradrarea,a.useradrother,a.userage,
+  			userloginphone,b.userloginpix,b.userlogintype,c.accounttypename as userlogintypename 
+  		FROM userinfo as a
+  			left join userlogininfo as b on b.userloginid = a.userloginid
+  			left join accounttype as c  on b.userLoginType= c.accounttypeid
+  		WHERE	a.userLoginId=#{id}
+  	</select>
  </mapper>

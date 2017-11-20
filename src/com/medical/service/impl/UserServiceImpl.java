@@ -181,7 +181,7 @@ public class UserServiceImpl implements UserService {
 					userlogininfo.setUserloginpwd(str[0]);
 					//salt值
 					userlogininfo.setUserloginsalt(str[1]); 
-					userlogininfo.setUserlogintype(false);
+					userlogininfo.setUserlogintype(1);
 					userlogininfo.setUserloginpix("1.jpg");
 					String phoneNumber = phone.substring(0, 3) + "****" + phone.substring(7, phone.length());
 					userlogininfo.setUserloginname(phoneNumber);
@@ -504,9 +504,9 @@ public class UserServiceImpl implements UserService {
 			Userinfo user = userinfoMapperCustom.selectByLoginId(userloginid);
 			if (user != null) {
 				Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
-				boolean type = userlogininfo.getUserlogintype();
+				int type = userlogininfo.getUserlogintype();
 				// 未审核
-				if (!type) {
+				if (true) {
 					Userinfo userinfo = new Userinfo();
 					String reallyDir = "D:\\\\upload\\\\user\\\\" + userloginid + "\\\\card\\\\";
 					// 保存到数据库的路径
@@ -793,7 +793,7 @@ public class UserServiceImpl implements UserService {
 			Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
 			if (user!=null) {
 				Usersick usersick = new Usersick();
-				boolean type = user.getUserlogintype();
+				int type = user.getUserlogintype();
 				//测试
 				if (true) {
 					//真实路径

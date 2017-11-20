@@ -23,9 +23,13 @@ public class Hosplogininfo {
 
     private Integer hosplogintype;
 
+    private Date hosploginsubchecktime;
+
     private String hosploginphone;
 
     private String hosploginpix;
+
+    private String hosphuanxinaccount;
 
     public Integer getHosploginid() {
         return hosploginid;
@@ -107,6 +111,14 @@ public class Hosplogininfo {
         this.hosplogintype = hosplogintype;
     }
 
+    public Date getHosploginsubchecktime() {
+        return hosploginsubchecktime;
+    }
+
+    public void setHosploginsubchecktime(Date hosploginsubchecktime) {
+        this.hosploginsubchecktime = hosploginsubchecktime;
+    }
+
     public String getHosploginphone() {
         return hosploginphone;
     }
@@ -121,5 +133,13 @@ public class Hosplogininfo {
 
     public void setHosploginpix(String hosploginpix) {
         this.hosploginpix = hosploginpix == null ? null : hosploginpix.trim();
+    }
+
+    public String getHosphuanxinaccount() {
+        return hosphuanxinaccount;
+    }
+
+    public void setHosphuanxinaccount(String hosphuanxinaccount) {
+        this.hosphuanxinaccount = hosphuanxinaccount == null ? null : hosphuanxinaccount.trim();
     }
 }

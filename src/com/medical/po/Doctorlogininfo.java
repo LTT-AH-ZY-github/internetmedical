@@ -5,6 +5,8 @@ import java.util.Date;
 public class Doctorlogininfo {
     private Integer docloginid;
 
+    private String dochuanxinaccount;
+
     private String docloginname;
 
     private String docloginphone;
@@ -33,8 +35,6 @@ public class Doctorlogininfo {
 
     private String docloginother;
 
-    private String doclogindev;
-
     private String docloginbver;
 
     private String docloginmodel;
@@ -45,11 +45,15 @@ public class Doctorlogininfo {
 
     private String docloginip;
 
-    private Boolean doclogintype;
+    private Integer doclogintype;
+
+    private Date docloginsubchecktime;
 
     private String docloginpix;
 
     private String docloginchannelid;
+
+    private Integer doclogindev;
 
     public Integer getDocloginid() {
         return docloginid;
@@ -57,6 +61,14 @@ public class Doctorlogininfo {
 
     public void setDocloginid(Integer docloginid) {
         this.docloginid = docloginid;
+    }
+
+    public String getDochuanxinaccount() {
+        return dochuanxinaccount;
+    }
+
+    public void setDochuanxinaccount(String dochuanxinaccount) {
+        this.dochuanxinaccount = dochuanxinaccount == null ? null : dochuanxinaccount.trim();
     }
 
     public String getDocloginname() {
@@ -171,14 +183,6 @@ public class Doctorlogininfo {
         this.docloginother = docloginother == null ? null : docloginother.trim();
     }
 
-    public String getDoclogindev() {
-        return doclogindev;
-    }
-
-    public void setDoclogindev(String doclogindev) {
-        this.doclogindev = doclogindev == null ? null : doclogindev.trim();
-    }
-
     public String getDocloginbver() {
         return docloginbver;
     }
@@ -219,12 +223,20 @@ public class Doctorlogininfo {
         this.docloginip = docloginip == null ? null : docloginip.trim();
     }
 
-    public Boolean getDoclogintype() {
+    public Integer getDoclogintype() {
         return doclogintype;
     }
 
-    public void setDoclogintype(Boolean doclogintype) {
+    public void setDoclogintype(Integer doclogintype) {
         this.doclogintype = doclogintype;
+    }
+
+    public Date getDocloginsubchecktime() {
+        return docloginsubchecktime;
+    }
+
+    public void setDocloginsubchecktime(Date docloginsubchecktime) {
+        this.docloginsubchecktime = docloginsubchecktime;
     }
 
     public String getDocloginpix() {
@@ -241,5 +253,13 @@ public class Doctorlogininfo {
 
     public void setDocloginchannelid(String docloginchannelid) {
         this.docloginchannelid = docloginchannelid == null ? null : docloginchannelid.trim();
+    }
+
+    public Integer getDoclogindev() {
+        return doclogindev;
+    }
+
+    public void setDoclogindev(Integer doclogindev) {
+        this.doclogindev = doclogindev;
     }
 }

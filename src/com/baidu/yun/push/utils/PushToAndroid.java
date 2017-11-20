@@ -31,13 +31,13 @@ public class PushToAndroid {
 		jsonCustormCont.put("doc_id", 12);
 		jsonCustormCont.put("sick_id", 12);
 		jsonCustormCont.put("type", 2);
-		pushMsgToSingleDevice("3525584841907349538","你好","你好",jsonCustormCont);
+		pushMsgToSingleDevice("3525584841907349538","你好","你好");
 	}
-	public static void pushMsgToSingleDevice(String channelId,String title,String msg,JSONObject jsonCustormCont) throws PushClientException,
+	public static boolean pushMsgToSingleDevice(String channelId,String title,String msg) throws PushClientException,
 			PushServerException {
 		// 1. get apiKey and secretKey from developer console
-		//String apiKey = "ugtoId8rc30G9vCMy5A4tFe9";
-		//String secretKey = "M0IliFMLSmbOEPN1CUBzKy9Y3xtIustE";
+		/*String apiKey = "ugtoId8rc30G9vCMy5A4tFe9";
+		String secretKey = "M0IliFMLSmbOEPN1CUBzKy9Y3xtIustE";*/
 		String apiKey = "xU6dBHm80gQbZ63hx01LwZdChu56ZRCG";
 		String secretKey = "zwxVyhFfMTUlSTsYWU6xXprTlfwyGtYr";
 		PushKeyPair pair = new PushKeyPair(apiKey, secretKey);
@@ -66,7 +66,7 @@ public class PushToAndroid {
 			//notification.put("url", "http://push.baidu.com");
 			/*JSONObject jsonCustormCont = new JSONObject();
 			jsonCustormCont.put("key", "value"); //自定义内容，key-value
-*/			notification.put("custom_content", jsonCustormCont);
+*/			//notification.put("custom_content", jsonCustormCont);
 
 			PushMsgToSingleDeviceRequest request = new PushMsgToSingleDeviceRequest()
 					.addChannelId(channelId)
@@ -80,6 +80,7 @@ public class PushToAndroid {
 			// Http请求结果解析打印
 			System.out.println("msgId: " + response.getMsgId() + ",sendTime: "
 					+ response.getSendTime());
+			return true;
 		} catch (PushClientException e) {
 			/*
 			 * ERROROPTTYPE 用于设置异常的处理方式 -- 抛出异常和捕获异常,'true' 表示抛出, 'false' 表示捕获。
@@ -89,6 +90,7 @@ public class PushToAndroid {
 			} else {
 				e.printStackTrace();
 			}
+			return false;
 		} catch (PushServerException e) {
 			if (BaiduPushConstants.ERROROPTTYPE) {
 				throw e;
@@ -97,7 +99,9 @@ public class PushToAndroid {
 						"requestId: %d, errorCode: %d, errorMessage: %s",
 						e.getRequestId(), e.getErrorCode(), e.getErrorMsg()));
 			}
+			return false;
 		}
+		
 	}
 	public static void pushMsgToAll(String title,String msg) 
 			throws PushClientException,PushServerException {
