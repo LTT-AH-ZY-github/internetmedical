@@ -31,22 +31,45 @@ import com.wordnik.swagger.annotations.ApiParam;
 public class HospitalInfoController {
 	@Autowired
 	private HospitalInfoService hospitalInfoService;
-
+	
+	@RequestMapping(value = "/getlogininfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取医院登录信息", httpMethod = "POST", notes = "获取医院登录信息")
+	public @ResponseBody String getLoginInfo(
+				@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid
+			) throws Exception {
+			if (hosploginid == null) {
+				return DataResult.error("医院登陆id为空");
+			}
+			return hospitalInfoService.getLoginInfo(hosploginid);
+	}
+	
+	@RequestMapping(value = "/getinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取医院信息", httpMethod = "POST", notes = "获取医院信息")
+	public @ResponseBody String getInfo(
+				@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid
+			) throws Exception {
+			if (hosploginid == null) {
+				return DataResult.error("医院登陆id为空");
+			}
+			return hospitalInfoService.getInfo(hosploginid);
+	}
+	
 	@RequestMapping(value = "/updateinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "更新医院信息", httpMethod = "POST", notes = "更新医院信息")
 	public @ResponseBody String updateInfo(
 				@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid,
 				@ApiParam(name = "hospname", value = "医院名称") @RequestParam String hospname,
 				@ApiParam(name = "hospabs", value = "医院简介") @RequestParam String hospabs,
-				@ApiParam(name = "hospgrade", value = "医院等级") @RequestParam Integer hospgrade,
+				@ApiParam(name = "hosplevel", value = "医院等级") @RequestParam String hosplevel,
 				@ApiParam(name = "hospphone", value = "医院联系电话") @RequestParam String hospphone,
+				@ApiParam(name = "hospregidcard", value = "注册人身份证号码") @RequestParam String hospregidcard,
 				@ApiParam(name = "hospfeature", value = "医院特色") @RequestParam String hospfeature,
-				@ApiParam(name = "hospadrprovince", value = "医院所在省") @RequestParam String hospadrprovince,
-				@ApiParam(name = "hospadrcity", value = "医院所在市") @RequestParam String hospadrcity,
-				@ApiParam(name = "hospadrarea", value = "医院所在区") @RequestParam String hospadrarea,
-				@ApiParam(name = "hospadrother", value = "医院所在详细地址") @RequestParam String hospadrother,
-				@ApiParam(name = "hospadrlon", value = "医院所在经度") @RequestParam String hospadrlon,
-				@ApiParam(name = "hospadrlat", value = "医院所在纬度") @RequestParam String hospadrlat
+				@ApiParam(name = "province", value = "医院所在省") @RequestParam(value="province") String hospadrprovince,
+				@ApiParam(name = "city", value = "医院所在市") @RequestParam(value="city") String hospadrcity,
+				@ApiParam(name = "area", value = "医院所在区") @RequestParam(value="area") String hospadrarea,
+				@ApiParam(name = "other", value = "医院所在详细地址") @RequestParam(value="other") String hospadrother,
+				@ApiParam(name = "lng", value = "医院所在经度") @RequestParam(value="lng") String hospadrlon,
+				@ApiParam(name = "lat", value = "医院所在纬度") @RequestParam(value="lat") String hospadrlat
 			) throws Exception {
 			if (hosploginid == null) {
 				return DataResult.error("医院登陆id为空");
@@ -55,7 +78,8 @@ public class HospitalInfoController {
 			hospinfo.setHosploginid(hosploginid);;
 			hospinfo.setHospname(hospname);
 			hospinfo.setHospabs(hospabs);
-			hospinfo.setHospgrade(hospgrade+"");
+			hospinfo.setHospgrade(hosplevel);
+			hospinfo.setHospregidcard(hospregidcard);
 			hospinfo.setHospphone(hospphone);
 			hospinfo.setHospfeature(hospfeature);
 			hospinfo.setHospadrprovince(hospadrprovince);
@@ -66,6 +90,7 @@ public class HospitalInfoController {
 			hospinfo.setHospadrlon(hospadrlon);
 			return hospitalInfoService.updateInfo(hospinfo);
 	}
+	
 	@RequestMapping(value = "/updatepic", method = RequestMethod.POST, consumes = "multipart/form-data", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "修改用户头像", httpMethod = "POST", consumes = "multipart/form-data", notes = "修改用户头像和昵称")
 	public String addUserInfo(

@@ -1,11 +1,16 @@
 package com.medical.service.impl.hospital;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.medical.mapper.AccounttypeMapper;
 import com.medical.mapper.HospinfoMapper;
 import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.HosplogininfoMapper;
+import com.medical.po.Accounttype;
 import com.medical.po.Hospinfo;
 import com.medical.po.Hosplogininfo;
 import com.medical.po.Hosporder;
@@ -20,7 +25,8 @@ public class HospitalInfoServiceImpl implements HospitalInfoService {
 	private HosplogininfoMapper hosplogininfoMapper;
 	@Autowired
 	private HospinfoMapperCustom hospinfoMapperCustom;
-	
+	@Autowired
+	private AccounttypeMapper accounttypeMapper;
 	@Override
 	public String updateInfo(Hospinfo hospinfo) {
 		Integer hosploginid = hospinfo.getHosploginid();
@@ -104,5 +110,50 @@ public class HospitalInfoServiceImpl implements HospitalInfoService {
 		} else {
 			return DataResult.error("提交失败");
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.medical.service.iface.hospital.HospitalInfoService#getInfo(java.lang.Integer)
+	 */
+	@Override
+	public String getInfo(Integer hosploginid) throws Exception {
+		Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(hosploginid);
+		if (hospinfo==null) {
+			return DataResult.error("账号信息不存在");
+		} 
+		Map<String, Object> map = new HashMap<>();
+		map.put("hospname", hospinfo.getHospname());
+		map.put("hospphone", hospinfo.getHospphone());
+		map.put("hospregidcard", hospinfo.getHospregidcard());
+		map.put("hospadrprovince", hospinfo.getHospadrprovince());
+		map.put("hospadrcity", hospinfo.getHospadrcity());
+		map.put("hospadrarea", hospinfo.getHospadrarea());
+		map.put("hospadrother", hospinfo.getHospadrother());
+		map.put("hospgrade", hospinfo.getHospgrade());
+		map.put("hospabs", hospinfo.getHospabs());
+		map.put("hospfeature", hospinfo.getHospfeature());
+		map.put("hospregdocquacer", hospinfo.getHospregdocquacer());
+		map.put("hosporgcodecer", hospinfo.getHosporgcodecer());
+		map.put("hosppraclicense", hospinfo.getHosppraclicense());
+		map.put("hosplegalcer", hospinfo.getHosplegalcer());
+		return DataResult.success("获取成功", map);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.medical.service.iface.hospital.HospitalInfoService#getLoginInfo(java.lang.Integer)
+	 */
+	@Override
+	public String getLoginInfo(Integer hosploginid) {
+		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
+		if (hosplogininfo==null) {
+			return DataResult.error("账号信息不存在");
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("hosploginphone", hosplogininfo.getHosploginphone());
+		map.put("hosplogintime", hosplogininfo.getHosplogintime());
+		map.put("hosplogintype", hosplogininfo.getHosplogintype());
+		Accounttype accounttype = accounttypeMapper.selectByPrimaryKey(hosplogininfo.getHosplogintype());
+		map.put("hosplogintypename", accounttype.getAccounttypename());
+		return DataResult.success("获取成功", map);
 	}
 }

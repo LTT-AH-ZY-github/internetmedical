@@ -16,6 +16,8 @@ import com.alipay.api.domain.Data;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.medical.mapper.DoctoraddressMapper;
+import com.medical.mapper.DoctorcalendarMapperCustom;
 import com.medical.mapper.DoctorcommentMapper;
 import com.medical.mapper.DoctorinfoMapper;
 import com.medical.mapper.DoctorinfoMapperCustom;
@@ -35,6 +37,8 @@ import com.medical.mapper.UserorderMapper;
 import com.medical.mapper.UserorderMapperCustom;
 import com.medical.mapper.UsersickMapper;
 import com.medical.mapper.UsersickMapperCustom;
+import com.medical.po.Doctoraddress;
+import com.medical.po.Doctorcalendar;
 import com.medical.po.Doctorcomment;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorpurse;
@@ -45,6 +49,7 @@ import com.medical.po.Pay;
 import com.medical.po.Preorder;
 import com.medical.po.Userorder;
 import com.medical.po.Usersick;
+import com.medical.po.custom.CalendarParmas;
 import com.medical.service.iface.CommonService;
 import com.medical.service.iface.user.UserOrderService;
 import com.medical.utils.StringReplaceUtil;
@@ -103,13 +108,28 @@ public class UserOrderServiceImpl implements UserOrderService {
 	private HosppurseMapper hosppurseMapper;
 	@Autowired
 	private UserinfoMapperCustom userinfoMapperCustom;
-
+	@Autowired
+	private DoctorcalendarMapperCustom doctorcalendarMapperCustom;
+	@Autowired
+	private DoctoraddressMapper doctoraddressMapper;
 	// 生成订单
 	@Override
 	public String createOrder(Integer docloginid, Integer userloginid, String userorderappointment) throws Exception {
 		// 查询处于发布状态的病情
 		List<Usersick> lists = usersickMapperCustom.selectByUserLoginIdAndState(userloginid, 2);
 		if (lists.size() == 1) {
+			String[] time = userorderappointment.split(" ");
+			CalendarParmas calendarParmas = new CalendarParmas();
+			calendarParmas.setId(docloginid);
+			calendarParmas.setTime(time[0]);
+			calendarParmas.setKey(time[1]);
+			System.out.println("时间"+time[0]+"s"+time[1]);
+			List<Doctorcalendar> doctorcalendar =  doctorcalendarMapperCustom.selectByDocloginidAndDayAndTimeInDoc(calendarParmas);
+			if (doctorcalendar==null || doctorcalendar.size()==0) {
+				return DataResult.error("该日程不存在");
+				//System.out.println("时间结过婚"+doctorcalendar.get(0).getDoccalendaradressid());
+			}
+			int docaddressid = doctorcalendar.get(0).getDoccalendaradressid();
 			Usersick sick = lists.get(0);
 			int usersickid = lists.get(0).getUsersickid();
 			// 订单信息
@@ -126,6 +146,14 @@ public class UserOrderServiceImpl implements UserOrderService {
 			userorder.setFamilyname(sick.getFamilyname());
 			userorder.setFamilymale(sick.getFamilymale());
 			userorder.setFamilyage(sick.getFamilyage());
+			Doctoraddress docaddress = doctoraddressMapper.selectByPrimaryKey(docaddressid);
+			userorder.setDocaddresslocation(docaddress.getDocaddresslocation());
+			userorder.setDocaddressprovince(docaddress.getDocaddressprovince());
+			userorder.setDocaddresscity(docaddress.getDocaddresscity());
+			userorder.setDocaddressarea(docaddress.getDocaddressarea());
+			userorder.setDocaddressother(docaddress.getDocaddressother());
+			userorder.setDocaddresslat(docaddress.getDocaddresslat());
+			userorder.setDocaddresslon(docaddress.getDocaddresslon());
 			List<Preorder> preorders = preorderMapperCustom.selectByDocIdAndSickId(docloginid, usersickid);
 			if (preorders == null || preorders.size() == 0) {
 				return DataResult.error("该医生未加入候选");

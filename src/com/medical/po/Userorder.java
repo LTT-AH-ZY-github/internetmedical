@@ -78,6 +78,20 @@ public class Userorder {
 
     private Integer familyage;
 
+    private String docaddresslocation;
+
+    private String docaddressprovince;
+
+    private String docaddresscity;
+
+    private String docaddressarea;
+
+    private String docaddressother;
+
+    private String docaddresslon;
+
+    private String docaddresslat;
+
     public Integer getUserorderid() {
         return userorderid;
     }
@@ -372,5 +386,61 @@ public class Userorder {
 
     public void setFamilyage(Integer familyage) {
         this.familyage = familyage;
+    }
+
+    public String getDocaddresslocation() {
+        return docaddresslocation;
+    }
+
+    public void setDocaddresslocation(String docaddresslocation) {
+        this.docaddresslocation = docaddresslocation == null ? null : docaddresslocation.trim();
+    }
+
+    public String getDocaddressprovince() {
+        return docaddressprovince;
+    }
+
+    public void setDocaddressprovince(String docaddressprovince) {
+        this.docaddressprovince = docaddressprovince == null ? null : docaddressprovince.trim();
+    }
+
+    public String getDocaddresscity() {
+        return docaddresscity;
+    }
+
+    public void setDocaddresscity(String docaddresscity) {
+        this.docaddresscity = docaddresscity == null ? null : docaddresscity.trim();
+    }
+
+    public String getDocaddressarea() {
+        return docaddressarea;
+    }
+
+    public void setDocaddressarea(String docaddressarea) {
+        this.docaddressarea = docaddressarea == null ? null : docaddressarea.trim();
+    }
+
+    public String getDocaddressother() {
+        return docaddressother;
+    }
+
+    public void setDocaddressother(String docaddressother) {
+        this.docaddressother = docaddressother == null ? null : docaddressother.trim();
+    }
+
+    public String getDocaddresslon() {
+        return docaddresslon;
+    }
+
+    public void setDocaddresslon(String docaddresslon) {
+        this.docaddresslon = docaddresslon == null ? null : docaddresslon.trim();
+    }
+
+    public String getDocaddresslat() {
+        return docaddresslat;
+    }
+
+    public void setDocaddresslat(String docaddresslat) {
+        this.docaddresslat = docaddresslat == null ? null : docaddresslat.trim();
     }
 }

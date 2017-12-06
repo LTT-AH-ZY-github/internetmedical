@@ -3,7 +3,7 @@
 <mapper namespace="com.medical.mapper.UserorderMapperCustom" >
   <!--新增订单并返回id  -->
   <insert id="insertSelectiveReturnId" useGeneratedKeys="true" keyProperty="userorderid" parameterType="com.medical.po.Userorder" >
-    insert into userorder
+     insert into userorder
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="userorderid != null" >
         userOrderId,
@@ -115,6 +115,27 @@
       </if>
       <if test="familyage != null" >
         familyAge,
+      </if>
+      <if test="docaddresslocation != null" >
+        docAddressLocation,
+      </if>
+      <if test="docaddressprovince != null" >
+        docAddressProvince,
+      </if>
+      <if test="docaddresscity != null" >
+        docAddressCity,
+      </if>
+      <if test="docaddressarea != null" >
+        docAddressArea,
+      </if>
+      <if test="docaddressother != null" >
+        docAddressOther,
+      </if>
+      <if test="docaddresslon != null" >
+        docAddressLon,
+      </if>
+      <if test="docaddresslat != null" >
+        docAddressLat,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -229,15 +250,36 @@
       <if test="familyage != null" >
         #{familyage,jdbcType=INTEGER},
       </if>
+      <if test="docaddresslocation != null" >
+        #{docaddresslocation,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressprovince != null" >
+        #{docaddressprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresscity != null" >
+        #{docaddresscity,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressarea != null" >
+        #{docaddressarea,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressother != null" >
+        #{docaddressother,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslon != null" >
+        #{docaddresslon,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslat != null" >
+        #{docaddresslat,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
  
   <!--用户查询不同状态订单  -->
   <select id="selectAllInfoByUserLoginId" parameterType="int" resultType="map">
  		select  a.userorderid,a.userorderstateid,j.userorderstatename,a.userorderprice,a.userorderdeposit,a.userorderappointment,
-	 		f.familyname,f.familymale,f.familyage,a.userorderactualhospitalizationid,
-	 		e.usersickdesc,e.usersickpic,
-	 		b.docname,b.doctitle,b.docaddresslocation,d.docloginid,d.docloginpix,d.dochuanxinaccount,
+	 		a.familyname,a.familymale,a.familyage,a.userorderactualhospitalizationid,
+	 		a.usersickdesc,a.usersickpic,
+	 		b.docname,b.doctitle,a.docaddresslocation,d.docloginid,d.docloginpix,d.dochuanxinaccount,
 	 		k.hosploginpix as inhosploginpix,n.hospname as inhospname
 	  from userorder  as a 
 	  		left join doctorinfo as b on a.userOrderDocLoginId=b.docLoginId 
@@ -273,11 +315,11 @@
  			a.userordertpricetype,g.pricetypename as userordertpricetypename,a.userordertprice,
 	 		a.userorderapricetype,l.pricetypename as userorderapricetypename,a.userorderaprice,
 	 		a.userorderepricetype,m.pricetypename as userorderepricetypename,a.userordereprice,
-	 		e.familyname,e.familymale,e.familyage,
-	 		d.usersickdesc,d.usersickpic,d.usersickprimarydept,d.usersickseconddept,
+	 		a.familyname,a.familymale,a.familyage,
+	 		a.usersickdesc,a.usersickpic,a.usersickprimarydept,a.usersickseconddept,
 	 		b.docname,c.docloginpix,b.docage,b.docmale,
 	 		b.doctitle,b.docloginid,c.dochuanxinaccount,
-	 		b.docaddresslocation,b.docaddressprovince,b.docaddresscity,b.docaddressarea,b.docaddressother,b.docaddresslon,b.docaddresslat,
+	 		a.docaddresslocation,a.docaddressprovince,a.docaddresscity,a.docaddressarea,a.docaddressother,a.docaddresslon,a.docaddresslat,
 	 		b.dochosp,b.hosplevel as dochosplevle,
 	 		a.userorderhstate,a.userorderactualhospitalizationid,n.actualhospitalizationstatename as userorderactualhospitalizationname,
 	 		a.userorderdeposit,a.userordertotaldeposit,a.userorderhprice,
@@ -317,8 +359,8 @@
   <!--医生查找处于等待自己确认的订单-->
   <select id="listOrderToConfirmByDocLoginId" parameterType="int" resultType="map">
 	select a.userorderid,a.userorderptime,
-			b.usersickdesc,b.usersickid,
-			c.familyname,c.familymale,c.familyage,
+			a.usersickdesc,a.usersickid,
+			a.familyname,a.familymale,a.familyage,
 			d.userloginpix,d.userhuanxinaccount,e.username
 	from  userorder  as a 
 	  		left join usersick as b on a.userSickId = b.userSickId
@@ -330,10 +372,10 @@
   </select>
   <!--医生查找不同状态的订单-->
    <select id="listByDocLoginIdAndState" parameterType="int" resultType="map">
-	select  a.userorderid,a.userorderappointment,a.userorderstateid,e.userorderstatename,f.docaddresslocation,a.userorderprice,
+	select  a.userorderid,a.userorderappointment,a.userorderstateid,e.userorderstatename,a.docaddresslocation,a.userorderprice,
 			d.userloginpix,d.userhuanxinaccount,g.username,
-			b.usersickdesc,
-			c.familyname,c.familymale,c.familyage
+			a.usersickdesc,
+			a.familyname,a.familymale,a.familyage
 		from userorder  as a 
 	  	    left join usersick as b on a.userSickId = b.userSickId
 	  		left join familyinfo as c on b.familyId = c.familyId
@@ -353,9 +395,9 @@
   <!--获取历史订单  -->
    <select id="listHistortOrderByDocLoginId" parameterType="int" resultType="map">
 	select a.userorderid,a.userorderetime,a.userorderstateid,e.userorderstatename,
-			b.usersickdesc,
-			c.familyname,c.familymale,c.familyage,g.username,
-			d.userloginpix,d.userhuanxinaccount
+			a.usersickdesc,
+			a.familyname,a.familymale,a.familyage,
+			d.userloginpix,d.userhuanxinaccount,g.username
 	from  userorder  as a 
 	  		left join usersick as b on a.userSickId = b.userSickId
 	  		left join familyinfo as c on c.familyId = b.familyId
@@ -367,15 +409,18 @@
   </select>
   <!--医生获取订单详情  -->
   <select id="selectAllInfoByUserOrderId" parameterType="int" resultType="map">
-	 select  d.userloginpix,d.userhuanxinaccount,c.familyname,c.familymale,c.familyage,
+	 select  d.userloginpix,d.userhuanxinaccount,a.familyname,a.familymale,a.familyage,
 	 		a.userorderid,a.userorderappointment,a.userorderstateid,e.userorderstatename,
 	 		a.userorderprice,a.userorderdprice,
 	 		a.userordertpricetype,g.pricetypename as userordertpricetypename,a.userordertprice,
 	 		a.userorderapricetype,l.pricetypename as userorderapricetypename,a.userorderaprice,
 	 		a.userorderepricetype,m.pricetypename as userorderepricetypename,a.userordereprice,
 	 		a.userorderptime,a.userorderrtime,a.userorderetime,
-	 		f.docaddresslocation,f.docaddressprovince,f.docaddresscity,f.docaddressarea,f.docaddressother,f.docaddresslon,f.docaddresslat,
-			b.usersickdesc,b.usersickpic,b.usersickprimarydept,b.usersickseconddept,n.username
+	 		a.docaddresslocation,a.docaddressprovince,a.docaddresscity,a.docaddressarea,a.docaddressother,a.docaddresslon,a.docaddresslat,
+			a.usersickdesc,a.usersickpic,a.usersickprimarydept,a.usersickseconddept,n.username,
+			a.userorderhstate,a.userorderactualhospitalizationid,o.actualhospitalizationstatename as userorderactualhospitalizationname,
+	 		a.userorderdeposit,a.userordertotaldeposit,a.userorderhprice,
+	 		p.hosploginid as inhosploginid,p.hospname as inhospname,p.hospabs as inhospabs,p.hospfeature as inhospfeature,z.hosplevelname as inhospgrade,p.hospadrprovince as inhospadrprovince,p.hospadrcity as inhospadrcity,p.hospadrarea  as inhospadrarea,p.hospadrother as inhospadrother,p.hospadrlon as inhospadrlon,p.hospadrlat as inhospadrlat
 		from userorder  as a 
 	  	    left join usersick as b on a.userSickId = b.userSickId
 	  		left join familyinfo as c on b.familyId = c.familyId
@@ -386,6 +431,9 @@
 	  		left join pricetype as l on a.userOrderAPriceType = l.priceTypeId
 	  		left join pricetype as m on a.userOrderEPriceType = m.priceTypeId
 	  		left join userinfo as n on a.userLoginId=n.userLoginId 
+	  		left join actualhospitalizationstate as o on o.ActualHospitalizationStateId = a.userOrderActualHospitalizationId
+	  		left join hospinfo as p on a.userOrderHospId = p.hosploginid 
+	  		left join hosplevel as z on z.hospLevelId = p.hospgrade
 	  where a.userOrderId=#{1} and a.userOrderDocLoginId=#{0}
  </select>
  
@@ -461,7 +509,7 @@
 		  		a.userorderdeposit,a.userordertotaldeposit,a.userorderhprice,a.userorderstateid,c.userorderstatename,
 		  		a.userorderdocloginid,b.docname,
 		  		a.userorderhospprimarydept,a.userorderhospseconddept,
-		  		d.usersickpic,e.familyname,e.familymale,e.familyage,
+		  		a.usersickpic,a.familyname,a.familymale,a.familyage,
 		  		a.userorderactualhospitalizationid,f.actualhospitalizationstatename
 		   from userorder as a
 		  		left join doctorinfo as b on a.userOrderDocLoginId=b.docLoginId 

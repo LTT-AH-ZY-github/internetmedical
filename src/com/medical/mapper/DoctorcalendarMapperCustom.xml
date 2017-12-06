@@ -22,7 +22,7 @@
   <select id="selectByDocloginidAndDayAndTimeInDoc" resultType="com.medical.po.Doctorcalendar" parameterType="com.medical.po.custom.CalendarParmas" >
     select *
    	from doctorcalendar as a 
-    where a.docLoginId = #{id}  and date_format(a.docCalendarDay,'%Y-%m-%d')=#{time}and a.docCalendarTime=#{key}
+    where a.docLoginId = #{id}  and date_format(a.docCalendarDay,'%Y-%m-%d')=#{time} and a.docCalendarTime=#{key}
   </select>
  
   <!--查询日程及地址信息  -->

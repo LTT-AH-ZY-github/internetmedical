@@ -15,6 +15,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.medical.mapper.DoctorcalendarMapperCustom;
 import com.medical.mapper.DoctorinfoMapper;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
@@ -43,6 +44,7 @@ import com.medical.po.Userorder;
 import com.medical.service.iface.CommonService;
 import com.medical.service.iface.hospital.HospitalConsultationService;
 import com.medical.utils.result.DataResult;
+import com.medical.utils.result.DataResult2;
 import com.pay.alipay.AliPayNotify;
 import com.pay.alipay.GetSign;
 import com.pay.alipay.MakeOrderNum;
@@ -82,7 +84,8 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 	private HospinfoMapper hospinfoMapper;
 	@Autowired
 	private DoctorinfoMapper doctorinfoMapper;
-
+	@Autowired
+	private DoctorcalendarMapperCustom doctorcalendarMapperCustom;
 	@Override
 	public String listDoctor(Integer pageNo, Integer pageSize, HospSearchDocTerm hospSearchDocTerm) throws Exception {
 		pageNo = pageNo == null ? 1 : pageNo;
@@ -438,6 +441,19 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 			return DataResult.success("获取数据成功", map);
 		} else {
 			return DataResult.success("获取数据为空", null);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.medical.service.iface.hospital.HospitalConsultationService#listCalendar(java.lang.Integer)
+	 */
+	@Override
+	public String listCalendar(Integer docloginid) {
+		List<Map<String, Object>> list =  doctorcalendarMapperCustom.selectAllInfoByDocloginidInUser(docloginid);
+		if (list != null && list.size()>0) {
+			return DataResult2.success("获取数据成功", list);
+		}else {
+			return DataResult2.success("获取数据为空", null);
 		}
 	}
 }

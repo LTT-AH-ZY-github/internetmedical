@@ -147,7 +147,7 @@
   		 resultType="map">
   		   SELECT a.docloginid,a.docloginpix,a.docloginname,b.docallday,a.docloginphone,b.dochosp,b.docdept,b.docage,b.docmale,
   		   			b.doctitle,b.docname,b.docbirthdate,b.docnation,b.docexpert,b.docabs,
-  		   			b.dochospprovince,b.dochospcity,b.dochosparea,b.dochospother,c.cityCode
+  		   			b.dochospprovince,b.dochospcity,b.dochosparea,b.dochospother
   		   			
   		   FROM doctorlogininfo as a 
   		  	left join doctorinfo as b on a.docLoginId=b.docLoginId 
@@ -156,8 +156,7 @@
   		  	left join city as e on b.docAddressArea= e.cityname
   		  	left join hospitaldept as f on b.docPrimaryDept=f.hospDeptName
   		  	left join hospitaldept as g on b.docSecondDept=g.hospDeptName
-  		<where>
-  			and a.docLoginType=2
+  		where  a.docLoginType=3
   			<if test="doctorTitle!=null">
   				and b.docTitle=#{doctorTitle}
   			</if>
@@ -179,7 +178,7 @@
   			<if test="Two_level_dept!=null">
   				and g.hospDeptId=#{Two_level_dept}
   			</if>
-  		</where>
+  		
   		ORDER BY a.docLoginTime desc
   		
   	</select>

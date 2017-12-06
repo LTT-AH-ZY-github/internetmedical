@@ -46,7 +46,7 @@ public class PushToDoctorInIOS {
 			JSONObject jsonAPS = new JSONObject();
 			jsonAPS.put("alert", msg);
 			jsonAPS.put("sound", "ttt"); // 设置通知铃声样式
-			//jsonAPS.put("badge", 1); // 设置角标，提示消息个数
+			jsonAPS.put("badge", 1); // 设置角标，提示消息个数
 			notification.put("aps", jsonAPS);
 			notification.put("key1", "value1");
 			notification.put("key2", "value2");

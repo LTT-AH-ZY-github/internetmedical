@@ -111,6 +111,15 @@ public interface HospitalConsultationService {
 	 */
 	String listConsultation(Integer hosploginid, Integer offset, Integer limit, Integer type) throws Exception;
 
+	/**
+	 * @Title: listCalendar
+	 * @Description: TODO
+	 * @param docloginid
+	 * @return
+	 * @return: String
+	 */
+	String listCalendar(Integer docloginid);
+
 	
 
 }

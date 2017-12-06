@@ -39,6 +39,13 @@
     <result column="familyName" property="familyname" jdbcType="VARCHAR" />
     <result column="familyMale" property="familymale" jdbcType="VARCHAR" />
     <result column="familyAge" property="familyage" jdbcType="INTEGER" />
+    <result column="docAddressLocation" property="docaddresslocation" jdbcType="VARCHAR" />
+    <result column="docAddressProvince" property="docaddressprovince" jdbcType="VARCHAR" />
+    <result column="docAddressCity" property="docaddresscity" jdbcType="VARCHAR" />
+    <result column="docAddressArea" property="docaddressarea" jdbcType="VARCHAR" />
+    <result column="docAddressOther" property="docaddressother" jdbcType="VARCHAR" />
+    <result column="docAddressLon" property="docaddresslon" jdbcType="VARCHAR" />
+    <result column="docAddressLat" property="docaddresslat" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -106,7 +113,8 @@
     userOrderHospSecondDept, userOrderTPriceType, userOrderTPrice, userOrderAPriceType, 
     userOrderAPrice, userOrderEPriceType, userOrderEPrice, userOrderPrice, userSickId, 
     userLoginId, userOrderFinishTime, userSickDesc, userSickPic, userSickPrimaryDept, 
-    userSickSecondDept, familyName, familyMale, familyAge
+    userSickSecondDept, familyName, familyMale, familyAge, docAddressLocation, docAddressProvince, 
+    docAddressCity, docAddressArea, docAddressOther, docAddressLon, docAddressLat
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.UserorderExample" >
     select
@@ -153,7 +161,9 @@
       userSickId, userLoginId, userOrderFinishTime, 
       userSickDesc, userSickPic, userSickPrimaryDept, 
       userSickSecondDept, familyName, familyMale, 
-      familyAge)
+      familyAge, docAddressLocation, docAddressProvince, 
+      docAddressCity, docAddressArea, docAddressOther, 
+      docAddressLon, docAddressLat)
     values (#{userorderid,jdbcType=INTEGER}, #{userorderstateid,jdbcType=INTEGER}, #{userorderptime,jdbcType=TIMESTAMP}, 
       #{userorderdocloginid,jdbcType=INTEGER}, #{userorderrecdocloginid,jdbcType=INTEGER}, 
       #{userorderrtime,jdbcType=TIMESTAMP}, #{userorderdprice,jdbcType=DECIMAL}, #{userorderappointment,jdbcType=VARCHAR}, 
@@ -168,7 +178,9 @@
       #{usersickid,jdbcType=INTEGER}, #{userloginid,jdbcType=INTEGER}, #{userorderfinishtime,jdbcType=TIMESTAMP}, 
       #{usersickdesc,jdbcType=VARCHAR}, #{usersickpic,jdbcType=VARCHAR}, #{usersickprimarydept,jdbcType=VARCHAR}, 
       #{usersickseconddept,jdbcType=VARCHAR}, #{familyname,jdbcType=VARCHAR}, #{familymale,jdbcType=VARCHAR}, 
-      #{familyage,jdbcType=INTEGER})
+      #{familyage,jdbcType=INTEGER}, #{docaddresslocation,jdbcType=VARCHAR}, #{docaddressprovince,jdbcType=VARCHAR}, 
+      #{docaddresscity,jdbcType=VARCHAR}, #{docaddressarea,jdbcType=VARCHAR}, #{docaddressother,jdbcType=VARCHAR}, 
+      #{docaddresslon,jdbcType=VARCHAR}, #{docaddresslat,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Userorder" >
     insert into userorder
@@ -284,6 +296,27 @@
       <if test="familyage != null" >
         familyAge,
       </if>
+      <if test="docaddresslocation != null" >
+        docAddressLocation,
+      </if>
+      <if test="docaddressprovince != null" >
+        docAddressProvince,
+      </if>
+      <if test="docaddresscity != null" >
+        docAddressCity,
+      </if>
+      <if test="docaddressarea != null" >
+        docAddressArea,
+      </if>
+      <if test="docaddressother != null" >
+        docAddressOther,
+      </if>
+      <if test="docaddresslon != null" >
+        docAddressLon,
+      </if>
+      <if test="docaddresslat != null" >
+        docAddressLat,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userorderid != null" >
@@ -396,6 +429,27 @@
       </if>
       <if test="familyage != null" >
         #{familyage,jdbcType=INTEGER},
+      </if>
+      <if test="docaddresslocation != null" >
+        #{docaddresslocation,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressprovince != null" >
+        #{docaddressprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresscity != null" >
+        #{docaddresscity,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressarea != null" >
+        #{docaddressarea,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressother != null" >
+        #{docaddressother,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslon != null" >
+        #{docaddresslon,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslat != null" >
+        #{docaddresslat,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -519,6 +573,27 @@
       <if test="record.familyage != null" >
         familyAge = #{record.familyage,jdbcType=INTEGER},
       </if>
+      <if test="record.docaddresslocation != null" >
+        docAddressLocation = #{record.docaddresslocation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddressprovince != null" >
+        docAddressProvince = #{record.docaddressprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddresscity != null" >
+        docAddressCity = #{record.docaddresscity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddressarea != null" >
+        docAddressArea = #{record.docaddressarea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddressother != null" >
+        docAddressOther = #{record.docaddressother,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddresslon != null" >
+        docAddressLon = #{record.docaddresslon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddresslat != null" >
+        docAddressLat = #{record.docaddresslat,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -562,7 +637,14 @@
       userSickSecondDept = #{record.usersickseconddept,jdbcType=VARCHAR},
       familyName = #{record.familyname,jdbcType=VARCHAR},
       familyMale = #{record.familymale,jdbcType=VARCHAR},
-      familyAge = #{record.familyage,jdbcType=INTEGER}
+      familyAge = #{record.familyage,jdbcType=INTEGER},
+      docAddressLocation = #{record.docaddresslocation,jdbcType=VARCHAR},
+      docAddressProvince = #{record.docaddressprovince,jdbcType=VARCHAR},
+      docAddressCity = #{record.docaddresscity,jdbcType=VARCHAR},
+      docAddressArea = #{record.docaddressarea,jdbcType=VARCHAR},
+      docAddressOther = #{record.docaddressother,jdbcType=VARCHAR},
+      docAddressLon = #{record.docaddresslon,jdbcType=VARCHAR},
+      docAddressLat = #{record.docaddresslat,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -678,6 +760,27 @@
       <if test="familyage != null" >
         familyAge = #{familyage,jdbcType=INTEGER},
       </if>
+      <if test="docaddresslocation != null" >
+        docAddressLocation = #{docaddresslocation,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressprovince != null" >
+        docAddressProvince = #{docaddressprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresscity != null" >
+        docAddressCity = #{docaddresscity,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressarea != null" >
+        docAddressArea = #{docaddressarea,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressother != null" >
+        docAddressOther = #{docaddressother,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslon != null" >
+        docAddressLon = #{docaddresslon,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslat != null" >
+        docAddressLat = #{docaddresslat,jdbcType=VARCHAR},
+      </if>
     </set>
     where userOrderId = #{userorderid,jdbcType=INTEGER}
   </update>
@@ -718,7 +821,14 @@
       userSickSecondDept = #{usersickseconddept,jdbcType=VARCHAR},
       familyName = #{familyname,jdbcType=VARCHAR},
       familyMale = #{familymale,jdbcType=VARCHAR},
-      familyAge = #{familyage,jdbcType=INTEGER}
+      familyAge = #{familyage,jdbcType=INTEGER},
+      docAddressLocation = #{docaddresslocation,jdbcType=VARCHAR},
+      docAddressProvince = #{docaddressprovince,jdbcType=VARCHAR},
+      docAddressCity = #{docaddresscity,jdbcType=VARCHAR},
+      docAddressArea = #{docaddressarea,jdbcType=VARCHAR},
+      docAddressOther = #{docaddressother,jdbcType=VARCHAR},
+      docAddressLon = #{docaddresslon,jdbcType=VARCHAR},
+      docAddressLat = #{docaddresslat,jdbcType=VARCHAR}
     where userOrderId = #{userorderid,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,7 +58,27 @@ public class HospitalConsultationController {
 		if (page == null) {
 			return DataResult.error("当前页为空");
 		}
-
+		if (StringUtils.isBlank(hosplevel)) {
+			hosplevel=null;
+		}
+		if (StringUtils.isBlank(doctortitle)) {
+			doctortitle=null;
+		}
+		if (province_code!=null && province_code==0) {
+			province_code=null;
+		}
+		if (city_code!=null && city_code==0) {
+			city_code=null;
+		}
+		if (area_code!=null && area_code==0) {
+			area_code=null;
+		}
+		if (One_level_dept!=null && One_level_dept==0) {
+			One_level_dept=null;
+		}
+		if (Two_level_dept!=null && Two_level_dept==0) {
+			Two_level_dept=null;
+		}
 		Integer pageSize = 6;
 		HospSearchDocTerm hospSearchDocTerm = new HospSearchDocTerm();
 		hospSearchDocTerm.setArea_code(area_code);
@@ -71,7 +92,14 @@ public class HospitalConsultationController {
 		return hospitalConsultationService.listDoctor(page, pageSize, hospSearchDocTerm);
 
 	}
+	@RequestMapping(value = "/getcalendar", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取医生当天后30天内日程", httpMethod = "POST", notes = "获取医生当天后30天内日程", produces = "application/json")
+	public String getCalendarbymonth(
+			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid
 
+	) throws Exception {
+		return hospitalConsultationService.listCalendar(docloginid);
+	}
 	// 创建会诊
 	@RequestMapping(value = "/PreOrderRequest", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "创建会诊", httpMethod = "POST", notes = "创建会诊")
