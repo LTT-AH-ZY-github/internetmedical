@@ -14,9 +14,13 @@ public interface HospitalOrderService {
 	 * */
 	String listDoctor(Integer pageNo, Integer pageSize, HospSearchDocTerm hospSearchDocTerm) throws Exception;
 	/**
+	 * 医院获取需要住院的病人订单
+	 * */
+	String listUserOrder(Integer hosploginid, Integer type, Integer limit, Integer offset) throws Exception;
+	/**
 	 * 医院确认病人住院
 	 * */
-	boolean confirmUserOrder(Integer hosploginid, Integer userorderid, Double userorderdeposit,
+	String confirmUserOrder(Integer hosploginid, Integer userorderid, Double userorderdeposit,
 			String userorderhospprimarydept, String userorderhospseconddept) throws Exception;
 	
 	/**
@@ -25,13 +29,15 @@ public interface HospitalOrderService {
 	String refuseUserOrder(Integer hosploginid, Integer userorderid) throws Exception;
 	/**
 	 * 增加押金
+	 * @throws Exception 
 	 * */
-	String updateUserOrderDeposit(Integer hosploginid, Integer userorderid, BigDecimal userorderdeposit);
+	String updateUserOrderDeposit(Integer hosploginid, Integer userorderid, BigDecimal userorderdeposit) throws Exception;
 	/**
 	 * 住院完成,结算费用
 	 * @param userorderhprice 
+	 * @throws Exception 
 	 * */
-	String updateUserOrderToSettle(Integer hosploginid, Integer userorderid, BigDecimal userorderhprice);
+	String updateUserOrderToSettle(Integer hosploginid, Integer userorderid, BigDecimal userorderhprice) throws Exception;
 	/**
 	 * 结束三方订单
 	 * */
@@ -44,17 +50,39 @@ public interface HospitalOrderService {
 	 * @param
 	 * 
 	 * */
-	String creatConsultation(Integer docloginid, Integer hosploginid, String orderabs, String orderstime, Double orderhospprice,
-			Integer orderhosptpricetype, Double orderhosptprice, Integer orderhospapricetype, Double orderhospaprice,
-			Integer orderhospepricetype, Double orderhospeprice) throws Exception;
+	String creatConsultation(Integer docloginid, Integer hosploginid, String orderabs, String orderstime,
+			BigDecimal orderhospprice, Integer orderhosptpricetype, BigDecimal orderhosptprice,
+			Integer orderhospapricetype, BigDecimal orderhospaprice, Integer orderhospepricetype,
+			BigDecimal orderhospeprice) throws Exception;
 	/**
 	 * 取消会诊
 	 * */
 	String cancelConsultation(Integer hosploginid, Integer hosporderid) throws Exception;
 	/**
+	 * 支付医生会诊费用
+	 * */
+	String payDoctor(Integer hosploginid, Integer hosporderid) throws Exception;
+	/**
+	 * 支付医生会诊费用完成
+	 * */
+	
+	/**
 	 * 结束会诊
 	 * */
 	String finishConsultation(Integer hosploginid, Integer hosporderid) throws Exception;
+	/**
+	 * @Title: payDoctorFinish
+	 * @Description: TODO
+	 * @param requestParams
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String payDoctorFinish(Map<String, String[]> requestParams) throws Exception;
+	
+	
+	
+	
 	
 	
 	

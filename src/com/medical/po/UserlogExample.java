@@ -505,52 +505,52 @@ public class UserlogExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserlogdevEqualTo(Boolean value) {
+        public Criteria andUserlogdevEqualTo(Integer value) {
             addCriterion("userLogDev =", value, "userlogdev");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogdevNotEqualTo(Boolean value) {
+        public Criteria andUserlogdevNotEqualTo(Integer value) {
             addCriterion("userLogDev <>", value, "userlogdev");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogdevGreaterThan(Boolean value) {
+        public Criteria andUserlogdevGreaterThan(Integer value) {
             addCriterion("userLogDev >", value, "userlogdev");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogdevGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andUserlogdevGreaterThanOrEqualTo(Integer value) {
             addCriterion("userLogDev >=", value, "userlogdev");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogdevLessThan(Boolean value) {
+        public Criteria andUserlogdevLessThan(Integer value) {
             addCriterion("userLogDev <", value, "userlogdev");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogdevLessThanOrEqualTo(Boolean value) {
+        public Criteria andUserlogdevLessThanOrEqualTo(Integer value) {
             addCriterion("userLogDev <=", value, "userlogdev");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogdevIn(List<Boolean> values) {
+        public Criteria andUserlogdevIn(List<Integer> values) {
             addCriterion("userLogDev in", values, "userlogdev");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogdevNotIn(List<Boolean> values) {
+        public Criteria andUserlogdevNotIn(List<Integer> values) {
             addCriterion("userLogDev not in", values, "userlogdev");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogdevBetween(Boolean value1, Boolean value2) {
+        public Criteria andUserlogdevBetween(Integer value1, Integer value2) {
             addCriterion("userLogDev between", value1, value2, "userlogdev");
             return (Criteria) this;
         }
 
-        public Criteria andUserlogdevNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andUserlogdevNotBetween(Integer value1, Integer value2) {
             addCriterion("userLogDev not between", value1, value2, "userlogdev");
             return (Criteria) this;
         }

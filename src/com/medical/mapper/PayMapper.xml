@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.PayMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Pay" >
+    <id column="payId" property="payid" jdbcType="INTEGER" />
+    <result column="payOrderId" property="payorderid" jdbcType="INTEGER" />
+    <result column="PayTradeNo" property="paytradeno" jdbcType="VARCHAR" />
+    <result column="payAlipayTradeNo" property="payalipaytradeno" jdbcType="VARCHAR" />
+    <result column="payWXTradeNo" property="paywxtradeno" jdbcType="VARCHAR" />
+    <result column="payTotalAmount" property="paytotalamount" jdbcType="DECIMAL" />
+    <result column="payReceiptAmount" property="payreceiptamount" jdbcType="DECIMAL" />
+    <result column="payCreatTime" property="paycreattime" jdbcType="TIMESTAMP" />
+    <result column="payEndTime" property="payendtime" jdbcType="TIMESTAMP" />
+    <result column="payBuyerId" property="paybuyerid" jdbcType="INTEGER" />
+    <result column="paySellerId" property="paysellerid" jdbcType="INTEGER" />
+    <result column="paySellerName" property="paysellername" jdbcType="VARCHAR" />
+    <result column="payTypeId" property="paytypeid" jdbcType="INTEGER" />
+    <result column="payStateId" property="paystateid" jdbcType="INTEGER" />
+    <result column="payModeId" property="paymodeid" jdbcType="INTEGER" />
+    <result column="payRemark" property="payremark" jdbcType="VARCHAR" />
+    <result column="payBuyerName" property="paybuyername" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.medical.po.Pay" extends="BaseResultMap" >
+    <result column="payInfo" property="payinfo" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    payId, payOrderId, PayTradeNo, payAlipayTradeNo, payWXTradeNo, payTotalAmount, payReceiptAmount, 
+    payCreatTime, payEndTime, payBuyerId, paySellerId, paySellerName, payTypeId, payStateId, 
+    payModeId, payRemark, payBuyerName
+  </sql>
+  <sql id="Blob_Column_List" >
+    payInfo
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.medical.po.PayExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pay
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.PayExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pay
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from pay
+    where payId = #{payid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pay
+    where payId = #{payid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.PayExample" >
+    delete from pay
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Pay" >
+    insert into pay (payId, payOrderId, PayTradeNo, 
+      payAlipayTradeNo, payWXTradeNo, payTotalAmount, 
+      payReceiptAmount, payCreatTime, payEndTime, 
+      payBuyerId, paySellerId, paySellerName, 
+      payTypeId, payStateId, payModeId, 
+      payRemark, payBuyerName, payInfo
+      )
+    values (#{payid,jdbcType=INTEGER}, #{payorderid,jdbcType=INTEGER}, #{paytradeno,jdbcType=VARCHAR}, 
+      #{payalipaytradeno,jdbcType=VARCHAR}, #{paywxtradeno,jdbcType=VARCHAR}, #{paytotalamount,jdbcType=DECIMAL}, 
+      #{payreceiptamount,jdbcType=DECIMAL}, #{paycreattime,jdbcType=TIMESTAMP}, #{payendtime,jdbcType=TIMESTAMP}, 
+      #{paybuyerid,jdbcType=INTEGER}, #{paysellerid,jdbcType=INTEGER}, #{paysellername,jdbcType=VARCHAR}, 
+      #{paytypeid,jdbcType=INTEGER}, #{paystateid,jdbcType=INTEGER}, #{paymodeid,jdbcType=INTEGER}, 
+      #{payremark,jdbcType=VARCHAR}, #{paybuyername,jdbcType=VARCHAR}, #{payinfo,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Pay" >
+    insert into pay
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="payid != null" >
+        payId,
+      </if>
+      <if test="payorderid != null" >
+        payOrderId,
+      </if>
+      <if test="paytradeno != null" >
+        PayTradeNo,
+      </if>
+      <if test="payalipaytradeno != null" >
+        payAlipayTradeNo,
+      </if>
+      <if test="paywxtradeno != null" >
+        payWXTradeNo,
+      </if>
+      <if test="paytotalamount != null" >
+        payTotalAmount,
+      </if>
+      <if test="payreceiptamount != null" >
+        payReceiptAmount,
+      </if>
+      <if test="paycreattime != null" >
+        payCreatTime,
+      </if>
+      <if test="payendtime != null" >
+        payEndTime,
+      </if>
+      <if test="paybuyerid != null" >
+        payBuyerId,
+      </if>
+      <if test="paysellerid != null" >
+        paySellerId,
+      </if>
+      <if test="paysellername != null" >
+        paySellerName,
+      </if>
+      <if test="paytypeid != null" >
+        payTypeId,
+      </if>
+      <if test="paystateid != null" >
+        payStateId,
+      </if>
+      <if test="paymodeid != null" >
+        payModeId,
+      </if>
+      <if test="payremark != null" >
+        payRemark,
+      </if>
+      <if test="paybuyername != null" >
+        payBuyerName,
+      </if>
+      <if test="payinfo != null" >
+        payInfo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="payid != null" >
+        #{payid,jdbcType=INTEGER},
+      </if>
+      <if test="payorderid != null" >
+        #{payorderid,jdbcType=INTEGER},
+      </if>
+      <if test="paytradeno != null" >
+        #{paytradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="payalipaytradeno != null" >
+        #{payalipaytradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="paywxtradeno != null" >
+        #{paywxtradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="paytotalamount != null" >
+        #{paytotalamount,jdbcType=DECIMAL},
+      </if>
+      <if test="payreceiptamount != null" >
+        #{payreceiptamount,jdbcType=DECIMAL},
+      </if>
+      <if test="paycreattime != null" >
+        #{paycreattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payendtime != null" >
+        #{payendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paybuyerid != null" >
+        #{paybuyerid,jdbcType=INTEGER},
+      </if>
+      <if test="paysellerid != null" >
+        #{paysellerid,jdbcType=INTEGER},
+      </if>
+      <if test="paysellername != null" >
+        #{paysellername,jdbcType=VARCHAR},
+      </if>
+      <if test="paytypeid != null" >
+        #{paytypeid,jdbcType=INTEGER},
+      </if>
+      <if test="paystateid != null" >
+        #{paystateid,jdbcType=INTEGER},
+      </if>
+      <if test="paymodeid != null" >
+        #{paymodeid,jdbcType=INTEGER},
+      </if>
+      <if test="payremark != null" >
+        #{payremark,jdbcType=VARCHAR},
+      </if>
+      <if test="paybuyername != null" >
+        #{paybuyername,jdbcType=VARCHAR},
+      </if>
+      <if test="payinfo != null" >
+        #{payinfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.PayExample" resultType="java.lang.Integer" >
+    select count(*) from pay
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update pay
+    <set >
+      <if test="record.payid != null" >
+        payId = #{record.payid,jdbcType=INTEGER},
+      </if>
+      <if test="record.payorderid != null" >
+        payOrderId = #{record.payorderid,jdbcType=INTEGER},
+      </if>
+      <if test="record.paytradeno != null" >
+        PayTradeNo = #{record.paytradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payalipaytradeno != null" >
+        payAlipayTradeNo = #{record.payalipaytradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paywxtradeno != null" >
+        payWXTradeNo = #{record.paywxtradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paytotalamount != null" >
+        payTotalAmount = #{record.paytotalamount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.payreceiptamount != null" >
+        payReceiptAmount = #{record.payreceiptamount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.paycreattime != null" >
+        payCreatTime = #{record.paycreattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.payendtime != null" >
+        payEndTime = #{record.payendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.paybuyerid != null" >
+        payBuyerId = #{record.paybuyerid,jdbcType=INTEGER},
+      </if>
+      <if test="record.paysellerid != null" >
+        paySellerId = #{record.paysellerid,jdbcType=INTEGER},
+      </if>
+      <if test="record.paysellername != null" >
+        paySellerName = #{record.paysellername,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paytypeid != null" >
+        payTypeId = #{record.paytypeid,jdbcType=INTEGER},
+      </if>
+      <if test="record.paystateid != null" >
+        payStateId = #{record.paystateid,jdbcType=INTEGER},
+      </if>
+      <if test="record.paymodeid != null" >
+        payModeId = #{record.paymodeid,jdbcType=INTEGER},
+      </if>
+      <if test="record.payremark != null" >
+        payRemark = #{record.payremark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paybuyername != null" >
+        payBuyerName = #{record.paybuyername,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payinfo != null" >
+        payInfo = #{record.payinfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update pay
+    set payId = #{record.payid,jdbcType=INTEGER},
+      payOrderId = #{record.payorderid,jdbcType=INTEGER},
+      PayTradeNo = #{record.paytradeno,jdbcType=VARCHAR},
+      payAlipayTradeNo = #{record.payalipaytradeno,jdbcType=VARCHAR},
+      payWXTradeNo = #{record.paywxtradeno,jdbcType=VARCHAR},
+      payTotalAmount = #{record.paytotalamount,jdbcType=DECIMAL},
+      payReceiptAmount = #{record.payreceiptamount,jdbcType=DECIMAL},
+      payCreatTime = #{record.paycreattime,jdbcType=TIMESTAMP},
+      payEndTime = #{record.payendtime,jdbcType=TIMESTAMP},
+      payBuyerId = #{record.paybuyerid,jdbcType=INTEGER},
+      paySellerId = #{record.paysellerid,jdbcType=INTEGER},
+      paySellerName = #{record.paysellername,jdbcType=VARCHAR},
+      payTypeId = #{record.paytypeid,jdbcType=INTEGER},
+      payStateId = #{record.paystateid,jdbcType=INTEGER},
+      payModeId = #{record.paymodeid,jdbcType=INTEGER},
+      payRemark = #{record.payremark,jdbcType=VARCHAR},
+      payBuyerName = #{record.paybuyername,jdbcType=VARCHAR},
+      payInfo = #{record.payinfo,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update pay
+    set payId = #{record.payid,jdbcType=INTEGER},
+      payOrderId = #{record.payorderid,jdbcType=INTEGER},
+      PayTradeNo = #{record.paytradeno,jdbcType=VARCHAR},
+      payAlipayTradeNo = #{record.payalipaytradeno,jdbcType=VARCHAR},
+      payWXTradeNo = #{record.paywxtradeno,jdbcType=VARCHAR},
+      payTotalAmount = #{record.paytotalamount,jdbcType=DECIMAL},
+      payReceiptAmount = #{record.payreceiptamount,jdbcType=DECIMAL},
+      payCreatTime = #{record.paycreattime,jdbcType=TIMESTAMP},
+      payEndTime = #{record.payendtime,jdbcType=TIMESTAMP},
+      payBuyerId = #{record.paybuyerid,jdbcType=INTEGER},
+      paySellerId = #{record.paysellerid,jdbcType=INTEGER},
+      paySellerName = #{record.paysellername,jdbcType=VARCHAR},
+      payTypeId = #{record.paytypeid,jdbcType=INTEGER},
+      payStateId = #{record.paystateid,jdbcType=INTEGER},
+      payModeId = #{record.paymodeid,jdbcType=INTEGER},
+      payRemark = #{record.payremark,jdbcType=VARCHAR},
+      payBuyerName = #{record.paybuyername,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Pay" >
+    update pay
+    <set >
+      <if test="payorderid != null" >
+        payOrderId = #{payorderid,jdbcType=INTEGER},
+      </if>
+      <if test="paytradeno != null" >
+        PayTradeNo = #{paytradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="payalipaytradeno != null" >
+        payAlipayTradeNo = #{payalipaytradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="paywxtradeno != null" >
+        payWXTradeNo = #{paywxtradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="paytotalamount != null" >
+        payTotalAmount = #{paytotalamount,jdbcType=DECIMAL},
+      </if>
+      <if test="payreceiptamount != null" >
+        payReceiptAmount = #{payreceiptamount,jdbcType=DECIMAL},
+      </if>
+      <if test="paycreattime != null" >
+        payCreatTime = #{paycreattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payendtime != null" >
+        payEndTime = #{payendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paybuyerid != null" >
+        payBuyerId = #{paybuyerid,jdbcType=INTEGER},
+      </if>
+      <if test="paysellerid != null" >
+        paySellerId = #{paysellerid,jdbcType=INTEGER},
+      </if>
+      <if test="paysellername != null" >
+        paySellerName = #{paysellername,jdbcType=VARCHAR},
+      </if>
+      <if test="paytypeid != null" >
+        payTypeId = #{paytypeid,jdbcType=INTEGER},
+      </if>
+      <if test="paystateid != null" >
+        payStateId = #{paystateid,jdbcType=INTEGER},
+      </if>
+      <if test="paymodeid != null" >
+        payModeId = #{paymodeid,jdbcType=INTEGER},
+      </if>
+      <if test="payremark != null" >
+        payRemark = #{payremark,jdbcType=VARCHAR},
+      </if>
+      <if test="paybuyername != null" >
+        payBuyerName = #{paybuyername,jdbcType=VARCHAR},
+      </if>
+      <if test="payinfo != null" >
+        payInfo = #{payinfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where payId = #{payid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.medical.po.Pay" >
+    update pay
+    set payOrderId = #{payorderid,jdbcType=INTEGER},
+      PayTradeNo = #{paytradeno,jdbcType=VARCHAR},
+      payAlipayTradeNo = #{payalipaytradeno,jdbcType=VARCHAR},
+      payWXTradeNo = #{paywxtradeno,jdbcType=VARCHAR},
+      payTotalAmount = #{paytotalamount,jdbcType=DECIMAL},
+      payReceiptAmount = #{payreceiptamount,jdbcType=DECIMAL},
+      payCreatTime = #{paycreattime,jdbcType=TIMESTAMP},
+      payEndTime = #{payendtime,jdbcType=TIMESTAMP},
+      payBuyerId = #{paybuyerid,jdbcType=INTEGER},
+      paySellerId = #{paysellerid,jdbcType=INTEGER},
+      paySellerName = #{paysellername,jdbcType=VARCHAR},
+      payTypeId = #{paytypeid,jdbcType=INTEGER},
+      payStateId = #{paystateid,jdbcType=INTEGER},
+      payModeId = #{paymodeid,jdbcType=INTEGER},
+      payRemark = #{payremark,jdbcType=VARCHAR},
+      payBuyerName = #{paybuyername,jdbcType=VARCHAR},
+      payInfo = #{payinfo,jdbcType=LONGVARCHAR}
+    where payId = #{payid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Pay" >
+    update pay
+    set payOrderId = #{payorderid,jdbcType=INTEGER},
+      PayTradeNo = #{paytradeno,jdbcType=VARCHAR},
+      payAlipayTradeNo = #{payalipaytradeno,jdbcType=VARCHAR},
+      payWXTradeNo = #{paywxtradeno,jdbcType=VARCHAR},
+      payTotalAmount = #{paytotalamount,jdbcType=DECIMAL},
+      payReceiptAmount = #{payreceiptamount,jdbcType=DECIMAL},
+      payCreatTime = #{paycreattime,jdbcType=TIMESTAMP},
+      payEndTime = #{payendtime,jdbcType=TIMESTAMP},
+      payBuyerId = #{paybuyerid,jdbcType=INTEGER},
+      paySellerId = #{paysellerid,jdbcType=INTEGER},
+      paySellerName = #{paysellername,jdbcType=VARCHAR},
+      payTypeId = #{paytypeid,jdbcType=INTEGER},
+      payStateId = #{paystateid,jdbcType=INTEGER},
+      payModeId = #{paymodeid,jdbcType=INTEGER},
+      payRemark = #{payremark,jdbcType=VARCHAR},
+      payBuyerName = #{paybuyername,jdbcType=VARCHAR}
+    where payId = #{payid,jdbcType=INTEGER}
+  </update>
+</mapper>

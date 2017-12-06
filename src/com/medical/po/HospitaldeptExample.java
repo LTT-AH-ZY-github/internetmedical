@@ -363,6 +363,66 @@ public class HospitaldeptExample {
             addCriterion("hospDeptFatherId not between", value1, value2, "hospdeptfatherid");
             return (Criteria) this;
         }
+
+        public Criteria andHospdeptischeckIsNull() {
+            addCriterion("hospDeptIsCheck is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptischeckIsNotNull() {
+            addCriterion("hospDeptIsCheck is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptischeckEqualTo(Boolean value) {
+            addCriterion("hospDeptIsCheck =", value, "hospdeptischeck");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptischeckNotEqualTo(Boolean value) {
+            addCriterion("hospDeptIsCheck <>", value, "hospdeptischeck");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptischeckGreaterThan(Boolean value) {
+            addCriterion("hospDeptIsCheck >", value, "hospdeptischeck");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptischeckGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("hospDeptIsCheck >=", value, "hospdeptischeck");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptischeckLessThan(Boolean value) {
+            addCriterion("hospDeptIsCheck <", value, "hospdeptischeck");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptischeckLessThanOrEqualTo(Boolean value) {
+            addCriterion("hospDeptIsCheck <=", value, "hospdeptischeck");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptischeckIn(List<Boolean> values) {
+            addCriterion("hospDeptIsCheck in", values, "hospdeptischeck");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptischeckNotIn(List<Boolean> values) {
+            addCriterion("hospDeptIsCheck not in", values, "hospdeptischeck");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptischeckBetween(Boolean value1, Boolean value2) {
+            addCriterion("hospDeptIsCheck between", value1, value2, "hospdeptischeck");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptischeckNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("hospDeptIsCheck not between", value1, value2, "hospdeptischeck");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

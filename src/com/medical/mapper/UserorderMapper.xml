@@ -32,6 +32,13 @@
     <result column="userSickId" property="usersickid" jdbcType="INTEGER" />
     <result column="userLoginId" property="userloginid" jdbcType="INTEGER" />
     <result column="userOrderFinishTime" property="userorderfinishtime" jdbcType="TIMESTAMP" />
+    <result column="userSickDesc" property="usersickdesc" jdbcType="VARCHAR" />
+    <result column="userSickPic" property="usersickpic" jdbcType="VARCHAR" />
+    <result column="userSickPrimaryDept" property="usersickprimarydept" jdbcType="VARCHAR" />
+    <result column="userSickSecondDept" property="usersickseconddept" jdbcType="VARCHAR" />
+    <result column="familyName" property="familyname" jdbcType="VARCHAR" />
+    <result column="familyMale" property="familymale" jdbcType="VARCHAR" />
+    <result column="familyAge" property="familyage" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -98,7 +105,8 @@
     userOrderHospId, userOrderDeposit, userOrderTotalDeposit, userOrderHPrice, userOrderHospPrimaryDept, 
     userOrderHospSecondDept, userOrderTPriceType, userOrderTPrice, userOrderAPriceType, 
     userOrderAPrice, userOrderEPriceType, userOrderEPrice, userOrderPrice, userSickId, 
-    userLoginId, userOrderFinishTime
+    userLoginId, userOrderFinishTime, userSickDesc, userSickPic, userSickPrimaryDept, 
+    userSickSecondDept, familyName, familyMale, familyAge
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.UserorderExample" >
     select
@@ -142,8 +150,10 @@
       userOrderHospSecondDept, userOrderTPriceType, 
       userOrderTPrice, userOrderAPriceType, userOrderAPrice, 
       userOrderEPriceType, userOrderEPrice, userOrderPrice, 
-      userSickId, userLoginId, userOrderFinishTime
-      )
+      userSickId, userLoginId, userOrderFinishTime, 
+      userSickDesc, userSickPic, userSickPrimaryDept, 
+      userSickSecondDept, familyName, familyMale, 
+      familyAge)
     values (#{userorderid,jdbcType=INTEGER}, #{userorderstateid,jdbcType=INTEGER}, #{userorderptime,jdbcType=TIMESTAMP}, 
       #{userorderdocloginid,jdbcType=INTEGER}, #{userorderrecdocloginid,jdbcType=INTEGER}, 
       #{userorderrtime,jdbcType=TIMESTAMP}, #{userorderdprice,jdbcType=DECIMAL}, #{userorderappointment,jdbcType=VARCHAR}, 
@@ -155,8 +165,10 @@
       #{userorderhospseconddept,jdbcType=VARCHAR}, #{userordertpricetype,jdbcType=INTEGER}, 
       #{userordertprice,jdbcType=DECIMAL}, #{userorderapricetype,jdbcType=INTEGER}, #{userorderaprice,jdbcType=DECIMAL}, 
       #{userorderepricetype,jdbcType=INTEGER}, #{userordereprice,jdbcType=DECIMAL}, #{userorderprice,jdbcType=DECIMAL}, 
-      #{usersickid,jdbcType=INTEGER}, #{userloginid,jdbcType=INTEGER}, #{userorderfinishtime,jdbcType=TIMESTAMP}
-      )
+      #{usersickid,jdbcType=INTEGER}, #{userloginid,jdbcType=INTEGER}, #{userorderfinishtime,jdbcType=TIMESTAMP}, 
+      #{usersickdesc,jdbcType=VARCHAR}, #{usersickpic,jdbcType=VARCHAR}, #{usersickprimarydept,jdbcType=VARCHAR}, 
+      #{usersickseconddept,jdbcType=VARCHAR}, #{familyname,jdbcType=VARCHAR}, #{familymale,jdbcType=VARCHAR}, 
+      #{familyage,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Userorder" >
     insert into userorder
@@ -251,6 +263,27 @@
       <if test="userorderfinishtime != null" >
         userOrderFinishTime,
       </if>
+      <if test="usersickdesc != null" >
+        userSickDesc,
+      </if>
+      <if test="usersickpic != null" >
+        userSickPic,
+      </if>
+      <if test="usersickprimarydept != null" >
+        userSickPrimaryDept,
+      </if>
+      <if test="usersickseconddept != null" >
+        userSickSecondDept,
+      </if>
+      <if test="familyname != null" >
+        familyName,
+      </if>
+      <if test="familymale != null" >
+        familyMale,
+      </if>
+      <if test="familyage != null" >
+        familyAge,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userorderid != null" >
@@ -342,6 +375,27 @@
       </if>
       <if test="userorderfinishtime != null" >
         #{userorderfinishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usersickdesc != null" >
+        #{usersickdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickpic != null" >
+        #{usersickpic,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickprimarydept != null" >
+        #{usersickprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickseconddept != null" >
+        #{usersickseconddept,jdbcType=VARCHAR},
+      </if>
+      <if test="familyname != null" >
+        #{familyname,jdbcType=VARCHAR},
+      </if>
+      <if test="familymale != null" >
+        #{familymale,jdbcType=VARCHAR},
+      </if>
+      <if test="familyage != null" >
+        #{familyage,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -444,6 +498,27 @@
       <if test="record.userorderfinishtime != null" >
         userOrderFinishTime = #{record.userorderfinishtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.usersickdesc != null" >
+        userSickDesc = #{record.usersickdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usersickpic != null" >
+        userSickPic = #{record.usersickpic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usersickprimarydept != null" >
+        userSickPrimaryDept = #{record.usersickprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="record.usersickseconddept != null" >
+        userSickSecondDept = #{record.usersickseconddept,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familyname != null" >
+        familyName = #{record.familyname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familymale != null" >
+        familyMale = #{record.familymale,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familyage != null" >
+        familyAge = #{record.familyage,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -480,7 +555,14 @@
       userOrderPrice = #{record.userorderprice,jdbcType=DECIMAL},
       userSickId = #{record.usersickid,jdbcType=INTEGER},
       userLoginId = #{record.userloginid,jdbcType=INTEGER},
-      userOrderFinishTime = #{record.userorderfinishtime,jdbcType=TIMESTAMP}
+      userOrderFinishTime = #{record.userorderfinishtime,jdbcType=TIMESTAMP},
+      userSickDesc = #{record.usersickdesc,jdbcType=VARCHAR},
+      userSickPic = #{record.usersickpic,jdbcType=VARCHAR},
+      userSickPrimaryDept = #{record.usersickprimarydept,jdbcType=VARCHAR},
+      userSickSecondDept = #{record.usersickseconddept,jdbcType=VARCHAR},
+      familyName = #{record.familyname,jdbcType=VARCHAR},
+      familyMale = #{record.familymale,jdbcType=VARCHAR},
+      familyAge = #{record.familyage,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -575,6 +657,27 @@
       <if test="userorderfinishtime != null" >
         userOrderFinishTime = #{userorderfinishtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="usersickdesc != null" >
+        userSickDesc = #{usersickdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickpic != null" >
+        userSickPic = #{usersickpic,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickprimarydept != null" >
+        userSickPrimaryDept = #{usersickprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickseconddept != null" >
+        userSickSecondDept = #{usersickseconddept,jdbcType=VARCHAR},
+      </if>
+      <if test="familyname != null" >
+        familyName = #{familyname,jdbcType=VARCHAR},
+      </if>
+      <if test="familymale != null" >
+        familyMale = #{familymale,jdbcType=VARCHAR},
+      </if>
+      <if test="familyage != null" >
+        familyAge = #{familyage,jdbcType=INTEGER},
+      </if>
     </set>
     where userOrderId = #{userorderid,jdbcType=INTEGER}
   </update>
@@ -608,7 +711,14 @@
       userOrderPrice = #{userorderprice,jdbcType=DECIMAL},
       userSickId = #{usersickid,jdbcType=INTEGER},
       userLoginId = #{userloginid,jdbcType=INTEGER},
-      userOrderFinishTime = #{userorderfinishtime,jdbcType=TIMESTAMP}
+      userOrderFinishTime = #{userorderfinishtime,jdbcType=TIMESTAMP},
+      userSickDesc = #{usersickdesc,jdbcType=VARCHAR},
+      userSickPic = #{usersickpic,jdbcType=VARCHAR},
+      userSickPrimaryDept = #{usersickprimarydept,jdbcType=VARCHAR},
+      userSickSecondDept = #{usersickseconddept,jdbcType=VARCHAR},
+      familyName = #{familyname,jdbcType=VARCHAR},
+      familyMale = #{familymale,jdbcType=VARCHAR},
+      familyAge = #{familyage,jdbcType=INTEGER}
     where userOrderId = #{userorderid,jdbcType=INTEGER}
   </update>
 </mapper>

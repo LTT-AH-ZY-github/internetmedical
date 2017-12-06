@@ -20,6 +20,15 @@ public class DoctorSearch {
 	private String primaryDept;
 
 	private String secondDept;
+	
+	private Integer type;
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
 
 	public Integer getPageNo() {
 		return pageNo;

@@ -1,51 +1,49 @@
 package com.medical.service.impl;
 
 import java.util.ArrayList;
+import com.push.websocket.WebSocketHandler;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.springframework.aop.ThrowsAdvice;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.baidu.yun.push.utils.PushToAndroid;
-import com.baidu.yun.push.utils.PushToDoctorInAndroid;
-import com.baidu.yun.push.utils.PushToDoctorInIOS;
-import com.baidu.yun.push.utils.PushToUserInAndroid;
-import com.baidu.yun.push.utils.PushToUserInIOS;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.web.socket.TextMessage;
+
+import com.baidu.yun.push.utils.PushToDoctor;
+import com.baidu.yun.push.utils.PushToUser;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.medical.exception.custom.MsgErrorException;
+
 import com.medical.exception.custom.MyException;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.DoctorlogininfoMapperCustom;
 import com.medical.mapper.HospinfoMapperCustom;
+import com.medical.mapper.HospitaldeptMapper;
 import com.medical.mapper.HospitaldeptMapperCustom;
 import com.medical.mapper.NotificationMapper;
 import com.medical.mapper.NotificationMapperCustom;
-import com.medical.mapper.UserinfoMapper;
+
 import com.medical.mapper.UserinfoMapperCustom;
 import com.medical.mapper.UserlogininfoMapper;
 import com.medical.mapper.UserlogininfoMapperCustom;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
-import com.medical.po.Hospinfo;
+
 import com.medical.po.Hospitaldept;
 import com.medical.po.Notification;
-import com.medical.po.Userinfo;
 import com.medical.po.Userlogininfo;
-import com.medical.service.UserService;
 import com.medical.service.iface.CommonService;
 import com.medical.utils.KeyWords;
 import com.medical.utils.result.DataResult;
-import com.medical.utils.result.Result;
 import com.netease.code.MsgCode;
-import com.sun.org.apache.bcel.internal.generic.NOP;
-
-import javafx.scene.chart.PieChart.Data;
 import net.sf.json.JSONObject;
 
 public class CommonServiceImpl implements CommonService {
@@ -69,8 +67,15 @@ public class CommonServiceImpl implements CommonService {
 	private HospinfoMapperCustom hospinfoMapperCustom;
 	@Autowired
 	private HospitaldeptMapperCustom hospitaldeptMapperCustom;
+	@Autowired
+	private HospitaldeptMapper hospitaldeptMapper;
 
 	Logger logger = Logger.getLogger(CommonService.class);
+
+	/*
+	 * @Bean//这个注解会从Spring容器拿出Bean public WebSocketHandler infoHandler() { return
+	 * new WebSocketHandler(); }
+	 */
 
 	// 查找账号是否注册
 	@Override
@@ -185,9 +190,10 @@ public class CommonServiceImpl implements CommonService {
 
 	}
 
+	// 医院获取需要接收的通知
 	@Override
-	public PageInfo<Map<String, Object>> listReceiveNotification(Integer notificationreceiverid,
-			Integer notificationType, Integer limit, Integer offset, Integer type) throws Exception {
+	public String listReceiveNotification(Integer notificationreceiverid, Integer notificationType, Integer limit,
+			Integer offset, Integer type) throws Exception {
 		int pageNo = 1;
 		if (offset != 0) {
 			pageNo = offset / limit + 1;
@@ -195,10 +201,20 @@ public class CommonServiceImpl implements CommonService {
 		PageHelper.startPage(pageNo, limit);
 		List<Map<String, Object>> list = notificationMapperCustom.selectByReceiverAndType(notificationreceiverid,
 				notificationType, type);
-		return new PageInfo<Map<String, Object>>(list);
+		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
+		if (pageInfo != null && !pageInfo.getList().isEmpty()) {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("rows", pageInfo.getList());
+			// 总共页数
+			data.put("total", pageInfo.getTotal());
+			return DataResult.success("获取数据成功", data);
+		} else {
+			return DataResult.success("获取数据为空", null);
+		}
 
 	}
 
+	// 病人医生获取需要接收的通知
 	@Override
 	public PageInfo<Map<String, Object>> listReceiveNotification(Integer notificationreceiverid,
 			Integer notificationType, Integer page, Integer type) throws Exception {
@@ -208,9 +224,10 @@ public class CommonServiceImpl implements CommonService {
 		return new PageInfo<Map<String, Object>>(list);
 	}
 
+	// 医院获取需要发送的通知
 	@Override
-	public PageInfo<Map<String, Object>> listSenderNotification(Integer notificationsenderid, Integer notificationType,
-			Integer limit, Integer offset, Integer type) throws Exception {
+	public String listSenderNotification(Integer notificationsenderid, Integer notificationType, Integer limit,
+			Integer offset, Integer type) throws Exception {
 		int pageNo = 1;
 		if (offset != 0) {
 			pageNo = offset / limit + 1;
@@ -218,10 +235,20 @@ public class CommonServiceImpl implements CommonService {
 		PageHelper.startPage(pageNo, limit);
 		List<Map<String, Object>> list = notificationMapperCustom.selectBySenderAndType(notificationsenderid,
 				notificationType, type);
-		return new PageInfo<Map<String, Object>>(list);
+		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
+		if (pageInfo != null && !pageInfo.getList().isEmpty()) {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("rows", pageInfo.getList());
+			// 总共页数
+			data.put("total", pageInfo.getTotal());
+			return DataResult.success("获取数据成功", data);
+		} else {
+			return DataResult.success("获取数据为空", null);
+		}
 
 	}
 
+	// 用户医生获取需要发送的通知
 	@Override
 	public PageInfo<Map<String, Object>> listSenderNotification(Integer notificationsenderid, Integer notificationType,
 			Integer page, Integer type) throws Exception {
@@ -231,6 +258,7 @@ public class CommonServiceImpl implements CommonService {
 		return new PageInfo<Map<String, Object>>(list);
 	}
 
+	// 将消息置为已读
 	@Override
 	public boolean updateNotificationToRead(Integer notificationid, Integer notificationreceiverid) throws Exception {
 		Notification notification = notificationMapper.selectByPrimaryKey(notificationid);
@@ -261,6 +289,26 @@ public class CommonServiceImpl implements CommonService {
 		}
 	}
 
+	// 将全部未读消息置为已读
+	@Override
+	public String updateAllNotificationToRead(Integer notificationreceiverid, Integer notificationtype)
+			throws Exception {
+		// type为2时获取未读通知
+		List<Map<String, Object>> list = notificationMapperCustom.selectByReceiverAndType(notificationreceiverid,
+				notificationtype, 2);
+		if (list == null || list.size() == 0) {
+			return DataResult.error("无未读通知");
+		}
+		int result = notificationMapperCustom.updateAllToReadByReceverIdAndNotificationType(notificationreceiverid,
+				notificationtype);
+		if (result > 0) {
+			return DataResult.success("全部已读成功");
+		} else {
+			return DataResult.error("全部已读失败");
+		}
+	}
+
+	// 将消息删除
 	@Override
 	public boolean deleteNotification(Integer notificationid, Integer notificationreceiverid) throws Exception {
 		Notification notification = notificationMapper.selectByPrimaryKey(notificationid);
@@ -285,14 +333,32 @@ public class CommonServiceImpl implements CommonService {
 		}
 	}
 
+	// 将所有消息删除
+	@Override
+	public String deleteAllNotification(Integer notificationreceiverid, Integer notificationtype) throws Exception {
+		// type为null时获取未读和已读通知
+		List<Map<String, Object>> list = notificationMapperCustom.selectByReceiverAndType(notificationreceiverid,
+				notificationtype, null);
+		if (list == null || list.size() == 0) {
+			return DataResult.error("无通知");
+		}
+		int result = notificationMapperCustom.updateAllToDelByReceverIdAndNotificationType(notificationreceiverid,
+				notificationtype);
+		if (result > 0) {
+			return DataResult.success("删除成功");
+		} else {
+			return DataResult.error("删除失败");
+		}
+	}
+
 	// 病人发给医生
 	@Override
-	public String createMsgUserToDoctor(Integer userloginid, Integer docloginid, String title, String msg, JSONObject jsonCustormCont)
-			throws Exception {
+	public boolean createMsgUserToDoctor(Integer userloginid, Integer docloginid, String title, String msg,
+			JSONObject jsonCustormCont) throws Exception {
 		String words = userinfoMapperCustom.selectByLoginId(userloginid).getUsername() + msg;
 		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
 		int dev = doctorlogininfo.getDoclogindev();
-		String channelId = doctorlogininfo.getDocloginchannelid();
+		String channelid = doctorlogininfo.getDocloginchannelid();
 		Notification notification = new Notification();
 		notification.setNotificationtitle(title);
 		notification.setNotificationwords(words);
@@ -306,28 +372,18 @@ public class CommonServiceImpl implements CommonService {
 		notification.setNotificationtypeid(1);
 		boolean result = notificationMapper.insertSelective(notification) > 0;
 		if (result) {
-			boolean pushResult = false;
-			// 安卓设备
-			if (1 == dev) {
-				pushResult = PushToDoctorInAndroid.pushMsgToSingleDevice(channelId, title, words);
-			} else {
-				pushResult = PushToDoctorInIOS.pushMsgToSingleDevice(channelId, title, msg);
-			}
-
-			if (pushResult && result) {
-				return "1";
-			} else {
-				return "2";
-			}
+			PushToDoctor pushToDoctor = new PushToDoctor(channelid, title, words, dev);
+			pushToDoctor.send();
+			return true;
 		} else {
-			return "3";
+			return false;
 		}
 	}
 
 	// 病人发给医院
 	@Override
-	public String createMsgUserToHospital(Integer userloginid, Integer hosploginid, String title, String msg, JSONObject jsonCustormCont)
-			throws Exception {
+	public boolean createMsgUserToHospital(Integer userloginid, Integer hosploginid, String title, String msg,
+			JSONObject jsonCustormCont) throws Exception {
 		String words = userinfoMapperCustom.selectByLoginId(userloginid).getUsername() + msg;
 		Notification notification = new Notification();
 		notification.setNotificationtitle(title);
@@ -342,21 +398,43 @@ public class CommonServiceImpl implements CommonService {
 		notification.setNotificationtypeid(2);
 		boolean result = notificationMapper.insertSelective(notification) > 0;
 		if (result) {
-			if (result) {
-				return "1";
-			} else {
-				return "2";
-			}
+			// infoHandler().sendMessageToUser(hosploginid+"", new TextMessage(words));
+			return true;
 		} else {
-			return "3";
+			return false;
 		}
 	}
-	
+
+	// 病人发给医发送管理员
+	@Override
+	public boolean createMsgUserToAdmin(Integer userloginid, Integer adminloginid, String title, String msg,
+			JSONObject jsonCustormCont) throws Exception {
+		String words = userinfoMapperCustom.selectByLoginId(userloginid).getUsername() + msg;
+		Notification notification = new Notification();
+		notification.setNotificationtitle(title);
+		notification.setNotificationwords(words);
+		notification.setNotificationdata(jsonCustormCont.toString());
+		notification.setNotificationcreatetime(new Date());
+		notification.setNotificationsenderid(userloginid);
+		notification.setNotificationreceiverid(adminloginid);
+		notification.setNotificationremove(false);
+		notification.setNotificationread(false);
+		// 2病人发给管理员
+		notification.setNotificationtypeid(7);
+		boolean result = notificationMapper.insertSelective(notification) > 0;
+		if (result) {
+			// infoHandler().sendMessageToUser(hosploginid+"", new TextMessage(words));
+			return true;
+
+		} else {
+			return false;
+		}
+	}
 
 	// 医生发送消息给病人
 	@Override
-	public  String createMsgDoctorToUser(Integer docloginid, Integer userloginid, String title, String msg, JSONObject jsonCustormCont)
-			throws Exception {
+	public boolean createMsgDoctorToUser(Integer docloginid, Integer userloginid, String title, String msg,
+			JSONObject jsonCustormCont) throws Exception {
 		String words = doctorinfoMapperCustom.selectByDocLoginId(docloginid).getDocname() + "医生" + msg;
 		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
 		int dev = userlogininfo.getUserlogindev();
@@ -374,28 +452,18 @@ public class CommonServiceImpl implements CommonService {
 		notification.setNotificationtypeid(3);
 		boolean result = notificationMapper.insertSelective(notification) > 0;
 		if (result) {
-			boolean pushResult = false;
-			// 安卓设备
-			if (1 == dev) {
-				pushResult = PushToUserInAndroid.pushMsgToSingleDevice(channelid, title, words);
-			} else {
-				pushResult = PushToUserInIOS.pushMsgToSingleDevice(channelid, title, msg);
-			}
-
-			if (pushResult && result) {
-				return "1";
-			} else {
-				return "2";
-			}
+			PushToUser pushToUser = new PushToUser(channelid, title, words, dev);
+			pushToUser.send();
+			return true;
 		} else {
-			return "3";
+			return false;
 		}
 	}
 
 	// 医生发给医院
 	@Override
-	public String createMsgDoctorToHospital(Integer docloginid, Integer hosploginid, String title, String msg, JSONObject jsonCustormCont)
-			throws Exception {
+	public boolean createMsgDoctorToHospital(Integer docloginid, Integer hosploginid, String title, String msg,
+			JSONObject jsonCustormCont) throws Exception {
 		String words = doctorinfoMapperCustom.selectByDocLoginId(docloginid).getDocname() + "医生" + msg;
 		Notification notification = new Notification();
 		notification.setNotificationtitle(title);
@@ -410,20 +478,42 @@ public class CommonServiceImpl implements CommonService {
 		notification.setNotificationtypeid(4);
 		boolean result = notificationMapper.insertSelective(notification) > 0;
 		if (result) {
-			if (result) {
-				return "1";
-			} else {
-				return "2";
-			}
+			// infoHandler().sendMessageToUser(hosploginid+"", new TextMessage(words));
+			return true;
 		} else {
-			return "3";
+			return false;
 		}
 	}
-	
-	// 医院发送消息给病人
+
+	// 医生发给管理员
 	@Override
-	public String createMsgHospitalToUser(Integer hosploginid, Integer userloginid, String title, String msg, JSONObject jsonCustormCont)
-			throws Exception {
+	public boolean createMsgDoctorToAdmin(Integer docloginid, Integer adminloginid, String title, String msg,
+			JSONObject jsonCustormCont) throws Exception {
+		String words = doctorinfoMapperCustom.selectByDocLoginId(docloginid).getDocname() + "医生" + msg;
+		Notification notification = new Notification();
+		notification.setNotificationtitle(title);
+		notification.setNotificationwords(words);
+		notification.setNotificationdata(jsonCustormCont.toString());
+		notification.setNotificationcreatetime(new Date());
+		notification.setNotificationsenderid(docloginid);
+		notification.setNotificationreceiverid(adminloginid);
+		notification.setNotificationremove(false);
+		notification.setNotificationread(false);
+		// 4医生发给医院
+		notification.setNotificationtypeid(8);
+		boolean result = notificationMapper.insertSelective(notification) > 0;
+		if (result) {
+			// infoHandler().sendMessageToUser(hosploginid+"", new TextMessage(words));
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// 医院发送消息给病人 
+	@Override
+	public boolean createMsgHospitalToUser(Integer hosploginid, Integer userloginid, String title, String msg,
+			JSONObject jsonCustormCont) throws Exception {
 		String words = hospinfoMapperCustom.selectByHospLoginId(hosploginid).getHospname() + msg;
 		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
 		int dev = userlogininfo.getUserlogindev();
@@ -441,28 +531,18 @@ public class CommonServiceImpl implements CommonService {
 		notification.setNotificationtypeid(5);
 		boolean result = notificationMapper.insertSelective(notification) > 0;
 		if (result) {
-			boolean pushResult = false;
-			// 安卓设备
-			if (1 == dev) {
-				pushResult = PushToUserInAndroid.pushMsgToSingleDevice(channelid, title, words);
-			} else {
-				pushResult = PushToUserInIOS.pushMsgToSingleDevice(channelid, title, msg);
-			}
-
-			if (pushResult && result) {
-				return "1";
-			} else {
-				return "2";
-			}
+			PushToUser pushToUser = new PushToUser(channelid, title, words, dev);
+			pushToUser.send();
+			return true;
 		} else {
-			return "3";
+			return false;
 		}
 	}
 
 	// 医院发送消息给医生
 	@Override
-	public String createMsgHospitalToDoctor(Integer hosploginid, Integer docloginid, String title, String msg, JSONObject jsonCustormCont)
-			throws Exception {
+	public boolean createMsgHospitalToDoctor(Integer hosploginid, Integer docloginid, String title, String msg,
+			JSONObject jsonCustormCont) throws Exception {
 		String words = hospinfoMapperCustom.selectByHospLoginId(hosploginid).getHospname() + msg;
 		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
 		int dev = doctorlogininfo.getDoclogindev();
@@ -480,25 +560,122 @@ public class CommonServiceImpl implements CommonService {
 		notification.setNotificationtypeid(6);
 		boolean result = notificationMapper.insertSelective(notification) > 0;
 		if (result) {
-			boolean pushResult = false;
-			// 安卓设备
-			if (1 == dev) {
-				pushResult = PushToDoctorInAndroid.pushMsgToSingleDevice(channelid, title, words);
-			} else {
-				pushResult = PushToDoctorInIOS.pushMsgToSingleDevice(channelid, title, msg);
-			}
-
-			if (pushResult && result) {
-				return "1";
-			} else {
-				return "2";
-			}
+			PushToDoctor pushToDoctor = new PushToDoctor(channelid, title, words, dev);
+			pushToDoctor.send();
+			return true;
 		} else {
-			return "3";
+			return false;
+		}
+	}
+
+	// 医院发送消息给管理员
+	@Override
+	public boolean createMsgHospitalToAdmin(Integer hosploginid, Integer adminloginid, String title, String msg,
+			JSONObject jsonCustormCont) throws Exception {
+		String words = hospinfoMapperCustom.selectByHospLoginId(hosploginid).getHospname() + msg;
+		Notification notification = new Notification();
+		notification.setNotificationtitle(title);
+		notification.setNotificationwords(words);
+		notification.setNotificationdata(jsonCustormCont.toString());
+		notification.setNotificationcreatetime(new Date());
+		notification.setNotificationsenderid(hosploginid);
+		notification.setNotificationreceiverid(adminloginid);
+		notification.setNotificationremove(false);
+		notification.setNotificationread(false);
+		// 5医院发送消息给管理体员
+		notification.setNotificationtypeid(9);
+		boolean result = notificationMapper.insertSelective(notification) > 0;
+		if (result) {
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// 管理员发送消息给病人
+	@Override
+	public boolean createMsgAdminToUser(Integer adminloginid, Integer userloginid, String title, String msg,
+			JSONObject jsonCustormCont) throws Exception {
+		String words = "管理员" + msg;
+		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
+		int dev = userlogininfo.getUserlogindev();
+		String channelid = userlogininfo.getUserloginchannelid();
+		Notification notification = new Notification();
+		notification.setNotificationtitle(title);
+		notification.setNotificationwords(words);
+		notification.setNotificationdata(jsonCustormCont.toString());
+		notification.setNotificationcreatetime(new Date());
+		notification.setNotificationsenderid(adminloginid);
+		notification.setNotificationreceiverid(userloginid);
+		notification.setNotificationremove(false);
+		notification.setNotificationread(false);
+		// 5医院发送消息给病人
+		notification.setNotificationtypeid(10);
+		boolean result = notificationMapper.insertSelective(notification) > 0;
+		if (result) {
+			PushToUser pushToUser = new PushToUser(channelid, title, words, dev);
+			pushToUser.send();
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// 管理员发送消息给医生
+	@Override
+	public boolean createMsgAdminToDoctor(Integer adminloginid, Integer docloginid, String title, String msg,
+			JSONObject jsonCustormCont) throws Exception {
+		String words = "管理员" + msg;
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		int dev = doctorlogininfo.getDoclogindev();
+		String channelid = doctorlogininfo.getDocloginchannelid();
+		Notification notification = new Notification();
+		notification.setNotificationtitle(title);
+		notification.setNotificationwords(words);
+		notification.setNotificationdata(jsonCustormCont.toString());
+		notification.setNotificationcreatetime(new Date());
+		notification.setNotificationsenderid(adminloginid);
+		notification.setNotificationreceiverid(docloginid);
+		notification.setNotificationremove(false);
+		notification.setNotificationread(false);
+		// 11管理员发送消息给医生
+		notification.setNotificationtypeid(11);
+		boolean result = notificationMapper.insertSelective(notification) > 0;
+		if (result) {
+			PushToDoctor pushToDoctor = new PushToDoctor(channelid, title, words, dev);
+			pushToDoctor.send();
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
-	//获取所有部门
+	// 管理员发给医院
+	@Override
+	public boolean createMsgAdminToHospital(Integer adminloginid, Integer hosploginid, String title, String msg,
+			JSONObject jsonCustormCont) throws Exception {
+		String words = "管理员" + msg;
+		Notification notification = new Notification();
+		notification.setNotificationtitle(title);
+		notification.setNotificationwords(words);
+		notification.setNotificationdata(jsonCustormCont.toString());
+		notification.setNotificationcreatetime(new Date());
+		notification.setNotificationsenderid(adminloginid);
+		notification.setNotificationreceiverid(hosploginid);
+		notification.setNotificationremove(false);
+		notification.setNotificationread(false);
+		// 12管理员发给医院
+		notification.setNotificationtypeid(12);
+		boolean result = notificationMapper.insertSelective(notification) > 0;
+		if (result) {
+			// infoHandler().sendMessageToUser(hosploginid+"", new TextMessage(words));
+			return true;
+		} else {
+			return false;
+		}
+	}
+	// 获取所有部门
 	@Override
 	public String getDept() throws Exception {
 		List<Hospitaldept> list = hospitaldeptMapperCustom.selectAll();
@@ -532,5 +709,111 @@ public class CommonServiceImpl implements CommonService {
 			}
 		}
 		return DataResult.success("获取成功", data);
+	}
+
+	@Override
+	public String addDept(Integer docloginid, String primarydept, String seconddept) {
+		// 一级部门为空
+		if (StringUtils.isBlank(primarydept)) {
+			List<Hospitaldept> seconddeptlist = hospitaldeptMapperCustom.selectByPrimaryDeptAndSecondDeptAndCheck(null,
+					seconddept, null);
+			if (seconddeptlist != null && seconddeptlist.size() > 0) {
+				return DataResult.error("该部门已存在");
+
+			}
+			Hospitaldept seconddeptRecord = new Hospitaldept();
+			seconddeptRecord.setHospdeptname(seconddept);
+			// -1为二级部门
+			seconddeptRecord.setHospdeptfatherid(-1);
+			seconddeptRecord.setHospdeptischeck(false);
+			boolean result = hospitaldeptMapper.insertSelective(seconddeptRecord) > 0;
+			if (result) {
+				return DataResult.success("新增成功");
+			} else {
+				return DataResult.error("新增失败");
+			}
+
+		}
+		// 二级部门为空
+		if (StringUtils.isBlank(seconddept)) {
+			List<Hospitaldept> primarydeptlist = hospitaldeptMapperCustom
+					.selectByPrimaryDeptAndSecondDeptAndCheck(primarydept, null, null);
+			if (primarydeptlist != null && primarydeptlist.size() > 0) {
+				return DataResult.error("该部门已存在");
+
+			}
+			Hospitaldept primarydeptRecord = new Hospitaldept();
+			primarydeptRecord.setHospdeptname(primarydept);
+			primarydeptRecord.setHospdeptfatherid(0);
+			primarydeptRecord.setHospdeptischeck(false);
+			boolean primarydeptResult = hospitaldeptMapperCustom.insertSelectiveReturnId(primarydeptRecord) > 0;
+			if (primarydeptResult) {
+				return DataResult.success("新增成功");
+			} else {
+				return DataResult.error("新增失败");
+			}
+
+		}
+		// 一级二级部门都存在
+		List<Hospitaldept> primarydeptlist = hospitaldeptMapperCustom
+				.selectByPrimaryDeptAndSecondDeptAndCheck(primarydept, null, null);
+		List<Hospitaldept> seconddeptlist = hospitaldeptMapperCustom.selectByPrimaryDeptAndSecondDeptAndCheck(null,
+				seconddept, null);
+		if (primarydeptlist != null && primarydeptlist.size() > 0 && seconddeptlist != null
+				&& seconddeptlist.size() > 0) {
+			return DataResult.error("该部门已存在");
+		}
+		if (primarydeptlist != null && primarydeptlist.size() > 0) {
+			Hospitaldept seconddeptRecord = new Hospitaldept();
+			seconddeptRecord.setHospdeptname(seconddept);
+			seconddeptRecord.setHospdeptfatherid(primarydeptlist.get(0).getHospdeptid());
+			seconddeptRecord.setHospdeptischeck(false);
+			boolean result = hospitaldeptMapper.insertSelective(seconddeptRecord) > 0;
+			if (result) {
+				return DataResult.success("新增成功");
+			} else {
+				return DataResult.error("新增失败");
+			}
+		} else {
+			Hospitaldept primarydeptRecord = new Hospitaldept();
+			primarydeptRecord.setHospdeptname(primarydept);
+			primarydeptRecord.setHospdeptfatherid(0);
+			primarydeptRecord.setHospdeptischeck(false);
+			boolean primarydeptResult = hospitaldeptMapperCustom.insertSelectiveReturnId(primarydeptRecord) > 0;
+			Hospitaldept seconddeptRecord = new Hospitaldept();
+			seconddeptRecord.setHospdeptname(seconddept);
+			seconddeptRecord.setHospdeptfatherid(primarydeptRecord.getHospdeptid());
+			seconddeptRecord.setHospdeptischeck(false);
+			boolean result = hospitaldeptMapper.insertSelective(seconddeptRecord) > 0;
+			if (result && primarydeptResult) {
+				return DataResult.success("新增成功");
+			} else {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+				return DataResult.error("新增失败");
+			}
+
+		}
+	}
+
+	@Override
+	public String addSecondDept(Integer docloginid, String seconddept) {
+		// 一级二级部门都存在
+		List<Hospitaldept> seconddeptlist = hospitaldeptMapperCustom.selectByPrimaryDeptAndSecondDeptAndCheck(null,
+				seconddept, null);
+		if (seconddeptlist != null && seconddeptlist.size() > 0) {
+			return DataResult.error("该部门已存在");
+		}
+		List<Hospitaldept> primarydeptlist = hospitaldeptMapperCustom.selectByPrimaryDeptAndSecondDeptAndCheck("其他部门",
+				null, null);
+		Hospitaldept seconddeptRecord = new Hospitaldept();
+		seconddeptRecord.setHospdeptname(seconddept);
+		seconddeptRecord.setHospdeptfatherid(primarydeptlist.get(0).getHospdeptid());
+		seconddeptRecord.setHospdeptischeck(false);
+		boolean result = hospitaldeptMapper.insertSelective(seconddeptRecord) > 0;
+		if (result) {
+			return DataResult.success("新增成功");
+		} else {
+			return DataResult.error("新增失败");
+		}
 	}
 }

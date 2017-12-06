@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.HosppurseMapperCustom" >
+  
+  <select id="selectHosploginid" resultType="com.medical.po.Hosppurse" parameterType="java.lang.Integer" >
+    select * from hosppurse
+    where hospLoginId = #{0}
+   	order by hospPurseTime desc
+   
+  </select>
+  <select id="selectAllInfoByHosploginid" resultType="map"  parameterType="java.lang.Integer">
+   select a.hosppurseid,a.hosppursetypeid,b.pursetypename,a.hosppurseamount,a.hosppursetime,a.payid,a.hosppursebalance
+    
+    from hosppurse as a
+    	left join pursetype  as b on a.hospPurseTypeId= b.purseTypeId
+    where a.hospLoginId = #{0,jdbcType=INTEGER}
+  </select>
+ 
+</mapper>

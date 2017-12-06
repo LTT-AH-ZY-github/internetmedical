@@ -235,6 +235,76 @@ public class HosplogininfoExample {
             return (Criteria) this;
         }
 
+        public Criteria andHosploginsaltIsNull() {
+            addCriterion("hospLoginSalt is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsaltIsNotNull() {
+            addCriterion("hospLoginSalt is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsaltEqualTo(String value) {
+            addCriterion("hospLoginSalt =", value, "hosploginsalt");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsaltNotEqualTo(String value) {
+            addCriterion("hospLoginSalt <>", value, "hosploginsalt");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsaltGreaterThan(String value) {
+            addCriterion("hospLoginSalt >", value, "hosploginsalt");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsaltGreaterThanOrEqualTo(String value) {
+            addCriterion("hospLoginSalt >=", value, "hosploginsalt");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsaltLessThan(String value) {
+            addCriterion("hospLoginSalt <", value, "hosploginsalt");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsaltLessThanOrEqualTo(String value) {
+            addCriterion("hospLoginSalt <=", value, "hosploginsalt");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsaltLike(String value) {
+            addCriterion("hospLoginSalt like", value, "hosploginsalt");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsaltNotLike(String value) {
+            addCriterion("hospLoginSalt not like", value, "hosploginsalt");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsaltIn(List<String> values) {
+            addCriterion("hospLoginSalt in", values, "hosploginsalt");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsaltNotIn(List<String> values) {
+            addCriterion("hospLoginSalt not in", values, "hosploginsalt");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsaltBetween(String value1, String value2) {
+            addCriterion("hospLoginSalt between", value1, value2, "hosploginsalt");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosploginsaltNotBetween(String value1, String value2) {
+            addCriterion("hospLoginSalt not between", value1, value2, "hosploginsalt");
+            return (Criteria) this;
+        }
+
         public Criteria andHosploginpwdIsNull() {
             addCriterion("hospLoginPwd is null");
             return (Criteria) this;

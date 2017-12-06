@@ -21,7 +21,6 @@ import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlog;
 import com.medical.po.Doctorlogininfo;
 import com.medical.po.Doctorskd;
-import com.medical.po.Userlogininfo;
 import com.medical.service.iface.doctor.DoctorAccountService;
 import com.medical.utils.Global;
 import com.medical.utils.MD5Util;
@@ -48,6 +47,18 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 	@Autowired
 	private UserlogininfoMapperCustom userlogininfoMapperCustom;
 	
+	// 查找账号是否注册
+	@Override
+	public String findAccountExit(String phone) throws Exception{
+		// 查询医生登录表
+		int doctorCount = doctorlogininfoMapperCustom.findDocCountByPhone(phone);
+		if (doctorCount > 0) {
+			return DataResult.error("该号码已注册");
+		} else {
+			return DataResult.success("该号码未注册");
+		}
+	}
+	
 	// 注册
 	@Override
 	public String createDoctor(String docloginphone, String magCode, String docLoginPwd) throws Exception {
@@ -58,8 +69,8 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		// 查询医生登录表
 	   int doctorCount = doctorlogininfoMapperCustom.findDocCountByPhone(docloginphone);
 	   // 查询病人登录表
-	   int userCount = userlogininfoMapperCustom.findUserCountByPhone(docloginphone);
-	   if (doctorCount>0 || userCount>0) {
+	  // int userCount = userlogininfoMapperCustom.findUserCountByPhone(docloginphone);
+	   if (doctorCount>0 ) {
 			return DataResult.error("该号码已注册");
 		}
 		Doctorlogininfo doctorlogininfo = new Doctorlogininfo();
@@ -80,12 +91,8 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		doctorinfo.setDocloginid(doctorlogininfo.getDocloginid());
 		// 创建信息表
 		int infoResult = doctorinfoMapper.insertSelective(doctorinfo);
-		// 创建日程表
-		Doctorskd doctorskd = new Doctorskd();
-		doctorskd.setDocloginid(doctorlogininfo.getDocloginid());
-		int skdResult = doctorskdMapper.insertSelective(doctorskd);
 		// 操作成功
-		if (result > 0 && infoResult > 0 && skdResult > 0) {
+		if (result > 0 && infoResult > 0 ) {
 			addHuanXinAccout(doctorlogininfo.getDocloginid(), docLoginPwd);
 			return DataResult.success("注册成功");
 		} else {
@@ -121,6 +128,7 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		logRecord.setDoclogmac(doctor.getDocloginmac());
 		logRecord.setDoclogmodel(doctor.getDocloginmodel());
 		logRecord.setDoclogpver(doctor.getDocloginpver());
+		logRecord.setDoclogdev(doctor.getDoclogindev());
 
 		// 检查账号密码是否正确
 		Doctorlogininfo doctorinfo = doctorlogininfoMapperCustom.selectDoctorByPhone(doctor.getDocloginphone());
@@ -191,6 +199,7 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		logRecord.setDoclogmac(doctor.getDocloginmac());
 		logRecord.setDoclogmodel(doctor.getDocloginmodel());
 		logRecord.setDoclogpver(doctor.getDocloginpver());
+		logRecord.setDoclogdev(doctor.getDoclogindev());
 		// 检查账号密码是否正确
 		Doctorlogininfo doctorinfo = doctorlogininfoMapperCustom.selectDoctorByPhone(doctor.getDocloginphone());
 		if (doctorinfo == null) {
@@ -239,24 +248,7 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		}
 	}
 	
-	// 更新百度云ChannelId
-	@Override
-	public String updateChannelId(Integer docloginid, String channelid) throws Exception{
-		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
-		if (doctorlogininfo == null) {
-			return DataResult.error("用户不存在");
-		}
-		Doctorlogininfo record = new Doctorlogininfo();
-		record.setDocloginid(docloginid);
-		record.setDocloginchannelid(channelid);
-		boolean result = doctorlogininfoMapper.updateByPrimaryKeySelective(record) > 0;
-		if (result) {
-			return DataResult.success("更新成功");
-		} else {
-			return DataResult.error("更新失败");
-		}
-
-	}
+	
 	
 	// 注册环信
 	@Override
@@ -328,30 +320,5 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		}
 	}
 	
-	//提交审核
-	@Override
-	public String updateInfoToReview(Integer docloginid)throws Exception{
-		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
-		if (doctorlogininfo == null) {
-			return DataResult.error("该用户不存在");
-		}
-		int type = doctorlogininfo.getDoclogintype();
-		if (type==2) {
-			return DataResult.error("已提交审核");
-		}
-		if (type==3) {
-			return DataResult.error("已通过审核");
-		}
-		Doctorlogininfo record = new Doctorlogininfo();
-		record.setDocloginid(docloginid);
-		record.setDocloginsubchecktime(new Date());
-		//等待审核
-		record.setDoclogintype(2);
-		boolean result = doctorlogininfoMapper.updateByPrimaryKeySelective(record)>0;
-		if (result) {
-			return DataResult.success("提交审核成功");
-		} else {
-			return DataResult.error("提交审核失败");
-		}
-	}
+	
 }

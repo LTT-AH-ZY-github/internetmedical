@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.NotificationMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Notification" >
+    <id column="notificationId" property="notificationid" jdbcType="INTEGER" />
+    <result column="notificationTitle" property="notificationtitle" jdbcType="VARCHAR" />
+    <result column="notificationWords" property="notificationwords" jdbcType="VARCHAR" />
+    <result column="notificationData" property="notificationdata" jdbcType="VARCHAR" />
+    <result column="notificationCreateTime" property="notificationcreatetime" jdbcType="TIMESTAMP" />
+    <result column="notificationReadTime" property="notificationreadtime" jdbcType="TIMESTAMP" />
+    <result column="notificationSenderId" property="notificationsenderid" jdbcType="INTEGER" />
+    <result column="notificationReceiverId" property="notificationreceiverid" jdbcType="INTEGER" />
+    <result column="notificationRead" property="notificationread" jdbcType="BIT" />
+    <result column="notificationRemove" property="notificationremove" jdbcType="BIT" />
+    <result column="notificationTypeId" property="notificationtypeid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    notificationId, notificationTitle, notificationWords, notificationData, notificationCreateTime, 
+    notificationReadTime, notificationSenderId, notificationReceiverId, notificationRead, 
+    notificationRemove, notificationTypeId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.NotificationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from notification
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from notification
+    where notificationId = #{notificationid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from notification
+    where notificationId = #{notificationid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.NotificationExample" >
+    delete from notification
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Notification" >
+    insert into notification (notificationId, notificationTitle, 
+      notificationWords, notificationData, notificationCreateTime, 
+      notificationReadTime, notificationSenderId, 
+      notificationReceiverId, notificationRead, notificationRemove, 
+      notificationTypeId)
+    values (#{notificationid,jdbcType=INTEGER}, #{notificationtitle,jdbcType=VARCHAR}, 
+      #{notificationwords,jdbcType=VARCHAR}, #{notificationdata,jdbcType=VARCHAR}, #{notificationcreatetime,jdbcType=TIMESTAMP}, 
+      #{notificationreadtime,jdbcType=TIMESTAMP}, #{notificationsenderid,jdbcType=INTEGER}, 
+      #{notificationreceiverid,jdbcType=INTEGER}, #{notificationread,jdbcType=BIT}, #{notificationremove,jdbcType=BIT}, 
+      #{notificationtypeid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Notification" >
+    insert into notification
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="notificationid != null" >
+        notificationId,
+      </if>
+      <if test="notificationtitle != null" >
+        notificationTitle,
+      </if>
+      <if test="notificationwords != null" >
+        notificationWords,
+      </if>
+      <if test="notificationdata != null" >
+        notificationData,
+      </if>
+      <if test="notificationcreatetime != null" >
+        notificationCreateTime,
+      </if>
+      <if test="notificationreadtime != null" >
+        notificationReadTime,
+      </if>
+      <if test="notificationsenderid != null" >
+        notificationSenderId,
+      </if>
+      <if test="notificationreceiverid != null" >
+        notificationReceiverId,
+      </if>
+      <if test="notificationread != null" >
+        notificationRead,
+      </if>
+      <if test="notificationremove != null" >
+        notificationRemove,
+      </if>
+      <if test="notificationtypeid != null" >
+        notificationTypeId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="notificationid != null" >
+        #{notificationid,jdbcType=INTEGER},
+      </if>
+      <if test="notificationtitle != null" >
+        #{notificationtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="notificationwords != null" >
+        #{notificationwords,jdbcType=VARCHAR},
+      </if>
+      <if test="notificationdata != null" >
+        #{notificationdata,jdbcType=VARCHAR},
+      </if>
+      <if test="notificationcreatetime != null" >
+        #{notificationcreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notificationreadtime != null" >
+        #{notificationreadtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notificationsenderid != null" >
+        #{notificationsenderid,jdbcType=INTEGER},
+      </if>
+      <if test="notificationreceiverid != null" >
+        #{notificationreceiverid,jdbcType=INTEGER},
+      </if>
+      <if test="notificationread != null" >
+        #{notificationread,jdbcType=BIT},
+      </if>
+      <if test="notificationremove != null" >
+        #{notificationremove,jdbcType=BIT},
+      </if>
+      <if test="notificationtypeid != null" >
+        #{notificationtypeid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.NotificationExample" resultType="java.lang.Integer" >
+    select count(*) from notification
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update notification
+    <set >
+      <if test="record.notificationid != null" >
+        notificationId = #{record.notificationid,jdbcType=INTEGER},
+      </if>
+      <if test="record.notificationtitle != null" >
+        notificationTitle = #{record.notificationtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.notificationwords != null" >
+        notificationWords = #{record.notificationwords,jdbcType=VARCHAR},
+      </if>
+      <if test="record.notificationdata != null" >
+        notificationData = #{record.notificationdata,jdbcType=VARCHAR},
+      </if>
+      <if test="record.notificationcreatetime != null" >
+        notificationCreateTime = #{record.notificationcreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.notificationreadtime != null" >
+        notificationReadTime = #{record.notificationreadtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.notificationsenderid != null" >
+        notificationSenderId = #{record.notificationsenderid,jdbcType=INTEGER},
+      </if>
+      <if test="record.notificationreceiverid != null" >
+        notificationReceiverId = #{record.notificationreceiverid,jdbcType=INTEGER},
+      </if>
+      <if test="record.notificationread != null" >
+        notificationRead = #{record.notificationread,jdbcType=BIT},
+      </if>
+      <if test="record.notificationremove != null" >
+        notificationRemove = #{record.notificationremove,jdbcType=BIT},
+      </if>
+      <if test="record.notificationtypeid != null" >
+        notificationTypeId = #{record.notificationtypeid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update notification
+    set notificationId = #{record.notificationid,jdbcType=INTEGER},
+      notificationTitle = #{record.notificationtitle,jdbcType=VARCHAR},
+      notificationWords = #{record.notificationwords,jdbcType=VARCHAR},
+      notificationData = #{record.notificationdata,jdbcType=VARCHAR},
+      notificationCreateTime = #{record.notificationcreatetime,jdbcType=TIMESTAMP},
+      notificationReadTime = #{record.notificationreadtime,jdbcType=TIMESTAMP},
+      notificationSenderId = #{record.notificationsenderid,jdbcType=INTEGER},
+      notificationReceiverId = #{record.notificationreceiverid,jdbcType=INTEGER},
+      notificationRead = #{record.notificationread,jdbcType=BIT},
+      notificationRemove = #{record.notificationremove,jdbcType=BIT},
+      notificationTypeId = #{record.notificationtypeid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Notification" >
+    update notification
+    <set >
+      <if test="notificationtitle != null" >
+        notificationTitle = #{notificationtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="notificationwords != null" >
+        notificationWords = #{notificationwords,jdbcType=VARCHAR},
+      </if>
+      <if test="notificationdata != null" >
+        notificationData = #{notificationdata,jdbcType=VARCHAR},
+      </if>
+      <if test="notificationcreatetime != null" >
+        notificationCreateTime = #{notificationcreatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notificationreadtime != null" >
+        notificationReadTime = #{notificationreadtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notificationsenderid != null" >
+        notificationSenderId = #{notificationsenderid,jdbcType=INTEGER},
+      </if>
+      <if test="notificationreceiverid != null" >
+        notificationReceiverId = #{notificationreceiverid,jdbcType=INTEGER},
+      </if>
+      <if test="notificationread != null" >
+        notificationRead = #{notificationread,jdbcType=BIT},
+      </if>
+      <if test="notificationremove != null" >
+        notificationRemove = #{notificationremove,jdbcType=BIT},
+      </if>
+      <if test="notificationtypeid != null" >
+        notificationTypeId = #{notificationtypeid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where notificationId = #{notificationid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Notification" >
+    update notification
+    set notificationTitle = #{notificationtitle,jdbcType=VARCHAR},
+      notificationWords = #{notificationwords,jdbcType=VARCHAR},
+      notificationData = #{notificationdata,jdbcType=VARCHAR},
+      notificationCreateTime = #{notificationcreatetime,jdbcType=TIMESTAMP},
+      notificationReadTime = #{notificationreadtime,jdbcType=TIMESTAMP},
+      notificationSenderId = #{notificationsenderid,jdbcType=INTEGER},
+      notificationReceiverId = #{notificationreceiverid,jdbcType=INTEGER},
+      notificationRead = #{notificationread,jdbcType=BIT},
+      notificationRemove = #{notificationremove,jdbcType=BIT},
+      notificationTypeId = #{notificationtypeid,jdbcType=INTEGER}
+    where notificationId = #{notificationid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -9,10 +9,15 @@ import com.medical.po.Hospinfo;
 
 
 public interface HospinfoMapperCustom {
+	
 	/**
-	 * 管理员获取医院列表
-	 * */
-	List<Map<String, Object>> selectByHospTypeInAdmin(Integer type);
+	 * @Title: selectByHospTypeInAdmin
+	 * @Description: 管理员获取医院列表
+	 * @param type
+	 * @return
+	 * @return: List<Map<String,Object>>
+	 */
+	List<Map<String, Object>> selectByHospTypeInAdmin(Integer type,Integer key);
 	/**
 	 * 管理员获取医院详细信息
 	 * @param 医院登录id
@@ -21,11 +26,13 @@ public interface HospinfoMapperCustom {
 	//根据医院名模糊查询医院
 	List<Map<String, Object>> selectByHospName(String hospname);
 	Hospinfo selectByHospLoginId(Integer hosploginid);
+	
 	/**
-	 * 医生端获取医院信息
+	 * @Title: selectAllInfoByHospLoginIdInDoctor
+	 * @Description: 医生端获取医院信息
+	 * @param hosploginid
 	 * @return
-	 * @param
-	 * 
-	 * */
+	 * @return: Map<String,Object>
+	 */
 	Map<String, Object> selectAllInfoByHospLoginIdInDoctor(Integer hosploginid);
 }

@@ -7,7 +7,7 @@
     <result column="docLogLon" property="docloglon" jdbcType="VARCHAR" />
     <result column="docLogLat" property="docloglat" jdbcType="VARCHAR" />
     <result column="docLogLoc" property="doclogloc" jdbcType="VARCHAR" />
-    <result column="docLogDev" property="doclogdev" jdbcType="BIT" />
+    <result column="docLogDev" property="doclogdev" jdbcType="INTEGER" />
     <result column="docLogBVer" property="doclogbver" jdbcType="VARCHAR" />
     <result column="docLogModel" property="doclogmodel" jdbcType="VARCHAR" />
     <result column="docLogPVer" property="doclogpver" jdbcType="VARCHAR" />
@@ -114,7 +114,7 @@
       docLogMac, docLogIp, docLoginId
       )
     values (#{doclogid,jdbcType=INTEGER}, #{doclogtime,jdbcType=TIMESTAMP}, #{docloglon,jdbcType=VARCHAR}, 
-      #{docloglat,jdbcType=VARCHAR}, #{doclogloc,jdbcType=VARCHAR}, #{doclogdev,jdbcType=BIT}, 
+      #{docloglat,jdbcType=VARCHAR}, #{doclogloc,jdbcType=VARCHAR}, #{doclogdev,jdbcType=INTEGER}, 
       #{doclogbver,jdbcType=VARCHAR}, #{doclogmodel,jdbcType=VARCHAR}, #{doclogpver,jdbcType=VARCHAR}, 
       #{doclogmac,jdbcType=VARCHAR}, #{doclogip,jdbcType=VARCHAR}, #{docloginid,jdbcType=INTEGER}
       )
@@ -176,7 +176,7 @@
         #{doclogloc,jdbcType=VARCHAR},
       </if>
       <if test="doclogdev != null" >
-        #{doclogdev,jdbcType=BIT},
+        #{doclogdev,jdbcType=INTEGER},
       </if>
       <if test="doclogbver != null" >
         #{doclogbver,jdbcType=VARCHAR},
@@ -223,7 +223,7 @@
         docLogLoc = #{record.doclogloc,jdbcType=VARCHAR},
       </if>
       <if test="record.doclogdev != null" >
-        docLogDev = #{record.doclogdev,jdbcType=BIT},
+        docLogDev = #{record.doclogdev,jdbcType=INTEGER},
       </if>
       <if test="record.doclogbver != null" >
         docLogBVer = #{record.doclogbver,jdbcType=VARCHAR},
@@ -255,7 +255,7 @@
       docLogLon = #{record.docloglon,jdbcType=VARCHAR},
       docLogLat = #{record.docloglat,jdbcType=VARCHAR},
       docLogLoc = #{record.doclogloc,jdbcType=VARCHAR},
-      docLogDev = #{record.doclogdev,jdbcType=BIT},
+      docLogDev = #{record.doclogdev,jdbcType=INTEGER},
       docLogBVer = #{record.doclogbver,jdbcType=VARCHAR},
       docLogModel = #{record.doclogmodel,jdbcType=VARCHAR},
       docLogPVer = #{record.doclogpver,jdbcType=VARCHAR},
@@ -282,7 +282,7 @@
         docLogLoc = #{doclogloc,jdbcType=VARCHAR},
       </if>
       <if test="doclogdev != null" >
-        docLogDev = #{doclogdev,jdbcType=BIT},
+        docLogDev = #{doclogdev,jdbcType=INTEGER},
       </if>
       <if test="doclogbver != null" >
         docLogBVer = #{doclogbver,jdbcType=VARCHAR},
@@ -311,7 +311,7 @@
       docLogLon = #{docloglon,jdbcType=VARCHAR},
       docLogLat = #{docloglat,jdbcType=VARCHAR},
       docLogLoc = #{doclogloc,jdbcType=VARCHAR},
-      docLogDev = #{doclogdev,jdbcType=BIT},
+      docLogDev = #{doclogdev,jdbcType=INTEGER},
       docLogBVer = #{doclogbver,jdbcType=VARCHAR},
       docLogModel = #{doclogmodel,jdbcType=VARCHAR},
       docLogPVer = #{doclogpver,jdbcType=VARCHAR},

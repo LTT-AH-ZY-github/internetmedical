@@ -4,8 +4,6 @@ package com.medical.mapper;
 
 import java.util.List;
 import java.util.Map;
-
-import com.medical.po.DoctorCustom;
 import com.medical.po.DoctorSearch;
 import com.medical.po.Doctorinfo;
 import com.medical.po.HospSearchDocTerm;
@@ -13,52 +11,133 @@ import com.medical.po.HospSearchDocTerm;
 
 
 
+/**
+ * @ClassName:     DoctorinfoMapperCustom.java
+ * @Description:   TODO(用一句话描述该文件做什么) 
+ * @author          xyh
+ * @version         V1.0  
+ * @Date           2017年12月5日 下午2:52:24 
+ */
 public interface DoctorinfoMapperCustom {
     
-	//医生信息列表模式
-	List<Map<String, Object>> findDoctorInfoInList(DoctorSearch doctorSearch)throws Exception;
-	//医生信息列表模式
-	//List<Map<String, Object>> findDoctorInfoInListByLoc(DoctorSearch doctorSearch)throws Exception;
-	
-	//医生信息地图模式
-	List<Map<String, Object>> findDoctorInfoInMap(double arg1,double arg2,double arg3,double arg4)throws Exception;
-	
-	//根据登录Id查询医生
-	Doctorinfo findDoctorinfoByDocLoginId(Integer docloginid);
-	
-	//根据登录Id查询医生
-	Map<String, Object> findDoctorByDocLoginId(Integer docloginid);
-	
-	List<Map<String, Object>> findDoctorByInfo(DoctorSearch doctorSearch);
-	
-	//查询第一页信息
-	Map<String, Object> selectFirstInfoByDocLoginId(Integer id);
-	Map<String, Object> selectFirstInfoDeptByDocLoginId(Integer id);
-	
-	//查询第二页信息
-	Map<String, Object> selectSecondInfoByDocLoginId(Integer id);
-	
-	
-	Map<String, Object> selectNameAndTitleByDocLoginId(Integer id);
-	
-	//医院获取医生
-	List<Map<String, Object>> paginationDoctorList(HospSearchDocTerm hospSearchDocTerm);
-	
-	//根据登录Id查询医生
+	/**
+	 * @Title: selectByDocLoginId
+	 * @Description: 根据登录Id查询医生
+	 * @param docloginid
+	 * @return
+	 * @return: Doctorinfo
+	 */
 	Doctorinfo selectByDocLoginId(Integer docloginid);
 	
+	/**
+	 * @Title: findDoctorInfoInList
+	 * @Description: 病人端医生信息列表模式
+	 * @param doctorSearch
+	 * @return
+	 * @throws Exception
+	 * @return: List<Map<String,Object>>
+	 */
+	List<Map<String, Object>> findDoctorInfoInList(DoctorSearch doctorSearch)throws Exception;
+	
+	/**
+	 * @Title: findDoctorInfoInMap
+	 * @Description: 病人端医生信息地图模式
+	 * @param arg1
+	 * @param arg2
+	 * @param arg3
+	 * @param arg4
+	 * @return
+	 * @throws Exception
+	 * @return: List<Map<String,Object>>
+	 */
+	List<Map<String, Object>> findDoctorInfoInMap(double arg1,double arg2,double arg3,double arg4)throws Exception;
+	
+	/**
+	 * @Title: selectByDept
+	 * @Description: 病人端推荐医生根据部门获取医生
+	 * @param docPrimaryDept
+	 * @param docSecondDept
+	 * @return
+	 * @return: List<Doctorinfo>
+	 */
 	List<Doctorinfo> selectByDept(String docPrimaryDept,String docSecondDept );
-	//根据医生姓名获取医生
+	
+	/**
+	 * @Title: findDoctorByDocLoginId
+	 * @Description: 病人端获取医生详细信息
+	 * @param docloginid
+	 * @return
+	 * @return: Map<String,Object>
+	 */
+	Map<String, Object> findDoctorByDocLoginId(Integer docloginid);
+	
+	//List<Map<String, Object>> findDoctorByInfo(DoctorSearch doctorSearch);
+	
+	/**
+	 * @Title: selectFirstInfoByDocLoginId
+	 * @Description: 医生端查询自己第一页信息
+	 * @param id
+	 * @return
+	 * @return: Map<String,Object>
+	 */
+	Map<String, Object> selectFirstInfoByDocLoginId(Integer id);
+	
+	/**
+	 * @Title: selectSecondInfoByDocLoginId
+	 * @Description: 医生端查询自己第二页信息
+	 * @param id
+	 * @return
+	 * @return: Map<String,Object>
+	 */
+	Map<String, Object> selectSecondInfoByDocLoginId(Integer id);
+	
+	/**
+	 * @Title: selectByName
+	 * @Description:医生端根据医生姓名获取医生
+	 * @param docname
+	 * @return
+	 * @return: List<Map<String,Object>>
+	 */
 	List<Map<String, Object>> selectByName(String docname);
+	
+	/**
+	 * @Title: updateInfoByPrimaryKey
+	 * @Description: 医生端更新接诊地址位置信息
+	 * @param doctorinfo
+	 * @return
+	 * @return: int
+	 */
 	int updateInfoByPrimaryKey(Doctorinfo doctorinfo);
+	
+	
+	//Map<String, Object> selectNameAndTitleByDocLoginId(Integer id);
+	
 	/**
-	 * 管理员获取医生列表
-	 * @param 用户账号类型
-	 * */
-	List<Map<String, Object>> selectByDocLoginTypeInAdmin(Integer type);
+	 * @Title: paginationDoctorListInHosp
+	 * @Description: 医院端获取医生
+	 * @param hospSearchDocTerm
+	 * @return
+	 * @return: List<Map<String,Object>>
+	 */
+	List<Map<String, Object>> paginationDoctorListInHosp(HospSearchDocTerm hospSearchDocTerm);
+	
+	
+	
 	/**
-	 * 管理员获取医生详细信息
-	 * @param 医生登录id
-	 * */
+	 * @Title: selectByDocLoginTypeInAdmin
+	 * @Description: 管理员获取医生列表
+	 * @param type 用户账号类型
+	 * @return
+	 * @return: List<Map<String,Object>>
+	 */
+	List<Map<String, Object>> selectByDocLoginTypeInAdmin(Integer type,Integer key);
+	
+	/**
+	 * @Title: selectInfoByDocLoginIdInAdmin
+	 * @Description: 管理员获取医生详细信息
+	 * @param docloginid 医生登录id
+	 * @return
+	 * @return: Map<String,Object>
+	 */
 	Map<String, Object>selectInfoByDocLoginIdInAdmin(Integer docloginid);
 }

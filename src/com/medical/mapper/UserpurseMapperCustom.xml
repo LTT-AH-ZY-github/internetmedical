@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.UserpurseMapperCustom" >
+ 
+  <select id="selectByUserLoginId" resultType="map" parameterType="java.lang.Integer" >
+    select a.userpurseid,a.userpursetypeid,b.pursetypename,a.userpurseamount,a.userpursetime,a.payid,a.userpursebalance
+    
+    from userpurse as a
+    	left join pursetype  as b on a.userPurseTypeId= b.purseTypeId
+    where a.userLoginId = #{0,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

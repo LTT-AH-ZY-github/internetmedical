@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.DoctorpurseMapperCustom" >
+  
+  <select id="selectByDocLoginId" resultType="com.medical.po.Doctorpurse" parameterType="java.lang.Integer" >
+    select *
+  	from doctorpurse
+    where docLoginId = #{0,jdbcType=INTEGER}
+    order by docPurseTime desc 
+  </select>
+  <select id="selectAllInfoByDocLoginId" resultType="com.medical.po.custom.doctor.purse.Purse" parameterType="java.lang.Integer" >
+    select a.docpurseid,a.docpursetypeid,b.pursetypename,a.docpurseamount,a.docpursetime,a.payid,a.docpursebalance
+    
+    from doctorpurse as a
+    	left join pursetype  as b on a.docPurseTypeId= b.purseTypeId
+    where a.docLoginId = #{0,jdbcType=INTEGER}
+  </select>
+  
+  
+</mapper>

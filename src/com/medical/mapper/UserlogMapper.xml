@@ -8,7 +8,7 @@
     <result column="userLogLon" property="userloglon" jdbcType="VARCHAR" />
     <result column="userLogLat" property="userloglat" jdbcType="VARCHAR" />
     <result column="userLogLoc" property="userlogloc" jdbcType="VARCHAR" />
-    <result column="userLogDev" property="userlogdev" jdbcType="BIT" />
+    <result column="userLogDev" property="userlogdev" jdbcType="INTEGER" />
     <result column="userLogBVer" property="userlogbver" jdbcType="VARCHAR" />
     <result column="userLogModel" property="userlogmodel" jdbcType="VARCHAR" />
     <result column="userLogPVer" property="userlogpver" jdbcType="VARCHAR" />
@@ -115,7 +115,7 @@
       )
     values (#{userlogid,jdbcType=INTEGER}, #{userloginid,jdbcType=INTEGER}, #{userlogtime,jdbcType=TIMESTAMP}, 
       #{userloglon,jdbcType=VARCHAR}, #{userloglat,jdbcType=VARCHAR}, #{userlogloc,jdbcType=VARCHAR}, 
-      #{userlogdev,jdbcType=BIT}, #{userlogbver,jdbcType=VARCHAR}, #{userlogmodel,jdbcType=VARCHAR}, 
+      #{userlogdev,jdbcType=INTEGER}, #{userlogbver,jdbcType=VARCHAR}, #{userlogmodel,jdbcType=VARCHAR}, 
       #{userlogpver,jdbcType=VARCHAR}, #{userlogmac,jdbcType=VARCHAR}, #{userlogip,jdbcType=VARCHAR}
       )
   </insert>
@@ -179,7 +179,7 @@
         #{userlogloc,jdbcType=VARCHAR},
       </if>
       <if test="userlogdev != null" >
-        #{userlogdev,jdbcType=BIT},
+        #{userlogdev,jdbcType=INTEGER},
       </if>
       <if test="userlogbver != null" >
         #{userlogbver,jdbcType=VARCHAR},
@@ -226,7 +226,7 @@
         userLogLoc = #{record.userlogloc,jdbcType=VARCHAR},
       </if>
       <if test="record.userlogdev != null" >
-        userLogDev = #{record.userlogdev,jdbcType=BIT},
+        userLogDev = #{record.userlogdev,jdbcType=INTEGER},
       </if>
       <if test="record.userlogbver != null" >
         userLogBVer = #{record.userlogbver,jdbcType=VARCHAR},
@@ -256,7 +256,7 @@
       userLogLon = #{record.userloglon,jdbcType=VARCHAR},
       userLogLat = #{record.userloglat,jdbcType=VARCHAR},
       userLogLoc = #{record.userlogloc,jdbcType=VARCHAR},
-      userLogDev = #{record.userlogdev,jdbcType=BIT},
+      userLogDev = #{record.userlogdev,jdbcType=INTEGER},
       userLogBVer = #{record.userlogbver,jdbcType=VARCHAR},
       userLogModel = #{record.userlogmodel,jdbcType=VARCHAR},
       userLogPVer = #{record.userlogpver,jdbcType=VARCHAR},
@@ -285,7 +285,7 @@
         userLogLoc = #{userlogloc,jdbcType=VARCHAR},
       </if>
       <if test="userlogdev != null" >
-        userLogDev = #{userlogdev,jdbcType=BIT},
+        userLogDev = #{userlogdev,jdbcType=INTEGER},
       </if>
       <if test="userlogbver != null" >
         userLogBVer = #{userlogbver,jdbcType=VARCHAR},
@@ -312,7 +312,7 @@
       userLogLon = #{userloglon,jdbcType=VARCHAR},
       userLogLat = #{userloglat,jdbcType=VARCHAR},
       userLogLoc = #{userlogloc,jdbcType=VARCHAR},
-      userLogDev = #{userlogdev,jdbcType=BIT},
+      userLogDev = #{userlogdev,jdbcType=INTEGER},
       userLogBVer = #{userlogbver,jdbcType=VARCHAR},
       userLogModel = #{userlogmodel,jdbcType=VARCHAR},
       userLogPVer = #{userlogpver,jdbcType=VARCHAR},

@@ -804,6 +804,266 @@ public class UsersickExample {
             addCriterion("userSickPTime not between", value1, value2, "usersickptime");
             return (Criteria) this;
         }
+
+        public Criteria andUsersickisdeleteIsNull() {
+            addCriterion("userSickIsDelete is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsersickisdeleteIsNotNull() {
+            addCriterion("userSickIsDelete is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsersickisdeleteEqualTo(Boolean value) {
+            addCriterion("userSickIsDelete =", value, "usersickisdelete");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsersickisdeleteNotEqualTo(Boolean value) {
+            addCriterion("userSickIsDelete <>", value, "usersickisdelete");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsersickisdeleteGreaterThan(Boolean value) {
+            addCriterion("userSickIsDelete >", value, "usersickisdelete");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsersickisdeleteGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("userSickIsDelete >=", value, "usersickisdelete");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsersickisdeleteLessThan(Boolean value) {
+            addCriterion("userSickIsDelete <", value, "usersickisdelete");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsersickisdeleteLessThanOrEqualTo(Boolean value) {
+            addCriterion("userSickIsDelete <=", value, "usersickisdelete");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsersickisdeleteIn(List<Boolean> values) {
+            addCriterion("userSickIsDelete in", values, "usersickisdelete");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsersickisdeleteNotIn(List<Boolean> values) {
+            addCriterion("userSickIsDelete not in", values, "usersickisdelete");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsersickisdeleteBetween(Boolean value1, Boolean value2) {
+            addCriterion("userSickIsDelete between", value1, value2, "usersickisdelete");
+            return (Criteria) this;
+        }
+
+        public Criteria andUsersickisdeleteNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("userSickIsDelete not between", value1, value2, "usersickisdelete");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilynameIsNull() {
+            addCriterion("familyName is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilynameIsNotNull() {
+            addCriterion("familyName is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilynameEqualTo(String value) {
+            addCriterion("familyName =", value, "familyname");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilynameNotEqualTo(String value) {
+            addCriterion("familyName <>", value, "familyname");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilynameGreaterThan(String value) {
+            addCriterion("familyName >", value, "familyname");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilynameGreaterThanOrEqualTo(String value) {
+            addCriterion("familyName >=", value, "familyname");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilynameLessThan(String value) {
+            addCriterion("familyName <", value, "familyname");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilynameLessThanOrEqualTo(String value) {
+            addCriterion("familyName <=", value, "familyname");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilynameLike(String value) {
+            addCriterion("familyName like", value, "familyname");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilynameNotLike(String value) {
+            addCriterion("familyName not like", value, "familyname");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilynameIn(List<String> values) {
+            addCriterion("familyName in", values, "familyname");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilynameNotIn(List<String> values) {
+            addCriterion("familyName not in", values, "familyname");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilynameBetween(String value1, String value2) {
+            addCriterion("familyName between", value1, value2, "familyname");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilynameNotBetween(String value1, String value2) {
+            addCriterion("familyName not between", value1, value2, "familyname");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilymaleIsNull() {
+            addCriterion("familyMale is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilymaleIsNotNull() {
+            addCriterion("familyMale is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilymaleEqualTo(String value) {
+            addCriterion("familyMale =", value, "familymale");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilymaleNotEqualTo(String value) {
+            addCriterion("familyMale <>", value, "familymale");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilymaleGreaterThan(String value) {
+            addCriterion("familyMale >", value, "familymale");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilymaleGreaterThanOrEqualTo(String value) {
+            addCriterion("familyMale >=", value, "familymale");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilymaleLessThan(String value) {
+            addCriterion("familyMale <", value, "familymale");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilymaleLessThanOrEqualTo(String value) {
+            addCriterion("familyMale <=", value, "familymale");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilymaleLike(String value) {
+            addCriterion("familyMale like", value, "familymale");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilymaleNotLike(String value) {
+            addCriterion("familyMale not like", value, "familymale");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilymaleIn(List<String> values) {
+            addCriterion("familyMale in", values, "familymale");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilymaleNotIn(List<String> values) {
+            addCriterion("familyMale not in", values, "familymale");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilymaleBetween(String value1, String value2) {
+            addCriterion("familyMale between", value1, value2, "familymale");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilymaleNotBetween(String value1, String value2) {
+            addCriterion("familyMale not between", value1, value2, "familymale");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilyageIsNull() {
+            addCriterion("familyAge is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilyageIsNotNull() {
+            addCriterion("familyAge is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilyageEqualTo(Integer value) {
+            addCriterion("familyAge =", value, "familyage");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilyageNotEqualTo(Integer value) {
+            addCriterion("familyAge <>", value, "familyage");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilyageGreaterThan(Integer value) {
+            addCriterion("familyAge >", value, "familyage");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilyageGreaterThanOrEqualTo(Integer value) {
+            addCriterion("familyAge >=", value, "familyage");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilyageLessThan(Integer value) {
+            addCriterion("familyAge <", value, "familyage");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilyageLessThanOrEqualTo(Integer value) {
+            addCriterion("familyAge <=", value, "familyage");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilyageIn(List<Integer> values) {
+            addCriterion("familyAge in", values, "familyage");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilyageNotIn(List<Integer> values) {
+            addCriterion("familyAge not in", values, "familyage");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilyageBetween(Integer value1, Integer value2) {
+            addCriterion("familyAge between", value1, value2, "familyage");
+            return (Criteria) this;
+        }
+
+        public Criteria andFamilyageNotBetween(Integer value1, Integer value2) {
+            addCriterion("familyAge not between", value1, value2, "familyage");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

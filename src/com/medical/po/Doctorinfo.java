@@ -1,9 +1,12 @@
 package com.medical.po;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Doctorinfo {
     private Integer docid;
+
+    private Integer docloginid;
 
     private String docname;
 
@@ -41,8 +44,6 @@ public class Doctorinfo {
 
     private String docseconddept;
 
-    private String docdept;
-
     private String doctitlephoto;
 
     private String docworkcardphoto;
@@ -71,7 +72,11 @@ public class Doctorinfo {
 
     private String docaddresslat;
 
-    private Integer docloginid;
+    private String docdept;
+
+    private String docalipayaccount;
+
+    private BigDecimal docpursebalance;
 
     public Integer getDocid() {
         return docid;
@@ -79,6 +84,14 @@ public class Doctorinfo {
 
     public void setDocid(Integer docid) {
         this.docid = docid;
+    }
+
+    public Integer getDocloginid() {
+        return docloginid;
+    }
+
+    public void setDocloginid(Integer docloginid) {
+        this.docloginid = docloginid;
     }
 
     public String getDocname() {
@@ -225,14 +238,6 @@ public class Doctorinfo {
         this.docseconddept = docseconddept == null ? null : docseconddept.trim();
     }
 
-    public String getDocdept() {
-        return docdept;
-    }
-
-    public void setDocdept(String docdept) {
-        this.docdept = docdept == null ? null : docdept.trim();
-    }
-
     public String getDoctitlephoto() {
         return doctitlephoto;
     }
@@ -345,11 +350,27 @@ public class Doctorinfo {
         this.docaddresslat = docaddresslat == null ? null : docaddresslat.trim();
     }
 
-    public Integer getDocloginid() {
-        return docloginid;
+    public String getDocdept() {
+        return docdept;
     }
 
-    public void setDocloginid(Integer docloginid) {
-        this.docloginid = docloginid;
+    public void setDocdept(String docdept) {
+        this.docdept = docdept == null ? null : docdept.trim();
+    }
+
+    public String getDocalipayaccount() {
+        return docalipayaccount;
+    }
+
+    public void setDocalipayaccount(String docalipayaccount) {
+        this.docalipayaccount = docalipayaccount == null ? null : docalipayaccount.trim();
+    }
+
+    public BigDecimal getDocpursebalance() {
+        return docpursebalance;
+    }
+
+    public void setDocpursebalance(BigDecimal docpursebalance) {
+        this.docpursebalance = docpursebalance;
     }
 }

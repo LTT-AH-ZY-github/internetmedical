@@ -21,7 +21,7 @@
   	<if test="param2!=null">
     	 and a.preOrderType=#{1}
      </if>
-  	<!-- ORDER BY distance ASC -->
+  	ORDER BY a.preOrderType desc,a.preordertime desc
   </select>
   <!-- 获取推荐医生详情 -->
    <select id="selectAllInfoByPreOrderId" parameterType="int" resultType="map">
@@ -81,11 +81,12 @@
   <!--医生获取已抢订单  -->
   <select id="listByDocLoginId" parameterType="java.lang.Integer" resultType="map">
  	 select b.usersickid,c.userloginpix,d.familyname,d.familyage,d.familymale,
- 	 		a.preorderid,a.preordertime,b.usersickdesc,c.userhuanxinaccount,a.preorderprice
+ 	 		a.preorderid,a.preordertime,b.usersickdesc,c.userhuanxinaccount,a.preorderprice,e.username
 	 from preorder as a
 	 	left join usersick as b on a.userSickId=b.userSickId
 	 	left join userlogininfo as c on a.preOrderUserLoginId =c.userLoginId 
   	    left join familyinfo as d on b.familyId =d.familyId
+  	    left join userinfo as e on e.userLoginId =c.userLoginId 
 	 where preOrderDocLoginId = #{0}  and preOrderType=2
 	</select>
 	<!--医生获取已抢订单详情  -->

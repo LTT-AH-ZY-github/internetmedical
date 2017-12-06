@@ -445,52 +445,52 @@ public class DoctorlogExample {
             return (Criteria) this;
         }
 
-        public Criteria andDoclogdevEqualTo(Boolean value) {
+        public Criteria andDoclogdevEqualTo(Integer value) {
             addCriterion("docLogDev =", value, "doclogdev");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogdevNotEqualTo(Boolean value) {
+        public Criteria andDoclogdevNotEqualTo(Integer value) {
             addCriterion("docLogDev <>", value, "doclogdev");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogdevGreaterThan(Boolean value) {
+        public Criteria andDoclogdevGreaterThan(Integer value) {
             addCriterion("docLogDev >", value, "doclogdev");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogdevGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andDoclogdevGreaterThanOrEqualTo(Integer value) {
             addCriterion("docLogDev >=", value, "doclogdev");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogdevLessThan(Boolean value) {
+        public Criteria andDoclogdevLessThan(Integer value) {
             addCriterion("docLogDev <", value, "doclogdev");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogdevLessThanOrEqualTo(Boolean value) {
+        public Criteria andDoclogdevLessThanOrEqualTo(Integer value) {
             addCriterion("docLogDev <=", value, "doclogdev");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogdevIn(List<Boolean> values) {
+        public Criteria andDoclogdevIn(List<Integer> values) {
             addCriterion("docLogDev in", values, "doclogdev");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogdevNotIn(List<Boolean> values) {
+        public Criteria andDoclogdevNotIn(List<Integer> values) {
             addCriterion("docLogDev not in", values, "doclogdev");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogdevBetween(Boolean value1, Boolean value2) {
+        public Criteria andDoclogdevBetween(Integer value1, Integer value2) {
             addCriterion("docLogDev between", value1, value2, "doclogdev");
             return (Criteria) this;
         }
 
-        public Criteria andDoclogdevNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andDoclogdevNotBetween(Integer value1, Integer value2) {
             addCriterion("docLogDev not between", value1, value2, "doclogdev");
             return (Criteria) this;
         }

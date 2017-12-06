@@ -9,8 +9,13 @@ import org.springframework.http.HttpStatus;
 import java.io.IOException;
 import java.util.List;
 
+
 /**
- * Created by WangJiang on 2016/9/2.
+ * @ClassName:     UserManger.java
+ * @Description:   TODO(用一句话描述该文件做什么) 
+ * @author          xyh
+ * @version         V1.0  
+ * @Date           2017年11月27日 下午9:48:28 
  */
 public class UserManger {
 

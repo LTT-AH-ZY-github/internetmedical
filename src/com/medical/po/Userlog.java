@@ -15,7 +15,7 @@ public class Userlog {
 
     private String userlogloc;
 
-    private Boolean userlogdev;
+    private Integer userlogdev;
 
     private String userlogbver;
 
@@ -75,11 +75,11 @@ public class Userlog {
         this.userlogloc = userlogloc == null ? null : userlogloc.trim();
     }
 
-    public Boolean getUserlogdev() {
+    public Integer getUserlogdev() {
         return userlogdev;
     }
 
-    public void setUserlogdev(Boolean userlogdev) {
+    public void setUserlogdev(Integer userlogdev) {
         this.userlogdev = userlogdev;
     }
 

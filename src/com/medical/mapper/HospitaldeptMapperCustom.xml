@@ -4,9 +4,80 @@
 	
   <select id="selectByFatherId" resultType="com.medical.po.Hospitaldept" parameterType="int" >
     select * from hospitaldept
-    where hospDeptFatherId=#{id}
+    where	hospDeptIsCheck=1 and  hospDeptFatherId=#{id} 
   </select>
  <select id="selectAll" resultType="com.medical.po.Hospitaldept">
- 	select * from hospitaldept
+ 	select * from hospitaldept where hospDeptIsCheck=1 
  </select>
+ <select id="selectByPrimaryDeptAndSecondDeptAndCheck" resultType="com.medical.po.Hospitaldept" parameterType="String">
+ 	select * from hospitaldept 
+ 	<where>
+	 	<if test="param1!=null">
+	 		and hospDeptName=#{0} and hospDeptFatherId=0
+	 	</if>
+	 	<if test="param2!=null">
+	 		and hospDeptName=#{1} and hospDeptFatherId!=0
+	 	</if>
+	 	<if test="param3==1">
+	 		and hospDeptIsCheck=1 
+	 	</if>
+	 	<if test="param3==0">
+	 		and hospDeptIsCheck=0 
+	 	</if>
+ 	</where>
+ </select>
+ <select id="selectByCheck" resultType="map" parameterType="java.lang.Integer">
+ 	select a.hospdeptid,a.hospdeptname,a.hospdeptfatherid,b.hospdeptname as hospfatherdeptname,b.hospdeptischeck as hospfatherdeptnameischeck,a.hospdeptischeck
+ 	from hospitaldept as a
+ 		left join hospitaldept as b on a.hospdeptfatherid=b.hospdeptid
+ 	where 1=1
+ 	<if test="param1==1">
+ 		and a.hospDeptIsCheck=1
+ 	</if> 
+	<if test="param1==2">
+ 		and a.hospDeptIsCheck=0
+ 	</if> 
+ </select>
+ <select id="selectFirstDept" resultType="map" parameterType="java.lang.Integer">
+ 	select hospdeptid,hospdeptname
+ 	from hospitaldept 
+ 	where hospDeptIsCheck=1
+  </select>
+ <insert id="insertSelectiveReturnId"  useGeneratedKeys="true" keyProperty="hospdeptid" parameterType="com.medical.po.Hospitaldept" >
+    insert into hospitaldept
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hospdeptid != null" >
+        hospDeptId,
+      </if>
+      <if test="hospdeptname != null" >
+        hospDeptName,
+      </if>
+      <if test="hospdeptabs != null" >
+        hospDeptAbs,
+      </if>
+      <if test="hospdeptfatherid != null" >
+        hospDeptFatherId,
+      </if>
+      <if test="hospdeptischeck != null" >
+        hospDeptIsCheck,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hospdeptid != null" >
+        #{hospdeptid,jdbcType=INTEGER},
+      </if>
+      <if test="hospdeptname != null" >
+        #{hospdeptname,jdbcType=VARCHAR},
+      </if>
+      <if test="hospdeptabs != null" >
+        #{hospdeptabs,jdbcType=VARCHAR},
+      </if>
+      <if test="hospdeptfatherid != null" >
+        #{hospdeptfatherid,jdbcType=INTEGER},
+      </if>
+      <if test="hospdeptischeck != null" >
+        #{hospdeptischeck,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
 </mapper>

@@ -25,6 +25,14 @@ public class Usersick {
 
     private Date usersickptime;
 
+    private Boolean usersickisdelete;
+
+    private String familyname;
+
+    private String familymale;
+
+    private Integer familyage;
+
     public Integer getUsersickid() {
         return usersickid;
     }
@@ -111,5 +119,37 @@ public class Usersick {
 
     public void setUsersickptime(Date usersickptime) {
         this.usersickptime = usersickptime;
+    }
+
+    public Boolean getUsersickisdelete() {
+        return usersickisdelete;
+    }
+
+    public void setUsersickisdelete(Boolean usersickisdelete) {
+        this.usersickisdelete = usersickisdelete;
+    }
+
+    public String getFamilyname() {
+        return familyname;
+    }
+
+    public void setFamilyname(String familyname) {
+        this.familyname = familyname == null ? null : familyname.trim();
+    }
+
+    public String getFamilymale() {
+        return familymale;
+    }
+
+    public void setFamilymale(String familymale) {
+        this.familymale = familymale == null ? null : familymale.trim();
+    }
+
+    public Integer getFamilyage() {
+        return familyage;
+    }
+
+    public void setFamilyage(Integer familyage) {
+        this.familyage = familyage;
     }
 }

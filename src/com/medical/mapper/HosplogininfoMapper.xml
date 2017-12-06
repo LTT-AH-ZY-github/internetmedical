@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.medical.po.Hosplogininfo" >
     <id column="hospLoginId" property="hosploginid" jdbcType="INTEGER" />
     <result column="hospLoginName" property="hosploginname" jdbcType="VARCHAR" />
+    <result column="hospLoginSalt" property="hosploginsalt" jdbcType="VARCHAR" />
     <result column="hospLoginPwd" property="hosploginpwd" jdbcType="VARCHAR" />
     <result column="hospLoginToken" property="hosplogintoken" jdbcType="VARCHAR" />
     <result column="hospLoginTime" property="hosplogintime" jdbcType="TIMESTAMP" />
@@ -76,9 +77,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    hospLoginId, hospLoginName, hospLoginPwd, hospLoginToken, hospLoginTime, hospLoginLoc, 
-    hospLoginBVer, hospLoginMac, hospLoginIp, hospLoginType, hospLoginSubCheckTime, hospLoginPhone, 
-    hospLoginPix, hospHuanXinAccount
+    hospLoginId, hospLoginName, hospLoginSalt, hospLoginPwd, hospLoginToken, hospLoginTime, 
+    hospLoginLoc, hospLoginBVer, hospLoginMac, hospLoginIp, hospLoginType, hospLoginSubCheckTime, 
+    hospLoginPhone, hospLoginPix, hospHuanXinAccount
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HosplogininfoExample" >
     select
@@ -111,16 +112,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.medical.po.Hosplogininfo" >
-    insert into hosplogininfo (hospLoginId, hospLoginName, hospLoginPwd, 
-      hospLoginToken, hospLoginTime, hospLoginLoc, 
-      hospLoginBVer, hospLoginMac, hospLoginIp, 
-      hospLoginType, hospLoginSubCheckTime, 
+    insert into hosplogininfo (hospLoginId, hospLoginName, hospLoginSalt, 
+      hospLoginPwd, hospLoginToken, hospLoginTime, 
+      hospLoginLoc, hospLoginBVer, hospLoginMac, 
+      hospLoginIp, hospLoginType, hospLoginSubCheckTime, 
       hospLoginPhone, hospLoginPix, hospHuanXinAccount
       )
-    values (#{hosploginid,jdbcType=INTEGER}, #{hosploginname,jdbcType=VARCHAR}, #{hosploginpwd,jdbcType=VARCHAR}, 
-      #{hosplogintoken,jdbcType=VARCHAR}, #{hosplogintime,jdbcType=TIMESTAMP}, #{hosploginloc,jdbcType=VARCHAR}, 
-      #{hosploginbver,jdbcType=VARCHAR}, #{hosploginmac,jdbcType=VARCHAR}, #{hosploginip,jdbcType=VARCHAR}, 
-      #{hosplogintype,jdbcType=INTEGER}, #{hosploginsubchecktime,jdbcType=TIMESTAMP}, 
+    values (#{hosploginid,jdbcType=INTEGER}, #{hosploginname,jdbcType=VARCHAR}, #{hosploginsalt,jdbcType=VARCHAR}, 
+      #{hosploginpwd,jdbcType=VARCHAR}, #{hosplogintoken,jdbcType=VARCHAR}, #{hosplogintime,jdbcType=TIMESTAMP}, 
+      #{hosploginloc,jdbcType=VARCHAR}, #{hosploginbver,jdbcType=VARCHAR}, #{hosploginmac,jdbcType=VARCHAR}, 
+      #{hosploginip,jdbcType=VARCHAR}, #{hosplogintype,jdbcType=INTEGER}, #{hosploginsubchecktime,jdbcType=TIMESTAMP}, 
       #{hosploginphone,jdbcType=VARCHAR}, #{hosploginpix,jdbcType=VARCHAR}, #{hosphuanxinaccount,jdbcType=VARCHAR}
       )
   </insert>
@@ -132,6 +133,9 @@
       </if>
       <if test="hosploginname != null" >
         hospLoginName,
+      </if>
+      <if test="hosploginsalt != null" >
+        hospLoginSalt,
       </if>
       <if test="hosploginpwd != null" >
         hospLoginPwd,
@@ -176,6 +180,9 @@
       </if>
       <if test="hosploginname != null" >
         #{hosploginname,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginsalt != null" >
+        #{hosploginsalt,jdbcType=VARCHAR},
       </if>
       <if test="hosploginpwd != null" >
         #{hosploginpwd,jdbcType=VARCHAR},
@@ -230,6 +237,9 @@
       <if test="record.hosploginname != null" >
         hospLoginName = #{record.hosploginname,jdbcType=VARCHAR},
       </if>
+      <if test="record.hosploginsalt != null" >
+        hospLoginSalt = #{record.hosploginsalt,jdbcType=VARCHAR},
+      </if>
       <if test="record.hosploginpwd != null" >
         hospLoginPwd = #{record.hosploginpwd,jdbcType=VARCHAR},
       </if>
@@ -275,6 +285,7 @@
     update hosplogininfo
     set hospLoginId = #{record.hosploginid,jdbcType=INTEGER},
       hospLoginName = #{record.hosploginname,jdbcType=VARCHAR},
+      hospLoginSalt = #{record.hosploginsalt,jdbcType=VARCHAR},
       hospLoginPwd = #{record.hosploginpwd,jdbcType=VARCHAR},
       hospLoginToken = #{record.hosplogintoken,jdbcType=VARCHAR},
       hospLoginTime = #{record.hosplogintime,jdbcType=TIMESTAMP},
@@ -296,6 +307,9 @@
     <set >
       <if test="hosploginname != null" >
         hospLoginName = #{hosploginname,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginsalt != null" >
+        hospLoginSalt = #{hosploginsalt,jdbcType=VARCHAR},
       </if>
       <if test="hosploginpwd != null" >
         hospLoginPwd = #{hosploginpwd,jdbcType=VARCHAR},
@@ -339,6 +353,7 @@
   <update id="updateByPrimaryKey" parameterType="com.medical.po.Hosplogininfo" >
     update hosplogininfo
     set hospLoginName = #{hosploginname,jdbcType=VARCHAR},
+      hospLoginSalt = #{hosploginsalt,jdbcType=VARCHAR},
       hospLoginPwd = #{hosploginpwd,jdbcType=VARCHAR},
       hospLoginToken = #{hosplogintoken,jdbcType=VARCHAR},
       hospLoginTime = #{hosplogintime,jdbcType=TIMESTAMP},

@@ -21,109 +21,137 @@ public interface DoctorInfoService {
 	 * @return
 	 * @param
 	 * */
-	String getNormalInfo(Integer docloginid);
+	String getNormalInfo(Integer docloginid) throws Exception;
 	/**
 	 * 更新我的介绍和我的擅长
 	 * @return
 	 * @param
 	 * */
-	String updateNormalInfo(Integer docloginid, String docexpert, String docabs);
+	String updateNormalInfo(Integer docloginid, String docexpert, String docabs) throws Exception;
+	/**
+	 * 更新第二页图片
+	 * @return
+	 * @param
+	 * */
+	String updateSecondInfo(Integer docloginid, Integer type, String oldpicture, MultipartFile[] picture)throws Exception;
 	/**
 	 * 新增日程
 	 * @return
 	 * @param
 	 * */
-	int updateSecondInfo(Integer docloginid, Integer type, String oldpicture, MultipartFile[] picture);
+	String getInfo(Integer docLoginId, Integer flag) throws Exception;
 	/**
-	 * 新增日程
+	 * 更新第一页信息
 	 * @return
 	 * @param
 	 * */
-	Map<String, Object> getInfo(Integer docLoginId, Integer flag);
+	String updateFirstInfo(Doctorinfo doctor) throws Exception;
 	/**
-	 * 新增日程
+	 * 获取常用地址
 	 * @return
 	 * @param
 	 * */
-	int updateInfo(Doctorinfo doctor) throws Exception;
+	String getAddress(Integer docloginid, Integer page) throws Exception;
+
 	/**
-	 * 新增日程
+	 * 获取所有地址 无分页
 	 * @return
 	 * @param
 	 * */
-	Map<String, Object> getAddress(Integer docloginid, Integer page);
+	String getAllAddress(Integer docloginid) throws Exception;
 	/**
-	 * 新增日程
+	 * 添加常用地址
 	 * @return
 	 * @param
 	 * */
-	int addAddress(Doctoraddress doctoraddress);
+	String addAddress(Doctoraddress doctoraddress) throws Exception;
 	/**
-	 * 新增日程
+	 * 修改常用地址
 	 * @return
 	 * @param
 	 * */
-	int editAddress(Doctoraddress doctoraddress);
+	String editAddress(Doctoraddress doctoraddress) throws Exception;
 	/**
-	 * 新增日程
+	 * 删除常用地址
 	 * @return
 	 * @param
 	 * */
-	int delAddress(Integer docloginid, Integer docaddressid);
+	String delAddress(Integer docloginid, Integer docaddressid) throws Exception;
 	/**
-	 * 新增日程
+	 * 设置接诊地址
 	 * @return
 	 * @param
 	 * */
-	int updateAddress(Integer docloginid, Integer docaddressid);
+	String updateAddress(Integer docloginid, Integer docaddressid) throws Exception;
 	/**
 	 * 新增日程
 	 * @return
 	 * @param
 	 * */
 	String addCalendar(Integer docloginid, Date doccalendarday, String doccalendartime, String doccalendaraffair,
-			Integer doccalendaradressid);
+			Integer doccalendaradressid) throws Exception;
 	/**
 	 * 修改日程
 	 * @return
 	 * @param
 	 * */
 	String editCalendar(Integer doccalendarid, Integer docloginid, Date doccalendarday, String doccalendartime,
-			String doccalendaraffair, Integer doccalendaradressid);
+			String doccalendaraffair, Integer doccalendaradressid) throws Exception;
 	/**
 	 * 删除日程
 	 * @return
 	 * @param
 	 * */
-	int deleteCalendar(Integer doccalendarid, Integer docloginid);
+	String deleteCalendar(Integer doccalendarid, Integer docloginid) throws Exception;
 	/**
 	 * 获取日程
 	 * @return
 	 * @param
 	 * */
-	String getCalendar(Integer docloginid, Integer page);
+	String getCalendar(Integer docloginid, Integer page) throws Exception;
 	/**
 	 * 根据月份获取日程
 	 * @return
 	 * @param
 	 * */
-	String getCalendarByMonth(Integer docloginid, String year, String month);
+	String getCalendarByMonth(Integer docloginid, String year, String month) throws Exception;
 
 	/**
-	 * 新增日程
+	 * 获取部门
 	 * @return
 	 * @param
 	 * */
 	Map<String, Object> getDept() throws Exception;
+	String setLocation(String time) throws Exception;
+	/**
+	 * @Title: updateChannelId
+	 * @Description: TODO
+	 * @param docloginid
+	 * @param channelid
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String updateChannelId(Integer docloginid, String channelid) throws Exception;
+	/**
+	 * @Title: updateInfoToReview
+	 * @Description: TODO
+	 * @param docloginid
+	 * @return
+	 * @return: String
+	 */
+	String updateInfoToReview(Integer docloginid) throws Exception;
+	/**
+	 * @Title: updateInfoToCancelReview
+	 * @Description: TODO
+	 * @param docloginid
+	 * @return
+	 * @return: String
+	 */
+	String updateInfoToCancelReview(Integer docloginid)throws Exception;
 
 	
 
-	/**
-	 * 获取所有地址
-	 * @return
-	 * @param
-	 * */
-	String getAllAddress(Integer docloginid);
 
 	
 

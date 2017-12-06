@@ -95,6 +95,27 @@
       <if test="userorderfinishtime != null" >
         userOrderFinishTime,
       </if>
+      <if test="usersickdesc != null" >
+        userSickDesc,
+      </if>
+      <if test="usersickpic != null" >
+        userSickPic,
+      </if>
+      <if test="usersickprimarydept != null" >
+        userSickPrimaryDept,
+      </if>
+      <if test="usersickseconddept != null" >
+        userSickSecondDept,
+      </if>
+      <if test="familyname != null" >
+        familyName,
+      </if>
+      <if test="familymale != null" >
+        familyMale,
+      </if>
+      <if test="familyage != null" >
+        familyAge,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userorderid != null" >
@@ -187,6 +208,27 @@
       <if test="userorderfinishtime != null" >
         #{userorderfinishtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="usersickdesc != null" >
+        #{usersickdesc,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickpic != null" >
+        #{usersickpic,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickprimarydept != null" >
+        #{usersickprimarydept,jdbcType=VARCHAR},
+      </if>
+      <if test="usersickseconddept != null" >
+        #{usersickseconddept,jdbcType=VARCHAR},
+      </if>
+      <if test="familyname != null" >
+        #{familyname,jdbcType=VARCHAR},
+      </if>
+      <if test="familymale != null" >
+        #{familymale,jdbcType=VARCHAR},
+      </if>
+      <if test="familyage != null" >
+        #{familyage,jdbcType=INTEGER},
+      </if>
     </trim>
   </insert>
  
@@ -215,7 +257,10 @@
 	 <if test="param2==3">
 	 	and a.userOrderStateId = 9 
 	 </if>
-	  <if test="param2==4">
+	 <if test="param2==4">
+	 	and a.userOrderStateId=1
+	 </if>
+	 <if test="param2==5">
 	 	and a.userOrderStateId <![CDATA[ > ]]>9
 	 </if>
 	 ORDER BY a.userorderptime DESC
@@ -274,18 +319,19 @@
 	select a.userorderid,a.userorderptime,
 			b.usersickdesc,b.usersickid,
 			c.familyname,c.familymale,c.familyage,
-			d.userloginpix,d.userhuanxinaccount
+			d.userloginpix,d.userhuanxinaccount,e.username
 	from  userorder  as a 
 	  		left join usersick as b on a.userSickId = b.userSickId
 	  		left join familyinfo as c on c.familyId = b.familyId
 	  		left join userlogininfo as d on a.userLoginId=d.userLoginId 
+	  		left join userinfo as e on a.userLoginId=e.userLoginId 
 	 where a.userOrderDocLoginId=#{0}  and a.userOrderStateId=1
 	 ORDER BY a.userOrderPTime DESC
   </select>
   <!--医生查找不同状态的订单-->
    <select id="listByDocLoginIdAndState" parameterType="int" resultType="map">
 	select  a.userorderid,a.userorderappointment,a.userorderstateid,e.userorderstatename,f.docaddresslocation,a.userorderprice,
-			d.userloginpix,d.userhuanxinaccount,
+			d.userloginpix,d.userhuanxinaccount,g.username,
 			b.usersickdesc,
 			c.familyname,c.familymale,c.familyage
 		from userorder  as a 
@@ -294,6 +340,7 @@
 	  		left join userlogininfo as d on a.userLoginId=d.userLoginId 
 	  		left join userorderstate as e on e.userorderstateid= a.userorderstateid
 	  		left join doctorinfo as f on a.userOrderDocLoginId= f.docLoginId
+	  		left join userinfo as g on a.userLoginId=g.userLoginId 
 	  where a.userOrderDocLoginId=#{0}
 	  <if test="param2==1">
 	  	and a.userOrderStateId=2
@@ -307,13 +354,14 @@
    <select id="listHistortOrderByDocLoginId" parameterType="int" resultType="map">
 	select a.userorderid,a.userorderetime,a.userorderstateid,e.userorderstatename,
 			b.usersickdesc,
-			c.familyname,c.familymale,c.familyage,
+			c.familyname,c.familymale,c.familyage,g.username,
 			d.userloginpix,d.userhuanxinaccount
 	from  userorder  as a 
 	  		left join usersick as b on a.userSickId = b.userSickId
 	  		left join familyinfo as c on c.familyId = b.familyId
 	  		left join userlogininfo as d on a.userLoginId=d.userLoginId 
 	  		left join userorderstate as e on e.userorderstateid= a.userorderstateid
+	  		left join userinfo as g on a.userLoginId=g.userLoginId 
 	 where a.userOrderDocLoginId=#{0}  and a.userOrderStateId<![CDATA[>]]>8 
 	 ORDER BY a.userOrderETime DESC
   </select>
@@ -327,7 +375,7 @@
 	 		a.userorderepricetype,m.pricetypename as userorderepricetypename,a.userordereprice,
 	 		a.userorderptime,a.userorderrtime,a.userorderetime,
 	 		f.docaddresslocation,f.docaddressprovince,f.docaddresscity,f.docaddressarea,f.docaddressother,f.docaddresslon,f.docaddresslat,
-			b.usersickdesc,b.usersickpic,b.usersickprimarydept,b.usersickseconddept
+			b.usersickdesc,b.usersickpic,b.usersickprimarydept,b.usersickseconddept,n.username
 		from userorder  as a 
 	  	    left join usersick as b on a.userSickId = b.userSickId
 	  		left join familyinfo as c on b.familyId = c.familyId
@@ -337,6 +385,7 @@
 	  		left join pricetype as g on a.userOrderTPriceType = g.priceTypeId
 	  		left join pricetype as l on a.userOrderAPriceType = l.priceTypeId
 	  		left join pricetype as m on a.userOrderEPriceType = m.priceTypeId
+	  		left join userinfo as n on a.userLoginId=n.userLoginId 
 	  where a.userOrderId=#{1} and a.userOrderDocLoginId=#{0}
  </select>
  
@@ -412,12 +461,14 @@
 		  		a.userorderdeposit,a.userordertotaldeposit,a.userorderhprice,a.userorderstateid,c.userorderstatename,
 		  		a.userorderdocloginid,b.docname,
 		  		a.userorderhospprimarydept,a.userorderhospseconddept,
-		  		d.usersickpic,e.familyname,e.familymale,e.familyage
+		  		d.usersickpic,e.familyname,e.familymale,e.familyage,
+		  		a.userorderactualhospitalizationid,f.actualhospitalizationstatename
 		   from userorder as a
 		  		left join doctorinfo as b on a.userOrderDocLoginId=b.docLoginId 
 		  		left join userorderstate as c on a.userOrderStateId = c.userOrderStateId
 		  		left join usersick as d on a.userSickId = d.userSickId
 	  			left join familyinfo as e on e.familyId = d.familyId
+	  			left join actualhospitalizationstate as f on a.userorderactualhospitalizationid=f.ActualHospitalizationStateId
 		  where  a.userOrderHospId = #{0} 
 		  <if test="param2==1">
 		  	and a.userOrderStateId=5 

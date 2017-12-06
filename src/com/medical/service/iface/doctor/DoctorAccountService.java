@@ -34,13 +34,6 @@ public interface DoctorAccountService {
 	String updateDoctorToNormalLogin(Doctorlogininfo doctor) throws Exception;
 	
 	/**
-	 *  更新百度云ChannelId
-	 * @Title: updateChannelId 
-	 * @Description: TODO
-	 * @return: String
-	 */
-	String updateChannelId(Integer docloginid, String channelid) throws Exception;
-	/**
 	 *  注册环信
 	 * @Title: addHuanXinAccout 
 	 * @Description: TODO
@@ -66,14 +59,7 @@ public interface DoctorAccountService {
 	 */
 	String updateAccountToExit(Integer docloginid) throws Exception;
 	
-	/**
-	 *  提交审核
-	 * @Title:
-	 * @Description: TODO
-	 * @return: 
-	 * 
-	 */
-	String updateInfoToReview(Integer docloginid) throws Exception;
+	
 	/**
 	 *  修改环信密码
 	 * @Title:
@@ -82,6 +68,15 @@ public interface DoctorAccountService {
 	 * 
 	 */
 	String editHuanXinPassword(Integer docloginid, String password) throws Exception;
+
+	/**
+	 * @Title: findAccountExit
+	 * @Description: TODO
+	 * @param phone
+	 * @return
+	 * @return: String
+	 */
+	String findAccountExit(String phone) throws Exception;
 
 	
 

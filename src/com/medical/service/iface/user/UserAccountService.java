@@ -53,5 +53,14 @@ public interface UserAccountService {
 	 * @param
 	 * */
 	String editHuanXinPassword(Integer userloginid, String password) throws Exception;
+
+	/**
+	 * @Title: findAccountExit
+	 * @Description: TODO
+	 * @param phone
+	 * @return
+	 * @return: String
+	 */
+	String findAccountExit(String phone);
 	
 }

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.HosppurseMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Hosppurse" >
+    <id column="hospPurseId" property="hosppurseid" jdbcType="INTEGER" />
+    <result column="hospPurseTypeId" property="hosppursetypeid" jdbcType="INTEGER" />
+    <result column="hospPurseAmount" property="hosppurseamount" jdbcType="DECIMAL" />
+    <result column="hospPurseTime" property="hosppursetime" jdbcType="TIMESTAMP" />
+    <result column="hospPurseRemark" property="hosppurseremark" jdbcType="VARCHAR" />
+    <result column="payId" property="payid" jdbcType="INTEGER" />
+    <result column="hospPurseBalance" property="hosppursebalance" jdbcType="DECIMAL" />
+    <result column="hospLoginId" property="hosploginid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    hospPurseId, hospPurseTypeId, hospPurseAmount, hospPurseTime, hospPurseRemark, payId, 
+    hospPurseBalance, hospLoginId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HosppurseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hosppurse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from hosppurse
+    where hospPurseId = #{hosppurseid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from hosppurse
+    where hospPurseId = #{hosppurseid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.HosppurseExample" >
+    delete from hosppurse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Hosppurse" >
+    insert into hosppurse (hospPurseId, hospPurseTypeId, hospPurseAmount, 
+      hospPurseTime, hospPurseRemark, payId, 
+      hospPurseBalance, hospLoginId)
+    values (#{hosppurseid,jdbcType=INTEGER}, #{hosppursetypeid,jdbcType=INTEGER}, #{hosppurseamount,jdbcType=DECIMAL}, 
+      #{hosppursetime,jdbcType=TIMESTAMP}, #{hosppurseremark,jdbcType=VARCHAR}, #{payid,jdbcType=INTEGER}, 
+      #{hosppursebalance,jdbcType=DECIMAL}, #{hosploginid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Hosppurse" >
+    insert into hosppurse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hosppurseid != null" >
+        hospPurseId,
+      </if>
+      <if test="hosppursetypeid != null" >
+        hospPurseTypeId,
+      </if>
+      <if test="hosppurseamount != null" >
+        hospPurseAmount,
+      </if>
+      <if test="hosppursetime != null" >
+        hospPurseTime,
+      </if>
+      <if test="hosppurseremark != null" >
+        hospPurseRemark,
+      </if>
+      <if test="payid != null" >
+        payId,
+      </if>
+      <if test="hosppursebalance != null" >
+        hospPurseBalance,
+      </if>
+      <if test="hosploginid != null" >
+        hospLoginId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hosppurseid != null" >
+        #{hosppurseid,jdbcType=INTEGER},
+      </if>
+      <if test="hosppursetypeid != null" >
+        #{hosppursetypeid,jdbcType=INTEGER},
+      </if>
+      <if test="hosppurseamount != null" >
+        #{hosppurseamount,jdbcType=DECIMAL},
+      </if>
+      <if test="hosppursetime != null" >
+        #{hosppursetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hosppurseremark != null" >
+        #{hosppurseremark,jdbcType=VARCHAR},
+      </if>
+      <if test="payid != null" >
+        #{payid,jdbcType=INTEGER},
+      </if>
+      <if test="hosppursebalance != null" >
+        #{hosppursebalance,jdbcType=DECIMAL},
+      </if>
+      <if test="hosploginid != null" >
+        #{hosploginid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.HosppurseExample" resultType="java.lang.Integer" >
+    select count(*) from hosppurse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update hosppurse
+    <set >
+      <if test="record.hosppurseid != null" >
+        hospPurseId = #{record.hosppurseid,jdbcType=INTEGER},
+      </if>
+      <if test="record.hosppursetypeid != null" >
+        hospPurseTypeId = #{record.hosppursetypeid,jdbcType=INTEGER},
+      </if>
+      <if test="record.hosppurseamount != null" >
+        hospPurseAmount = #{record.hosppurseamount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.hosppursetime != null" >
+        hospPurseTime = #{record.hosppursetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.hosppurseremark != null" >
+        hospPurseRemark = #{record.hosppurseremark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payid != null" >
+        payId = #{record.payid,jdbcType=INTEGER},
+      </if>
+      <if test="record.hosppursebalance != null" >
+        hospPurseBalance = #{record.hosppursebalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.hosploginid != null" >
+        hospLoginId = #{record.hosploginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update hosppurse
+    set hospPurseId = #{record.hosppurseid,jdbcType=INTEGER},
+      hospPurseTypeId = #{record.hosppursetypeid,jdbcType=INTEGER},
+      hospPurseAmount = #{record.hosppurseamount,jdbcType=DECIMAL},
+      hospPurseTime = #{record.hosppursetime,jdbcType=TIMESTAMP},
+      hospPurseRemark = #{record.hosppurseremark,jdbcType=VARCHAR},
+      payId = #{record.payid,jdbcType=INTEGER},
+      hospPurseBalance = #{record.hosppursebalance,jdbcType=DECIMAL},
+      hospLoginId = #{record.hosploginid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Hosppurse" >
+    update hosppurse
+    <set >
+      <if test="hosppursetypeid != null" >
+        hospPurseTypeId = #{hosppursetypeid,jdbcType=INTEGER},
+      </if>
+      <if test="hosppurseamount != null" >
+        hospPurseAmount = #{hosppurseamount,jdbcType=DECIMAL},
+      </if>
+      <if test="hosppursetime != null" >
+        hospPurseTime = #{hosppursetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hosppurseremark != null" >
+        hospPurseRemark = #{hosppurseremark,jdbcType=VARCHAR},
+      </if>
+      <if test="payid != null" >
+        payId = #{payid,jdbcType=INTEGER},
+      </if>
+      <if test="hosppursebalance != null" >
+        hospPurseBalance = #{hosppursebalance,jdbcType=DECIMAL},
+      </if>
+      <if test="hosploginid != null" >
+        hospLoginId = #{hosploginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where hospPurseId = #{hosppurseid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Hosppurse" >
+    update hosppurse
+    set hospPurseTypeId = #{hosppursetypeid,jdbcType=INTEGER},
+      hospPurseAmount = #{hosppurseamount,jdbcType=DECIMAL},
+      hospPurseTime = #{hosppursetime,jdbcType=TIMESTAMP},
+      hospPurseRemark = #{hosppurseremark,jdbcType=VARCHAR},
+      payId = #{payid,jdbcType=INTEGER},
+      hospPurseBalance = #{hosppursebalance,jdbcType=DECIMAL},
+      hospLoginId = #{hosploginid,jdbcType=INTEGER}
+    where hospPurseId = #{hosppurseid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -25,6 +25,8 @@
     <result column="userCollectDoc" property="usercollectdoc" jdbcType="VARCHAR" />
     <result column="userRelation" property="userrelation" jdbcType="VARCHAR" />
     <result column="userLoginId" property="userloginid" jdbcType="INTEGER" />
+    <result column="userAlipayAccount" property="useralipayaccount" jdbcType="VARCHAR" />
+    <result column="userPurseBalance" property="userpursebalance" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -88,7 +90,7 @@
     userId, userName, userMale, userAge, userCardNum, userCardPhoto, userBirthDate, userAdrProvince, 
     userAdrCity, userAdrArea, userAdrOther, userMarry, userNation, userCareer, userAllergy, 
     userDisease, userOperate, userDegree, userPhone, userEmail, userCollectDoc, userRelation, 
-    userLoginId
+    userLoginId, userAlipayAccount, userPurseBalance
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.UserinfoExample" >
     select
@@ -128,7 +130,8 @@
       userNation, userCareer, userAllergy, 
       userDisease, userOperate, userDegree, 
       userPhone, userEmail, userCollectDoc, 
-      userRelation, userLoginId)
+      userRelation, userLoginId, userAlipayAccount, 
+      userPurseBalance)
     values (#{userid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{usermale,jdbcType=CHAR}, 
       #{userage,jdbcType=INTEGER}, #{usercardnum,jdbcType=CHAR}, #{usercardphoto,jdbcType=VARCHAR}, 
       #{userbirthdate,jdbcType=DATE}, #{useradrprovince,jdbcType=VARCHAR}, #{useradrcity,jdbcType=VARCHAR}, 
@@ -136,7 +139,8 @@
       #{usernation,jdbcType=CHAR}, #{usercareer,jdbcType=CHAR}, #{userallergy,jdbcType=VARCHAR}, 
       #{userdisease,jdbcType=VARCHAR}, #{useroperate,jdbcType=VARCHAR}, #{userdegree,jdbcType=CHAR}, 
       #{userphone,jdbcType=CHAR}, #{useremail,jdbcType=CHAR}, #{usercollectdoc,jdbcType=VARCHAR}, 
-      #{userrelation,jdbcType=VARCHAR}, #{userloginid,jdbcType=INTEGER})
+      #{userrelation,jdbcType=VARCHAR}, #{userloginid,jdbcType=INTEGER}, #{useralipayaccount,jdbcType=VARCHAR}, 
+      #{userpursebalance,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Userinfo" >
     insert into userinfo
@@ -210,6 +214,12 @@
       <if test="userloginid != null" >
         userLoginId,
       </if>
+      <if test="useralipayaccount != null" >
+        userAlipayAccount,
+      </if>
+      <if test="userpursebalance != null" >
+        userPurseBalance,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userid != null" >
@@ -280,6 +290,12 @@
       </if>
       <if test="userloginid != null" >
         #{userloginid,jdbcType=INTEGER},
+      </if>
+      <if test="useralipayaccount != null" >
+        #{useralipayaccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userpursebalance != null" >
+        #{userpursebalance,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -361,6 +377,12 @@
       <if test="record.userloginid != null" >
         userLoginId = #{record.userloginid,jdbcType=INTEGER},
       </if>
+      <if test="record.useralipayaccount != null" >
+        userAlipayAccount = #{record.useralipayaccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userpursebalance != null" >
+        userPurseBalance = #{record.userpursebalance,jdbcType=DECIMAL},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -390,7 +412,9 @@
       userEmail = #{record.useremail,jdbcType=CHAR},
       userCollectDoc = #{record.usercollectdoc,jdbcType=VARCHAR},
       userRelation = #{record.userrelation,jdbcType=VARCHAR},
-      userLoginId = #{record.userloginid,jdbcType=INTEGER}
+      userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      userAlipayAccount = #{record.useralipayaccount,jdbcType=VARCHAR},
+      userPurseBalance = #{record.userpursebalance,jdbcType=DECIMAL}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -464,6 +488,12 @@
       <if test="userloginid != null" >
         userLoginId = #{userloginid,jdbcType=INTEGER},
       </if>
+      <if test="useralipayaccount != null" >
+        userAlipayAccount = #{useralipayaccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userpursebalance != null" >
+        userPurseBalance = #{userpursebalance,jdbcType=DECIMAL},
+      </if>
     </set>
     where userId = #{userid,jdbcType=INTEGER}
   </update>
@@ -490,7 +520,9 @@
       userEmail = #{useremail,jdbcType=CHAR},
       userCollectDoc = #{usercollectdoc,jdbcType=VARCHAR},
       userRelation = #{userrelation,jdbcType=VARCHAR},
-      userLoginId = #{userloginid,jdbcType=INTEGER}
+      userLoginId = #{userloginid,jdbcType=INTEGER},
+      userAlipayAccount = #{useralipayaccount,jdbcType=VARCHAR},
+      userPurseBalance = #{userpursebalance,jdbcType=DECIMAL}
     where userId = #{userid,jdbcType=INTEGER}
   </update>
 </mapper>

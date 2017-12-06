@@ -7,6 +7,8 @@ public class Hosplogininfo {
 
     private String hosploginname;
 
+    private String hosploginsalt;
+
     private String hosploginpwd;
 
     private String hosplogintoken;
@@ -45,6 +47,14 @@ public class Hosplogininfo {
 
     public void setHosploginname(String hosploginname) {
         this.hosploginname = hosploginname == null ? null : hosploginname.trim();
+    }
+
+    public String getHosploginsalt() {
+        return hosploginsalt;
+    }
+
+    public void setHosploginsalt(String hosploginsalt) {
+        this.hosploginsalt = hosploginsalt == null ? null : hosploginsalt.trim();
     }
 
     public String getHosploginpwd() {

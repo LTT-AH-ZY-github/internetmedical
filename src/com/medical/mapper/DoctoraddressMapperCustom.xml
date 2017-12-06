@@ -2,12 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.medical.mapper.DoctoraddressMapperCustom" >
   
+  <!--医生端根据医生登录id获取其所有地址  -->
   <select id="selectByDocloginid" resultType="com.medical.po.Doctoraddress" parameterType="java.lang.Integer" >
     select *
  	from doctoraddress
     where docLoginId = #{0,jdbcType=INTEGER}
   </select>
-   <update id="updateCheckedByDocLoginId" parameterType="java.lang.Integer" >
+  
+  <!--根据医生登录id及地址是否为医院所在地址查询  -->
+  <select id="selectByDocloginidAndType" resultType="com.medical.po.Doctoraddress" parameterType="java.lang.Integer" >
+    select *
+ 	from doctoraddress
+    where docLoginId = #{0,jdbcType=INTEGER} and docAddressType=#{1}
+  </select>
+  
+  <!--根据医生登录id更新所有地址的选中状态  -->
+  <update id="updateCheckedByDocLoginId" parameterType="java.lang.Integer" >
     update doctoraddress
     set 
       docAddressChecked = #{1,jdbcType=BIT}

@@ -1,5 +1,7 @@
 package com.medical.po;
 
+import java.math.BigDecimal;
+
 public class Hospinfo {
     private Integer hospid;
 
@@ -28,6 +30,22 @@ public class Hospinfo {
     private String hosplegalcer;
 
     private Integer hosploginid;
+
+    private String hospadrprovince;
+
+    private String hospadrcity;
+
+    private String hospadrarea;
+
+    private String hospadrother;
+
+    private String hospadrlon;
+
+    private String hospadrlat;
+
+    private String hospalipayaccount;
+
+    private BigDecimal hosppursebalance;
 
     public Integer getHospid() {
         return hospid;
@@ -139,5 +157,69 @@ public class Hospinfo {
 
     public void setHosploginid(Integer hosploginid) {
         this.hosploginid = hosploginid;
+    }
+
+    public String getHospadrprovince() {
+        return hospadrprovince;
+    }
+
+    public void setHospadrprovince(String hospadrprovince) {
+        this.hospadrprovince = hospadrprovince == null ? null : hospadrprovince.trim();
+    }
+
+    public String getHospadrcity() {
+        return hospadrcity;
+    }
+
+    public void setHospadrcity(String hospadrcity) {
+        this.hospadrcity = hospadrcity == null ? null : hospadrcity.trim();
+    }
+
+    public String getHospadrarea() {
+        return hospadrarea;
+    }
+
+    public void setHospadrarea(String hospadrarea) {
+        this.hospadrarea = hospadrarea == null ? null : hospadrarea.trim();
+    }
+
+    public String getHospadrother() {
+        return hospadrother;
+    }
+
+    public void setHospadrother(String hospadrother) {
+        this.hospadrother = hospadrother == null ? null : hospadrother.trim();
+    }
+
+    public String getHospadrlon() {
+        return hospadrlon;
+    }
+
+    public void setHospadrlon(String hospadrlon) {
+        this.hospadrlon = hospadrlon == null ? null : hospadrlon.trim();
+    }
+
+    public String getHospadrlat() {
+        return hospadrlat;
+    }
+
+    public void setHospadrlat(String hospadrlat) {
+        this.hospadrlat = hospadrlat == null ? null : hospadrlat.trim();
+    }
+
+    public String getHospalipayaccount() {
+        return hospalipayaccount;
+    }
+
+    public void setHospalipayaccount(String hospalipayaccount) {
+        this.hospalipayaccount = hospalipayaccount == null ? null : hospalipayaccount.trim();
+    }
+
+    public BigDecimal getHosppursebalance() {
+        return hosppursebalance;
+    }
+
+    public void setHosppursebalance(BigDecimal hosppursebalance) {
+        this.hosppursebalance = hosppursebalance;
     }
 }

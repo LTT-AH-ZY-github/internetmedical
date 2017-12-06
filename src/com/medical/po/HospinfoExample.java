@@ -1,5 +1,6 @@
 package com.medical.po;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -1061,6 +1062,556 @@ public class HospinfoExample {
 
         public Criteria andHosploginidNotBetween(Integer value1, Integer value2) {
             addCriterion("hospLoginId not between", value1, value2, "hosploginid");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrprovinceIsNull() {
+            addCriterion("hospAdrProvince is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrprovinceIsNotNull() {
+            addCriterion("hospAdrProvince is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrprovinceEqualTo(String value) {
+            addCriterion("hospAdrProvince =", value, "hospadrprovince");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrprovinceNotEqualTo(String value) {
+            addCriterion("hospAdrProvince <>", value, "hospadrprovince");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrprovinceGreaterThan(String value) {
+            addCriterion("hospAdrProvince >", value, "hospadrprovince");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrprovinceGreaterThanOrEqualTo(String value) {
+            addCriterion("hospAdrProvince >=", value, "hospadrprovince");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrprovinceLessThan(String value) {
+            addCriterion("hospAdrProvince <", value, "hospadrprovince");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrprovinceLessThanOrEqualTo(String value) {
+            addCriterion("hospAdrProvince <=", value, "hospadrprovince");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrprovinceLike(String value) {
+            addCriterion("hospAdrProvince like", value, "hospadrprovince");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrprovinceNotLike(String value) {
+            addCriterion("hospAdrProvince not like", value, "hospadrprovince");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrprovinceIn(List<String> values) {
+            addCriterion("hospAdrProvince in", values, "hospadrprovince");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrprovinceNotIn(List<String> values) {
+            addCriterion("hospAdrProvince not in", values, "hospadrprovince");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrprovinceBetween(String value1, String value2) {
+            addCriterion("hospAdrProvince between", value1, value2, "hospadrprovince");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrprovinceNotBetween(String value1, String value2) {
+            addCriterion("hospAdrProvince not between", value1, value2, "hospadrprovince");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrcityIsNull() {
+            addCriterion("hospAdrCity is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrcityIsNotNull() {
+            addCriterion("hospAdrCity is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrcityEqualTo(String value) {
+            addCriterion("hospAdrCity =", value, "hospadrcity");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrcityNotEqualTo(String value) {
+            addCriterion("hospAdrCity <>", value, "hospadrcity");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrcityGreaterThan(String value) {
+            addCriterion("hospAdrCity >", value, "hospadrcity");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrcityGreaterThanOrEqualTo(String value) {
+            addCriterion("hospAdrCity >=", value, "hospadrcity");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrcityLessThan(String value) {
+            addCriterion("hospAdrCity <", value, "hospadrcity");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrcityLessThanOrEqualTo(String value) {
+            addCriterion("hospAdrCity <=", value, "hospadrcity");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrcityLike(String value) {
+            addCriterion("hospAdrCity like", value, "hospadrcity");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrcityNotLike(String value) {
+            addCriterion("hospAdrCity not like", value, "hospadrcity");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrcityIn(List<String> values) {
+            addCriterion("hospAdrCity in", values, "hospadrcity");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrcityNotIn(List<String> values) {
+            addCriterion("hospAdrCity not in", values, "hospadrcity");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrcityBetween(String value1, String value2) {
+            addCriterion("hospAdrCity between", value1, value2, "hospadrcity");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrcityNotBetween(String value1, String value2) {
+            addCriterion("hospAdrCity not between", value1, value2, "hospadrcity");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrareaIsNull() {
+            addCriterion("hospAdrArea is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrareaIsNotNull() {
+            addCriterion("hospAdrArea is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrareaEqualTo(String value) {
+            addCriterion("hospAdrArea =", value, "hospadrarea");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrareaNotEqualTo(String value) {
+            addCriterion("hospAdrArea <>", value, "hospadrarea");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrareaGreaterThan(String value) {
+            addCriterion("hospAdrArea >", value, "hospadrarea");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrareaGreaterThanOrEqualTo(String value) {
+            addCriterion("hospAdrArea >=", value, "hospadrarea");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrareaLessThan(String value) {
+            addCriterion("hospAdrArea <", value, "hospadrarea");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrareaLessThanOrEqualTo(String value) {
+            addCriterion("hospAdrArea <=", value, "hospadrarea");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrareaLike(String value) {
+            addCriterion("hospAdrArea like", value, "hospadrarea");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrareaNotLike(String value) {
+            addCriterion("hospAdrArea not like", value, "hospadrarea");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrareaIn(List<String> values) {
+            addCriterion("hospAdrArea in", values, "hospadrarea");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrareaNotIn(List<String> values) {
+            addCriterion("hospAdrArea not in", values, "hospadrarea");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrareaBetween(String value1, String value2) {
+            addCriterion("hospAdrArea between", value1, value2, "hospadrarea");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrareaNotBetween(String value1, String value2) {
+            addCriterion("hospAdrArea not between", value1, value2, "hospadrarea");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrotherIsNull() {
+            addCriterion("hospAdrOther is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrotherIsNotNull() {
+            addCriterion("hospAdrOther is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrotherEqualTo(String value) {
+            addCriterion("hospAdrOther =", value, "hospadrother");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrotherNotEqualTo(String value) {
+            addCriterion("hospAdrOther <>", value, "hospadrother");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrotherGreaterThan(String value) {
+            addCriterion("hospAdrOther >", value, "hospadrother");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrotherGreaterThanOrEqualTo(String value) {
+            addCriterion("hospAdrOther >=", value, "hospadrother");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrotherLessThan(String value) {
+            addCriterion("hospAdrOther <", value, "hospadrother");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrotherLessThanOrEqualTo(String value) {
+            addCriterion("hospAdrOther <=", value, "hospadrother");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrotherLike(String value) {
+            addCriterion("hospAdrOther like", value, "hospadrother");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrotherNotLike(String value) {
+            addCriterion("hospAdrOther not like", value, "hospadrother");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrotherIn(List<String> values) {
+            addCriterion("hospAdrOther in", values, "hospadrother");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrotherNotIn(List<String> values) {
+            addCriterion("hospAdrOther not in", values, "hospadrother");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrotherBetween(String value1, String value2) {
+            addCriterion("hospAdrOther between", value1, value2, "hospadrother");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrotherNotBetween(String value1, String value2) {
+            addCriterion("hospAdrOther not between", value1, value2, "hospadrother");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlonIsNull() {
+            addCriterion("hospAdrLon is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlonIsNotNull() {
+            addCriterion("hospAdrLon is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlonEqualTo(String value) {
+            addCriterion("hospAdrLon =", value, "hospadrlon");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlonNotEqualTo(String value) {
+            addCriterion("hospAdrLon <>", value, "hospadrlon");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlonGreaterThan(String value) {
+            addCriterion("hospAdrLon >", value, "hospadrlon");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlonGreaterThanOrEqualTo(String value) {
+            addCriterion("hospAdrLon >=", value, "hospadrlon");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlonLessThan(String value) {
+            addCriterion("hospAdrLon <", value, "hospadrlon");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlonLessThanOrEqualTo(String value) {
+            addCriterion("hospAdrLon <=", value, "hospadrlon");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlonLike(String value) {
+            addCriterion("hospAdrLon like", value, "hospadrlon");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlonNotLike(String value) {
+            addCriterion("hospAdrLon not like", value, "hospadrlon");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlonIn(List<String> values) {
+            addCriterion("hospAdrLon in", values, "hospadrlon");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlonNotIn(List<String> values) {
+            addCriterion("hospAdrLon not in", values, "hospadrlon");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlonBetween(String value1, String value2) {
+            addCriterion("hospAdrLon between", value1, value2, "hospadrlon");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlonNotBetween(String value1, String value2) {
+            addCriterion("hospAdrLon not between", value1, value2, "hospadrlon");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlatIsNull() {
+            addCriterion("hospAdrLat is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlatIsNotNull() {
+            addCriterion("hospAdrLat is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlatEqualTo(String value) {
+            addCriterion("hospAdrLat =", value, "hospadrlat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlatNotEqualTo(String value) {
+            addCriterion("hospAdrLat <>", value, "hospadrlat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlatGreaterThan(String value) {
+            addCriterion("hospAdrLat >", value, "hospadrlat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlatGreaterThanOrEqualTo(String value) {
+            addCriterion("hospAdrLat >=", value, "hospadrlat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlatLessThan(String value) {
+            addCriterion("hospAdrLat <", value, "hospadrlat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlatLessThanOrEqualTo(String value) {
+            addCriterion("hospAdrLat <=", value, "hospadrlat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlatLike(String value) {
+            addCriterion("hospAdrLat like", value, "hospadrlat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlatNotLike(String value) {
+            addCriterion("hospAdrLat not like", value, "hospadrlat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlatIn(List<String> values) {
+            addCriterion("hospAdrLat in", values, "hospadrlat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlatNotIn(List<String> values) {
+            addCriterion("hospAdrLat not in", values, "hospadrlat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlatBetween(String value1, String value2) {
+            addCriterion("hospAdrLat between", value1, value2, "hospadrlat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospadrlatNotBetween(String value1, String value2) {
+            addCriterion("hospAdrLat not between", value1, value2, "hospadrlat");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospalipayaccountIsNull() {
+            addCriterion("hospAlipayAccount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospalipayaccountIsNotNull() {
+            addCriterion("hospAlipayAccount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospalipayaccountEqualTo(String value) {
+            addCriterion("hospAlipayAccount =", value, "hospalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospalipayaccountNotEqualTo(String value) {
+            addCriterion("hospAlipayAccount <>", value, "hospalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospalipayaccountGreaterThan(String value) {
+            addCriterion("hospAlipayAccount >", value, "hospalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospalipayaccountGreaterThanOrEqualTo(String value) {
+            addCriterion("hospAlipayAccount >=", value, "hospalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospalipayaccountLessThan(String value) {
+            addCriterion("hospAlipayAccount <", value, "hospalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospalipayaccountLessThanOrEqualTo(String value) {
+            addCriterion("hospAlipayAccount <=", value, "hospalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospalipayaccountLike(String value) {
+            addCriterion("hospAlipayAccount like", value, "hospalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospalipayaccountNotLike(String value) {
+            addCriterion("hospAlipayAccount not like", value, "hospalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospalipayaccountIn(List<String> values) {
+            addCriterion("hospAlipayAccount in", values, "hospalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospalipayaccountNotIn(List<String> values) {
+            addCriterion("hospAlipayAccount not in", values, "hospalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospalipayaccountBetween(String value1, String value2) {
+            addCriterion("hospAlipayAccount between", value1, value2, "hospalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospalipayaccountNotBetween(String value1, String value2) {
+            addCriterion("hospAlipayAccount not between", value1, value2, "hospalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosppursebalanceIsNull() {
+            addCriterion("hospPurseBalance is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosppursebalanceIsNotNull() {
+            addCriterion("hospPurseBalance is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosppursebalanceEqualTo(BigDecimal value) {
+            addCriterion("hospPurseBalance =", value, "hosppursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosppursebalanceNotEqualTo(BigDecimal value) {
+            addCriterion("hospPurseBalance <>", value, "hosppursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosppursebalanceGreaterThan(BigDecimal value) {
+            addCriterion("hospPurseBalance >", value, "hosppursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosppursebalanceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("hospPurseBalance >=", value, "hosppursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosppursebalanceLessThan(BigDecimal value) {
+            addCriterion("hospPurseBalance <", value, "hosppursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosppursebalanceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("hospPurseBalance <=", value, "hosppursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosppursebalanceIn(List<BigDecimal> values) {
+            addCriterion("hospPurseBalance in", values, "hosppursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosppursebalanceNotIn(List<BigDecimal> values) {
+            addCriterion("hospPurseBalance not in", values, "hosppursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosppursebalanceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("hospPurseBalance between", value1, value2, "hosppursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosppursebalanceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("hospPurseBalance not between", value1, value2, "hosppursebalance");
             return (Criteria) this;
         }
     }

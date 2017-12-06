@@ -1,14 +1,20 @@
 package com.medical.mapper;
 
-import com.medical.po.City;
-import com.medical.po.CityExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
+
+import com.medical.po.City;
+
 
 public interface CityMapperCustom {
     
-	
+	/**
+     * @Title: selectByParentCode
+     * @Description: 医院端根据父id获取城市
+     * @param code
+     * @return
+     * @return: List<City>
+     */
     List<City> selectByParentCode(String code);
-    List<City> selectByLevel(int level);
+    //List<City> selectByLevel(int level);
    
 }

@@ -24,10 +24,13 @@ import com.netease.checksum.CheckSumBuilder;
 import com.sun.xml.internal.ws.api.client.ThrowableInPacketCompletionFeature;
 
 import sun.net.www.content.image.gif;
+
 /**
- * 发送验证码
- * @author liuxuanlin
- *
+ * @ClassName:     MsgCode.java
+ * @Description:   TODO(用一句话描述该文件做什么) 
+ * @author          xyh
+ * @version         V1.0  
+ * @Date           2017年09月27日 上午9:50:11 
  */
 public class MsgCode {
     //发送验证码的请求路径URL

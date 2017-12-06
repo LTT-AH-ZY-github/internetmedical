@@ -1,5 +1,6 @@
 package com.medical.po;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -189,6 +190,66 @@ public class DoctorinfoExample {
 
         public Criteria andDocidNotBetween(Integer value1, Integer value2) {
             addCriterion("docId not between", value1, value2, "docid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocloginidIsNull() {
+            addCriterion("docLoginId is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocloginidIsNotNull() {
+            addCriterion("docLoginId is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocloginidEqualTo(Integer value) {
+            addCriterion("docLoginId =", value, "docloginid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocloginidNotEqualTo(Integer value) {
+            addCriterion("docLoginId <>", value, "docloginid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocloginidGreaterThan(Integer value) {
+            addCriterion("docLoginId >", value, "docloginid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocloginidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("docLoginId >=", value, "docloginid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocloginidLessThan(Integer value) {
+            addCriterion("docLoginId <", value, "docloginid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocloginidLessThanOrEqualTo(Integer value) {
+            addCriterion("docLoginId <=", value, "docloginid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocloginidIn(List<Integer> values) {
+            addCriterion("docLoginId in", values, "docloginid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocloginidNotIn(List<Integer> values) {
+            addCriterion("docLoginId not in", values, "docloginid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocloginidBetween(Integer value1, Integer value2) {
+            addCriterion("docLoginId between", value1, value2, "docloginid");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocloginidNotBetween(Integer value1, Integer value2) {
+            addCriterion("docLoginId not between", value1, value2, "docloginid");
             return (Criteria) this;
         }
 
@@ -1432,76 +1493,6 @@ public class DoctorinfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andDocdeptIsNull() {
-            addCriterion("docDept is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocdeptIsNotNull() {
-            addCriterion("docDept is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocdeptEqualTo(String value) {
-            addCriterion("docDept =", value, "docdept");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocdeptNotEqualTo(String value) {
-            addCriterion("docDept <>", value, "docdept");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocdeptGreaterThan(String value) {
-            addCriterion("docDept >", value, "docdept");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocdeptGreaterThanOrEqualTo(String value) {
-            addCriterion("docDept >=", value, "docdept");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocdeptLessThan(String value) {
-            addCriterion("docDept <", value, "docdept");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocdeptLessThanOrEqualTo(String value) {
-            addCriterion("docDept <=", value, "docdept");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocdeptLike(String value) {
-            addCriterion("docDept like", value, "docdept");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocdeptNotLike(String value) {
-            addCriterion("docDept not like", value, "docdept");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocdeptIn(List<String> values) {
-            addCriterion("docDept in", values, "docdept");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocdeptNotIn(List<String> values) {
-            addCriterion("docDept not in", values, "docdept");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocdeptBetween(String value1, String value2) {
-            addCriterion("docDept between", value1, value2, "docdept");
-            return (Criteria) this;
-        }
-
-        public Criteria andDocdeptNotBetween(String value1, String value2) {
-            addCriterion("docDept not between", value1, value2, "docdept");
-            return (Criteria) this;
-        }
-
         public Criteria andDoctitlephotoIsNull() {
             addCriterion("docTitlePhoto is null");
             return (Criteria) this;
@@ -2472,63 +2463,203 @@ public class DoctorinfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andDocloginidIsNull() {
-            addCriterion("docLoginId is null");
+        public Criteria andDocdeptIsNull() {
+            addCriterion("docDept is null");
             return (Criteria) this;
         }
 
-        public Criteria andDocloginidIsNotNull() {
-            addCriterion("docLoginId is not null");
+        public Criteria andDocdeptIsNotNull() {
+            addCriterion("docDept is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDocloginidEqualTo(Integer value) {
-            addCriterion("docLoginId =", value, "docloginid");
+        public Criteria andDocdeptEqualTo(String value) {
+            addCriterion("docDept =", value, "docdept");
             return (Criteria) this;
         }
 
-        public Criteria andDocloginidNotEqualTo(Integer value) {
-            addCriterion("docLoginId <>", value, "docloginid");
+        public Criteria andDocdeptNotEqualTo(String value) {
+            addCriterion("docDept <>", value, "docdept");
             return (Criteria) this;
         }
 
-        public Criteria andDocloginidGreaterThan(Integer value) {
-            addCriterion("docLoginId >", value, "docloginid");
+        public Criteria andDocdeptGreaterThan(String value) {
+            addCriterion("docDept >", value, "docdept");
             return (Criteria) this;
         }
 
-        public Criteria andDocloginidGreaterThanOrEqualTo(Integer value) {
-            addCriterion("docLoginId >=", value, "docloginid");
+        public Criteria andDocdeptGreaterThanOrEqualTo(String value) {
+            addCriterion("docDept >=", value, "docdept");
             return (Criteria) this;
         }
 
-        public Criteria andDocloginidLessThan(Integer value) {
-            addCriterion("docLoginId <", value, "docloginid");
+        public Criteria andDocdeptLessThan(String value) {
+            addCriterion("docDept <", value, "docdept");
             return (Criteria) this;
         }
 
-        public Criteria andDocloginidLessThanOrEqualTo(Integer value) {
-            addCriterion("docLoginId <=", value, "docloginid");
+        public Criteria andDocdeptLessThanOrEqualTo(String value) {
+            addCriterion("docDept <=", value, "docdept");
             return (Criteria) this;
         }
 
-        public Criteria andDocloginidIn(List<Integer> values) {
-            addCriterion("docLoginId in", values, "docloginid");
+        public Criteria andDocdeptLike(String value) {
+            addCriterion("docDept like", value, "docdept");
             return (Criteria) this;
         }
 
-        public Criteria andDocloginidNotIn(List<Integer> values) {
-            addCriterion("docLoginId not in", values, "docloginid");
+        public Criteria andDocdeptNotLike(String value) {
+            addCriterion("docDept not like", value, "docdept");
             return (Criteria) this;
         }
 
-        public Criteria andDocloginidBetween(Integer value1, Integer value2) {
-            addCriterion("docLoginId between", value1, value2, "docloginid");
+        public Criteria andDocdeptIn(List<String> values) {
+            addCriterion("docDept in", values, "docdept");
             return (Criteria) this;
         }
 
-        public Criteria andDocloginidNotBetween(Integer value1, Integer value2) {
-            addCriterion("docLoginId not between", value1, value2, "docloginid");
+        public Criteria andDocdeptNotIn(List<String> values) {
+            addCriterion("docDept not in", values, "docdept");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocdeptBetween(String value1, String value2) {
+            addCriterion("docDept between", value1, value2, "docdept");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocdeptNotBetween(String value1, String value2) {
+            addCriterion("docDept not between", value1, value2, "docdept");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipayaccountIsNull() {
+            addCriterion("docAlipayAccount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipayaccountIsNotNull() {
+            addCriterion("docAlipayAccount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipayaccountEqualTo(String value) {
+            addCriterion("docAlipayAccount =", value, "docalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipayaccountNotEqualTo(String value) {
+            addCriterion("docAlipayAccount <>", value, "docalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipayaccountGreaterThan(String value) {
+            addCriterion("docAlipayAccount >", value, "docalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipayaccountGreaterThanOrEqualTo(String value) {
+            addCriterion("docAlipayAccount >=", value, "docalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipayaccountLessThan(String value) {
+            addCriterion("docAlipayAccount <", value, "docalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipayaccountLessThanOrEqualTo(String value) {
+            addCriterion("docAlipayAccount <=", value, "docalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipayaccountLike(String value) {
+            addCriterion("docAlipayAccount like", value, "docalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipayaccountNotLike(String value) {
+            addCriterion("docAlipayAccount not like", value, "docalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipayaccountIn(List<String> values) {
+            addCriterion("docAlipayAccount in", values, "docalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipayaccountNotIn(List<String> values) {
+            addCriterion("docAlipayAccount not in", values, "docalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipayaccountBetween(String value1, String value2) {
+            addCriterion("docAlipayAccount between", value1, value2, "docalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipayaccountNotBetween(String value1, String value2) {
+            addCriterion("docAlipayAccount not between", value1, value2, "docalipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpursebalanceIsNull() {
+            addCriterion("docPurseBalance is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpursebalanceIsNotNull() {
+            addCriterion("docPurseBalance is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpursebalanceEqualTo(BigDecimal value) {
+            addCriterion("docPurseBalance =", value, "docpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpursebalanceNotEqualTo(BigDecimal value) {
+            addCriterion("docPurseBalance <>", value, "docpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpursebalanceGreaterThan(BigDecimal value) {
+            addCriterion("docPurseBalance >", value, "docpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpursebalanceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("docPurseBalance >=", value, "docpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpursebalanceLessThan(BigDecimal value) {
+            addCriterion("docPurseBalance <", value, "docpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpursebalanceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("docPurseBalance <=", value, "docpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpursebalanceIn(List<BigDecimal> values) {
+            addCriterion("docPurseBalance in", values, "docpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpursebalanceNotIn(List<BigDecimal> values) {
+            addCriterion("docPurseBalance not in", values, "docpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpursebalanceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("docPurseBalance between", value1, value2, "docpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpursebalanceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("docPurseBalance not between", value1, value2, "docpursebalance");
             return (Criteria) this;
         }
     }

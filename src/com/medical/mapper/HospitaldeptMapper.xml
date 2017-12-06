@@ -6,6 +6,7 @@
     <result column="hospDeptName" property="hospdeptname" jdbcType="VARCHAR" />
     <result column="hospDeptAbs" property="hospdeptabs" jdbcType="VARCHAR" />
     <result column="hospDeptFatherId" property="hospdeptfatherid" jdbcType="INTEGER" />
+    <result column="hospDeptIsCheck" property="hospdeptischeck" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -66,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    hospDeptId, hospDeptName, hospDeptAbs, hospDeptFatherId
+    hospDeptId, hospDeptName, hospDeptAbs, hospDeptFatherId, hospDeptIsCheck
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HospitaldeptExample" >
     select
@@ -100,9 +101,9 @@
   </delete>
   <insert id="insert" parameterType="com.medical.po.Hospitaldept" >
     insert into hospitaldept (hospDeptId, hospDeptName, hospDeptAbs, 
-      hospDeptFatherId)
+      hospDeptFatherId, hospDeptIsCheck)
     values (#{hospdeptid,jdbcType=INTEGER}, #{hospdeptname,jdbcType=VARCHAR}, #{hospdeptabs,jdbcType=VARCHAR}, 
-      #{hospdeptfatherid,jdbcType=INTEGER})
+      #{hospdeptfatherid,jdbcType=INTEGER}, #{hospdeptischeck,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Hospitaldept" >
     insert into hospitaldept
@@ -119,6 +120,9 @@
       <if test="hospdeptfatherid != null" >
         hospDeptFatherId,
       </if>
+      <if test="hospdeptischeck != null" >
+        hospDeptIsCheck,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="hospdeptid != null" >
@@ -132,6 +136,9 @@
       </if>
       <if test="hospdeptfatherid != null" >
         #{hospdeptfatherid,jdbcType=INTEGER},
+      </if>
+      <if test="hospdeptischeck != null" >
+        #{hospdeptischeck,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -156,6 +163,9 @@
       <if test="record.hospdeptfatherid != null" >
         hospDeptFatherId = #{record.hospdeptfatherid,jdbcType=INTEGER},
       </if>
+      <if test="record.hospdeptischeck != null" >
+        hospDeptIsCheck = #{record.hospdeptischeck,jdbcType=BIT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -166,7 +176,8 @@
     set hospDeptId = #{record.hospdeptid,jdbcType=INTEGER},
       hospDeptName = #{record.hospdeptname,jdbcType=VARCHAR},
       hospDeptAbs = #{record.hospdeptabs,jdbcType=VARCHAR},
-      hospDeptFatherId = #{record.hospdeptfatherid,jdbcType=INTEGER}
+      hospDeptFatherId = #{record.hospdeptfatherid,jdbcType=INTEGER},
+      hospDeptIsCheck = #{record.hospdeptischeck,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -183,6 +194,9 @@
       <if test="hospdeptfatherid != null" >
         hospDeptFatherId = #{hospdeptfatherid,jdbcType=INTEGER},
       </if>
+      <if test="hospdeptischeck != null" >
+        hospDeptIsCheck = #{hospdeptischeck,jdbcType=BIT},
+      </if>
     </set>
     where hospDeptId = #{hospdeptid,jdbcType=INTEGER}
   </update>
@@ -190,7 +204,8 @@
     update hospitaldept
     set hospDeptName = #{hospdeptname,jdbcType=VARCHAR},
       hospDeptAbs = #{hospdeptabs,jdbcType=VARCHAR},
-      hospDeptFatherId = #{hospdeptfatherid,jdbcType=INTEGER}
+      hospDeptFatherId = #{hospdeptfatherid,jdbcType=INTEGER},
+      hospDeptIsCheck = #{hospdeptischeck,jdbcType=BIT}
     where hospDeptId = #{hospdeptid,jdbcType=INTEGER}
   </update>
 </mapper>

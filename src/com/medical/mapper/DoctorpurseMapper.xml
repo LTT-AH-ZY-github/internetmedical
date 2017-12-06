@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.DoctorpurseMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Doctorpurse" >
+    <id column="docPurseId" property="docpurseid" jdbcType="INTEGER" />
+    <result column="docPurseTypeId" property="docpursetypeid" jdbcType="INTEGER" />
+    <result column="docPurseAmount" property="docpurseamount" jdbcType="DECIMAL" />
+    <result column="docPurseTime" property="docpursetime" jdbcType="TIMESTAMP" />
+    <result column="docPurseRemark" property="docpurseremark" jdbcType="VARCHAR" />
+    <result column="payId" property="payid" jdbcType="INTEGER" />
+    <result column="docPurseBalance" property="docpursebalance" jdbcType="DECIMAL" />
+    <result column="docLoginId" property="docloginid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    docPurseId, docPurseTypeId, docPurseAmount, docPurseTime, docPurseRemark, payId, 
+    docPurseBalance, docLoginId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.DoctorpurseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from doctorpurse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from doctorpurse
+    where docPurseId = #{docpurseid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from doctorpurse
+    where docPurseId = #{docpurseid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.DoctorpurseExample" >
+    delete from doctorpurse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Doctorpurse" >
+    insert into doctorpurse (docPurseId, docPurseTypeId, docPurseAmount, 
+      docPurseTime, docPurseRemark, payId, 
+      docPurseBalance, docLoginId)
+    values (#{docpurseid,jdbcType=INTEGER}, #{docpursetypeid,jdbcType=INTEGER}, #{docpurseamount,jdbcType=DECIMAL}, 
+      #{docpursetime,jdbcType=TIMESTAMP}, #{docpurseremark,jdbcType=VARCHAR}, #{payid,jdbcType=INTEGER}, 
+      #{docpursebalance,jdbcType=DECIMAL}, #{docloginid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Doctorpurse" >
+    insert into doctorpurse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="docpurseid != null" >
+        docPurseId,
+      </if>
+      <if test="docpursetypeid != null" >
+        docPurseTypeId,
+      </if>
+      <if test="docpurseamount != null" >
+        docPurseAmount,
+      </if>
+      <if test="docpursetime != null" >
+        docPurseTime,
+      </if>
+      <if test="docpurseremark != null" >
+        docPurseRemark,
+      </if>
+      <if test="payid != null" >
+        payId,
+      </if>
+      <if test="docpursebalance != null" >
+        docPurseBalance,
+      </if>
+      <if test="docloginid != null" >
+        docLoginId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="docpurseid != null" >
+        #{docpurseid,jdbcType=INTEGER},
+      </if>
+      <if test="docpursetypeid != null" >
+        #{docpursetypeid,jdbcType=INTEGER},
+      </if>
+      <if test="docpurseamount != null" >
+        #{docpurseamount,jdbcType=DECIMAL},
+      </if>
+      <if test="docpursetime != null" >
+        #{docpursetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="docpurseremark != null" >
+        #{docpurseremark,jdbcType=VARCHAR},
+      </if>
+      <if test="payid != null" >
+        #{payid,jdbcType=INTEGER},
+      </if>
+      <if test="docpursebalance != null" >
+        #{docpursebalance,jdbcType=DECIMAL},
+      </if>
+      <if test="docloginid != null" >
+        #{docloginid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.DoctorpurseExample" resultType="java.lang.Integer" >
+    select count(*) from doctorpurse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update doctorpurse
+    <set >
+      <if test="record.docpurseid != null" >
+        docPurseId = #{record.docpurseid,jdbcType=INTEGER},
+      </if>
+      <if test="record.docpursetypeid != null" >
+        docPurseTypeId = #{record.docpursetypeid,jdbcType=INTEGER},
+      </if>
+      <if test="record.docpurseamount != null" >
+        docPurseAmount = #{record.docpurseamount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.docpursetime != null" >
+        docPurseTime = #{record.docpursetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.docpurseremark != null" >
+        docPurseRemark = #{record.docpurseremark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payid != null" >
+        payId = #{record.payid,jdbcType=INTEGER},
+      </if>
+      <if test="record.docpursebalance != null" >
+        docPurseBalance = #{record.docpursebalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.docloginid != null" >
+        docLoginId = #{record.docloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update doctorpurse
+    set docPurseId = #{record.docpurseid,jdbcType=INTEGER},
+      docPurseTypeId = #{record.docpursetypeid,jdbcType=INTEGER},
+      docPurseAmount = #{record.docpurseamount,jdbcType=DECIMAL},
+      docPurseTime = #{record.docpursetime,jdbcType=TIMESTAMP},
+      docPurseRemark = #{record.docpurseremark,jdbcType=VARCHAR},
+      payId = #{record.payid,jdbcType=INTEGER},
+      docPurseBalance = #{record.docpursebalance,jdbcType=DECIMAL},
+      docLoginId = #{record.docloginid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Doctorpurse" >
+    update doctorpurse
+    <set >
+      <if test="docpursetypeid != null" >
+        docPurseTypeId = #{docpursetypeid,jdbcType=INTEGER},
+      </if>
+      <if test="docpurseamount != null" >
+        docPurseAmount = #{docpurseamount,jdbcType=DECIMAL},
+      </if>
+      <if test="docpursetime != null" >
+        docPurseTime = #{docpursetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="docpurseremark != null" >
+        docPurseRemark = #{docpurseremark,jdbcType=VARCHAR},
+      </if>
+      <if test="payid != null" >
+        payId = #{payid,jdbcType=INTEGER},
+      </if>
+      <if test="docpursebalance != null" >
+        docPurseBalance = #{docpursebalance,jdbcType=DECIMAL},
+      </if>
+      <if test="docloginid != null" >
+        docLoginId = #{docloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where docPurseId = #{docpurseid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Doctorpurse" >
+    update doctorpurse
+    set docPurseTypeId = #{docpursetypeid,jdbcType=INTEGER},
+      docPurseAmount = #{docpurseamount,jdbcType=DECIMAL},
+      docPurseTime = #{docpursetime,jdbcType=TIMESTAMP},
+      docPurseRemark = #{docpurseremark,jdbcType=VARCHAR},
+      payId = #{payid,jdbcType=INTEGER},
+      docPurseBalance = #{docpursebalance,jdbcType=DECIMAL},
+      docLoginId = #{docloginid,jdbcType=INTEGER}
+    where docPurseId = #{docpurseid,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -13,6 +13,10 @@
     <result column="userSickTime" property="usersicktime" jdbcType="TIMESTAMP" />
     <result column="userSickStateId" property="usersickstateid" jdbcType="INTEGER" />
     <result column="userSickPTime" property="usersickptime" jdbcType="TIMESTAMP" />
+    <result column="userSickIsDelete" property="usersickisdelete" jdbcType="BIT" />
+    <result column="familyName" property="familyname" jdbcType="VARCHAR" />
+    <result column="familyMale" property="familymale" jdbcType="VARCHAR" />
+    <result column="familyAge" property="familyage" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -74,7 +78,8 @@
   </sql>
   <sql id="Base_Column_List" >
     userSickId, userSickDesc, userSickPic, userSickPrimaryDept, userSickSecondDept, familyId, 
-    userOrderId, userLoginId, userSickTime, userSickStateId, userSickPTime
+    userOrderId, userLoginId, userSickTime, userSickStateId, userSickPTime, userSickIsDelete, 
+    familyName, familyMale, familyAge
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.UsersickExample" >
     select
@@ -110,13 +115,15 @@
     insert into usersick (userSickId, userSickDesc, userSickPic, 
       userSickPrimaryDept, userSickSecondDept, 
       familyId, userOrderId, userLoginId, 
-      userSickTime, userSickStateId, userSickPTime
-      )
+      userSickTime, userSickStateId, userSickPTime, 
+      userSickIsDelete, familyName, familyMale, 
+      familyAge)
     values (#{usersickid,jdbcType=INTEGER}, #{usersickdesc,jdbcType=VARCHAR}, #{usersickpic,jdbcType=VARCHAR}, 
       #{usersickprimarydept,jdbcType=VARCHAR}, #{usersickseconddept,jdbcType=VARCHAR}, 
       #{familyid,jdbcType=INTEGER}, #{userorderid,jdbcType=INTEGER}, #{userloginid,jdbcType=INTEGER}, 
-      #{usersicktime,jdbcType=TIMESTAMP}, #{usersickstateid,jdbcType=INTEGER}, #{usersickptime,jdbcType=TIMESTAMP}
-      )
+      #{usersicktime,jdbcType=TIMESTAMP}, #{usersickstateid,jdbcType=INTEGER}, #{usersickptime,jdbcType=TIMESTAMP}, 
+      #{usersickisdelete,jdbcType=BIT}, #{familyname,jdbcType=VARCHAR}, #{familymale,jdbcType=VARCHAR}, 
+      #{familyage,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Usersick" >
     insert into usersick
@@ -154,6 +161,18 @@
       <if test="usersickptime != null" >
         userSickPTime,
       </if>
+      <if test="usersickisdelete != null" >
+        userSickIsDelete,
+      </if>
+      <if test="familyname != null" >
+        familyName,
+      </if>
+      <if test="familymale != null" >
+        familyMale,
+      </if>
+      <if test="familyage != null" >
+        familyAge,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="usersickid != null" >
@@ -188,6 +207,18 @@
       </if>
       <if test="usersickptime != null" >
         #{usersickptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usersickisdelete != null" >
+        #{usersickisdelete,jdbcType=BIT},
+      </if>
+      <if test="familyname != null" >
+        #{familyname,jdbcType=VARCHAR},
+      </if>
+      <if test="familymale != null" >
+        #{familymale,jdbcType=VARCHAR},
+      </if>
+      <if test="familyage != null" >
+        #{familyage,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -233,6 +264,18 @@
       <if test="record.usersickptime != null" >
         userSickPTime = #{record.usersickptime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.usersickisdelete != null" >
+        userSickIsDelete = #{record.usersickisdelete,jdbcType=BIT},
+      </if>
+      <if test="record.familyname != null" >
+        familyName = #{record.familyname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familymale != null" >
+        familyMale = #{record.familymale,jdbcType=VARCHAR},
+      </if>
+      <if test="record.familyage != null" >
+        familyAge = #{record.familyage,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -250,7 +293,11 @@
       userLoginId = #{record.userloginid,jdbcType=INTEGER},
       userSickTime = #{record.usersicktime,jdbcType=TIMESTAMP},
       userSickStateId = #{record.usersickstateid,jdbcType=INTEGER},
-      userSickPTime = #{record.usersickptime,jdbcType=TIMESTAMP}
+      userSickPTime = #{record.usersickptime,jdbcType=TIMESTAMP},
+      userSickIsDelete = #{record.usersickisdelete,jdbcType=BIT},
+      familyName = #{record.familyname,jdbcType=VARCHAR},
+      familyMale = #{record.familymale,jdbcType=VARCHAR},
+      familyAge = #{record.familyage,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -288,6 +335,18 @@
       <if test="usersickptime != null" >
         userSickPTime = #{usersickptime,jdbcType=TIMESTAMP},
       </if>
+      <if test="usersickisdelete != null" >
+        userSickIsDelete = #{usersickisdelete,jdbcType=BIT},
+      </if>
+      <if test="familyname != null" >
+        familyName = #{familyname,jdbcType=VARCHAR},
+      </if>
+      <if test="familymale != null" >
+        familyMale = #{familymale,jdbcType=VARCHAR},
+      </if>
+      <if test="familyage != null" >
+        familyAge = #{familyage,jdbcType=INTEGER},
+      </if>
     </set>
     where userSickId = #{usersickid,jdbcType=INTEGER}
   </update>
@@ -302,7 +361,11 @@
       userLoginId = #{userloginid,jdbcType=INTEGER},
       userSickTime = #{usersicktime,jdbcType=TIMESTAMP},
       userSickStateId = #{usersickstateid,jdbcType=INTEGER},
-      userSickPTime = #{usersickptime,jdbcType=TIMESTAMP}
+      userSickPTime = #{usersickptime,jdbcType=TIMESTAMP},
+      userSickIsDelete = #{usersickisdelete,jdbcType=BIT},
+      familyName = #{familyname,jdbcType=VARCHAR},
+      familyMale = #{familymale,jdbcType=VARCHAR},
+      familyAge = #{familyage,jdbcType=INTEGER}
     where userSickId = #{usersickid,jdbcType=INTEGER}
   </update>
 </mapper>

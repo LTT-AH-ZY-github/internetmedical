@@ -40,9 +40,12 @@
 	    <aop:pointcut id="TransicationTestService1" expression="execution(* com.medical.service.impl.*.*(..))" />  
 	    <aop:pointcut id="TransicationTestService2" expression="execution(* com.medical.service.impl.user.*.*(..))" />
 	    <aop:pointcut id="TransicationTestService3" expression="execution(* com.medical.service.impl.hospital.*.*(..))" />    
+	    <aop:pointcut id="TransicationTestService4" expression="execution(* com.medical.service.impl.doctor.*.*(..))" /> 
+	    <aop:pointcut id="TransicationTestService5" expression="execution(* com.medical.service.impl.admin.*.*(..))" /> 
 	   	<aop:advisor pointcut-ref="TransicationTestService1" advice-ref="txAdvice"/>  
 	    <aop:advisor pointcut-ref="TransicationTestService2" advice-ref="txAdvice"/>  
 	    <aop:advisor pointcut-ref="TransicationTestService3" advice-ref="txAdvice"/> 
-	      
+	    <aop:advisor pointcut-ref="TransicationTestService4" advice-ref="txAdvice"/>  
+	    <aop:advisor pointcut-ref="TransicationTestService5" advice-ref="txAdvice"/>
 	</aop:config>
 </beans>

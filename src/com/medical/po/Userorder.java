@@ -64,6 +64,20 @@ public class Userorder {
 
     private Date userorderfinishtime;
 
+    private String usersickdesc;
+
+    private String usersickpic;
+
+    private String usersickprimarydept;
+
+    private String usersickseconddept;
+
+    private String familyname;
+
+    private String familymale;
+
+    private Integer familyage;
+
     public Integer getUserorderid() {
         return userorderid;
     }
@@ -302,5 +316,61 @@ public class Userorder {
 
     public void setUserorderfinishtime(Date userorderfinishtime) {
         this.userorderfinishtime = userorderfinishtime;
+    }
+
+    public String getUsersickdesc() {
+        return usersickdesc;
+    }
+
+    public void setUsersickdesc(String usersickdesc) {
+        this.usersickdesc = usersickdesc == null ? null : usersickdesc.trim();
+    }
+
+    public String getUsersickpic() {
+        return usersickpic;
+    }
+
+    public void setUsersickpic(String usersickpic) {
+        this.usersickpic = usersickpic == null ? null : usersickpic.trim();
+    }
+
+    public String getUsersickprimarydept() {
+        return usersickprimarydept;
+    }
+
+    public void setUsersickprimarydept(String usersickprimarydept) {
+        this.usersickprimarydept = usersickprimarydept == null ? null : usersickprimarydept.trim();
+    }
+
+    public String getUsersickseconddept() {
+        return usersickseconddept;
+    }
+
+    public void setUsersickseconddept(String usersickseconddept) {
+        this.usersickseconddept = usersickseconddept == null ? null : usersickseconddept.trim();
+    }
+
+    public String getFamilyname() {
+        return familyname;
+    }
+
+    public void setFamilyname(String familyname) {
+        this.familyname = familyname == null ? null : familyname.trim();
+    }
+
+    public String getFamilymale() {
+        return familymale;
+    }
+
+    public void setFamilymale(String familymale) {
+        this.familymale = familymale == null ? null : familymale.trim();
+    }
+
+    public Integer getFamilyage() {
+        return familyage;
+    }
+
+    public void setFamilyage(Integer familyage) {
+        this.familyage = familyage;
     }
 }

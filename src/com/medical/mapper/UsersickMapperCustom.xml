@@ -13,7 +13,7 @@
      from   usersick as a   
      		left   join   familyinfo as b     on   a.familyId=b.familyId  
      		left join     usersickstate as c on a.usersickstateid= c.usersickstateid
-     where a.userLoginId = #{0,jdbcType=INTEGER}
+     where a.userLoginId = #{0,jdbcType=INTEGER} and a.userSickIsDelete=0
      <if test="param2==1">
     	 and  a.userSickStateId = 1
      </if>
@@ -42,7 +42,7 @@
      where usersick= #{userLoginId,jdbcType=INTEGER}
   </select>
    <insert id="insertSelectiveReturnId" useGeneratedKeys="true" keyProperty="usersickid"  parameterType="com.medical.po.Usersick" >
-    insert into usersick
+insert into usersick
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="usersickid != null" >
         userSickId,
@@ -76,6 +76,18 @@
       </if>
       <if test="usersickptime != null" >
         userSickPTime,
+      </if>
+      <if test="usersickisdelete != null" >
+        userSickIsDelete,
+      </if>
+      <if test="familyname != null" >
+        familyName,
+      </if>
+      <if test="familymale != null" >
+        familyMale,
+      </if>
+      <if test="familyage != null" >
+        familyAge,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -111,6 +123,18 @@
       </if>
       <if test="usersickptime != null" >
         #{usersickptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="usersickisdelete != null" >
+        #{usersickisdelete,jdbcType=BIT},
+      </if>
+      <if test="familyname != null" >
+        #{familyname,jdbcType=VARCHAR},
+      </if>
+      <if test="familymale != null" >
+        #{familymale,jdbcType=VARCHAR},
+      </if>
+      <if test="familyage != null" >
+        #{familyage,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -222,7 +246,7 @@
   <select id="paginationReSickSortByDistance" parameterType="com.medical.po.SickSearch" resultType="map">
     select 	c.familyname,c.familyage,c.familymale,
     		a.usersickid,a.usersickdesc,a.usersickptime,
-    		b.userloginpix,b.userhuanxinaccount,
+    		b.userloginpix,b.userhuanxinaccount,d.username,
     		
   		ROUND(
 			    6378.138 * 2 * ASIN(
@@ -249,6 +273,7 @@
   from usersick as a 
   	  left join userlogininfo as b on a.userLoginId =b.userLoginId 
   	  left join familyinfo as c on a.familyId =c.familyId
+  	  left join userinfo as d on a.userLoginId =d.userLoginId 
   where a.userSickStateId=2 
   ORDER BY a.userSickPTime DESC
  </select>
@@ -256,7 +281,7 @@
   <select id="paginationSickSortByTime" parameterType="com.medical.po.SickSearch" resultType="map">
     select c.familyname,c.familyage,c.familymale,
     		a.usersickid,a.usersickdesc,a.usersickptime,
-    		b.userloginpix,b.userhuanxinaccount,
+    		b.userloginpix,b.userhuanxinaccount,d.username,
   		ROUND(
 			    6378.138 * 2 * ASIN(
 			          SQRT(
@@ -282,15 +307,16 @@
   from usersick as a 
   	  left join userlogininfo as b on a.userLoginId =b.userLoginId 
   	  left join familyinfo as c on a.familyId =c.familyId
+  	    left join userinfo as d on a.userLoginId =d.userLoginId 
   where a.userSickStateId=2 
-  ORDER BY distance ASC
+  ORDER BY a.userSickPTime DESC
 	
   </select>
   <!--医生获取按位置排序的病情  -->
    <select id="paginationSickSortByLoc" parameterType="com.medical.po.SickSearch" resultType="map">
     select c.familyname,c.familyage,c.familymale,
     		a.usersickid,a.usersickdesc,a.usersickptime,
-    		b.userloginpix,b.userhuanxinaccount,
+    		b.userloginpix,b.userhuanxinaccount,d.username,
   		ROUND(
 			    6378.138 * 2 * ASIN(
 			          SQRT(
@@ -316,6 +342,7 @@
   from usersick as a 
   	  left join userlogininfo as b on a.userLoginId =b.userLoginId 
   	  left join familyinfo as c on a.familyId =c.familyId
+  	  left join userinfo as d on a.userLoginId =d.userLoginId 
   where a.userSickStateId=2 
 	  <if test="province!=null">
 		  and 	b.userLoginProvince=#{province}
@@ -326,17 +353,18 @@
 	  <if test="area!=null">
 	    and  b.userLoginArea=#{area}
 	  </if>
-	ORDER BY distance ASC
+	ORDER BY a.userSickPTime DESC
  </select>	
  <!--医生查看病情详情  -->
   <select id="selectAllInfoByUserSickId" parameterType="java.lang.Integer" resultType="map">
     select c.familyname,c.familyage,c.familymale,
     	a.usersickid,a.usersickdesc,a.usersickptime,
-    	b.userloginpix,b.userhuanxinaccount,
+    	b.userloginpix,b.userhuanxinaccount,d.username,
     	a.usersickpic,a.usersickprimarydept,a.usersickseconddept
   	from usersick as a 
   	  left join userlogininfo as b on a.userLoginId =b.userLoginId 
   	  left join familyinfo as c on a.familyId =c.familyId
+  	   left join userinfo as d on a.userLoginId =d.userLoginId 
     where a.userSickId=#{0} 
   </select>
     <select id="selectReSickSortByDistance" parameterType="com.medical.po.SickSearch" resultType="map">

@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class PictureTool {
 	public static String SavePictures(MultipartFile[] pictureFile) throws Exception {
 		// 真实路径
-		String reallyDir = "D:\\\\upload\\\\";
+		String reallyDir = "C:\\upload\\";
 		// 保存到数据库的路径
 		String virtualDir = "";
 		String fileName = null;
@@ -37,7 +37,7 @@ public class PictureTool {
 	}
 	public static String SaveOnePicture(MultipartFile pictureFile) throws Exception {
 		// 真实路径
-		String reallyDir = "D:\\\\upload\\\\";
+		String reallyDir = "C:\\upload\\";
 		// 保存到数据库的路径
 		
 		String fileName = null;

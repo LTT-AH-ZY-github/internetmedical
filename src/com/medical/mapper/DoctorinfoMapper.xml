@@ -3,6 +3,7 @@
 <mapper namespace="com.medical.mapper.DoctorinfoMapper" >
   <resultMap id="BaseResultMap" type="com.medical.po.Doctorinfo" >
     <id column="docId" property="docid" jdbcType="INTEGER" />
+    <result column="docLoginId" property="docloginid" jdbcType="INTEGER" />
     <result column="docName" property="docname" jdbcType="VARCHAR" />
     <result column="docMale" property="docmale" jdbcType="CHAR" />
     <result column="docAge" property="docage" jdbcType="INTEGER" />
@@ -21,7 +22,6 @@
     <result column="docHospLat" property="dochosplat" jdbcType="VARCHAR" />
     <result column="docPrimaryDept" property="docprimarydept" jdbcType="VARCHAR" />
     <result column="docSecondDept" property="docseconddept" jdbcType="VARCHAR" />
-    <result column="docDept" property="docdept" jdbcType="VARCHAR" />
     <result column="docTitlePhoto" property="doctitlephoto" jdbcType="VARCHAR" />
     <result column="docWorkCardPhoto" property="docworkcardphoto" jdbcType="VARCHAR" />
     <result column="docQualPhoto" property="docqualphoto" jdbcType="VARCHAR" />
@@ -36,7 +36,9 @@
     <result column="docAddressOther" property="docaddressother" jdbcType="VARCHAR" />
     <result column="docAddressLon" property="docaddresslon" jdbcType="VARCHAR" />
     <result column="docAddressLat" property="docaddresslat" jdbcType="VARCHAR" />
-    <result column="docLoginId" property="docloginid" jdbcType="INTEGER" />
+    <result column="docDept" property="docdept" jdbcType="VARCHAR" />
+    <result column="docAlipayAccount" property="docalipayaccount" jdbcType="VARCHAR" />
+    <result column="docPurseBalance" property="docpursebalance" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -97,11 +99,12 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    docId, docName, docMale, docAge, docTitle, docCardNum, docCardPhoto, docBirthDate, 
-    docNation, docHosp, hospLevel, docHospProvince, docHospCity, docHospArea, docHospOther, 
-    docHospLon, docHospLat, docPrimaryDept, docSecondDept, docDept, docTitlePhoto, docWorkCardPhoto, 
-    docQualPhoto, docExpert, docOtherPhoto, docAllDay, docAbs, docAddressLocation, docAddressProvince, 
-    docAddressCity, docAddressArea, docAddressOther, docAddressLon, docAddressLat, docLoginId
+    docId, docLoginId, docName, docMale, docAge, docTitle, docCardNum, docCardPhoto, 
+    docBirthDate, docNation, docHosp, hospLevel, docHospProvince, docHospCity, docHospArea, 
+    docHospOther, docHospLon, docHospLat, docPrimaryDept, docSecondDept, docTitlePhoto, 
+    docWorkCardPhoto, docQualPhoto, docExpert, docOtherPhoto, docAllDay, docAbs, docAddressLocation, 
+    docAddressProvince, docAddressCity, docAddressArea, docAddressOther, docAddressLon, 
+    docAddressLat, docDept, docAlipayAccount, docPurseBalance
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.DoctorinfoExample" >
     select
@@ -134,38 +137,41 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.medical.po.Doctorinfo" >
-    insert into doctorinfo (docId, docName, docMale, 
-      docAge, docTitle, docCardNum, 
-      docCardPhoto, docBirthDate, docNation, 
-      docHosp, hospLevel, docHospProvince, 
-      docHospCity, docHospArea, docHospOther, 
-      docHospLon, docHospLat, docPrimaryDept, 
-      docSecondDept, docDept, docTitlePhoto, 
+    insert into doctorinfo (docId, docLoginId, docName, 
+      docMale, docAge, docTitle, 
+      docCardNum, docCardPhoto, docBirthDate, 
+      docNation, docHosp, hospLevel, 
+      docHospProvince, docHospCity, docHospArea, 
+      docHospOther, docHospLon, docHospLat, 
+      docPrimaryDept, docSecondDept, docTitlePhoto, 
       docWorkCardPhoto, docQualPhoto, docExpert, 
       docOtherPhoto, docAllDay, docAbs, 
       docAddressLocation, docAddressProvince, 
       docAddressCity, docAddressArea, docAddressOther, 
-      docAddressLon, docAddressLat, docLoginId
-      )
-    values (#{docid,jdbcType=INTEGER}, #{docname,jdbcType=VARCHAR}, #{docmale,jdbcType=CHAR}, 
-      #{docage,jdbcType=INTEGER}, #{doctitle,jdbcType=VARCHAR}, #{doccardnum,jdbcType=CHAR}, 
-      #{doccardphoto,jdbcType=VARCHAR}, #{docbirthdate,jdbcType=DATE}, #{docnation,jdbcType=CHAR}, 
-      #{dochosp,jdbcType=VARCHAR}, #{hosplevel,jdbcType=VARCHAR}, #{dochospprovince,jdbcType=VARCHAR}, 
-      #{dochospcity,jdbcType=VARCHAR}, #{dochosparea,jdbcType=VARCHAR}, #{dochospother,jdbcType=VARCHAR}, 
-      #{dochosplon,jdbcType=VARCHAR}, #{dochosplat,jdbcType=VARCHAR}, #{docprimarydept,jdbcType=VARCHAR}, 
-      #{docseconddept,jdbcType=VARCHAR}, #{docdept,jdbcType=VARCHAR}, #{doctitlephoto,jdbcType=VARCHAR}, 
+      docAddressLon, docAddressLat, docDept, 
+      docAlipayAccount, docPurseBalance)
+    values (#{docid,jdbcType=INTEGER}, #{docloginid,jdbcType=INTEGER}, #{docname,jdbcType=VARCHAR}, 
+      #{docmale,jdbcType=CHAR}, #{docage,jdbcType=INTEGER}, #{doctitle,jdbcType=VARCHAR}, 
+      #{doccardnum,jdbcType=CHAR}, #{doccardphoto,jdbcType=VARCHAR}, #{docbirthdate,jdbcType=DATE}, 
+      #{docnation,jdbcType=CHAR}, #{dochosp,jdbcType=VARCHAR}, #{hosplevel,jdbcType=VARCHAR}, 
+      #{dochospprovince,jdbcType=VARCHAR}, #{dochospcity,jdbcType=VARCHAR}, #{dochosparea,jdbcType=VARCHAR}, 
+      #{dochospother,jdbcType=VARCHAR}, #{dochosplon,jdbcType=VARCHAR}, #{dochosplat,jdbcType=VARCHAR}, 
+      #{docprimarydept,jdbcType=VARCHAR}, #{docseconddept,jdbcType=VARCHAR}, #{doctitlephoto,jdbcType=VARCHAR}, 
       #{docworkcardphoto,jdbcType=VARCHAR}, #{docqualphoto,jdbcType=VARCHAR}, #{docexpert,jdbcType=VARCHAR}, 
       #{docotherphoto,jdbcType=VARCHAR}, #{docallday,jdbcType=BIT}, #{docabs,jdbcType=VARCHAR}, 
       #{docaddresslocation,jdbcType=VARCHAR}, #{docaddressprovince,jdbcType=VARCHAR}, 
       #{docaddresscity,jdbcType=VARCHAR}, #{docaddressarea,jdbcType=VARCHAR}, #{docaddressother,jdbcType=VARCHAR}, 
-      #{docaddresslon,jdbcType=VARCHAR}, #{docaddresslat,jdbcType=VARCHAR}, #{docloginid,jdbcType=INTEGER}
-      )
+      #{docaddresslon,jdbcType=VARCHAR}, #{docaddresslat,jdbcType=VARCHAR}, #{docdept,jdbcType=VARCHAR}, 
+      #{docalipayaccount,jdbcType=VARCHAR}, #{docpursebalance,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Doctorinfo" >
     insert into doctorinfo
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="docid != null" >
         docId,
+      </if>
+      <if test="docloginid != null" >
+        docLoginId,
       </if>
       <if test="docname != null" >
         docName,
@@ -221,9 +227,6 @@
       <if test="docseconddept != null" >
         docSecondDept,
       </if>
-      <if test="docdept != null" >
-        docDept,
-      </if>
       <if test="doctitlephoto != null" >
         docTitlePhoto,
       </if>
@@ -266,13 +269,22 @@
       <if test="docaddresslat != null" >
         docAddressLat,
       </if>
-      <if test="docloginid != null" >
-        docLoginId,
+      <if test="docdept != null" >
+        docDept,
+      </if>
+      <if test="docalipayaccount != null" >
+        docAlipayAccount,
+      </if>
+      <if test="docpursebalance != null" >
+        docPurseBalance,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="docid != null" >
         #{docid,jdbcType=INTEGER},
+      </if>
+      <if test="docloginid != null" >
+        #{docloginid,jdbcType=INTEGER},
       </if>
       <if test="docname != null" >
         #{docname,jdbcType=VARCHAR},
@@ -328,9 +340,6 @@
       <if test="docseconddept != null" >
         #{docseconddept,jdbcType=VARCHAR},
       </if>
-      <if test="docdept != null" >
-        #{docdept,jdbcType=VARCHAR},
-      </if>
       <if test="doctitlephoto != null" >
         #{doctitlephoto,jdbcType=VARCHAR},
       </if>
@@ -373,8 +382,14 @@
       <if test="docaddresslat != null" >
         #{docaddresslat,jdbcType=VARCHAR},
       </if>
-      <if test="docloginid != null" >
-        #{docloginid,jdbcType=INTEGER},
+      <if test="docdept != null" >
+        #{docdept,jdbcType=VARCHAR},
+      </if>
+      <if test="docalipayaccount != null" >
+        #{docalipayaccount,jdbcType=VARCHAR},
+      </if>
+      <if test="docpursebalance != null" >
+        #{docpursebalance,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -389,6 +404,9 @@
     <set >
       <if test="record.docid != null" >
         docId = #{record.docid,jdbcType=INTEGER},
+      </if>
+      <if test="record.docloginid != null" >
+        docLoginId = #{record.docloginid,jdbcType=INTEGER},
       </if>
       <if test="record.docname != null" >
         docName = #{record.docname,jdbcType=VARCHAR},
@@ -444,9 +462,6 @@
       <if test="record.docseconddept != null" >
         docSecondDept = #{record.docseconddept,jdbcType=VARCHAR},
       </if>
-      <if test="record.docdept != null" >
-        docDept = #{record.docdept,jdbcType=VARCHAR},
-      </if>
       <if test="record.doctitlephoto != null" >
         docTitlePhoto = #{record.doctitlephoto,jdbcType=VARCHAR},
       </if>
@@ -489,8 +504,14 @@
       <if test="record.docaddresslat != null" >
         docAddressLat = #{record.docaddresslat,jdbcType=VARCHAR},
       </if>
-      <if test="record.docloginid != null" >
-        docLoginId = #{record.docloginid,jdbcType=INTEGER},
+      <if test="record.docdept != null" >
+        docDept = #{record.docdept,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docalipayaccount != null" >
+        docAlipayAccount = #{record.docalipayaccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docpursebalance != null" >
+        docPurseBalance = #{record.docpursebalance,jdbcType=DECIMAL},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -500,6 +521,7 @@
   <update id="updateByExample" parameterType="map" >
     update doctorinfo
     set docId = #{record.docid,jdbcType=INTEGER},
+      docLoginId = #{record.docloginid,jdbcType=INTEGER},
       docName = #{record.docname,jdbcType=VARCHAR},
       docMale = #{record.docmale,jdbcType=CHAR},
       docAge = #{record.docage,jdbcType=INTEGER},
@@ -518,7 +540,6 @@
       docHospLat = #{record.dochosplat,jdbcType=VARCHAR},
       docPrimaryDept = #{record.docprimarydept,jdbcType=VARCHAR},
       docSecondDept = #{record.docseconddept,jdbcType=VARCHAR},
-      docDept = #{record.docdept,jdbcType=VARCHAR},
       docTitlePhoto = #{record.doctitlephoto,jdbcType=VARCHAR},
       docWorkCardPhoto = #{record.docworkcardphoto,jdbcType=VARCHAR},
       docQualPhoto = #{record.docqualphoto,jdbcType=VARCHAR},
@@ -533,7 +554,9 @@
       docAddressOther = #{record.docaddressother,jdbcType=VARCHAR},
       docAddressLon = #{record.docaddresslon,jdbcType=VARCHAR},
       docAddressLat = #{record.docaddresslat,jdbcType=VARCHAR},
-      docLoginId = #{record.docloginid,jdbcType=INTEGER}
+      docDept = #{record.docdept,jdbcType=VARCHAR},
+      docAlipayAccount = #{record.docalipayaccount,jdbcType=VARCHAR},
+      docPurseBalance = #{record.docpursebalance,jdbcType=DECIMAL}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -541,6 +564,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Doctorinfo" >
     update doctorinfo
     <set >
+      <if test="docloginid != null" >
+        docLoginId = #{docloginid,jdbcType=INTEGER},
+      </if>
       <if test="docname != null" >
         docName = #{docname,jdbcType=VARCHAR},
       </if>
@@ -595,9 +621,6 @@
       <if test="docseconddept != null" >
         docSecondDept = #{docseconddept,jdbcType=VARCHAR},
       </if>
-      <if test="docdept != null" >
-        docDept = #{docdept,jdbcType=VARCHAR},
-      </if>
       <if test="doctitlephoto != null" >
         docTitlePhoto = #{doctitlephoto,jdbcType=VARCHAR},
       </if>
@@ -640,15 +663,22 @@
       <if test="docaddresslat != null" >
         docAddressLat = #{docaddresslat,jdbcType=VARCHAR},
       </if>
-      <if test="docloginid != null" >
-        docLoginId = #{docloginid,jdbcType=INTEGER},
+      <if test="docdept != null" >
+        docDept = #{docdept,jdbcType=VARCHAR},
+      </if>
+      <if test="docalipayaccount != null" >
+        docAlipayAccount = #{docalipayaccount,jdbcType=VARCHAR},
+      </if>
+      <if test="docpursebalance != null" >
+        docPurseBalance = #{docpursebalance,jdbcType=DECIMAL},
       </if>
     </set>
     where docId = #{docid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.medical.po.Doctorinfo" >
     update doctorinfo
-    set docName = #{docname,jdbcType=VARCHAR},
+    set docLoginId = #{docloginid,jdbcType=INTEGER},
+      docName = #{docname,jdbcType=VARCHAR},
       docMale = #{docmale,jdbcType=CHAR},
       docAge = #{docage,jdbcType=INTEGER},
       docTitle = #{doctitle,jdbcType=VARCHAR},
@@ -666,7 +696,6 @@
       docHospLat = #{dochosplat,jdbcType=VARCHAR},
       docPrimaryDept = #{docprimarydept,jdbcType=VARCHAR},
       docSecondDept = #{docseconddept,jdbcType=VARCHAR},
-      docDept = #{docdept,jdbcType=VARCHAR},
       docTitlePhoto = #{doctitlephoto,jdbcType=VARCHAR},
       docWorkCardPhoto = #{docworkcardphoto,jdbcType=VARCHAR},
       docQualPhoto = #{docqualphoto,jdbcType=VARCHAR},
@@ -681,7 +710,9 @@
       docAddressOther = #{docaddressother,jdbcType=VARCHAR},
       docAddressLon = #{docaddresslon,jdbcType=VARCHAR},
       docAddressLat = #{docaddresslat,jdbcType=VARCHAR},
-      docLoginId = #{docloginid,jdbcType=INTEGER}
+      docDept = #{docdept,jdbcType=VARCHAR},
+      docAlipayAccount = #{docalipayaccount,jdbcType=VARCHAR},
+      docPurseBalance = #{docpursebalance,jdbcType=DECIMAL}
     where docId = #{docid,jdbcType=INTEGER}
   </update>
 </mapper>

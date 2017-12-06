@@ -43,12 +43,12 @@ public interface DoctorOrderService {
 	 * @return
 	 * 
 	 * */
-	String getOrderDetail(Integer docLoginId, Integer userOrderId);
+	String getOrderDetail(Integer docLoginId, Integer userOrderId) throws Exception;
 	
 
-	Map<String, Object> getDoctorByName(String docname);
 
-	Map<String, Object> updateOrderToRefuse(Integer docloginid, Integer userorderid, Integer redocloginid) throws Exception;
+
+	String updateOrderToRefuse(Integer docloginid, Integer userorderid, Integer redocloginid) throws Exception;
 	/**
 	 * 确认订单
 	 * @param
@@ -57,9 +57,9 @@ public interface DoctorOrderService {
 	 * */
 	String  updateOrderConfirm(Userorder userorder) throws Exception;
 
-	Map<String, Object> updateOrderToCancle(Integer docLoginId, Integer userorderid) throws Exception;
+	String updateOrderToCancle(Integer docLoginId, Integer userorderid) throws Exception;
 
-	Map<String, Object> finishOrder(Integer docloginid, Integer userorderid, Boolean userorderhstate,
+	String finishOrder(Integer docloginid, Integer userorderid, Boolean userorderhstate,
 			Integer userorderhospid) throws Exception;
 	String listOrderToConfirm(Integer docLoginId, Integer pageNo, Integer pageSize) throws Exception;
 	/**
@@ -68,46 +68,9 @@ public interface DoctorOrderService {
 	 * @return
 	 * 
 	 * */
-	String listHistoryOrder(Integer docloginid, Integer page);
-	/**
-	 * 获取会诊
-	 * @param
-	 * @return
-	 * 
-	 * */
-	String listConsultation(Integer docloginid, Integer type, Integer page);
-	/**
-	 * 获取会诊详情
-	 * @param
-	 * @return
-	 * @throws Exception 
-	 * 
-	 * */
-	String listConsultationDetail(Integer docloginid, Integer hosporderid) throws Exception;
-	/**
-	 * 确认会诊
-	 * @param
-	 * @return
-	 * 
-	 * */
-	String updateConsultationToConfirm(Integer docloginid, Integer hosporderid, BigDecimal orderdoctorprice,
-			Integer orderdoctortpricetype, BigDecimal orderdoctortprice, Integer orderdoctorapricetype,
-			BigDecimal orderdoctoraprice, Integer orderdoctorepricetype, BigDecimal orderdoctoreprice);
-	/**
-	 * 取消会诊
-	 * @param
-	 * @return
-	 * 
-	 * */
-	String updateConsultationToCancel(Integer docloginid, Integer hosporderid);
-	/**
-	 * 更改病情部门
-	 * @param
-	 * @return
-	 * @throws Exception 
-	 * 
-	 * */
-	String changeDept(Integer docloginid, Integer usersickid, String usersickprimarydept, String usersickseconddept) throws Exception;
+	String listHistoryOrder(Integer docloginid, Integer page) throws Exception;
+	
+	
 	
 	
 	

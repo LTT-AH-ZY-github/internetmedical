@@ -1,5 +1,6 @@
 package com.medical.po;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Userinfo {
@@ -48,6 +49,10 @@ public class Userinfo {
     private String userrelation;
 
     private Integer userloginid;
+
+    private String useralipayaccount;
+
+    private BigDecimal userpursebalance;
 
     public Integer getUserid() {
         return userid;
@@ -231,5 +236,21 @@ public class Userinfo {
 
     public void setUserloginid(Integer userloginid) {
         this.userloginid = userloginid;
+    }
+
+    public String getUseralipayaccount() {
+        return useralipayaccount;
+    }
+
+    public void setUseralipayaccount(String useralipayaccount) {
+        this.useralipayaccount = useralipayaccount == null ? null : useralipayaccount.trim();
+    }
+
+    public BigDecimal getUserpursebalance() {
+        return userpursebalance;
+    }
+
+    public void setUserpursebalance(BigDecimal userpursebalance) {
+        this.userpursebalance = userpursebalance;
     }
 }

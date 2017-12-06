@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.UserpurseMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Userpurse" >
+    <id column="userPurseId" property="userpurseid" jdbcType="INTEGER" />
+    <result column="userPurseTypeId" property="userpursetypeid" jdbcType="INTEGER" />
+    <result column="userPurseAmount" property="userpurseamount" jdbcType="DECIMAL" />
+    <result column="userPurseTime" property="userpursetime" jdbcType="TIMESTAMP" />
+    <result column="userPurseRemark" property="userpurseremark" jdbcType="VARCHAR" />
+    <result column="payId" property="payid" jdbcType="INTEGER" />
+    <result column="userPurseBalance" property="userpursebalance" jdbcType="DECIMAL" />
+    <result column="userLoginId" property="userloginid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    userPurseId, userPurseTypeId, userPurseAmount, userPurseTime, userPurseRemark, payId, 
+    userPurseBalance, userLoginId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.UserpurseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from userpurse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from userpurse
+    where userPurseId = #{userpurseid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from userpurse
+    where userPurseId = #{userpurseid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.UserpurseExample" >
+    delete from userpurse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Userpurse" >
+    insert into userpurse (userPurseId, userPurseTypeId, userPurseAmount, 
+      userPurseTime, userPurseRemark, payId, 
+      userPurseBalance, userLoginId)
+    values (#{userpurseid,jdbcType=INTEGER}, #{userpursetypeid,jdbcType=INTEGER}, #{userpurseamount,jdbcType=DECIMAL}, 
+      #{userpursetime,jdbcType=TIMESTAMP}, #{userpurseremark,jdbcType=VARCHAR}, #{payid,jdbcType=INTEGER}, 
+      #{userpursebalance,jdbcType=DECIMAL}, #{userloginid,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Userpurse" >
+    insert into userpurse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userpurseid != null" >
+        userPurseId,
+      </if>
+      <if test="userpursetypeid != null" >
+        userPurseTypeId,
+      </if>
+      <if test="userpurseamount != null" >
+        userPurseAmount,
+      </if>
+      <if test="userpursetime != null" >
+        userPurseTime,
+      </if>
+      <if test="userpurseremark != null" >
+        userPurseRemark,
+      </if>
+      <if test="payid != null" >
+        payId,
+      </if>
+      <if test="userpursebalance != null" >
+        userPurseBalance,
+      </if>
+      <if test="userloginid != null" >
+        userLoginId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userpurseid != null" >
+        #{userpurseid,jdbcType=INTEGER},
+      </if>
+      <if test="userpursetypeid != null" >
+        #{userpursetypeid,jdbcType=INTEGER},
+      </if>
+      <if test="userpurseamount != null" >
+        #{userpurseamount,jdbcType=DECIMAL},
+      </if>
+      <if test="userpursetime != null" >
+        #{userpursetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userpurseremark != null" >
+        #{userpurseremark,jdbcType=VARCHAR},
+      </if>
+      <if test="payid != null" >
+        #{payid,jdbcType=INTEGER},
+      </if>
+      <if test="userpursebalance != null" >
+        #{userpursebalance,jdbcType=DECIMAL},
+      </if>
+      <if test="userloginid != null" >
+        #{userloginid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.UserpurseExample" resultType="java.lang.Integer" >
+    select count(*) from userpurse
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update userpurse
+    <set >
+      <if test="record.userpurseid != null" >
+        userPurseId = #{record.userpurseid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userpursetypeid != null" >
+        userPurseTypeId = #{record.userpursetypeid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userpurseamount != null" >
+        userPurseAmount = #{record.userpurseamount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userpursetime != null" >
+        userPurseTime = #{record.userpursetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userpurseremark != null" >
+        userPurseRemark = #{record.userpurseremark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payid != null" >
+        payId = #{record.payid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userpursebalance != null" >
+        userPurseBalance = #{record.userpursebalance,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userloginid != null" >
+        userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update userpurse
+    set userPurseId = #{record.userpurseid,jdbcType=INTEGER},
+      userPurseTypeId = #{record.userpursetypeid,jdbcType=INTEGER},
+      userPurseAmount = #{record.userpurseamount,jdbcType=DECIMAL},
+      userPurseTime = #{record.userpursetime,jdbcType=TIMESTAMP},
+      userPurseRemark = #{record.userpurseremark,jdbcType=VARCHAR},
+      payId = #{record.payid,jdbcType=INTEGER},
+      userPurseBalance = #{record.userpursebalance,jdbcType=DECIMAL},
+      userLoginId = #{record.userloginid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Userpurse" >
+    update userpurse
+    <set >
+      <if test="userpursetypeid != null" >
+        userPurseTypeId = #{userpursetypeid,jdbcType=INTEGER},
+      </if>
+      <if test="userpurseamount != null" >
+        userPurseAmount = #{userpurseamount,jdbcType=DECIMAL},
+      </if>
+      <if test="userpursetime != null" >
+        userPurseTime = #{userpursetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userpurseremark != null" >
+        userPurseRemark = #{userpurseremark,jdbcType=VARCHAR},
+      </if>
+      <if test="payid != null" >
+        payId = #{payid,jdbcType=INTEGER},
+      </if>
+      <if test="userpursebalance != null" >
+        userPurseBalance = #{userpursebalance,jdbcType=DECIMAL},
+      </if>
+      <if test="userloginid != null" >
+        userLoginId = #{userloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where userPurseId = #{userpurseid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Userpurse" >
+    update userpurse
+    set userPurseTypeId = #{userpursetypeid,jdbcType=INTEGER},
+      userPurseAmount = #{userpurseamount,jdbcType=DECIMAL},
+      userPurseTime = #{userpursetime,jdbcType=TIMESTAMP},
+      userPurseRemark = #{userpurseremark,jdbcType=VARCHAR},
+      payId = #{payid,jdbcType=INTEGER},
+      userPurseBalance = #{userpursebalance,jdbcType=DECIMAL},
+      userLoginId = #{userloginid,jdbcType=INTEGER}
+    where userPurseId = #{userpurseid,jdbcType=INTEGER}
+  </update>
+</mapper>

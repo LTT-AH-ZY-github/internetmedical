@@ -1,9 +1,6 @@
 package com.medical.service.iface.user;
 
-import java.util.List;
-import java.util.Map;
 
-import com.github.pagehelper.PageInfo;
 import com.medical.po.DoctorSearch;
 
 /**
@@ -34,7 +31,7 @@ public interface UserHomeService {
 	 * @return
 	 * @param
 	 * */
-	String listCalendar(Integer docloginid, Integer page) throws Exception;
+	String listCalendar(Integer docloginid) throws Exception;
 	
 	/**
 	 * 获取对医生评价

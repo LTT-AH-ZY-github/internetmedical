@@ -1,5 +1,6 @@
 package com.medical.po;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -1689,6 +1690,136 @@ public class UserinfoExample {
 
         public Criteria andUserloginidNotBetween(Integer value1, Integer value2) {
             addCriterion("userLoginId not between", value1, value2, "userloginid");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipayaccountIsNull() {
+            addCriterion("userAlipayAccount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipayaccountIsNotNull() {
+            addCriterion("userAlipayAccount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipayaccountEqualTo(String value) {
+            addCriterion("userAlipayAccount =", value, "useralipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipayaccountNotEqualTo(String value) {
+            addCriterion("userAlipayAccount <>", value, "useralipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipayaccountGreaterThan(String value) {
+            addCriterion("userAlipayAccount >", value, "useralipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipayaccountGreaterThanOrEqualTo(String value) {
+            addCriterion("userAlipayAccount >=", value, "useralipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipayaccountLessThan(String value) {
+            addCriterion("userAlipayAccount <", value, "useralipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipayaccountLessThanOrEqualTo(String value) {
+            addCriterion("userAlipayAccount <=", value, "useralipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipayaccountLike(String value) {
+            addCriterion("userAlipayAccount like", value, "useralipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipayaccountNotLike(String value) {
+            addCriterion("userAlipayAccount not like", value, "useralipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipayaccountIn(List<String> values) {
+            addCriterion("userAlipayAccount in", values, "useralipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipayaccountNotIn(List<String> values) {
+            addCriterion("userAlipayAccount not in", values, "useralipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipayaccountBetween(String value1, String value2) {
+            addCriterion("userAlipayAccount between", value1, value2, "useralipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipayaccountNotBetween(String value1, String value2) {
+            addCriterion("userAlipayAccount not between", value1, value2, "useralipayaccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserpursebalanceIsNull() {
+            addCriterion("userPurseBalance is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserpursebalanceIsNotNull() {
+            addCriterion("userPurseBalance is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserpursebalanceEqualTo(BigDecimal value) {
+            addCriterion("userPurseBalance =", value, "userpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserpursebalanceNotEqualTo(BigDecimal value) {
+            addCriterion("userPurseBalance <>", value, "userpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserpursebalanceGreaterThan(BigDecimal value) {
+            addCriterion("userPurseBalance >", value, "userpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserpursebalanceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("userPurseBalance >=", value, "userpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserpursebalanceLessThan(BigDecimal value) {
+            addCriterion("userPurseBalance <", value, "userpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserpursebalanceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("userPurseBalance <=", value, "userpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserpursebalanceIn(List<BigDecimal> values) {
+            addCriterion("userPurseBalance in", values, "userpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserpursebalanceNotIn(List<BigDecimal> values) {
+            addCriterion("userPurseBalance not in", values, "userpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserpursebalanceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("userPurseBalance between", value1, value2, "userpursebalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andUserpursebalanceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("userPurseBalance not between", value1, value2, "userpursebalance");
             return (Criteria) this;
         }
     }

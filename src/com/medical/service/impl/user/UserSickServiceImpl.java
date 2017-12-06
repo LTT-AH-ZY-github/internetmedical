@@ -1,106 +1,56 @@
 package com.medical.service.impl.user;
 
-import java.io.File;
+
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.medical.exception.custom.MyException;
-import com.medical.mapper.CityMapperCustom;
-import com.medical.mapper.DoctorcommentMapper;
-import com.medical.mapper.DoctorcommentMapperCustom;
-import com.medical.mapper.DoctorinfoMapper;
-import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
-import com.medical.mapper.DoctorlogininfoMapperCustom;
-import com.medical.mapper.DoctorskdMapper;
-import com.medical.mapper.DoctorskdMapperCustom;
 import com.medical.mapper.FamilyinfoMapper;
-import com.medical.mapper.FamilyinfoMapperCustom;
-import com.medical.mapper.HospitalcommentMapper;
 import com.medical.mapper.PreorderMapper;
 import com.medical.mapper.PreorderMapperCustom;
-import com.medical.mapper.UserinfoMapper;
-import com.medical.mapper.UserinfoMapperCustom;
-import com.medical.mapper.UserlogMapper;
 import com.medical.mapper.UserlogininfoMapper;
-import com.medical.mapper.UserlogininfoMapperCustom;
-import com.medical.mapper.UserorderMapper;
-import com.medical.mapper.UserorderMapperCustom;
 import com.medical.mapper.UsersickMapper;
 import com.medical.mapper.UsersickMapperCustom;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
+import com.medical.po.Familyinfo;
 import com.medical.po.Preorder;
 import com.medical.po.Userlogininfo;
 import com.medical.po.Usersick;
 import com.medical.po.UsersickCustom;
 import com.medical.service.iface.CommonService;
 import com.medical.service.iface.user.UserSickService;
-import com.medical.utils.CommonUtils;
-import com.medical.utils.CreateFileUtil;
 import com.medical.utils.PictureTool;
 import com.medical.utils.result.DataResult;
 
-import javafx.scene.chart.PieChart.Data;
 
 public class UserSickServiceImpl implements UserSickService {
-	@Autowired
-	private UserinfoMapper userinfoMapper;
-	@Autowired
-	private UserinfoMapperCustom userinfoMapperCustom;
+
 	@Autowired
 	private UserlogininfoMapper userlogininfoMapper;
-	@Autowired
-	private UserlogininfoMapperCustom userlogininfoMapperCustom;
-	@Autowired
-	private UserlogMapper userlogMapper;
-	@Autowired
-	private FamilyinfoMapper familyinfoMapper;
-	@Autowired
-	private FamilyinfoMapperCustom familyinfoMapperCustom;
-	@Autowired
-	private CityMapperCustom cityMapperCustom;
+
 	@Autowired
 	private UsersickMapper usersickMapper;
 	@Autowired
 	private UsersickMapperCustom usersickMapperCustom;
-	@Autowired
-	private DoctorinfoMapperCustom doctorinfoMapperCustom;
-	@Autowired
-	private DoctorlogininfoMapperCustom doctorlogininfoMapperCustom;
-	@Autowired
-	private DoctorinfoMapper doctorinfoMapper;
+
 	@Autowired
 	private DoctorlogininfoMapper doctorlogininfoMapper;
-	@Autowired
-	private DoctorskdMapperCustom doctorskdMapperCustom;
-	@Autowired
-	private DoctorskdMapper doctorskdMapper;
+
 	@Autowired
 	private PreorderMapper preorderMapper;
 	@Autowired
 	private PreorderMapperCustom preorderMapperCustom;
-	@Autowired
-	private UserorderMapper userorderMapper;
-	@Autowired
-	private UserorderMapperCustom userorderMapperCustom;
-	@Autowired
-	private DoctorcommentMapper doctorcommentMapper;
-	@Autowired
-	private HospitalcommentMapper hospitalcommentMapper;
-	@Autowired
-	private DoctorcommentMapperCustom doctorcommentMapperCustom;
+
 	@Autowired
 	private CommonService commonService;
-
+	@Autowired
+	private FamilyinfoMapper familyinfoMapper;
 	// 插入病情信息
 	@Override
 	public String addSick(MultipartFile[] pictureFile, UsersickCustom usersickCustom) throws Exception {
@@ -110,16 +60,21 @@ public class UserSickServiceImpl implements UserSickService {
 			return DataResult.error("用户不存在");
 		}
 		Usersick usersick = new Usersick();
-		int type = user.getUserlogintype();
+		//int type = user.getUserlogintype();
 		/*
 		 * if (type!=3) { return DataResult.error("账号未审核"); }
 		 */
+		Familyinfo familyinfo = familyinfoMapper.selectByPrimaryKey(usersickCustom.getFamilyid());
+		usersick.setFamilymale(familyinfo.getFamilymale());
+		usersick.setFamilyname(familyinfo.getFamilyname());
+		usersick.setFamilyage(familyinfo.getFamilyage());
 		usersick.setUsersickpic(PictureTool.SavePictures(pictureFile));
 		usersick.setFamilyid(usersickCustom.getFamilyid());
 		usersick.setUserloginid(user.getUserloginid());
 		usersick.setUsersickprimarydept(usersickCustom.getUsersickprimarydept());
 		usersick.setUsersickseconddept(usersickCustom.getUsersickseconddept());
 		usersick.setUsersickdesc(usersickCustom.getUsersickdesc());
+		//病情创建时间
 		usersick.setUsersicktime(new Date());
 		boolean result = usersickMapperCustom.insertSelectiveReturnId(usersick) > 0;
 		if (result) {
@@ -133,7 +88,6 @@ public class UserSickServiceImpl implements UserSickService {
 	// 按type获取病情
 	@Override
 	public String listSicks(Integer userloginid, Integer type,Integer page) {
-		
 		PageHelper.startPage(page, 5);
 		List<Map<String, Object>> list =  usersickMapperCustom.selectAllInfoByUserLoginId(userloginid, type);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
@@ -151,7 +105,7 @@ public class UserSickServiceImpl implements UserSickService {
 		if (map != null && !map.isEmpty()) {
 			return DataResult.success("获取数据成功", map);
 		}else {
-			return DataResult.success("获取数据为空", null);
+			return DataResult.error("病情不存在", null);
 		}
 	}
 
@@ -164,9 +118,12 @@ public class UserSickServiceImpl implements UserSickService {
 			return DataResult.error("该状态不支持删除");
 		}
 		// 发布状态 删除相关医生
-		boolean result = usersickMapper.deleteByPrimaryKey(usersickid) > 0;
+		Usersick sickrecord = new Usersick();
+		sickrecord.setUsersickid(usersickid);
+		sickrecord.setUsersickisdelete(true);
+		boolean result = usersickMapper.updateByPrimaryKeySelective(sickrecord) > 0;
 		if (stateid == 2) {
-			boolean preResult = 	preorderMapperCustom.deleteAllByUserSickId(usersickid)>0;
+			boolean preResult = preorderMapperCustom.deleteAllByUserSickId(usersickid)>0;
 			result = preResult && result;
 		}
 		if (result) {
@@ -186,9 +143,9 @@ public class UserSickServiceImpl implements UserSickService {
 		if (sick == null) {
 			return DataResult.error("病情不存在");
 		}
-		int user = sick.getUserloginid();
+		/*int user = sick.getUserloginid();
 		int userloginid = sick.getUserloginid();
-		/*if (userloginid!=user) {
+		if (userloginid!=user) {
 			return DataResult.error("该病情不属于当前用户");
 		}*/
 		int userSickStateId = sick.getUsersickstateid();
@@ -363,10 +320,11 @@ public class UserSickServiceImpl implements UserSickService {
 			preorder.setPreorderstate(1);
 			preorder.setPreorderuserloginid(userloginid);
 			List<Preorder> list = preorderMapperCustom.selectByDocLoginIdAndUserSickId(docloginid, usersickid, 4);
-			// 该医生未被推荐
+			// 该医生未被选择
 			if (list.size() == 0) { 
 				preorder.setUsersickid(count.get(0).getUsersickid());
-				preorder.setPreordertype(4); // 预选医生
+				// 4为预选医生
+				preorder.setPreordertype(4); 
 				preorder.setPreordertime(new Date());
 				boolean result=  preorderMapper.insertSelective(preorder) > 0;
 				if (result) {

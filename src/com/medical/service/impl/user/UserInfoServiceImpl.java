@@ -1,48 +1,29 @@
 package com.medical.service.impl.user;
 
-import java.io.File;
+
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.medical.exception.custom.MyException;
-import com.medical.mapper.CityMapperCustom;
-import com.medical.mapper.DoctorcommentMapper;
-import com.medical.mapper.DoctorcommentMapperCustom;
-import com.medical.mapper.DoctorinfoMapper;
-import com.medical.mapper.DoctorinfoMapperCustom;
-import com.medical.mapper.DoctorlogininfoMapper;
-import com.medical.mapper.DoctorlogininfoMapperCustom;
-import com.medical.mapper.DoctorskdMapper;
-import com.medical.mapper.DoctorskdMapperCustom;
 import com.medical.mapper.FamilyinfoMapper;
 import com.medical.mapper.FamilyinfoMapperCustom;
-import com.medical.mapper.HospitalcommentMapper;
-import com.medical.mapper.PreorderMapper;
-import com.medical.mapper.PreorderMapperCustom;
 import com.medical.mapper.UserinfoMapper;
 import com.medical.mapper.UserinfoMapperCustom;
-import com.medical.mapper.UserlogMapper;
 import com.medical.mapper.UserlogininfoMapper;
-import com.medical.mapper.UserlogininfoMapperCustom;
-import com.medical.mapper.UserorderMapper;
-import com.medical.mapper.UserorderMapperCustom;
-import com.medical.mapper.UsersickMapper;
 import com.medical.mapper.UsersickMapperCustom;
 import com.medical.po.Familyinfo;
 import com.medical.po.Userinfo;
 import com.medical.po.Userlogininfo;
 import com.medical.po.UserlogininfoCustom;
+import com.medical.service.iface.CommonService;
 import com.medical.service.iface.user.UserInfoService;
-import com.medical.utils.CommonUtils;
-import com.medical.utils.CreateFileUtil;
 import com.medical.utils.PictureTool;
 import com.medical.utils.result.DataResult;
+
+import net.sf.json.JSONObject;
+
 
 public class UserInfoServiceImpl implements UserInfoService {
 	@Autowired
@@ -52,45 +33,14 @@ public class UserInfoServiceImpl implements UserInfoService {
 	@Autowired
 	private UserlogininfoMapper userlogininfoMapper;
 	@Autowired
-	private UserlogininfoMapperCustom userlogininfoMapperCustom;
-	@Autowired
-	private UserlogMapper userlogMapper;
-	@Autowired
 	private FamilyinfoMapper familyinfoMapper;
 	@Autowired
 	private FamilyinfoMapperCustom familyinfoMapperCustom;
 	@Autowired
-	private CityMapperCustom cityMapperCustom;
-	@Autowired
-	private UsersickMapper usersickMapper;
-	@Autowired
 	private UsersickMapperCustom usersickMapperCustom;
 	@Autowired
-	private DoctorinfoMapperCustom doctorinfoMapperCustom;
-	@Autowired
-	private DoctorlogininfoMapperCustom doctorlogininfoMapperCustom;
-	@Autowired
-	private DoctorinfoMapper doctorinfoMapper;
-	@Autowired
-	private DoctorlogininfoMapper doctorlogininfoMapper;
-	@Autowired
-	private DoctorskdMapperCustom doctorskdMapperCustom;
-	@Autowired
-	private DoctorskdMapper doctorskdMapper;
-	@Autowired
-	private PreorderMapper preorderMapper;
-	@Autowired
-	private PreorderMapperCustom preorderMapperCustom;
-	@Autowired
-	private UserorderMapper userorderMapper;
-	@Autowired
-	private UserorderMapperCustom userorderMapperCustom;
-	@Autowired
-	private DoctorcommentMapper doctorcommentMapper;
-	@Autowired
-	private HospitalcommentMapper hospitalcommentMapper;
-	@Autowired
-	private DoctorcommentMapperCustom doctorcommentMapperCustom;
+	private CommonService commonService;
+	
 	
 	//每次登录更新位置信息
 	@Override
@@ -131,13 +81,18 @@ public class UserInfoServiceImpl implements UserInfoService {
 		if (userlogininfo == null) {
 			return DataResult.error("用户不存在");
 		}
+		String file = null;
+		if (pictureFile!=null && !pictureFile.isEmpty() ) {
+			file = PictureTool.SaveOnePicture(pictureFile);
+		}
+		
 		UserlogininfoCustom userlogininfoCustom = new UserlogininfoCustom();
 		userlogininfoCustom.setUserloginid(userloginid);
 		userlogininfoCustom.setUserloginname(username);
-		userlogininfoCustom.setUserloginpix(PictureTool.SaveOnePicture(pictureFile));
+		userlogininfoCustom.setUserloginpix(file);
 		boolean result = userlogininfoMapper.updateByPrimaryKeySelective(userlogininfoCustom) > 0;
 		if (result) {
-			return DataResult.success("修改成功",userlogininfo.getUserloginpix());
+			return DataResult.success("修改成功",file);
 		} else {
 			return DataResult.error("修改失败");
 		}
@@ -183,7 +138,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 			userinfo.setUsername(username);
 			userinfo.setUsermale(usermale);
 			userinfo.setUsercardphoto(PictureTool.SavePictures(pictureFile));
-			int result = userinfoMapper.updateByPrimaryKeySelective(userinfo);
+			boolean result = userinfoMapper.updateByPrimaryKeySelective(userinfo)>0;
 			Familyinfo familyinfo = new Familyinfo();
 			familyinfo.setFamilyage(userage);
 			familyinfo.setFamilymale(usermale);
@@ -192,16 +147,17 @@ public class UserInfoServiceImpl implements UserInfoService {
 			familyinfo.setFamilytype(true);
 			// "1"为用户本人
 			List<Familyinfo> list = familyinfoMapperCustom.selectByUserLoginIdAndType(userloginid, 1);
-			int familyResult = 0;
+			boolean familyResult = false;
+			//int familyResult = 0;
 			if (list.size() == 0) {
 				// 插入到亲属信息表
-				familyResult = familyinfoMapper.insertSelective(familyinfo);
+				familyResult = familyinfoMapper.insertSelective(familyinfo)>0;
 			} else {
 				Integer id = list.get(0).getFamilyid();
 				familyinfo.setFamilyid(id);
-				familyResult = familyinfoMapper.updateByPrimaryKey(familyinfo);
+				familyResult = familyinfoMapper.updateByPrimaryKey(familyinfo)>0;
 			}
-			if (result > 0 && familyResult > 0) {
+			if (result && familyResult) {
 				return DataResult.success("信息修改成功");
 			} else {
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -210,7 +166,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		}
 		
 	}
-
+	//消息
 	// 提交审核
 	@Override
 	public String updateInfoToReview(Integer userloginid) throws Exception {
@@ -231,6 +187,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 		record.setUserlogintype(2);
 		boolean result = userlogininfoMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
+			JSONObject jsonCustormCont = new JSONObject();
+			boolean push = commonService.createMsgUserToAdmin(userloginid, 0, "通知消息", "提交资料审核", jsonCustormCont);
 			return DataResult.success("提交审核成功");
 		} else {
 			return DataResult.error("提交审核失败");
@@ -260,45 +218,96 @@ public class UserInfoServiceImpl implements UserInfoService {
 				return DataResult.error("添加失败");
 			} 
 		} else {
-			throw new MyException("该亲属已存在");
-		}
+			return DataResult.error("该亲属已存在");
+		 }
 		
 	}
 
 	// 修改亲属信息
 	@Override
-	public boolean updateFamily(Familyinfo familyinfo) throws Exception {
+	public String updateFamily(Familyinfo familyinfo) throws Exception {
 		Familyinfo family = familyinfoMapper.selectByPrimaryKey(familyinfo.getFamilyid());
-		if (family != null) {
-			boolean type = family.getFamilytype();
-			if (!type) {
-				return familyinfoMapper.updateByPrimaryKeySelective(familyinfo) > 0;
-			} else {
-				throw new MyException("本人信息无法修改");
-			}
+		if (family == null) {
+			return DataResult.error("亲属不存在");
+		}
+		int user = familyinfo.getUserloginid();
+		int userloginid = family.getUserloginid();
+		if (user != userloginid) {
+			return DataResult.error("账户信息不匹配");
+		}
+		boolean type = family.getFamilytype();
+		if (type) {
+			return DataResult.error("本人信息无法修改");
+		}
+		boolean result = familyinfoMapper.updateByPrimaryKeySelective(familyinfo) > 0;
+		if (result) {
+			return DataResult.success("修改成功");
 		} else {
-
-			throw new MyException("亲属不存在");
+			return DataResult.error("修改失败");
 		}
 
 	}
 
 	// 删除亲属信息
 	@Override
-	public boolean deleteFamily(Integer familyid) throws Exception {
-		Familyinfo familyinfo = familyinfoMapper.selectByPrimaryKey(familyid);
-		boolean type = familyinfo.getFamilytype();
-		if (!type) {
-			int count = usersickMapperCustom.selectCountByFamilyId(familyid);
-			if (count == 0) {
-				return familyinfoMapper.deleteByPrimaryKey(familyid) > 0;
+	public String deleteFamily(Integer familyid) throws Exception {
+		Familyinfo family = familyinfoMapper.selectByPrimaryKey(familyid);
+		if (family == null) {
+			return DataResult.error("亲属不存在");
+		}
+		/*
+		 * int user = familyinfo.getUserloginid(); int userloginid =
+		 * family.getUserloginid(); if (user != userloginid) { return
+		 * DataResult.error("账户信息不匹配"); }
+		 */
+		boolean type = family.getFamilytype();
+		if (type) {
+			return DataResult.error("本人信息无法删除");
+		}
+		int count = usersickMapperCustom.selectCountByFamilyId(familyid);
+		if (count == 0) {
+			boolean result = familyinfoMapper.deleteByPrimaryKey(familyid) > 0;
+			if (result) {
+				return DataResult.success("删除成功");
 			} else {
-				throw new MyException("该亲属已填写病情，无法删除");
+				return DataResult.error("删除失败");
 			}
 		} else {
-			throw new MyException("为本人信息，无法删除");
-
+			return DataResult.error("该亲属已填写病情，无法删除");
 		}
 
 	}
+
+	/* (non-Javadoc)
+	 * @see com.medical.service.iface.user.UserInfoService#updateInfoToCancelReview(java.lang.Integer)
+	 */
+	@Override
+	public String updateInfoToCancelReview(Integer userloginid) {
+		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
+		if (userlogininfo == null) {
+			return DataResult.error("用户不存在");
+		}
+		int type = userlogininfo.getUserlogintype();
+		if (type == 1) {
+			return DataResult.error("未提交审核");
+		}
+		if (type == 3) {
+			return DataResult.error("已通过审核");
+		}
+		if (type == 4) {
+			return DataResult.error("未通过审核");
+		}
+		Userlogininfo record = new Userlogininfo();
+		record.setUserloginid(userloginid);
+		record.setUserloginsubchecktime(new Date());
+		record.setUserlogintype(1);
+		boolean result = userlogininfoMapper.updateByPrimaryKeySelective(record) > 0;
+		if (result) {
+			return DataResult.success("撤销审核成功");
+		} else {
+			return DataResult.error("撤销审核失败");
+		}
+	}
+	
+	
 }

@@ -1,10 +1,6 @@
 package com.medical.service.iface.user;
 
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.web.multipart.MultipartFile;
-
 import com.medical.po.Familyinfo;
 
 public interface UserInfoService {
@@ -52,12 +48,33 @@ public interface UserInfoService {
 	 * @param
 	 * */
 	String findFamily(Integer userloginid) throws Exception;
-
+	/**
+	 * 添加亲属信息
+	 * @return
+	 * @param
+	 * */
 	String addFamily(Familyinfo familyinfo) throws Exception;
-
-	boolean updateFamily(Familyinfo familyinfo) throws Exception;
-
-	boolean deleteFamily(Integer familyid) throws Exception;
+	/**
+	 * 修改亲属信息
+	 * @return
+	 * @param
+	 * */
+	String updateFamily(Familyinfo familyinfo) throws Exception;
+	/**
+	 * 删除亲属信息
+	 * @return
+	 * @param
+	 * */
+	String deleteFamily(Integer familyid) throws Exception;
+	/**
+	 * @Title: updateInfoToCancelReview
+	 * @Description: TODO
+	 * @param userloginid
+	 * @return
+	 * @return: String
+	 */
+	String updateInfoToCancelReview(Integer userloginid);
+	
 
 
 

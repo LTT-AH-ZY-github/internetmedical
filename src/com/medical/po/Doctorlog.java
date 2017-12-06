@@ -13,7 +13,7 @@ public class Doctorlog {
 
     private String doclogloc;
 
-    private Boolean doclogdev;
+    private Integer doclogdev;
 
     private String doclogbver;
 
@@ -67,11 +67,11 @@ public class Doctorlog {
         this.doclogloc = doclogloc == null ? null : doclogloc.trim();
     }
 
-    public Boolean getDoclogdev() {
+    public Integer getDoclogdev() {
         return doclogdev;
     }
 
-    public void setDoclogdev(Boolean doclogdev) {
+    public void setDoclogdev(Integer doclogdev) {
         this.doclogdev = doclogdev;
     }
 

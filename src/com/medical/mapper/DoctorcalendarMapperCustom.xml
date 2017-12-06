@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.medical.mapper.DoctorcalendarMapperCustom" >
- 
+  
+  <!--根据医生登录id获取医生日程  -->
   <select id="selectByDocloginid" resultType="com.medical.po.Doctorcalendar" parameterType="java.lang.Integer" >
     select *
    	from doctorcalendar
     where docLoginId = #{0,jdbcType=INTEGER}
   </select>
+  
+  <!--查询医生指定日期前最新的日程  -->
+  <select id="selectByDocloginidAndDayInDoc" resultType="com.medical.po.Doctorcalendar" parameterType="com.medical.po.custom.CalendarParmas" >
+    select *
+   	from doctorcalendar as a 
+    where a.docLoginId = #{id}
+    	and a.docCalendarDay <![CDATA[ < ]]> #{time}
+    	ORDER BY a.docCalendarDay DESC
+  </select>
+ 
+  <!--查询医生指定日期的日程  -->
+  <select id="selectByDocloginidAndDayAndTimeInDoc" resultType="com.medical.po.Doctorcalendar" parameterType="com.medical.po.custom.CalendarParmas" >
+    select *
+   	from doctorcalendar as a 
+    where a.docLoginId = #{id}  and date_format(a.docCalendarDay,'%Y-%m-%d')=#{time}and a.docCalendarTime=#{key}
+  </select>
+ 
   <!--查询日程及地址信息  -->
   <select id="selectAllInfoByDocloginid" resultType="map" parameterType="com.medical.po.custom.CalendarParmas" >
     select a.doccalendarid,a.doccalendarday,a.doccalendartime,a.doccalendaraffair,a.doccalendaradressid,
@@ -26,19 +44,19 @@
     where a.doccalendarid = #{0}
     
   </select>
-  <!--根据时间查询日程-->
+  <!--根据时间和上下午查询日程-->
   <select id="selectByDayAndTime" resultType="com.medical.po.Doctorcalendar" parameterType="java.lang.String" >
     select *
    	from doctorcalendar 
-   	where docCalendarDay = #{0}
+   	where docCalendarDay = #{0} and docCalendarTime=#{1}
    	
  </select>
- <select id="selectAllInfoByDocloginidInUser" resultType="map" parameterType="com.medical.po.custom.CalendarParmas" >
+ <select id="selectAllInfoByDocloginidInUser" resultType="map" parameterType="java.lang.Integer" >
     select a.doccalendarid,a.doccalendarday,a.doccalendartime,a.doccalendaraffair,a.doccalendaradressid,
     	b.docaddresslocation,b.docaddressprovince,b.docaddresscity,b.docaddressarea,b.docaddressother,b.docaddresslon,b.docaddresslat
    	from doctorcalendar as a 
    		left join doctoraddress as b on a.docCalendarAdressId = b.docAddressId 
-    where  date_add(CURDATE(), INTERVAL 30 DAY) <![CDATA[ >= ]]> a.docCalendarDay and a.docCalendarDay<![CDATA[ >= ]]>CURDATE()
+    where  a.docLoginId=#{0}  and date_add(CURDATE(), INTERVAL 30 DAY) <![CDATA[ >= ]]> a.docCalendarDay and a.docCalendarDay<![CDATA[ >= ]]>CURDATE()
     ORDER BY a.docCalendarDay ASC
     </select>
  <insert id="insertSelectiveReturnId" useGeneratedKeys="true" keyProperty="doccalendarid" parameterType="com.medical.po.Doctorcalendar" >

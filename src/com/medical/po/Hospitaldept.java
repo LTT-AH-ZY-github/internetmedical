@@ -9,6 +9,8 @@ public class Hospitaldept {
 
     private Integer hospdeptfatherid;
 
+    private Boolean hospdeptischeck;
+
     public Integer getHospdeptid() {
         return hospdeptid;
     }
@@ -39,5 +41,13 @@ public class Hospitaldept {
 
     public void setHospdeptfatherid(Integer hospdeptfatherid) {
         this.hospdeptfatherid = hospdeptfatherid;
+    }
+
+    public Boolean getHospdeptischeck() {
+        return hospdeptischeck;
+    }
+
+    public void setHospdeptischeck(Boolean hospdeptischeck) {
+        this.hospdeptischeck = hospdeptischeck;
     }
 }

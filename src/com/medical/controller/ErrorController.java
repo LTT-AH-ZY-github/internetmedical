@@ -1,12 +1,14 @@
 package com.medical.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-/**
- * @author  作者:xyh
- * @date 创建时间：2017年9月24日 上午12:05:48
- * @version 1.0 
- */
 import org.springframework.web.bind.annotation.RestController;
+/**
+ * @ClassName:     ErrorController.java
+ * @Description:   错误
+ * @author          xyh
+ * @version         V1.0  
+ * @Date           2017年11月27日 下午9:47:54 
+ */
 @RestController
 public class ErrorController {
 	/**
