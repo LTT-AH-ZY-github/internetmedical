@@ -1,7 +1,13 @@
 package com.medical.controller.doctor;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Locale;
+
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.number.CurrencyFormatter;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -78,6 +84,18 @@ public class DoctorPurseController {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
+		//二、CurrencyFormatter：实现货币样式的格式化/解析  
+		CurrencyFormatter currencyFormatter = new CurrencyFormatter();  
+		currencyFormatter.setFractionDigits(2);//保留小数点后几位  
+		currencyFormatter.setRoundingMode(RoundingMode.CEILING);//舍入模式（ceilling表示四舍五入）  
+		  
+		//1、将带货币符号的字符串“$123.125”转换为BigDecimal("123.00")  
+		Assert.assertEquals(new BigDecimal("123.13"), currencyFormatter.parse("$123.125", Locale.US));  
+		//2、将BigDecimal("123")格式化为字符串“$123.00”展示  
+		System.out.println("货币"+currencyFormatter.print(new BigDecimal("123"), Locale.CHINA));
+		Assert.assertEquals("$123.00", currencyFormatter.print(new BigDecimal("123"), Locale.US));  
+		Assert.assertEquals("￥123.00", currencyFormatter.print(new BigDecimal("123"), Locale.CHINA));  
+		Assert.assertEquals("￥123.00", currencyFormatter.print(new BigDecimal("123"), Locale.JAPAN));  
 		return doctorPurseService.listBalanceRecord(docloginid,page);
 		// TODO Auto-generated method stub
 

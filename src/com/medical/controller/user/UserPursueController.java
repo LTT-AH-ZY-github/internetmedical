@@ -44,7 +44,7 @@ public class UserPursueController {
 
 	}
 	*/
-	/*@RequestMapping(value = "/listbalancerecord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/listbalancerecord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取账户余额变动记录", httpMethod = "POST", notes = "获取账户余额变动记录", produces = "application/json")
 	public String listBalanceRecord(
 			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam(value = "userloginid") Integer userloginid,
@@ -57,7 +57,7 @@ public class UserPursueController {
 		return userPursueService.listBalanceRecord(userloginid,page);
 		// TODO Auto-generated method stub
 
-	}*/
+	}
 	@RequestMapping(value = "/getalipayaccount", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取支付宝账号", httpMethod = "POST", notes = "获取支付宝账号", produces = "application/json")
 	public String getBalance(

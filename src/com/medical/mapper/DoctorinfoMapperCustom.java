@@ -7,6 +7,7 @@ import java.util.Map;
 import com.medical.po.DoctorSearch;
 import com.medical.po.Doctorinfo;
 import com.medical.po.HospSearchDocTerm;
+import com.medical.po.custom.HospSearchDoc;
 
 
 
@@ -119,7 +120,7 @@ public interface DoctorinfoMapperCustom {
 	 * @return
 	 * @return: List<Map<String,Object>>
 	 */
-	List<Map<String, Object>> paginationDoctorListInHosp(HospSearchDocTerm hospSearchDocTerm);
+	List<Map<String, Object>> paginationDoctorListInHosp(HospSearchDoc hospSearchDoc);
 	
 	
 	

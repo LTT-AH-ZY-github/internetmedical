@@ -123,12 +123,14 @@ public class DoctorConsultationServiceImpl implements DoctorConsultationService 
 	// 取消会诊
 	@Override
 	public String updateConsultationToCancel(Integer docloginid, Integer hosporderid) throws Exception {
+		System.out.println("订单id"+hosporderid);
 		Hosporder hosporder = hosporderMapper.selectByPrimaryKey(hosporderid);
 		if (hosporder == null) {
 			return DataResult.error("订单不存在");
 		}
 		int doctor = hosporder.getDoctorid();
-		if (!docloginid.equals(doctor)) {
+		System.out.println("医生id"+doctor+"医生"+docloginid);
+		if (docloginid!=doctor) {
 			return DataResult.error("该订单不属于该医生");
 		}
 		int state = hosporder.getOrderstate();

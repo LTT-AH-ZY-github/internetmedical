@@ -11,11 +11,10 @@
   			a.orderdoctortpricetype,h.pricetypename as orderdoctortpricetypename,a.orderdoctortprice,
   			a.orderdoctorapricetype,i.pricetypename as orderdoctorapricetypename,a.orderdoctoraprice,
   			a.orderdoctorepricetype,j.pricetypename as orderdoctorepricetypename,a.orderdoctoreprice,
-  			c.hosploginid,c.hospname,d.hosplevelname,b.hosphuanxinaccount,b.hosploginpix
+  			c.hosploginid,c.hospname,c.hospGrade as hosplevelname,b.hosphuanxinaccount,b.hosploginpix
   		from hosporder as a
   		left join hosplogininfo as b on a.HospId=b.hospLoginId
   		left join hospinfo as c on c.hospLoginId= b.hospLoginId
-  		left join hosplevel as d on d.hospLevelId= c.hospGrade
   		left join pricetype as e on e.priceTypeId=a.OrderHospTPriceType
   		left join pricetype as f on f.priceTypeId=a.OrderHospAPriceType
   		left join pricetype as g on g.priceTypeId=a.OrderHospEPriceType
@@ -34,15 +33,15 @@
   	</if>
   	
   	<if test="param2==3">
-  		and a.OrderState<![CDATA[ > ]]>2 and a.OrderState<![CDATA[ < ]]>5
+  		and a.OrderState<![CDATA[ > ]]>2 and a.OrderState<![CDATA[ < ]]>4
   		ORDER BY OrderSTime ASC
   	</if>
   	<if test="param2==4">
-  		and a.OrderState=5
+  		and a.OrderState=4
   		ORDER BY OrderETime DESC
   	</if>
   	<if test="param2==5">
-  		and a.OrderState<![CDATA[ > ]]>4 
+  		and a.OrderState<![CDATA[ >= ]]>4 
   		ORDER BY OrderETime DESC
   	</if>
   	 
@@ -58,12 +57,12 @@
   			a.orderdoctortpricetype,h.pricetypename as orderdoctortpricetypename,a.orderdoctortprice,
   			a.orderdoctorapricetype,i.pricetypename as orderdoctorapricetypename,a.orderdoctoraprice,
   			a.orderdoctorepricetype,j.pricetypename as orderdoctorepricetypename,a.orderdoctoreprice,
-  			c.hosploginid,c.hospname,d.hosplevelname,b.hosphuanxinaccount,b.hosploginpix,
+  			c.hosploginid,c.hospname,c.hospGrade as hosplevelname,b.hosphuanxinaccount,b.hosploginpix,
   			c.hospabs,c.hospfeature,c.hospadrprovince,c.hospadrcity,c.hospadrarea,c.hospadrother,c.hospadrlon,c.hospadrlat
   		from hosporder as a
   		left join hosplogininfo as b on a.HospId=b.hospLoginId
   		left join hospinfo as c on c.hospLoginId= b.hospLoginId
-  		left join hosplevel as d on d.hospLevelId= c.hospGrade
+  		
   		left join pricetype as e on e.priceTypeId=a.OrderHospTPriceType
   		left join pricetype as f on f.priceTypeId=a.OrderHospAPriceType
   		left join pricetype as g on g.priceTypeId=a.OrderHospEPriceType

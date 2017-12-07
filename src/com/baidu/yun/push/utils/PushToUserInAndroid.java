@@ -9,20 +9,15 @@ import com.baidu.yun.push.exception.PushClientException;
 import com.baidu.yun.push.exception.PushServerException;
 import com.baidu.yun.push.model.PushMsgToSingleDeviceRequest;
 import com.baidu.yun.push.model.PushMsgToSingleDeviceResponse;
+import com.medical.push.PushConfig;
 import com.medical.utils.Global;
 
 import net.sf.json.JSONObject;
 
 public class PushToUserInAndroid {
 	
-	public static void main(String[] args) throws Exception{
-		JSONObject jsonCustormCont = new JSONObject();
-		jsonCustormCont.put("doc_id", 12);
-		jsonCustormCont.put("sick_id", 12);
-		jsonCustormCont.put("type", 2);
-		pushMsgToSingleDevice("4345462790363541415","你好","你好");
-	}
-	public static boolean pushMsgToSingleDevice(String channelId, String title, String msg)
+	
+	public static boolean pushMsgToSingleDeviceInAndroid(String channelId, String title, String msg)
 			throws PushClientException, PushServerException {
 		// 1. get apiKey and secretKey from developer console
 		PushKeyPair pair = new PushKeyPair(PushConfig.AndroidInUserApiKey, PushConfig.AndroidInUserSecretKey);

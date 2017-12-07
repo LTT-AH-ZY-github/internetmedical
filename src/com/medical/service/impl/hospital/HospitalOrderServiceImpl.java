@@ -9,8 +9,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-
-import com.baidu.yun.push.utils.PushToUser;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.exception.custom.HospitalOrderException;
@@ -32,6 +30,7 @@ import com.medical.po.Hosporder;
 import com.medical.po.Pay;
 import com.medical.po.Userorder;
 import com.medical.po.Usersick;
+import com.medical.push.PushToUser;
 import com.medical.service.iface.CommonService;
 import com.medical.service.iface.hospital.HospitalOrderService;
 import com.medical.utils.result.DataResult;
@@ -65,7 +64,7 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 	@Autowired
 	private PayMapperCustom payMapperCustom;
 
-	@Override
+/*	@Override
 	public String listDoctor(Integer pageNo, Integer pageSize, HospSearchDocTerm hospSearchDocTerm) throws Exception {
 		pageNo = pageNo == null ? 1 : pageNo;
 		pageSize = pageSize == null ? 3 : pageSize;
@@ -84,7 +83,7 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 		} else {
 			return DataResult.success("获取数据为空", null);
 		}
-	}
+	}*/
 
 	// 医院获取需要住院的病人订单
 	@Override

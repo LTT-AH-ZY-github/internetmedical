@@ -15,9 +15,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.socket.TextMessage;
 
-import com.baidu.yun.push.utils.PushToDoctor;
-import com.baidu.yun.push.utils.PushToUser;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -40,6 +37,8 @@ import com.medical.po.Doctorlogininfo;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Notification;
 import com.medical.po.Userlogininfo;
+import com.medical.push.PushToDoctor;
+import com.medical.push.PushToUser;
 import com.medical.service.iface.CommonService;
 import com.medical.utils.KeyWords;
 import com.medical.utils.result.DataResult;

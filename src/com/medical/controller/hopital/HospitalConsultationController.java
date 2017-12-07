@@ -89,7 +89,7 @@ public class HospitalConsultationController {
 		hospSearchDocTerm.setOne_level_dept(One_level_dept);
 		hospSearchDocTerm.setProvince_code(province_code);
 		hospSearchDocTerm.setTwo_level_dept(Two_level_dept);
-		return hospitalConsultationService.listDoctor(page, pageSize, hospSearchDocTerm);
+		return hospitalConsultationService.listDoctor(page, pageSize,province_code,city_code,area_code,details,doctortitle,hosplevel,One_level_dept,Two_level_dept);
 
 	}
 	@RequestMapping(value = "/getcalendar", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")

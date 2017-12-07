@@ -11,6 +11,7 @@ import com.baidu.yun.push.exception.PushClientException;
 import com.baidu.yun.push.exception.PushServerException;
 import com.baidu.yun.push.model.PushMsgToSingleDeviceRequest;
 import com.baidu.yun.push.model.PushMsgToSingleDeviceResponse;
+import com.medical.push.PushConfig;
 
 public class PushToDoctorInIOS {
 	public static void main(String[] args) throws Exception{

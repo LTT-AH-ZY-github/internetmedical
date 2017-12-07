@@ -3,10 +3,12 @@
  */
 package com.medical.service.impl.doctor;
 
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.number.CurrencyFormatter;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -90,8 +92,9 @@ public class DoctorPurseServiceImpl implements DoctorPurseService {
 	@Override
 	public String listBalanceRecord(Integer docloginid,Integer page) throws Exception {
 		PageHelper.startPage(page, 5);
-		List<Purse> list = doctorpurseMapperCustom.selectAllInfoByDocLoginId(docloginid);
-		PageInfo<Purse> pageInfo = new PageInfo<Purse>(list);
+		List<Map<String, Object>> list = doctorpurseMapperCustom.selectAllInfoByDocLoginId(docloginid);
+		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
+		
 		if (pageInfo != null && !pageInfo.getList().isEmpty()) {
 			return DataResult.success("获取数据成功", pageInfo.getList());
 		} else {

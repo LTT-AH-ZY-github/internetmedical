@@ -86,7 +86,7 @@ public interface HospitalConsultationService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	String listDoctor(Integer pageNo, Integer pageSize, HospSearchDocTerm hospSearchDocTerm) throws Exception;
+	//String listDoctor(Integer pageNo, Integer pageSize, HospSearchDocTerm hospSearchDocTerm) throws Exception;
 
 	/**
 	 * @Title: updateStatePayDoctorFinish
@@ -119,6 +119,25 @@ public interface HospitalConsultationService {
 	 * @return: String
 	 */
 	String listCalendar(Integer docloginid);
+
+	/**
+	 * @Title: listDoctor
+	 * @Description: TODO
+	 * @param page
+	 * @param pageSize
+	 * @param province_code
+	 * @param area_code
+	 * @param city_code
+	 * @param details
+	 * @param doctortitle
+	 * @param hosplevel
+	 * @param one_level_dept
+	 * @param two_level_dept
+	 * @return
+	 * @return: String
+	 */
+	String listDoctor(Integer page, Integer pageSize, Integer province_code, Integer area_code, Integer city_code,
+			String details, String doctortitle, String hosplevel, Integer one_level_dept, Integer two_level_dept);
 
 	
 

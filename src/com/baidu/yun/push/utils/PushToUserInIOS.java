@@ -11,9 +11,10 @@ import com.baidu.yun.push.exception.PushClientException;
 import com.baidu.yun.push.exception.PushServerException;
 import com.baidu.yun.push.model.PushMsgToSingleDeviceRequest;
 import com.baidu.yun.push.model.PushMsgToSingleDeviceResponse;
+import com.medical.push.PushConfig;
 
 public class PushToUserInIOS {
-	public static void pushMsgToSingleDevice(String channelid, String title, String msg)
+	public static void pushMsgToSingleDeviceInIOS(String channelid, String title, String msg)
 			throws PushClientException, PushServerException {
 		
 		// 1. get apiKey and secretKey from developer console

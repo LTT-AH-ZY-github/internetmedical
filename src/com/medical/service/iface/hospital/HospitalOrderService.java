@@ -12,7 +12,7 @@ public interface HospitalOrderService {
 	/**
 	 * 医院根据条件获取医生
 	 * */
-	String listDoctor(Integer pageNo, Integer pageSize, HospSearchDocTerm hospSearchDocTerm) throws Exception;
+	//String listDoctor(Integer pageNo, Integer pageSize, HospSearchDocTerm hospSearchDocTerm) throws Exception;
 	/**
 	 * 医院获取需要住院的病人订单
 	 * */

@@ -8,7 +8,7 @@
     where docLoginId = #{0,jdbcType=INTEGER}
     order by docPurseTime desc 
   </select>
-  <select id="selectAllInfoByDocLoginId" resultType="com.medical.po.custom.doctor.purse.Purse" parameterType="java.lang.Integer" >
+  <select id="selectAllInfoByDocLoginId" resultType="map" parameterType="java.lang.Integer" >
     select a.docpurseid,a.docpursetypeid,b.pursetypename,a.docpurseamount,a.docpursetime,a.payid,a.docpursebalance
     
     from doctorpurse as a

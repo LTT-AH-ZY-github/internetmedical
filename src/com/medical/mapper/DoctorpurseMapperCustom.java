@@ -16,7 +16,7 @@ public interface DoctorpurseMapperCustom {
 	 * */
     List<Doctorpurse> selectByDocLoginId(Integer docloginid);
 
-    List<Purse>  selectAllInfoByDocLoginId(Integer docloginid);
+    List<Map<String, Object>>  selectAllInfoByDocLoginId(Integer docloginid);
 
     
 }

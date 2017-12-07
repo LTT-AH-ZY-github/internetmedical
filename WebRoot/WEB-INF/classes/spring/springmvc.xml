@@ -43,6 +43,7 @@
 				<!-- 日期类型转换 -->
 				<bean class="com.medical.controller.converter.CustomDateConverter"/>
 				<bean class="com.medical.controller.converter.CustomDateConverter2"/>
+				
 			</list>
 		</property>
 	</bean>

@@ -143,7 +143,7 @@
   			where docLoginId = #{id}
   	</select>
   	<!--医院端查找医生  -->
-  	<select id="paginationDoctorListInHosp" parameterType="com.medical.po.HospSearchDocTerm"
+  	<select id="paginationDoctorListInHosp" parameterType="com.medical.po.custom.HospSearchDoc"
   		 resultType="map">
   		   SELECT a.docloginid,a.docloginpix,a.docloginname,b.docallday,a.docloginphone,b.dochosp,b.docdept,b.docage,b.docmale,
   		   			b.doctitle,b.docname,b.docbirthdate,b.docnation,b.docexpert,b.docabs,
@@ -151,11 +151,6 @@
   		   			
   		   FROM doctorlogininfo as a 
   		  	left join doctorinfo as b on a.docLoginId=b.docLoginId 
-  		  	left join city as c on b.docAddressProvince= c.cityname
-  		  	left join city as d on b.docAddressCity= d.cityname
-  		  	left join city as e on b.docAddressArea= e.cityname
-  		  	left join hospitaldept as f on b.docPrimaryDept=f.hospDeptName
-  		  	left join hospitaldept as g on b.docSecondDept=g.hospDeptName
   		where  a.docLoginType=3
   			<if test="doctorTitle!=null">
   				and b.docTitle=#{doctorTitle}
@@ -164,19 +159,19 @@
   				and b.hospLevel=#{hospLevel}
   			</if>
   			<if test="province_code!=null">
-  				and c.cityCode=#{province_code}
+  				and b.docAddressProvince=#{province_code}
   			</if>
   			<if test="city_code!=null">
-  				and d.cityCode=#{city_code}
+  				and b.docAddressCity=#{city_code}
   			</if>
   			<if test="area_code!=null">
-  				and e.cityCode=#{area_code}
+  				and b.docAddressArea=#{area_code}
   			</if>
   			<if test="One_level_dept!=null">
-  				and f.hospDeptId=#{One_level_dept}
+  				and b.docPrimaryDept=#{One_level_dept}
   			</if>
   			<if test="Two_level_dept!=null">
-  				and g.hospDeptId=#{Two_level_dept}
+  				and b.docSecondDept=#{Two_level_dept}
   			</if>
   		
   		ORDER BY a.docLoginTime desc

@@ -9,13 +9,13 @@ import com.baidu.yun.push.exception.PushClientException;
 import com.baidu.yun.push.exception.PushServerException;
 import com.baidu.yun.push.model.PushMsgToSingleDeviceRequest;
 import com.baidu.yun.push.model.PushMsgToSingleDeviceResponse;
-
+import com.medical.push.PushConfig;
 
 import net.sf.json.JSONObject;
 
 public class PushToDoctorInAndroid {
 	
-	public static boolean pushMsgToSingleDevice(String channelid, String title, String msg)
+	public static boolean pushMsgToSingleDeviceInAndroid(String channelid, String title, String msg)
 			throws PushClientException, PushServerException {
 		// 1. get apiKey and secretKey from developer console
 		PushKeyPair pair = new PushKeyPair(PushConfig.AndroidInDoctorApiKey, PushConfig.AndroidInDoctorSecretKey);

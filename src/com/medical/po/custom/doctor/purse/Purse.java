@@ -6,6 +6,12 @@ package com.medical.po.custom.doctor.purse;
 import java.math.BigDecimal;
 import java.util.Date;
 
+
+
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
+
+
 /**
  * @ClassName:     Purse.java
  * @Description:   TODO(用一句话描述该文件做什么) 
@@ -17,9 +23,11 @@ public class Purse {
 	private Integer docpurseid;
 	private Integer docpursetypeid;
 	private String pursetypename;
+	
 	private BigDecimal docpurseamount;
 	private Date docpursetime;
 	private Integer payid;
+	
 	private BigDecimal docpursebalance;
 	public Integer getDocpurseid() {
 		return docpurseid;
