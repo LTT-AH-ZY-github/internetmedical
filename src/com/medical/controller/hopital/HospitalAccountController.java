@@ -1,5 +1,14 @@
 package com.medical.controller.hopital;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +22,8 @@ import com.medical.utils.result.DataResult;
 import com.medical.utils.result.Result;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+
+import net.sf.json.JSONObject;
 
 /**
  * @ClassName: HospitalAccountController.java
@@ -118,7 +129,48 @@ public class HospitalAccountController {
 		}
 		return hospitalAccountService.updateDoctorToNormalLogin(hosploginphone, hosploginpwd);
 	}
+	
+	// 登录
+	/*@RequestMapping(value = "/weblogin", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "登录", httpMethod = "POST", notes = "登录")
+	public String webLogin(
+			@ApiParam(name = "hosploginphone", required = true, value = "登录号码") @RequestParam String hosploginphone,
+			@ApiParam(name = "hosploginpwd", required = true, value = "密码") @RequestParam String hosploginpwd)
+			throws Exception {
+		if (StringUtils.isBlank(hosploginphone)) {
+			return DataResult.error("手机号码为空");
+		}
+		if (StringUtils.isNotBlank(hosploginphone) && !CheckUtils.isChinaPhoneLegal(hosploginphone)) {
+			return Result.error("手机号码格式错误");
+		}
+		if (StringUtils.isBlank(hosploginpwd)) {
+			return DataResult.error("密码为空");
+		}
+		return hospitalAccountService.updateDoctorToNormalLogin(hosploginphone, hosploginpwd);
+	}*/
 
+	@RequestMapping(value = "/loginsubmit", produces = "application/json;charset=UTF-8")
+	public  String loginsubmit(HttpServletRequest request, HttpServletResponse response)throws Exception{
+		System.out.println("进入登陆提交函数！！");
+		response.addHeader("Access-Control-Allow-Origin","*");
+		String hosploginphone = request.getParameter("hosploginphone");
+		String hosploginpwd = request.getParameter("hosploginpwd");
+		Map<String,Object> result = new HashMap<String,Object>();
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		md.update(hosploginpwd.getBytes());
+		String hosploginpwdMD5 = new BigInteger(1, md.digest()).toString(16);
+		String data =  hospitalAccountService.updateDoctorToNormalLogin(hosploginphone, hosploginpwdMD5);
+		JSONObject jsonObject = JSONObject.fromObject(data);
+		String logincode = jsonObject.get("code").toString();
+		if("100".equals(logincode)) {
+			JSONObject datajson = jsonObject.getJSONObject("data");
+			String huanxinaccount = datajson.get("huanxinaccount").toString();
+			HttpSession session = request.getSession();  
+		    session.setAttribute("huanxinaccount", huanxinaccount); 
+		}
+		return data;
+		
+	}
 	// 用户退出登陆
 	@RequestMapping(value = "/exit", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "退出登陆", httpMethod = "POST", notes = "退出登陆")

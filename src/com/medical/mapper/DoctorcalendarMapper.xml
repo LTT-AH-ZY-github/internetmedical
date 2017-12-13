@@ -8,6 +8,14 @@
     <result column="docCalendarAffair" property="doccalendaraffair" jdbcType="VARCHAR" />
     <result column="docCalendarAdressId" property="doccalendaradressid" jdbcType="INTEGER" />
     <result column="docLoginId" property="docloginid" jdbcType="INTEGER" />
+    <result column="docCalendarIsCheck" property="doccalendarischeck" jdbcType="BIT" />
+    <result column="docAddressLocation" property="docaddresslocation" jdbcType="VARCHAR" />
+    <result column="docAddressProvince" property="docaddressprovince" jdbcType="VARCHAR" />
+    <result column="docAddressCity" property="docaddresscity" jdbcType="VARCHAR" />
+    <result column="docAddressArea" property="docaddressarea" jdbcType="VARCHAR" />
+    <result column="docAddressOther" property="docaddressother" jdbcType="VARCHAR" />
+    <result column="docAddressLon" property="docaddresslon" jdbcType="VARCHAR" />
+    <result column="docAddressLat" property="docaddresslat" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -69,7 +77,8 @@
   </sql>
   <sql id="Base_Column_List" >
     docCalendarId, docCalendarDay, docCalendarTime, docCalendarAffair, docCalendarAdressId, 
-    docLoginId
+    docLoginId, docCalendarIsCheck, docAddressLocation, docAddressProvince, docAddressCity, 
+    docAddressArea, docAddressOther, docAddressLon, docAddressLat
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.DoctorcalendarExample" >
     select
@@ -104,10 +113,16 @@
   <insert id="insert" parameterType="com.medical.po.Doctorcalendar" >
     insert into doctorcalendar (docCalendarId, docCalendarDay, docCalendarTime, 
       docCalendarAffair, docCalendarAdressId, 
-      docLoginId)
+      docLoginId, docCalendarIsCheck, docAddressLocation, 
+      docAddressProvince, docAddressCity, docAddressArea, 
+      docAddressOther, docAddressLon, docAddressLat
+      )
     values (#{doccalendarid,jdbcType=INTEGER}, #{doccalendarday,jdbcType=DATE}, #{doccalendartime,jdbcType=CHAR}, 
       #{doccalendaraffair,jdbcType=VARCHAR}, #{doccalendaradressid,jdbcType=INTEGER}, 
-      #{docloginid,jdbcType=INTEGER})
+      #{docloginid,jdbcType=INTEGER}, #{doccalendarischeck,jdbcType=BIT}, #{docaddresslocation,jdbcType=VARCHAR}, 
+      #{docaddressprovince,jdbcType=VARCHAR}, #{docaddresscity,jdbcType=VARCHAR}, #{docaddressarea,jdbcType=VARCHAR}, 
+      #{docaddressother,jdbcType=VARCHAR}, #{docaddresslon,jdbcType=VARCHAR}, #{docaddresslat,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Doctorcalendar" >
     insert into doctorcalendar
@@ -130,6 +145,30 @@
       <if test="docloginid != null" >
         docLoginId,
       </if>
+      <if test="doccalendarischeck != null" >
+        docCalendarIsCheck,
+      </if>
+      <if test="docaddresslocation != null" >
+        docAddressLocation,
+      </if>
+      <if test="docaddressprovince != null" >
+        docAddressProvince,
+      </if>
+      <if test="docaddresscity != null" >
+        docAddressCity,
+      </if>
+      <if test="docaddressarea != null" >
+        docAddressArea,
+      </if>
+      <if test="docaddressother != null" >
+        docAddressOther,
+      </if>
+      <if test="docaddresslon != null" >
+        docAddressLon,
+      </if>
+      <if test="docaddresslat != null" >
+        docAddressLat,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="doccalendarid != null" >
@@ -149,6 +188,30 @@
       </if>
       <if test="docloginid != null" >
         #{docloginid,jdbcType=INTEGER},
+      </if>
+      <if test="doccalendarischeck != null" >
+        #{doccalendarischeck,jdbcType=BIT},
+      </if>
+      <if test="docaddresslocation != null" >
+        #{docaddresslocation,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressprovince != null" >
+        #{docaddressprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresscity != null" >
+        #{docaddresscity,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressarea != null" >
+        #{docaddressarea,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressother != null" >
+        #{docaddressother,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslon != null" >
+        #{docaddresslon,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslat != null" >
+        #{docaddresslat,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -179,6 +242,30 @@
       <if test="record.docloginid != null" >
         docLoginId = #{record.docloginid,jdbcType=INTEGER},
       </if>
+      <if test="record.doccalendarischeck != null" >
+        docCalendarIsCheck = #{record.doccalendarischeck,jdbcType=BIT},
+      </if>
+      <if test="record.docaddresslocation != null" >
+        docAddressLocation = #{record.docaddresslocation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddressprovince != null" >
+        docAddressProvince = #{record.docaddressprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddresscity != null" >
+        docAddressCity = #{record.docaddresscity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddressarea != null" >
+        docAddressArea = #{record.docaddressarea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddressother != null" >
+        docAddressOther = #{record.docaddressother,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddresslon != null" >
+        docAddressLon = #{record.docaddresslon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.docaddresslat != null" >
+        docAddressLat = #{record.docaddresslat,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -191,7 +278,15 @@
       docCalendarTime = #{record.doccalendartime,jdbcType=CHAR},
       docCalendarAffair = #{record.doccalendaraffair,jdbcType=VARCHAR},
       docCalendarAdressId = #{record.doccalendaradressid,jdbcType=INTEGER},
-      docLoginId = #{record.docloginid,jdbcType=INTEGER}
+      docLoginId = #{record.docloginid,jdbcType=INTEGER},
+      docCalendarIsCheck = #{record.doccalendarischeck,jdbcType=BIT},
+      docAddressLocation = #{record.docaddresslocation,jdbcType=VARCHAR},
+      docAddressProvince = #{record.docaddressprovince,jdbcType=VARCHAR},
+      docAddressCity = #{record.docaddresscity,jdbcType=VARCHAR},
+      docAddressArea = #{record.docaddressarea,jdbcType=VARCHAR},
+      docAddressOther = #{record.docaddressother,jdbcType=VARCHAR},
+      docAddressLon = #{record.docaddresslon,jdbcType=VARCHAR},
+      docAddressLat = #{record.docaddresslat,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -214,6 +309,30 @@
       <if test="docloginid != null" >
         docLoginId = #{docloginid,jdbcType=INTEGER},
       </if>
+      <if test="doccalendarischeck != null" >
+        docCalendarIsCheck = #{doccalendarischeck,jdbcType=BIT},
+      </if>
+      <if test="docaddresslocation != null" >
+        docAddressLocation = #{docaddresslocation,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressprovince != null" >
+        docAddressProvince = #{docaddressprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresscity != null" >
+        docAddressCity = #{docaddresscity,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressarea != null" >
+        docAddressArea = #{docaddressarea,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressother != null" >
+        docAddressOther = #{docaddressother,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslon != null" >
+        docAddressLon = #{docaddresslon,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslat != null" >
+        docAddressLat = #{docaddresslat,jdbcType=VARCHAR},
+      </if>
     </set>
     where docCalendarId = #{doccalendarid,jdbcType=INTEGER}
   </update>
@@ -223,7 +342,15 @@
       docCalendarTime = #{doccalendartime,jdbcType=CHAR},
       docCalendarAffair = #{doccalendaraffair,jdbcType=VARCHAR},
       docCalendarAdressId = #{doccalendaradressid,jdbcType=INTEGER},
-      docLoginId = #{docloginid,jdbcType=INTEGER}
+      docLoginId = #{docloginid,jdbcType=INTEGER},
+      docCalendarIsCheck = #{doccalendarischeck,jdbcType=BIT},
+      docAddressLocation = #{docaddresslocation,jdbcType=VARCHAR},
+      docAddressProvince = #{docaddressprovince,jdbcType=VARCHAR},
+      docAddressCity = #{docaddresscity,jdbcType=VARCHAR},
+      docAddressArea = #{docaddressarea,jdbcType=VARCHAR},
+      docAddressOther = #{docaddressother,jdbcType=VARCHAR},
+      docAddressLon = #{docaddresslon,jdbcType=VARCHAR},
+      docAddressLat = #{docaddresslat,jdbcType=VARCHAR}
     where docCalendarId = #{doccalendarid,jdbcType=INTEGER}
   </update>
 </mapper>

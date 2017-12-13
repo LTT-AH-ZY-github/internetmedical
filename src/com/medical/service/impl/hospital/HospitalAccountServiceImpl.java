@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
@@ -124,7 +126,7 @@ public class HospitalAccountServiceImpl implements HospitalAccountService{
 			if (logresult && loginresult) {
 				Map<String, Object> map = new HashMap<>();
 				map.put("hosploginid", hosplogininfo.getHosploginid());
-				map.put("huanxinaccount", hosplogininfo.getHosploginid());
+				map.put("huanxinaccount", hosplogininfo.getHosphuanxinaccount());
 				return DataResult.success("登录成功",map);
 			} else {
 				return DataResult.error("登录失败");

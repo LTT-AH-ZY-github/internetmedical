@@ -22,14 +22,9 @@ public class Global {
 	public static final String ENCRYPT_KEY = "sudiyiyun";
 	//token过期时间30天
 	public static final long TOKEN_OUT_TIME = 2592000000L;
-	//百度云key
-	public static final String AndroidInUserApiKey = "02ctBmx6b14cLwT1N0c8Gx85qMyYbzbk";
 	
-	public static final String AndroidInUserSecretKey = "CKt3UsYSmYtkBcw5AHX7WRpbSPoKIdiz";
-	//百度云key
-	public static final String AndroidInDoctorApiKey = "xU6dBHm80gQbZ63hx01LwZdChu56ZRCG";
-		
-	public static final String AndroidInDoctorSecretKey = "zwxVyhFfMTUlSTsYWU6xXprTlfwyGtYr";
+	//图片上传本地路径
+	public static final String uploadLocalPath="C:\\upload\\";
 	
 	public static Map<String , Object> globalToken =new HashMap<String, Object>();
 }

@@ -12,4 +12,16 @@ package com.medical.service.iface.admin;
  */
 public interface AdminAccountService {
 
+	
+
+	/**
+	 * @Title: updateAccountStateToLogin
+	 * @Description: 管理登录
+	 * @param adminloginname 登录名
+	 * @param adminloginpwd 密码
+	 * @return
+	 * @return: String
+	 */
+	String updateAccountStateToLogin(String adminloginname, String adminloginpwd) throws Exception;
+
 }

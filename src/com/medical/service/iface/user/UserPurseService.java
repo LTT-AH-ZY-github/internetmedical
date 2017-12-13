@@ -5,7 +5,7 @@ package com.medical.service.iface.user;
 
 /**
  * @ClassName:     UserPursueService.java
- * @Description:   TODO(用一句话描述该文件做什么) 
+ * @Description:   用户钱包功能接口
  * @author          xyh
  * @version         V1.0  
  * @Date           2017年11月27日 上午11:54:13 
@@ -45,23 +45,23 @@ public interface UserPurseService {
 
 	/**
 	 * @Title: addAliPayAccount
-	 * @Description: TODO
-	 * @param userloginid
-	 * @param alipayaccount
+	 * @Description: 更新用户绑定的支付宝账号
+	 * @param userloginid 用户登录id
+	 * @param alipayaccount 支付宝账号
 	 * @return
 	 * @throws Exception
 	 * @return: String
 	 */
-	String addAliPayAccount(Integer userloginid, String alipayaccount) throws Exception;
+	String updateAliPayAccount(Integer userloginid, String alipayaccount) throws Exception;
 
 	/**
 	 * @Title: getAliPayAccount
-	 * @Description: TODO
-	 * @param docloginid
+	 * @Description: 获取用户绑定的支付宝账号<
+	 * @param userloginid 用户登录id
 	 * @return
 	 * @return: String
 	 * @throws Exception 
 	 */
-	String getAliPayAccount(Integer docloginid) throws Exception;
+	String getAliPayAccount(Integer userloginid) throws Exception;
 
 }

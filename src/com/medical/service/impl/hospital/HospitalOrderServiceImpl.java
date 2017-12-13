@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
@@ -16,6 +17,7 @@ import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.DoctortitleMapper;
 import com.medical.mapper.HospinfoMapperCustom;
+import com.medical.mapper.HospitalberthMapperCustom;
 import com.medical.mapper.HospitaldeptMapperCustom;
 import com.medical.mapper.HosplogininfoMapper;
 import com.medical.mapper.HosporderMapper;
@@ -26,12 +28,15 @@ import com.medical.mapper.UsersickMapper;
 import com.medical.po.Doctorlogininfo;
 import com.medical.po.HospSearchDocTerm;
 import com.medical.po.Hospinfo;
+import com.medical.po.Hospitaldept;
+import com.medical.po.Hosplogininfo;
 import com.medical.po.Hosporder;
 import com.medical.po.Pay;
 import com.medical.po.Userorder;
 import com.medical.po.Usersick;
 import com.medical.push.PushToUser;
 import com.medical.service.iface.CommonService;
+import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.hospital.HospitalOrderService;
 import com.medical.utils.result.DataResult;
 import com.pay.alipay.AliPayNotify;
@@ -63,6 +68,10 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 	private UsersickMapper usersickMapper;
 	@Autowired
 	private PayMapperCustom payMapperCustom;
+	@Autowired
+	private HospitalberthMapperCustom hospitalberthMapperCustom;
+	@Autowired 
+	private SenderNotificationService senderNotificationService;
 
 /*	@Override
 	public String listDoctor(Integer pageNo, Integer pageSize, HospSearchDocTerm hospSearchDocTerm) throws Exception {
@@ -126,7 +135,7 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 				boolean result = userorderMapper.updateByPrimaryKeySelective(userorder) > 0;
 				if (result) {
 					JSONObject jsonCustormCont = new JSONObject();
-					boolean push = commonService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知",
+					boolean push = senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知",
 							"确认了您的订单", jsonCustormCont);
 					if (push) {
 						return DataResult.success("确认成功,且消息发送成功");
@@ -169,7 +178,7 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 				boolean sickResult = usersickMapper.updateByPrimaryKeySelective(usersick) > 0;
 				if (result && sickResult) {
 					JSONObject jsonCustormCont = new JSONObject();
-					boolean push = commonService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知",
+					boolean push = senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知",
 							"拒绝了您的请求", jsonCustormCont);
 					if (push) {
 						return DataResult.success("操作成功,且消息发送成功");
@@ -208,7 +217,7 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 		boolean result = userorderMapper.updateByPrimaryKeySelective(userorder) > 0;
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
-			boolean push = commonService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知", "要求增加押金",
+			boolean push = senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知", "要求增加押金",
 					jsonCustormCont);
 			if (push) {
 				return DataResult.success("操作成功,且消息发送成功");
@@ -260,7 +269,7 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 					
 				}
 				JSONObject jsonCustormCont = new JSONObject();
-				boolean push = commonService.createMsgHospitalToUser(hosploginid, order.getUserloginid(),"消息通知", msg, jsonCustormCont);
+				boolean push = senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(),"消息通知", msg, jsonCustormCont);
 				if (push) {
 					return DataResult.success("操作成功,且消息发送成功");
 				} else {
@@ -358,7 +367,7 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 		int result = hosporderMapper.insertSelective(hosporder);
 		if (result > 0) {
 			JSONObject jsonCustormCont = new JSONObject();
-			boolean push = commonService.createMsgHospitalToDoctor(hosploginid, docloginid, "通知", "发送会诊请求",
+			boolean push = senderNotificationService.createMsgHospitalToDoctor(hosploginid, docloginid, "通知", "发送会诊请求",
 					jsonCustormCont);
 			if (push) {
 				return DataResult.success("创建会诊成功，且消息发送成功");
@@ -390,7 +399,7 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 		boolean result = hosporderMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
-			boolean push = commonService.createMsgHospitalToDoctor(hosploginid, hosporder.getDoctorid(), "通知", "发送会诊请求",
+			boolean push = senderNotificationService.createMsgHospitalToDoctor(hosploginid, hosporder.getDoctorid(), "通知", "发送会诊请求",
 					jsonCustormCont);
 			if (push) {
 				return DataResult.success("创建会诊成功，且消息发送成功");
@@ -462,6 +471,42 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 		} else {
 			return DataResult.error("会诊完成失败");
 		}
+	}
+
+	/* (非 Javadoc)  
+	* <p>Title: getHospBerthNum</p>  
+	* <p>Description: </p>  
+	* @param hosploginid
+	* @param userorderhospprimarydept
+	* @param userorderhospseconddept
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.hospital.HospitalOrderService#getHospBerthNum(java.lang.Integer, java.lang.String, java.lang.String)  
+	*/  
+	@Override
+	public String getHospBerthNum(Integer hosploginid, String userorderhospprimarydept, String userorderhospseconddept)
+			throws Exception {
+		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
+		if (hosplogininfo==null) {
+			return DataResult.error("账号不存在");
+		}
+		int hospberthdeptid = 0;
+		List<Hospitaldept> primarydeptlist = hospitaldeptMapperCustom.selectByDeptNameAndFatherId(userorderhospprimarydept, "0");
+		if (primarydeptlist==null || primarydeptlist.size()==0) {
+			return DataResult.error("该一级部门不存在");
+		}
+		hospberthdeptid = primarydeptlist.get(0).getHospdeptid();
+		if (StringUtils.isNotBlank(userorderhospseconddept)) {
+			List<Hospitaldept> seconddeptlist = hospitaldeptMapperCustom.selectByDeptNameAndFatherId(userorderhospseconddept, hospberthdeptid+"");
+			if (seconddeptlist==null || seconddeptlist.size()==0) {
+				return DataResult.error("该二级部门不存在");
+			}
+			hospberthdeptid = seconddeptlist.get(0).getHospdeptid();
+		}
+		int conut = hospitalberthMapperCustom.selectCountByHospLoginIdAndHospDerthDeptId(hospberthdeptid, hosploginid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("number", conut);
+		return DataResult.success("获取成功", map);
 	}
 
 }

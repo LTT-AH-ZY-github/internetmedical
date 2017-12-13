@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.po.HospSearchDocTerm;
 import com.medical.service.iface.hospital.HospitalConsultationService;
+import com.medical.utils.CheckUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -146,6 +147,9 @@ public class HospitalConsultationController {
 		}*/
 		if (hosploginid == null) {
 			return DataResult.error("医院id为空");
+		}
+		if (!CheckUtils.isPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为正整数");
 		}
 		return hospitalConsultationService.listConsultation(hosploginid,limit,offset,type);
 

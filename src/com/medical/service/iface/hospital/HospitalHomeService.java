@@ -3,6 +3,7 @@ package com.medical.service.iface.hospital;
 import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
+import com.medical.po.Hospitalunitprice;
 
 public interface HospitalHomeService {
 
@@ -44,6 +45,8 @@ public interface HospitalHomeService {
 	 * @return: String
 	 */
 	String listDoctorTitle() throws Exception;
+
+	
 
 	
 

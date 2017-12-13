@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.service.iface.hospital.HospitalPurseService;
+import com.medical.utils.CheckUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -78,6 +79,9 @@ public class HospitalPurseController {
 	) throws Exception{
 		if (hosploginid == null) {
 			return DataResult.error("医院登陆id为空");
+		}
+		if (!CheckUtils.isPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为正整数");
 		}
 		return hospitalPurseService.listBalanceRecord(hosploginid,limit,offset);
 		// TODO Auto-generated method stub

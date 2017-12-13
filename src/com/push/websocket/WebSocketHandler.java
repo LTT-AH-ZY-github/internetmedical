@@ -34,7 +34,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         // 获取提交过来的消息详情  
         LOGGER.debug("收到用户 " + username + "的消息:" + message.toString());  
         //回复一条信息，  
-        session.sendMessage(new TextMessage("reply msg:" + message.getPayload()));  
+        //session.sendMessage(new TextMessage("reply msg:" + message.getPayload()));  
     }  
   
   
@@ -51,8 +51,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
         users.add(session);  
         String username = (String) session.getAttributes().get("WEBSOCKET_USERNAME");  
         LOGGER.info("用户 " + username + " Connection Established"+users.size());  
-        session.sendMessage(new TextMessage(username + " connect"));  
-        session.sendMessage(new TextMessage("hello wellcome"));  
+        // session.sendMessage(new TextMessage(username + " connect"));  
+        //session.sendMessage(new TextMessage("hello wellcome"));  
     }  
   
     /** 

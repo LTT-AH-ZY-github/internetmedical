@@ -11,6 +11,7 @@ import com.medical.mapper.HosporderMapper;
 import com.medical.mapper.HosporderMapperCustom;
 import com.medical.po.Hosporder;
 import com.medical.service.iface.CommonService;
+import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.doctor.DoctorConsultationService;
 import com.medical.utils.result.DataResult;
 
@@ -26,6 +27,8 @@ public class DoctorConsultationServiceImpl implements DoctorConsultationService 
 	private HosporderMapperCustom hosporderMapperCustom;
 	@Autowired
 	private CommonService commonService;
+	@Autowired 
+	private SenderNotificationService senderNotificationService;
 
 	// 获取会诊
 	@Override
@@ -112,7 +115,7 @@ public class DoctorConsultationServiceImpl implements DoctorConsultationService 
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
 			
-			boolean push = commonService.createMsgDoctorToHospital(hosporder.getDoctorid(), hosporder.getHospid(), "消息通知", "确认了会诊",
+			boolean push = senderNotificationService.createMsgDoctorToHospital(hosporder.getDoctorid(), hosporder.getHospid(), "消息通知", "确认了会诊",
 					jsonCustormCont);
 			return DataResult.success("确认成功");
 		} else {
@@ -158,7 +161,7 @@ public class DoctorConsultationServiceImpl implements DoctorConsultationService 
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
 			
-			boolean push = commonService.createMsgDoctorToHospital(hosporder.getDoctorid(), hosporder.getHospid(), "消息通知", "取消了会诊",
+			boolean push = senderNotificationService.createMsgDoctorToHospital(hosporder.getDoctorid(), hosporder.getHospid(), "消息通知", "取消了会诊",
 					jsonCustormCont);
 			return DataResult.success("取消成功");
 		} else {

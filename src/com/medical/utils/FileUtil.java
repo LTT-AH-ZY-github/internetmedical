@@ -1,17 +1,19 @@
 package com.medical.utils;
 
 import java.io.File;
-
 import org.apache.commons.lang.StringUtils;
 
-import com.google.common.base.Strings;
+
 
 public class FileUtil {
-	/** 
-     * 取得文件名. 
+	
+    /**
+     * @Title: getFileName
+     * @Description: 取得文件名
      * @param fullpath 完整路径名 
-     * @return 
-     */  
+     * @return
+     * @return: String
+     */
     public static String getFileName(String fullpath) { 
     	
         if (StringUtils.isEmpty(fullpath)) {  

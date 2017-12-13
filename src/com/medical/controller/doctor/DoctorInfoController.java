@@ -1,20 +1,23 @@
 package com.medical.controller.doctor;
 
-import java.util.Date;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.mangofactory.swagger.annotations.ApiIgnore;
+import com.medical.controller.validation.Add;
+import com.medical.controller.validation.Update;
 import com.medical.po.Doctoraddress;
+import com.medical.po.Doctorcalendar;
 import com.medical.po.Doctorinfo;
 import com.medical.service.iface.CommonService;
 import com.medical.service.iface.doctor.DoctorInfoService;
+import com.medical.utils.CheckUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
@@ -22,11 +25,11 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
 /**
- * @ClassName:     DoctorInfoController.java
- * @Description:   医生信息管理 
- * @author          xyh
- * @version         V1.0  
- * @Date           2017年11月27日 下午9:45:12 
+ * @ClassName: DoctorInfoController.java
+ * @Description: 医生信息管理
+ * @author xyh
+ * @version V1.0
+ * @Date 2017年11月27日 下午9:45:12
  */
 @RestController
 @RequestMapping(value = "/doctor")
@@ -45,7 +48,6 @@ public class DoctorInfoController {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
-		System.out.println("id" + docloginid);
 		if (StringUtils.isBlank(channelid)) {
 			return DataResult.error("channelid为空");
 		}
@@ -71,13 +73,13 @@ public class DoctorInfoController {
 
 	// 获取我的介绍和我的擅长
 	@RequestMapping(value = "/getinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "获取我的介绍和我的擅长", httpMethod = "POST", notes = "获取我的介绍和我的擅长获取我的介绍和我的擅长")
+	@ApiOperation(value = "获取我的介绍和我的擅长", httpMethod = "POST", notes = "获取我的介绍和我的擅长")
 	public String getInfo(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
 			throws Exception {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
-		return doctorInfoService.getNormalInfo(docloginid);
+		return doctorInfoService.getAbsAndExpert(docloginid);
 	}
 
 	// 更新我的介绍和我的擅长
@@ -89,31 +91,16 @@ public class DoctorInfoController {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
-		return doctorInfoService.updateNormalInfo(docloginid, docexpert, docabs);
-	}
-
-	// 获取科室
-	@RequestMapping(value = "/getdept", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "获取科室", httpMethod = "GET", notes = "获取科室")
-	public String getDept() throws Exception {
-		return commonService.getDept();
-	}
-
-	// 新增科室
-	@RequestMapping(value = "/adddept", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "新增科室", httpMethod = "POST", notes = "新增科室")
-	public String addDept(
-			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid,
-			@ApiParam(name = "primarydept", value = "一级部门") @RequestParam(required = false) String primarydept,
-			@ApiParam(name = "seconddept", value = "二级部门") @RequestParam(required = false) String seconddept)
-			throws Exception {
-		return commonService.addDept(docloginid, primarydept, seconddept);
+		if (StringUtils.isBlank(docexpert) && StringUtils.isBlank(docabs)) {
+			return DataResult.error("所填信息为空");
+		}
+		return doctorInfoService.updateAbsAndExpert(docloginid, docexpert, docabs);
 	}
 
 	// 获取第一页个人信息
 	@RequestMapping(value = "/getfirstinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "获取第一页个人信息,替换/getfirstinfo", httpMethod = "POST", notes = "获取第一页个人信息")
-	public String getFirstInfo2(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
+	@ApiOperation(value = "获取第一页个人信息", httpMethod = "POST", notes = "获取第一页个人信息")
+	public String getFirstInfo(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
 			throws Exception {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
@@ -124,7 +111,7 @@ public class DoctorInfoController {
 	// 获取第二页个人信息
 	@RequestMapping(value = "/getsecondinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取第二页个人信息", httpMethod = "POST", notes = "获取第二页个人信息")
-	public String getSecondInfo2(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
+	public String getSecondInfo(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
 			throws Exception {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
@@ -159,7 +146,7 @@ public class DoctorInfoController {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
-		return doctorInfoService.updateFirstInfo(doctorinfo);
+		return doctorInfoService.updateNormalInfo(doctorinfo);
 
 	}
 
@@ -179,19 +166,19 @@ public class DoctorInfoController {
 		if (type == null || (type < 1 || type > 5)) {
 			return DataResult.error("type值超出范围");
 		}
-		return doctorInfoService.updateSecondInfo(docloginid, type, oldpicture, picture);
+		return doctorInfoService.updateSomePicture(docloginid, type, oldpicture, picture);
 	}
 
 	@RequestMapping(value = "/cancelreview", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "撤销审核", httpMethod = "POST", notes = "撤销审核")
-	public String cancelreview(
-			@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
+	public String cancelreview(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
 			throws Exception {
 		if (docloginid == null) {
 			return DataResult.error("id为空");
 		}
 		return doctorInfoService.updateInfoToCancelReview(docloginid);
 	}
+
 	@RequestMapping(value = "/reviewinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "提交审核", httpMethod = "POST", notes = "提交审核")
 	public String reviewInfo(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
@@ -207,28 +194,27 @@ public class DoctorInfoController {
 	@ApiOperation(value = "获取常用地址", httpMethod = "POST", notes = "获取常用地址", produces = "application/json")
 	public String getAddress(
 			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid,
-			@ApiParam(name = "page", required = true, value = "当前页") @RequestParam(required = true) Integer page) throws Exception {
+			@ApiParam(name = "page", required = true, value = "当前页") @RequestParam(required = true) Integer page)
+			throws Exception {
 		if (docloginid == null) {
 			return DataResult.error("医生id为空");
 		}
-		if (page == null) {
-			return DataResult.error("当前页为空");
+		if (!CheckUtils.isPageLegal(page)) {
+			return DataResult.error("当前页有误");
 		}
-		if (page != null && page < 1) {
-			return DataResult.error("当前页因为大于0的整数");
-		}
-		return doctorInfoService.getAddress(docloginid, page);
+		return doctorInfoService.listAddress(docloginid, page);
 	}
 
 	// 获取全部常用地址
 	@RequestMapping(value = "/getalladdress", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取全部常用地址", httpMethod = "POST", notes = "获取全部常用地址", produces = "application/json")
 	public String getAllAddress(
-			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid) throws Exception {
+			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid)
+			throws Exception {
 		if (docloginid == null) {
 			return DataResult.error("医生id为空");
 		}
-		return doctorInfoService.getAllAddress(docloginid);
+		return doctorInfoService.listAllAddress(docloginid);
 
 	}
 
@@ -240,18 +226,21 @@ public class DoctorInfoController {
 			@ApiImplicitParam(name = "docaddresslocation", required = true, value = "地点名称", dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "docaddressprovince", required = true, value = "省", dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "docaddresscity", required = true, value = "市", dataType = "String", paramType = "query"),
-			@ApiImplicitParam(name = "docaddressarea", required = true, value = "区", dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "docaddressarea", required = false, value = "区", dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "docaddressother", required = false, value = "详细地址", dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "docaddresslon", required = true, value = "经度", dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "docaddresslat", required = true, value = "纬度", dataType = "String", paramType = "query") })
-	public String addAddress(@ApiIgnore Doctoraddress doctoraddress) throws Exception {
+	public String addAddress(@ApiIgnore @Validated(Add.class) Doctoraddress doctoraddress, BindingResult bindingResult)
+			throws Exception {
+		if (bindingResult.hasErrors()) {
+			return DataResult.error(bindingResult.getAllErrors().get(0).getDefaultMessage());
+		}
 		return doctorInfoService.addAddress(doctoraddress);
 
 	}
 
-	// 修改常用地址
 	@RequestMapping(value = "/editaddress", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "修改常用地址", httpMethod = "POST", notes = "修改常用地址", produces = "application/json")
+	@ApiOperation(value = "修改地址信息", httpMethod = "POST", notes = "修改地址信息", produces = "application/json")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "docloginid", required = true, value = "医生登录id", dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "docaddressid", required = true, value = "地址id", dataType = "int", paramType = "query"),
@@ -262,8 +251,12 @@ public class DoctorInfoController {
 			@ApiImplicitParam(name = "docaddressother", required = false, value = "详细地址", dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "docaddresslon", required = false, value = "经度", dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "docaddresslat", required = false, value = "纬度", dataType = "String", paramType = "query") })
-	public String editAddress(@ApiIgnore Doctoraddress doctoraddress) throws Exception {
-		return doctorInfoService.editAddress(doctoraddress);
+	public String editAddress(@ApiIgnore @Validated(Update.class) Doctoraddress doctoraddress,
+			BindingResult bindingResult) throws Exception {
+		if (bindingResult.hasErrors()) {
+			return DataResult.error(bindingResult.getAllErrors().get(0).getDefaultMessage());
+		}
+		return doctorInfoService.updateAddress(doctoraddress);
 
 	}
 
@@ -272,7 +265,8 @@ public class DoctorInfoController {
 	@ApiOperation(value = "删除常用地址", httpMethod = "POST", notes = "删除常用地址", produces = "application/json")
 	public String deleteAddress(
 			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid,
-			@ApiParam(name = "docaddressid", required = true, value = "地址id") @RequestParam(required = true) Integer docaddressid) throws Exception {
+			@ApiParam(name = "docaddressid", required = true, value = "地址id") @RequestParam(required = true) Integer docaddressid)
+			throws Exception {
 		if (docloginid == null) {
 			return DataResult.error("医生id为空");
 		}
@@ -287,14 +281,15 @@ public class DoctorInfoController {
 	@ApiOperation(value = "设置坐诊地点", httpMethod = "POST", notes = "设置坐诊地点", produces = "application/json")
 	public String setAddress(
 			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid,
-			@ApiParam(name = "docaddressid", required = true, value = "地址id") @RequestParam(required = true) Integer docaddressid) throws Exception {
+			@ApiParam(name = "docaddressid", required = true, value = "地址id") @RequestParam(required = true) Integer docaddressid)
+			throws Exception {
 		if (docloginid == null) {
 			return DataResult.error("医生id为空");
 		}
 		if (docaddressid == null) {
 			return DataResult.error("医生地址id为空");
 		}
-		return doctorInfoService.updateAddress(docloginid, docaddressid);
+		return doctorInfoService.updateAddressToCheck(docloginid, docaddressid);
 	}
 
 	// 获取日程表
@@ -302,15 +297,18 @@ public class DoctorInfoController {
 	@ApiOperation(value = "获取日程表", httpMethod = "POST", notes = "获取日程表", produces = "application/json")
 	public String getCalendar(
 			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid,
-			@ApiParam(name = "page", required = true, value = "当前页") @RequestParam(required = true) Integer page) throws Exception {
+			@ApiParam(name = "page", required = true, value = "当前页") @RequestParam(required = true) Integer page)
+			throws Exception {
 		if (docloginid == null) {
 			return DataResult.error("医生id为空");
 		}
-		return doctorInfoService.getCalendar(docloginid, page);
+		if (!CheckUtils.isPageLegal(page)) {
+			return DataResult.error("当前页有误");
+		}
+		return doctorInfoService.listCalendars(docloginid, page);
 
 	}
 
-	// 获取日程表
 	@RequestMapping(value = "/getcalendarbymonth", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "按月份获取日程表", httpMethod = "POST", notes = "按月份获取日程表", produces = "application/json")
 	public String getCalendarbymonth(
@@ -320,40 +318,46 @@ public class DoctorInfoController {
 		if (docloginid == null) {
 			return DataResult.error("医生id为空");
 		}
-		return doctorInfoService.getCalendarByMonth(docloginid, year, month);
+		if (StringUtils.isBlank(year)) {
+			return DataResult.error("年为空");
+		}
+		if (StringUtils.isBlank(month)) {
+			return DataResult.error("月为空");
+		}
+		return doctorInfoService.listCalendarsByMonth(docloginid, year, month);
 	}
 
-	// 新增日程表
 	@RequestMapping(value = "/addcalendar", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "设置日程表", httpMethod = "POST", notes = "设置日程表", produces = "application/json")
-	public String addCalendar(
-			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid,
-			@ApiParam(name = "doccalendarday", required = true, value = "时间(格式如2017-01-02)") @RequestParam(required = true) Date doccalendarday,
-			@ApiParam(name = "doccalendartime", required = true, value = "上午或者下午") @RequestParam(required = true) String doccalendartime,
-			@ApiParam(name = "doccalendaraffair", required = true, value = "事件") @RequestParam(required = true) String doccalendaraffair,
-			@ApiParam(name = "doccalendaradressid", required = true, value = "地址id") @RequestParam(required = true) Integer doccalendaradressid) throws Exception {
-		if (docloginid == null) {
-			return DataResult.error("医生id为空");
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "docloginid", required = true, value = "医生登录id", dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "doccalendarday", required = true, value = "时间(格式如2017-01-02)", dataType = "Date", paramType = "query"),
+			@ApiImplicitParam(name = "doccalendartime", required = true, value = "上午或者下午", dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "doccalendaraffair", required = false, value = "事件", dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "doccalendaradressid", required = true, value = "地址id", dataType = "int", paramType = "query"), })
+	public String addCalendar(@ApiIgnore @Validated(Add.class) Doctorcalendar doctorcalendar,
+			BindingResult bindingResult) throws Exception {
+		if (bindingResult.hasErrors()) {
+			return DataResult.error(bindingResult.getAllErrors().get(0).getDefaultMessage());
 		}
-		return doctorInfoService.addCalendar(docloginid, doccalendarday, doccalendartime, doccalendaraffair,
-				doccalendaradressid);
+		return doctorInfoService.addCalendar(doctorcalendar);
 	}
 
 	// 修改日程
 	@RequestMapping(value = "/editcalendar", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "修改日程", httpMethod = "POST", notes = "修改日程", produces = "application/json")
-	public String editCalendar(
-			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid,
-			@ApiParam(name = "doccalendarid", value = "日程id") @RequestParam Integer doccalendarid,
-			@ApiParam(name = "doccalendarday", value = "时间") @RequestParam(required = false) Date doccalendarday,
-			@ApiParam(name = "doccalendartime", value = "上午或者下午") @RequestParam(required = false) String doccalendartime,
-			@ApiParam(name = "doccalendaraffair", value = "事件") @RequestParam(required = false) String doccalendaraffair,
-			@ApiParam(name = "doccalendaradressid", value = "地址id") @RequestParam(required = false) Integer doccalendaradressid) throws Exception {
-		if (docloginid == null) {
-			return DataResult.error("医生id为空");
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "docloginid", required = true, value = "医生登录id", dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "doccalendarday", required = false, value = "时间(格式如2017-01-02)", dataType = "Date", paramType = "query"),
+			@ApiImplicitParam(name = "doccalendartime", required = false, value = "上午或者下午", dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "doccalendaraffair", required = false, value = "事件", dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "doccalendaradressid", required = false, value = "地址id", dataType = "int", paramType = "query"), })
+	public String editCalendar(@ApiIgnore @Validated(Update.class) Doctorcalendar doctorcalendar,
+			BindingResult bindingResult) throws Exception {
+		if (bindingResult.hasErrors()) {
+			return DataResult.error(bindingResult.getAllErrors().get(0).getDefaultMessage());
 		}
-		return doctorInfoService.editCalendar(doccalendarid, docloginid, doccalendarday, doccalendartime,
-				doccalendaraffair, doccalendaradressid);
+		return doctorInfoService.updateCalendar(doctorcalendar);
 	}
 
 	// 删除日程
@@ -361,10 +365,29 @@ public class DoctorInfoController {
 	@ApiOperation(value = "删除日程", httpMethod = "POST", notes = "删除日程", produces = "application/json")
 	public String deleteCalendar(
 			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid,
-			@ApiParam(name = "doccalendarid", value = "日程id") @RequestParam(required = true) Integer doccalendarid) throws Exception {
+			@ApiParam(name = "doccalendarid", value = "日程id") @RequestParam(required = true) Integer doccalendarid)
+			throws Exception {
 		if (docloginid == null) {
 			return DataResult.error("医生id为空");
 		}
 		return doctorInfoService.deleteCalendar(doccalendarid, docloginid);
+	}
+
+	// 获取科室
+	@RequestMapping(value = "/getdept", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取科室", httpMethod = "GET", notes = "获取科室")
+	public String getDept() throws Exception {
+		return commonService.listDepts();
+	}
+
+	// 新增科室
+	@RequestMapping(value = "/adddept", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "新增科室", httpMethod = "POST", notes = "新增科室")
+	public String addDept(
+			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid,
+			@ApiParam(name = "primarydept", value = "一级部门") @RequestParam(required = false) String primarydept,
+			@ApiParam(name = "seconddept", value = "二级部门") @RequestParam(required = false) String seconddept)
+			throws Exception {
+		return commonService.addDept(docloginid, primarydept, seconddept);
 	}
 }

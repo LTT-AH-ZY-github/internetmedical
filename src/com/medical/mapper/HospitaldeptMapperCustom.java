@@ -23,4 +23,5 @@ public interface HospitaldeptMapperCustom {
 	 */
 	List<Map<String, Object>> selectByCheck(Integer check, Integer i);
 	List<Map<String, Object>> selectFirstDept();
+	List<Hospitaldept> selectByDeptNameAndFatherId(String deptname,String fatherid);
 }

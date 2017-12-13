@@ -60,51 +60,14 @@ public interface CommonService {
 	boolean updateNotificationToRead(Integer notificationid, Integer notificationreceiverid) throws Exception;
 
 	boolean deleteNotification(Integer notificationid, Integer hosploginid) throws Exception;
-	/**
-	 * 用户发消息给医生
-     * @param 
-     * @return 
-     */
-	boolean createMsgUserToDoctor(Integer userloginid, Integer docloginid, String title, String msg, JSONObject jsonCustormCont) throws Exception;
-	/**
-	 * 用户发消息给医院
-     * @param 
-     * @return 
-     */
-	boolean createMsgUserToHospital(Integer userloginid, Integer hosploginid, String title, String msg, JSONObject jsonCustormCont) throws Exception;
-	/**
-	 * 医生发消息给用户
-	 * @param jsonCustormCont 
-     * @param 
-     * @return 
-     */
-	boolean createMsgDoctorToUser(Integer docloginid, Integer userloginid, String title, String msg, JSONObject jsonCustormCont) throws Exception;
-	/**
-	 * 医生发消息给医院
-     * @param 
-     * @return 
-     */
-	boolean createMsgDoctorToHospital(Integer docloginid, Integer hosploginid, String title, String msg, JSONObject jsonCustormCont)
-			throws Exception;
-	/**
-	 * 医院发消息给用户
-     * @param 
-     * @return 
-     */
-	boolean createMsgHospitalToUser(Integer hosploginid, Integer userloginid, String title, String msg, JSONObject jsonCustormCont) throws Exception;
-	/**
-	 * 医院发消息给医生
-     * @param 
-     * @return 
-     */
-	boolean createMsgHospitalToDoctor(Integer hosploginid, Integer docloginid, String title, String msg, JSONObject jsonCustormCont)
-			throws Exception;
+	
+	
 	/**
 	 * 获取所有部门
      * @param 
      * @return 
-     */
-	String getDept() throws Exception;
+     *//*
+	String getDept() throws Exception;*/
 	/**
 	 * 根据接受者id和接受者类型将所有消息置为已读
      * @param notificationreceiverid 接收者id
@@ -128,94 +91,24 @@ public interface CommonService {
 	 * */
 	String addSecondDept(Integer docloginid, String seconddept);
 
+	
+
 	/**
-	 * @Title: createMsgUserToAdmin
-	 * @Description: TODO
-	 * @param userloginid
-	 * @param adminloginid
-	 * @param title
-	 * @param msg
-	 * @param jsonCustormCont
+	 * @Title: listDepts
+	 * @Description: 获取部门
 	 * @return
 	 * @throws Exception
 	 * @return: String
 	 */
-	boolean createMsgUserToAdmin(Integer userloginid, Integer adminloginid, String title, String msg,
-			JSONObject jsonCustormCont) throws Exception;
+	String listDepts() throws Exception;
 
 	/**
-	 * @Title: createMsgDoctorToAdmin
-	 * @Description: TODO
-	 * @param docloginid
-	 * @param adminloginid
-	 * @param title
-	 * @param msg
-	 * @param jsonCustormCont
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
-	boolean createMsgDoctorToAdmin(Integer docloginid, Integer adminloginid, String title, String msg,
-			JSONObject jsonCustormCont) throws Exception;
-
-	/**
-	 * @Title: createMsgHospitalToAdmin
+	 * @Title: getUnreadNotificationNum
 	 * @Description: TODO
 	 * @param hosploginid
-	 * @param docloginid
-	 * @param title
-	 * @param msg
-	 * @param jsonCustormCont
 	 * @return
-	 * @throws Exception
 	 * @return: String
 	 */
-	boolean createMsgHospitalToAdmin(Integer hosploginid, Integer docloginid, String title, String msg,
-			JSONObject jsonCustormCont) throws Exception;
-
-	/**
-	 * @Title: createMsgAdminToUser
-	 * @Description: TODO
-	 * @param adminloginid
-	 * @param userloginid
-	 * @param title
-	 * @param msg
-	 * @param jsonCustormCont
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
-	boolean createMsgAdminToUser(Integer adminloginid, Integer userloginid, String title, String msg,
-			JSONObject jsonCustormCont) throws Exception;
-
-	/**
-	 * @Title: createMsgAdminToDoctor
-	 * @Description: TODO
-	 * @param adminloginid
-	 * @param docloginid
-	 * @param title
-	 * @param msg
-	 * @param jsonCustormCont
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
-	boolean createMsgAdminToDoctor(Integer adminloginid, Integer docloginid, String title, String msg,
-			JSONObject jsonCustormCont) throws Exception;
-
-	/**
-	 * @Title: createMsgAdminToHospital
-	 * @Description: TODO
-	 * @param adminloginid
-	 * @param hosploginid
-	 * @param title
-	 * @param msg
-	 * @param jsonCustormCont
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
-	boolean createMsgAdminToHospital(Integer adminloginid, Integer hosploginid, String title, String msg,
-			JSONObject jsonCustormCont) throws Exception;
+	String getUnreadNotificationNum(Integer hosploginid);
 
 }

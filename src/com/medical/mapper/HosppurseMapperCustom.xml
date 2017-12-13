@@ -14,6 +14,7 @@
     from hosppurse as a
     	left join pursetype  as b on a.hospPurseTypeId= b.purseTypeId
     where a.hospLoginId = #{0,jdbcType=INTEGER}
+    order by hospPurseTime desc
   </select>
  
 </mapper>

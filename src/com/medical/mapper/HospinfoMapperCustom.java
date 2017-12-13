@@ -9,7 +9,7 @@ import com.medical.po.Hospinfo;
 
 
 public interface HospinfoMapperCustom {
-	
+	List<Map<String, Object>> selectAllHospitalInAdmin();
 	/**
 	 * @Title: selectByHospTypeInAdmin
 	 * @Description: 管理员获取医院列表

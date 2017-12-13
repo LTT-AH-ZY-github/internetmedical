@@ -1,6 +1,5 @@
 package com.medical.service.impl.user;
 
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -18,13 +17,20 @@ import com.medical.po.Userinfo;
 import com.medical.po.Userlogininfo;
 import com.medical.po.UserlogininfoCustom;
 import com.medical.service.iface.CommonService;
+import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.user.UserInfoService;
 import com.medical.utils.PictureTool;
 import com.medical.utils.result.DataResult;
 
 import net.sf.json.JSONObject;
 
-
+/**
+ * @ClassName: UserInfoServiceImpl.java
+ * @Description: 用户信息管理接口实现类
+ * @author xyh
+ * @version V1.0
+ * @Date 2017年12月7日 下午9:40:30
+ */
 public class UserInfoServiceImpl implements UserInfoService {
 	@Autowired
 	private UserinfoMapper userinfoMapper;
@@ -40,77 +46,167 @@ public class UserInfoServiceImpl implements UserInfoService {
 	private UsersickMapperCustom usersickMapperCustom;
 	@Autowired
 	private CommonService commonService;
-	
-	
-	//每次登录更新位置信息
+	@Autowired 
+	private SenderNotificationService senderNotificationService;
+
+	/*
+	 * (非 Javadoc) <p>Title: updateLocation</p> <p>Description: 每次登录更新位置信息</p>
+	 * 
+	 * @param userloginid
+	 * 
+	 * @param userloginlon
+	 * 
+	 * @param userloginlat
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see com.medical.service.iface.user.UserInfoService#updateLocation(java.lang.
+	 * Integer, java.lang.String, java.lang.String)
+	 */
 	@Override
-	public String updateLocation(Integer userloginid, String userloginlon, String userloginlat) throws Exception{
+	public String updateLocation(Integer userloginid, String userloginlon, String userloginlat) throws Exception {
 		Userlogininfo userlogininfo = new Userlogininfo();
 		userlogininfo.setUserloginid(userloginid);
 		userlogininfo.setUserloginlat(userloginlat);
 		userlogininfo.setUserloginlon(userloginlon);
-		boolean result=  userlogininfoMapper.updateByPrimaryKeySelective(userlogininfo) > 0;
+		boolean result = userlogininfoMapper.updateByPrimaryKeySelective(userlogininfo) > 0;
 		if (result) {
 			return DataResult.success("更新位置信息成功");
 		} else {
 			return DataResult.error("更新位置信息失败");
-		} 
+		}
 	}
 
-	// 更新channelId
+	/*
+	 * (非 Javadoc) <p>Title: updateChannelId</p> <p>Description:更新channelId </p>
+	 * 
+	 * @param userloginid
+	 * 
+	 * @param channelid
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.user.UserInfoService#updateChannelId(java.lang.
+	 * Integer, java.lang.String)
+	 */
 	@Override
-	public String updateChannelId(Integer userloginid, String channelid) throws Exception{
+	public String updateChannelId(Integer userloginid, String channelid) throws Exception {
 		Userlogininfo record = new Userlogininfo();
 		record.setUserloginid(userloginid);
 		record.setUserloginchannelid(channelid);
-		boolean result =  userlogininfoMapper.updateByPrimaryKeySelective(record) > 0;
+		boolean result = userlogininfoMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
 			return DataResult.success("更新成功");
 		} else {
 			return DataResult.error("更新失败");
-		} 
+		}
 
 	}
 
-	// 修改用户头像和昵称
+	/*
+	 * (非 Javadoc) <p>Title: updateUserPixAndUserName</p> <p>Description:
+	 * 修改用户头像和昵称</p>
+	 * 
+	 * @param pictureFile
+	 * 
+	 * @param userloginid
+	 * 
+	 * @param username
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.user.UserInfoService#updateUserPixAndUserName(org.
+	 * springframework.web.multipart.MultipartFile, java.lang.Integer,
+	 * java.lang.String)
+	 */
 	@Override
 	public String updateUserPixAndUserName(MultipartFile pictureFile, Integer userloginid, String username)
 			throws Exception {
-		
+
 		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
 		if (userlogininfo == null) {
 			return DataResult.error("用户不存在");
 		}
 		String file = null;
-		if (pictureFile!=null && !pictureFile.isEmpty() ) {
+		if (pictureFile != null && !pictureFile.isEmpty()) {
 			file = PictureTool.SaveOnePicture(pictureFile);
 		}
-		
+
 		UserlogininfoCustom userlogininfoCustom = new UserlogininfoCustom();
 		userlogininfoCustom.setUserloginid(userloginid);
 		userlogininfoCustom.setUserloginname(username);
 		userlogininfoCustom.setUserloginpix(file);
 		boolean result = userlogininfoMapper.updateByPrimaryKeySelective(userlogininfoCustom) > 0;
 		if (result) {
-			return DataResult.success("修改成功",file);
+			return DataResult.success("修改成功", file);
 		} else {
 			return DataResult.error("修改失败");
 		}
-		
+
 	}
 
-	// 获取用户信息
+	/*
+	 * (非 Javadoc) <p>Title: findUserInfo</p> <p>Description: 获取用户信息</p>
+	 * 
+	 * @param userloginid
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see com.medical.service.iface.user.UserInfoService#findUserInfo(java.lang.
+	 * Integer)
+	 */
 	@Override
-	public String findUserInfo(Integer userloginid) throws Exception{
+	public String findUserInfo(Integer userloginid) throws Exception {
 		Map<String, Object> reslutMap = userinfoMapperCustom.findUserInfoByLoginId(userloginid);
-		if (reslutMap!=null) {
+		if (reslutMap != null) {
 			return DataResult.success("获取成功", reslutMap);
 		} else {
-			return DataResult.success("个人信息为空");
+			return DataResult.error("用户不存在");
 		}
 	}
 
-	// 修改用户信息
+	/*
+	 * (非 Javadoc) <p>Title: updateUserInfo</p> <p>Description: 修改用户信息</p>
+	 * 
+	 * @param userloginid
+	 * 
+	 * @param username
+	 * 
+	 * @param usermale
+	 * 
+	 * @param usercardnum
+	 * 
+	 * @param useradrprovince
+	 * 
+	 * @param useradrcity
+	 * 
+	 * @param userage
+	 * 
+	 * @param useradrarea
+	 * 
+	 * @param useradrother
+	 * 
+	 * @param pictureFile
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see com.medical.service.iface.user.UserInfoService#updateUserInfo(java.lang.
+	 * Integer, java.lang.String, java.lang.String, java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.Integer, java.lang.String,
+	 * java.lang.String, org.springframework.web.multipart.MultipartFile[])
+	 */
 	@Override
 	public String updateUserInfo(Integer userloginid, String username, String usermale, String usercardnum,
 			String useradrprovince, String useradrcity, Integer userage, String useradrarea, String useradrother,
@@ -124,9 +220,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 		int type = userlogininfo.getUserlogintype();
 		if (type == 2) {
 			return DataResult.error("已提交审核，不可修改");
-		}else if (type == 3) {
+		} else if (type == 3) {
 			return DataResult.error("已通过审核，不可修改");
-		}else {
+		} else {
 			Userinfo userinfo = new Userinfo();
 			userinfo.setUseradrprovince(useradrprovince);
 			userinfo.setUseradrcity(useradrcity);
@@ -138,7 +234,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 			userinfo.setUsername(username);
 			userinfo.setUsermale(usermale);
 			userinfo.setUsercardphoto(PictureTool.SavePictures(pictureFile));
-			boolean result = userinfoMapper.updateByPrimaryKeySelective(userinfo)>0;
+			boolean result = userinfoMapper.updateByPrimaryKeySelective(userinfo) > 0;
 			Familyinfo familyinfo = new Familyinfo();
 			familyinfo.setFamilyage(userage);
 			familyinfo.setFamilymale(usermale);
@@ -148,14 +244,14 @@ public class UserInfoServiceImpl implements UserInfoService {
 			// "1"为用户本人
 			List<Familyinfo> list = familyinfoMapperCustom.selectByUserLoginIdAndType(userloginid, 1);
 			boolean familyResult = false;
-			//int familyResult = 0;
-			if (list.size() == 0) {
+			// 第一次填写信息
+			if (list==null || list.size() == 0) {
 				// 插入到亲属信息表
-				familyResult = familyinfoMapper.insertSelective(familyinfo)>0;
+				familyResult = familyinfoMapper.insertSelective(familyinfo) > 0;
 			} else {
 				Integer id = list.get(0).getFamilyid();
 				familyinfo.setFamilyid(id);
-				familyResult = familyinfoMapper.updateByPrimaryKey(familyinfo)>0;
+				familyResult = familyinfoMapper.updateByPrimaryKey(familyinfo) > 0;
 			}
 			if (result && familyResult) {
 				return DataResult.success("信息修改成功");
@@ -164,10 +260,22 @@ public class UserInfoServiceImpl implements UserInfoService {
 				return DataResult.error("信息修改失败");
 			}
 		}
-		
+
 	}
-	//消息
-	// 提交审核
+
+	/*
+	 * (非 Javadoc) <p>Title: updateInfoToReview</p> <p>Description: 提交审核</p>
+	 * 
+	 * @param userloginid
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.user.UserInfoService#updateInfoToReview(java.lang.
+	 * Integer)
+	 */
 	@Override
 	public String updateInfoToReview(Integer userloginid) throws Exception {
 		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
@@ -188,27 +296,49 @@ public class UserInfoServiceImpl implements UserInfoService {
 		boolean result = userlogininfoMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
-			boolean push = commonService.createMsgUserToAdmin(userloginid, 0, "通知消息", "提交资料审核", jsonCustormCont);
+			boolean push = senderNotificationService.createMsgUserToAdmin(userloginid, 1, "通知消息", "提交审核", jsonCustormCont);
 			return DataResult.success("提交审核成功");
 		} else {
 			return DataResult.error("提交审核失败");
 		}
 	}
 
-	// 查询亲属信息
+	/*
+	 * (非 Javadoc) <p>Title: findFamily</p> <p>Description:查询亲属信息 </p>
+	 * 
+	 * @param userloginid
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.user.UserInfoService#findFamily(java.lang.Integer)
+	 */
 	@Override
-	public String findFamily(Integer userloginid) throws Exception{
+	public String findFamily(Integer userloginid) throws Exception {
 		List<Familyinfo> list = familyinfoMapperCustom.findByUserLoginId(userloginid);
-		if (list!=null && list.size()>0) {
-			return DataResult.success("查询成功", list);
-		} else {
-			return DataResult.success("数据为空");
-		} 
+		return DataResult.success("获取成功", list);
 	}
 
-	// 添加亲属信息
+	/*
+	 * (非 Javadoc) <p>Title: addFamily</p> <p>Description: 添加亲属信息</p>
+	 * 
+	 * @param familyinfo
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see com.medical.service.iface.user.UserInfoService#addFamily(com.medical.po.
+	 * Familyinfo)
+	 */
 	@Override
 	public String addFamily(Familyinfo familyinfo) throws Exception {
+		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(familyinfo.getUserloginid());
+		if (userlogininfo == null) {
+			return DataResult.error("用户不存在");
+		}
 		List<Familyinfo> lists = familyinfoMapperCustom.selectByUserLoginIdAndInfo(familyinfo);
 		if (lists.size() == 0) {
 			boolean result = familyinfoMapper.insertSelective(familyinfo) > 0;
@@ -216,14 +346,26 @@ public class UserInfoServiceImpl implements UserInfoService {
 				return DataResult.success("添加成功");
 			} else {
 				return DataResult.error("添加失败");
-			} 
+			}
 		} else {
 			return DataResult.error("该亲属已存在");
-		 }
-		
+		}
+
 	}
 
-	// 修改亲属信息
+	/*
+	 * (非 Javadoc) <p>Title: updateFamily</p> <p>Description: 修改亲属信息</p>
+	 * 
+	 * @param familyinfo
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.user.UserInfoService#updateFamily(com.medical.po.
+	 * Familyinfo)
+	 */
 	@Override
 	public String updateFamily(Familyinfo familyinfo) throws Exception {
 		Familyinfo family = familyinfoMapper.selectByPrimaryKey(familyinfo.getFamilyid());
@@ -248,7 +390,18 @@ public class UserInfoServiceImpl implements UserInfoService {
 
 	}
 
-	// 删除亲属信息
+	/*
+	 * (非 Javadoc) <p>Title: deleteFamily</p> <p>Description: 删除亲属信息</p>
+	 * 
+	 * @param familyid
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see com.medical.service.iface.user.UserInfoService#deleteFamily(java.lang.
+	 * Integer)
+	 */
 	@Override
 	public String deleteFamily(Integer familyid) throws Exception {
 		Familyinfo family = familyinfoMapper.selectByPrimaryKey(familyid);
@@ -278,8 +431,16 @@ public class UserInfoServiceImpl implements UserInfoService {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see com.medical.service.iface.user.UserInfoService#updateInfoToCancelReview(java.lang.Integer)
+	/*
+	 * (非 Javadoc) <p>Title: updateInfoToCancelReview</p> <p>Description: 撤销审核</p>
+	 * 
+	 * @param userloginid
+	 * 
+	 * @return
+	 * 
+	 * @see
+	 * com.medical.service.iface.user.UserInfoService#updateInfoToCancelReview(java.
+	 * lang.Integer)
 	 */
 	@Override
 	public String updateInfoToCancelReview(Integer userloginid) {
@@ -308,6 +469,5 @@ public class UserInfoServiceImpl implements UserInfoService {
 			return DataResult.error("撤销审核失败");
 		}
 	}
-	
-	
+
 }

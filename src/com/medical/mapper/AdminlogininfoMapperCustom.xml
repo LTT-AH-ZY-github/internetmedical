@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.AdminlogininfoMapperCustom" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Adminlogininfo" >
+    <id column="adminLoginId" property="adminloginid" jdbcType="INTEGER" />
+    <result column="adminLoginName" property="adminloginname" jdbcType="VARCHAR" />
+    <result column="adminLoginPwd" property="adminloginpwd" jdbcType="VARCHAR" />
+    <result column="adminLoginPix" property="adminloginpix" jdbcType="VARCHAR" />
+    <result column="adminLoginToken" property="adminlogintoken" jdbcType="VARCHAR" />
+    <result column="adminLoginTime" property="adminlogintime" jdbcType="TIMESTAMP" />
+    <result column="adminLoginLoc" property="adminloginloc" jdbcType="VARCHAR" />
+    <result column="adminLoginBVer" property="adminloginbver" jdbcType="VARCHAR" />
+    <result column="adminLoginMac" property="adminloginmac" jdbcType="VARCHAR" />
+    <result column="adminLoginIp" property="adminloginip" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectByAdminLoginName" resultMap="BaseResultMap" parameterType="String" >
+    select *
+    from adminlogininfo
+    where adminLoginName = #{0}
+  </select>
+  
+</mapper>

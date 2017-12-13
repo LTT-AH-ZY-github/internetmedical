@@ -79,6 +79,16 @@ public interface HospitalOrderService {
 	 * @return: String
 	 */
 	String payDoctorFinish(Map<String, String[]> requestParams) throws Exception;
+	/**
+	 * @Title: getHospDeptNum
+	 * @Description: 获取医院床位数量
+	 * @param hosploginid 医院登录id
+	 * @param userorderhospprimarydept 一级部门名称
+	 * @param userorderhospseconddept 二级部门名称
+	 * @return
+	 * @return: String
+	 */
+	String getHospBerthNum(Integer hosploginid, String userorderhospprimarydept, String userorderhospseconddept) throws Exception;
 	
 	
 	

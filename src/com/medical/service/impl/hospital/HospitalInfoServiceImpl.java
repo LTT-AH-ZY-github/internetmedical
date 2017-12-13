@@ -14,9 +14,13 @@ import com.medical.po.Accounttype;
 import com.medical.po.Hospinfo;
 import com.medical.po.Hosplogininfo;
 import com.medical.po.Hosporder;
+import com.medical.service.iface.CommonService;
+import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.hospital.HospitalInfoService;
 import com.medical.utils.PictureTool;
 import com.medical.utils.result.DataResult;
+
+import net.sf.json.JSONObject;
 
 public class HospitalInfoServiceImpl implements HospitalInfoService {
 	@Autowired
@@ -27,6 +31,10 @@ public class HospitalInfoServiceImpl implements HospitalInfoService {
 	private HospinfoMapperCustom hospinfoMapperCustom;
 	@Autowired
 	private AccounttypeMapper accounttypeMapper;
+	@Autowired
+	private CommonService commonService;
+	@Autowired 
+	private SenderNotificationService senderNotificationService;
 	@Override
 	public String updateInfo(Hospinfo hospinfo) {
 		Integer hosploginid = hospinfo.getHosploginid();
@@ -89,7 +97,7 @@ public class HospitalInfoServiceImpl implements HospitalInfoService {
 
 	
 	@Override
-	public String updateToReview(Integer hosploginid) {
+	public String updateToReview(Integer hosploginid) throws Exception {
 		Hosplogininfo hosplogininfo =  hosplogininfoMapper.selectByPrimaryKey(hosploginid);
 		if (hosplogininfo==null) {
 			return DataResult.error("账号不存在");
@@ -106,6 +114,8 @@ public class HospitalInfoServiceImpl implements HospitalInfoService {
 		hosplogininforecord.setHosplogintype(2);
 		boolean result = hosplogininfoMapper.updateByPrimaryKeySelective(hosplogininforecord)>0;
 		if (result) {
+			JSONObject jsonCustormCont = new JSONObject();
+			senderNotificationService.createMsgHospitalToAdmin(hosploginid, 1, "消息通知", "提交审核", jsonCustormCont);
 			return DataResult.success("提交成功");
 		} else {
 			return DataResult.error("提交失败");

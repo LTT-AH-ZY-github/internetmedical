@@ -8,8 +8,10 @@ import java.util.Random;
 public class CommonUtils {
 
 	/**
-	 * 时间加随时数生成文件名
-	 * @return String
+	 * @Title: randomFileName
+	 * @Description: 时间加随时数生成文件名
+	 * @return
+	 * @return: String
 	 */
 	public static synchronized String randomFileName() {
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddhhmmssSSS");

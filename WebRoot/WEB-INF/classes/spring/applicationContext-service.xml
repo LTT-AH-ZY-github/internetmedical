@@ -12,6 +12,7 @@
 	
 	
     <bean id="commonService" class="com.medical.service.impl.CommonServiceImpl"/>
+    <bean id="senderNotificationService" class="com.medical.service.impl.SenderNotificationServiceImpl"/>
     <!--用户接口  -->
     <bean id="userAccountService" class="com.medical.service.impl.user.UserAccountServiceImpl"/>
     <bean id="userInfoService" class="com.medical.service.impl.user.UserInfoServiceImpl"/>
@@ -31,11 +32,15 @@
    	<bean id="hospitalHomeService" class="com.medical.service.impl.hospital.HospitalHomeServiceImpl"/>
     <bean id="hospitalInfoService" class="com.medical.service.impl.hospital.HospitalInfoServiceImpl"/>
     <bean id="hospitalOrderService" class="com.medical.service.impl.hospital.HospitalOrderServiceImpl"/>
-   <bean id="HospitalConsultationService" class="com.medical.service.impl.hospital.HospitalConsultationServiceImpl"/>
-   <bean id="HospitalPurseServiceService" class="com.medical.service.impl.hospital.HospitalPurseServiceImpl"/>
-  
+    <bean id="hospitalConsultationService" class="com.medical.service.impl.hospital.HospitalConsultationServiceImpl"/>
+    <bean id="hospitalPurseService" class="com.medical.service.impl.hospital.HospitalPurseServiceImpl"/>
+    <bean id="hospitalUnitPriceService" class="com.medical.service.impl.hospital.HospitalUnitPriceServiceImpl"/>
+    <bean id="hospitalBerthService" class="com.medical.service.impl.hospital.HospitalBerthServiceImpl"/>
+    <bean id="hospitalPackageService" class="com.medical.service.impl.hospital.HospitalPackageServiceImpl"/>
     <!--管理员接口  -->
     <bean id="adminFunctionService" class="com.medical.service.impl.admin.AdminFunctionServiceImpl"/>
+    <bean id="adminAccountService" class="com.medical.service.impl.admin.AdminAccountServiceImpl"/>
+    <bean id="adminCheckToFundService" class="com.medical.service.impl.admin.AdminCheckToFundServiceImpl"/>
     
 
 

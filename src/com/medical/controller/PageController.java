@@ -35,8 +35,8 @@ public class PageController {
         String username = request.getParameter("username");  
         System.out.println(username + "登录");  
         HttpSession session = request.getSession(false);  
-        session.setAttribute("SESSION_USERNAME", username); 
-        System.out.println("测试数据"+session.getAttribute("SESSION_USERNAME"));
+        session.setAttribute("huanxinaccount", username); 
+        System.out.println("测试数据"+session.getAttribute("huanxinaccount"));
         response.sendRedirect("websocket.jsp");  
     }  
   

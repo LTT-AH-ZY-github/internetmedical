@@ -1,7 +1,121 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.medical.mapper.PayMapperCustom" >
-  
+  <insert id="insertSelectiveReturnId" keyProperty="payid" useGeneratedKeys="true" parameterType="com.medical.po.Pay" >
+    insert into pay
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="payid != null" >
+        payId,
+      </if>
+      <if test="payorderid != null" >
+        payOrderId,
+      </if>
+      <if test="paytradeno != null" >
+        PayTradeNo,
+      </if>
+      <if test="payalipaytradeno != null" >
+        payAlipayTradeNo,
+      </if>
+      <if test="paywxtradeno != null" >
+        payWXTradeNo,
+      </if>
+      <if test="paytotalamount != null" >
+        payTotalAmount,
+      </if>
+      <if test="payreceiptamount != null" >
+        payReceiptAmount,
+      </if>
+      <if test="paycreattime != null" >
+        payCreatTime,
+      </if>
+      <if test="payendtime != null" >
+        payEndTime,
+      </if>
+      <if test="paybuyerid != null" >
+        payBuyerId,
+      </if>
+      <if test="paysellerid != null" >
+        paySellerId,
+      </if>
+      <if test="paysellername != null" >
+        paySellerName,
+      </if>
+      <if test="paytypeid != null" >
+        payTypeId,
+      </if>
+      <if test="paystateid != null" >
+        payStateId,
+      </if>
+      <if test="paymodeid != null" >
+        payModeId,
+      </if>
+      <if test="payremark != null" >
+        payRemark,
+      </if>
+      <if test="paybuyername != null" >
+        payBuyerName,
+      </if>
+      <if test="payinfo != null" >
+        payInfo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="payid != null" >
+        #{payid,jdbcType=INTEGER},
+      </if>
+      <if test="payorderid != null" >
+        #{payorderid,jdbcType=INTEGER},
+      </if>
+      <if test="paytradeno != null" >
+        #{paytradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="payalipaytradeno != null" >
+        #{payalipaytradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="paywxtradeno != null" >
+        #{paywxtradeno,jdbcType=VARCHAR},
+      </if>
+      <if test="paytotalamount != null" >
+        #{paytotalamount,jdbcType=DECIMAL},
+      </if>
+      <if test="payreceiptamount != null" >
+        #{payreceiptamount,jdbcType=DECIMAL},
+      </if>
+      <if test="paycreattime != null" >
+        #{paycreattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payendtime != null" >
+        #{payendtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paybuyerid != null" >
+        #{paybuyerid,jdbcType=INTEGER},
+      </if>
+      <if test="paysellerid != null" >
+        #{paysellerid,jdbcType=INTEGER},
+      </if>
+      <if test="paysellername != null" >
+        #{paysellername,jdbcType=VARCHAR},
+      </if>
+      <if test="paytypeid != null" >
+        #{paytypeid,jdbcType=INTEGER},
+      </if>
+      <if test="paystateid != null" >
+        #{paystateid,jdbcType=INTEGER},
+      </if>
+      <if test="paymodeid != null" >
+        #{paymodeid,jdbcType=INTEGER},
+      </if>
+      <if test="payremark != null" >
+        #{payremark,jdbcType=VARCHAR},
+      </if>
+      <if test="paybuyername != null" >
+        #{paybuyername,jdbcType=VARCHAR},
+      </if>
+      <if test="payinfo != null" >
+        #{payinfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
   <select id="selectByPayTradeNo" resultType="com.medical.po.Pay" parameterType="String" >
     select *
     

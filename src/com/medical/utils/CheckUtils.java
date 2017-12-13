@@ -4,9 +4,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import com.github.pagehelper.Page;
+
+/**
+ * @ClassName:     CheckUtils.java
+ * @Description:   参数验证
+ * @author          xyh
+ * @version         V1.0  
+ * @Date           2017年12月9日 下午8:57:42 
+ */
 public class CheckUtils {
 	public static void main(String[] args) {
-		System.out.println(isChineseNameLegal("拒绝流量了"));
+		System.out.println(isPositiveIntegerLegal(null));
 	}
 	/**
 	 * 检查手机号码是否合法
@@ -44,4 +53,35 @@ public class CheckUtils {
 		} 
         return false;
     } 
+	
+	/**
+	 * @Title: isPageNoLegal
+	 * @Description: 是否为合法当前页
+	 * @param num
+	 * @return
+	 * @throws PatternSyntaxException
+	 * @return: boolean
+	 */
+	public static boolean isPageLegal(Integer page) throws PatternSyntaxException {  
+        if (page!=null && page>0) {
+        	return true;
+		}
+        return false;
+    } 
+	/**
+	 * @Title: isPositiveIntegerLegal
+	 * @Description: 是否为合法正整数
+	 * @param num
+	 * @return
+	 * @throws PatternSyntaxException
+	 * @return: boolean
+	 */
+	public static boolean isPositiveIntegerLegal(Integer num) throws PatternSyntaxException {  
+		  String regExp = "^[1-9]\\d*$";
+	      Pattern p = Pattern.compile(regExp);  
+	      Matcher m = p.matcher(num+"");  
+	      return m.matches(); 
+    } 
+	
+	
 }

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.HospitalunitpriceMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Hospitalunitprice" >
+    <id column="UnitPriceId" property="unitpriceid" jdbcType="INTEGER" />
+    <result column="HospLoginId" property="hosploginid" jdbcType="INTEGER" />
+    <result column="UnitPriceName" property="unitpricename" jdbcType="VARCHAR" />
+    <result column="UnitPriceNumber" property="unitpricenumber" jdbcType="DECIMAL" />
+    <result column="UnitPriceAbs" property="unitpriceabs" jdbcType="VARCHAR" />
+    <result column="UnitPriceTime" property="unitpricetime" jdbcType="TIMESTAMP" />
+    <result column="UnitPriceOperateTime" property="unitpriceoperatetime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    UnitPriceId, HospLoginId, UnitPriceName, UnitPriceNumber, UnitPriceAbs, UnitPriceTime, 
+    UnitPriceOperateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HospitalunitpriceExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hospitalunitprice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from hospitalunitprice
+    where UnitPriceId = #{unitpriceid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from hospitalunitprice
+    where UnitPriceId = #{unitpriceid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.HospitalunitpriceExample" >
+    delete from hospitalunitprice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Hospitalunitprice" >
+    insert into hospitalunitprice (UnitPriceId, HospLoginId, UnitPriceName, 
+      UnitPriceNumber, UnitPriceAbs, UnitPriceTime, 
+      UnitPriceOperateTime)
+    values (#{unitpriceid,jdbcType=INTEGER}, #{hosploginid,jdbcType=INTEGER}, #{unitpricename,jdbcType=VARCHAR}, 
+      #{unitpricenumber,jdbcType=DECIMAL}, #{unitpriceabs,jdbcType=VARCHAR}, #{unitpricetime,jdbcType=TIMESTAMP}, 
+      #{unitpriceoperatetime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Hospitalunitprice" >
+    insert into hospitalunitprice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="unitpriceid != null" >
+        UnitPriceId,
+      </if>
+      <if test="hosploginid != null" >
+        HospLoginId,
+      </if>
+      <if test="unitpricename != null" >
+        UnitPriceName,
+      </if>
+      <if test="unitpricenumber != null" >
+        UnitPriceNumber,
+      </if>
+      <if test="unitpriceabs != null" >
+        UnitPriceAbs,
+      </if>
+      <if test="unitpricetime != null" >
+        UnitPriceTime,
+      </if>
+      <if test="unitpriceoperatetime != null" >
+        UnitPriceOperateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="unitpriceid != null" >
+        #{unitpriceid,jdbcType=INTEGER},
+      </if>
+      <if test="hosploginid != null" >
+        #{hosploginid,jdbcType=INTEGER},
+      </if>
+      <if test="unitpricename != null" >
+        #{unitpricename,jdbcType=VARCHAR},
+      </if>
+      <if test="unitpricenumber != null" >
+        #{unitpricenumber,jdbcType=DECIMAL},
+      </if>
+      <if test="unitpriceabs != null" >
+        #{unitpriceabs,jdbcType=VARCHAR},
+      </if>
+      <if test="unitpricetime != null" >
+        #{unitpricetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unitpriceoperatetime != null" >
+        #{unitpriceoperatetime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.HospitalunitpriceExample" resultType="java.lang.Integer" >
+    select count(*) from hospitalunitprice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update hospitalunitprice
+    <set >
+      <if test="record.unitpriceid != null" >
+        UnitPriceId = #{record.unitpriceid,jdbcType=INTEGER},
+      </if>
+      <if test="record.hosploginid != null" >
+        HospLoginId = #{record.hosploginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.unitpricename != null" >
+        UnitPriceName = #{record.unitpricename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unitpricenumber != null" >
+        UnitPriceNumber = #{record.unitpricenumber,jdbcType=DECIMAL},
+      </if>
+      <if test="record.unitpriceabs != null" >
+        UnitPriceAbs = #{record.unitpriceabs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unitpricetime != null" >
+        UnitPriceTime = #{record.unitpricetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.unitpriceoperatetime != null" >
+        UnitPriceOperateTime = #{record.unitpriceoperatetime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update hospitalunitprice
+    set UnitPriceId = #{record.unitpriceid,jdbcType=INTEGER},
+      HospLoginId = #{record.hosploginid,jdbcType=INTEGER},
+      UnitPriceName = #{record.unitpricename,jdbcType=VARCHAR},
+      UnitPriceNumber = #{record.unitpricenumber,jdbcType=DECIMAL},
+      UnitPriceAbs = #{record.unitpriceabs,jdbcType=VARCHAR},
+      UnitPriceTime = #{record.unitpricetime,jdbcType=TIMESTAMP},
+      UnitPriceOperateTime = #{record.unitpriceoperatetime,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Hospitalunitprice" >
+    update hospitalunitprice
+    <set >
+      <if test="hosploginid != null" >
+        HospLoginId = #{hosploginid,jdbcType=INTEGER},
+      </if>
+      <if test="unitpricename != null" >
+        UnitPriceName = #{unitpricename,jdbcType=VARCHAR},
+      </if>
+      <if test="unitpricenumber != null" >
+        UnitPriceNumber = #{unitpricenumber,jdbcType=DECIMAL},
+      </if>
+      <if test="unitpriceabs != null" >
+        UnitPriceAbs = #{unitpriceabs,jdbcType=VARCHAR},
+      </if>
+      <if test="unitpricetime != null" >
+        UnitPriceTime = #{unitpricetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="unitpriceoperatetime != null" >
+        UnitPriceOperateTime = #{unitpriceoperatetime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where UnitPriceId = #{unitpriceid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Hospitalunitprice" >
+    update hospitalunitprice
+    set HospLoginId = #{hosploginid,jdbcType=INTEGER},
+      UnitPriceName = #{unitpricename,jdbcType=VARCHAR},
+      UnitPriceNumber = #{unitpricenumber,jdbcType=DECIMAL},
+      UnitPriceAbs = #{unitpriceabs,jdbcType=VARCHAR},
+      UnitPriceTime = #{unitpricetime,jdbcType=TIMESTAMP},
+      UnitPriceOperateTime = #{unitpriceoperatetime,jdbcType=VARCHAR}
+    where UnitPriceId = #{unitpriceid,jdbcType=INTEGER}
+  </update>
+</mapper>

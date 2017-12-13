@@ -1,22 +1,47 @@
 package com.medical.po;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.medical.controller.validation.Add;
+import com.medical.controller.validation.Del;
+import com.medical.controller.validation.Get;
+import com.medical.controller.validation.List;
+import com.medical.controller.validation.Update;
+import com.medical.controller.validation.ValidGroup1;
+import com.medical.controller.validation.ValidGroup2;
+
+
+
 public class Doctoraddress {
+	
+	
+
+	@NotNull(message="地址id为空",groups= {Update.class,Del.class,Get.class})
     private Integer docaddressid;
-
+    
+	@NotBlank(message="地址位置为空",groups= {Add.class})
     private String docaddresslocation;
-
+	
+	@NotBlank(message="省为空",groups= {Add.class})
     private String docaddressprovince;
-
+	
+	@NotBlank(message="市为空",groups= {Add.class})
     private String docaddresscity;
-
+	
+	@NotBlank(message="区县为空",groups= {Add.class})
     private String docaddressarea;
-
-    private String docaddressother;
-
+	
+	private String docaddressother;
+	
+	@NotBlank(message="经度为空",groups= {Add.class})
     private String docaddresslon;
-
+	
+	@NotBlank(message="纬度为空",groups= {Add.class})
     private String docaddresslat;
-
+	
+	@NotNull(message="医生登录id为空",groups= {Add.class,Update.class,Del.class,Get.class,List.class})
     private Integer docloginid;
 
     private Boolean docaddresstype;

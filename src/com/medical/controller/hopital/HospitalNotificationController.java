@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.service.iface.CommonService;
+import com.medical.utils.CheckUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -43,19 +44,24 @@ public class HospitalNotificationController {
 		if (limit != null && limit < 0) {
 			return DataResult.error("limit值应为大于0的整数");
 		}
-		if (offset == null) {
-			return DataResult.error("offset值为空");
-		}
-		if (offset != null && offset < 0) {
-			return DataResult.error("offset值应为大于0的整数");
-		}
 		if (type != null && (type != 1 || type != 2)) {
 			return DataResult.error("type值超出范围");
 		}
 		return commonService.listReceiveNotification(hosploginid, 1, limit, offset, type);
 
 	}
+	@RequestMapping(value = "/getunreadnotificationnum", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取未读的通知数量", httpMethod = "psot", notes = "获取未读的通知数量")
+	public @ResponseBody String getUnreadNotificationNum(
+			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid
+			)
+			throws Exception {
+		if (hosploginid == null) {
+			return DataResult.error("医院登录id为空");
+		}
+		return commonService.getUnreadNotificationNum(hosploginid);
 
+	}
 	@RequestMapping(value = "/listsendernotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取发送的通知", httpMethod = "psot", notes = "获取发送的通知")
 	public @ResponseBody String listsendernotification(
@@ -67,17 +73,8 @@ public class HospitalNotificationController {
 		if (hosploginid == null) {
 			return DataResult.error("医院登录id为空");
 		}
-		if (limit == null) {
-			return DataResult.error("limit值为空");
-		}
-		if (limit != null && limit < 0) {
-			return DataResult.error("limit值应为大于0的整数");
-		}
-		if (offset == null) {
-			return DataResult.error("offset值为空");
-		}
-		if (offset != null && offset < 0) {
-			return DataResult.error("offset值应为大于0的整数");
+		if (!CheckUtils.isPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为正整数");
 		}
 		if (type != null && (type != 1 || type != 2)) {
 			return DataResult.error("type值超出范围");

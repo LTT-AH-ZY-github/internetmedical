@@ -106,7 +106,7 @@ public class DoctorHomeServiceImpl implements DoctorHomeService {
 		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
 		// 医生个人信息为空
 		if (doctorinfo == null) {
-			return PaginationResult.error("该用户不存在");
+			return PaginationResult.error("账号不存在");
 		}
 		DoctorSearch doctorSearch = new DoctorSearch();
 		doctorSearch.setLat(lat);
@@ -130,7 +130,7 @@ public class DoctorHomeServiceImpl implements DoctorHomeService {
 		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
 		// 医生个人信息为空
 		if (doctorinfo == null) {
-			return PaginationResult.error("该用户不存在");
+			return PaginationResult.error("账号不存在");
 		}
 		DoctorSearch doctorSearch = new DoctorSearch();
 		doctorSearch.setLat(lat);
@@ -155,7 +155,7 @@ public class DoctorHomeServiceImpl implements DoctorHomeService {
 		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
 		// 医生个人信息为空
 		if (doctorinfo == null) {
-			return PaginationResult.error("该用户不存在");
+			return PaginationResult.error("账号不存在");
 		}
 		DoctorSearch doctorSearch = new DoctorSearch();
 		doctorSearch.setLat(lat);
@@ -176,6 +176,11 @@ public class DoctorHomeServiceImpl implements DoctorHomeService {
 	// 获取病情详情
 	@Override
 	public String getSickDetail(Integer docloginid, Integer usersickid) throws Exception {
+		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
+		// 医生个人信息为空
+		if (doctorinfo == null) {
+			return PaginationResult.error("账号不存在");
+		}
 		Map<String, Object> data = usersickMapperCustom.selectAllInfoByUserSickId(usersickid);
 		if (data != null && !data.isEmpty()) {
 			return DataResult.success("获取病情详情成功", data);
@@ -216,7 +221,11 @@ public class DoctorHomeServiceImpl implements DoctorHomeService {
 			String usersickseconddept) throws Exception {
 		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
 		if (doctorlogininfo == null) {
-			return DataResult.error("该医生不存在");
+			return DataResult.error("账户不存在");
+		}
+		int type = doctorlogininfo.getDoclogintype();
+		if (type!=3) {
+			return DataResult.error("账户未审核");
 		}
 		Usersick usersick = usersickMapper.selectByPrimaryKey(usersickid);
 		if (usersick == null) {

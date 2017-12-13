@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.medical.mapper.HospitaldeptMapperCustom" >
 	
+	<select id="selectByDeptNameAndFatherId" resultType="com.medical.po.Hospitaldept" parameterType="String">
+	select * from hospitaldept
+    where hospDeptIsCheck=1 and  hospDeptName =#{0} and hospDeptFatherId=#{1} 
+	</select>
   <select id="selectByFatherId" resultType="com.medical.po.Hospitaldept" parameterType="int" >
     select * from hospitaldept
     where	hospDeptIsCheck=1 and  hospDeptFatherId=#{id} 

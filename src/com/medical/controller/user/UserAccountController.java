@@ -43,14 +43,10 @@ public class UserAccountController {
 	public String phoneTest(
 			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam(value = "userloginphone") String userloginphone)
 			throws Exception {
-		if (StringUtils.isNotBlank(userloginphone)) {
-			if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
-				return Result.error("手机号码格式错误");
-			}
-			return userAccountService.findAccountExit(userloginphone);
-		} else {
-			return Result.error("手机号码为空");
+		if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
+			return Result.error("手机号码输入有误");
 		}
+		return userAccountService.findAccountExit(userloginphone);
 	}
 
 	/**
@@ -66,14 +62,10 @@ public class UserAccountController {
 	public String getCode(
 			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam String userloginphone)
 			throws Exception {
-		if (StringUtils.isBlank(userloginphone)) {
-			return Result.error("手机号码为空");
-		} else {
-			if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
-				return Result.error("手机号码格式错误");
-			}
-			return commonService.getMsgCode(userloginphone);
+		if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
+			return Result.error("手机号码输入有误");
 		}
+		return commonService.getMsgCode(userloginphone);
 	}
 
 	/**
@@ -92,11 +84,8 @@ public class UserAccountController {
 			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam(value = "userloginphone") String userloginphone,
 			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam(value = "userloginpwd") String userloginpwd,
 			@ApiParam(name = "code", required = true, value = "短信验证码") @RequestParam String code) throws Exception {
-		if (StringUtils.isBlank(userloginphone)) {
-			return Result.error("手机号码为空");
-		}
-		if (StringUtils.isNotBlank(userloginphone) && !CheckUtils.isChinaPhoneLegal(userloginphone)) {
-			return Result.error("手机号码格式错误");
+		if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
+			return Result.error("手机号码输入有误");
 		}
 		if (StringUtils.isBlank(userloginpwd)) {
 			return DataResult.error("密码为空");
@@ -124,9 +113,12 @@ public class UserAccountController {
 			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam(value = "userloginpwd") String userloginpwd)
 			throws Exception {
 		if (userloginid == null) {
-			return DataResult.error("id为空");
+			return DataResult.error("用户登录id为空");
 		}
-		return userAccountService.addHuanXinAccout(userloginid, userloginpwd);
+		if (userloginpwd == null) {
+			return DataResult.error("密码为空");
+		}
+		return userAccountService.createHuanXinAccout(userloginid, userloginpwd);
 	}
 
 	/**
@@ -148,14 +140,9 @@ public class UserAccountController {
 			@ApiParam(name = "userlogindev", value = "登录设备，1为安卓设置，2为IOS设备") @RequestParam(required = false) Integer userlogindev,
 			@ApiParam(name = "userlogintoken", value = "token") @RequestParam(required = false) String userlogintoken)
 			throws Exception {
-		if (StringUtils.isBlank(userloginphone)) {
-			return Result.error("手机号码为空");
+		if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
+			return Result.error("手机号码输入有误");
 		}
-
-		if (StringUtils.isNotBlank(userloginphone) && !CheckUtils.isChinaPhoneLegal(userloginphone)) {
-			return Result.error("手机号码格式错误");
-		}
-
 		if (StringUtils.isBlank(userloginpwd)) {
 			return DataResult.error("密码为空");
 		}
@@ -204,11 +191,8 @@ public class UserAccountController {
 			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam(value = "userloginphone") String userloginphone,
 			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam(value = "userloginpwd") String userloginpwd,
 			@ApiParam(name = "code", required = true, value = "短信验证码") @RequestParam String code) throws Exception {
-		if (StringUtils.isBlank(userloginphone)) {
-			return Result.error("手机号码为空");
-		}
-		if (StringUtils.isNotBlank(userloginphone) && !CheckUtils.isChinaPhoneLegal(userloginphone)) {
-			return Result.error("手机号码格式错误");
+		if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
+			return Result.error("手机号码输入有误");
 		}
 		if (StringUtils.isBlank(userloginpwd)) {
 			return DataResult.error("密码为空");

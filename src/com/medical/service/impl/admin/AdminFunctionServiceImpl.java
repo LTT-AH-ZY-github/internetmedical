@@ -24,8 +24,11 @@ import com.medical.po.Doctorlogininfo;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Hosplogininfo;
 import com.medical.po.Userlogininfo;
+import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.admin.AdminFunctionService;
 import com.medical.utils.result.DataResult;
+
+import net.sf.json.JSONObject;
 
 
 
@@ -49,6 +52,9 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	private HospitaldeptMapperCustom hospitaldeptMapperCustom;
 	@Autowired
 	private HospitaldeptMapper hospitaldeptMapper;
+	@Autowired
+	private SenderNotificationService senderNotificationService;
+
 	
 	//管理员根据用户账号类型查询用户 
 	@Override
@@ -122,6 +128,8 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		}
 		boolean result = userlogininfoMapper.updateByPrimaryKeySelective(record)>0;
 		if (result) {
+			JSONObject jsonCustormCont = new JSONObject();
+			senderNotificationService.createMsgAdminToUser(adminloginid, userloginid, "消息通知", "已审核通过", jsonCustormCont);
 			return DataResult.success("审核成功");
 		} else {
 			return DataResult.error("审核失败");
@@ -197,6 +205,8 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		}
 		boolean result = doctorlogininfoMapper.updateByPrimaryKeySelective(record)>0;
 		if (result) {
+			JSONObject jsonCustormCont = new JSONObject();
+			senderNotificationService.createMsgAdminToDoctor(adminloginid, docloginid, "消息通知", "已审核通过", jsonCustormCont);
 			return DataResult.success("审核成功");
 		} else {
 			return DataResult.error("审核失败");
@@ -272,6 +282,8 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		}
 		boolean result = hosplogininfoMapper.updateByPrimaryKeySelective(record)>0;
 		if (result) {
+			JSONObject jsonCustormCont = new JSONObject();
+			senderNotificationService.createMsgAdminToHospital(adminloginid, hosploginid, "消息通知", "已审核通过", jsonCustormCont);
 			return DataResult.success("审核成功");
 		} else {
 			return DataResult.error("审核失败");

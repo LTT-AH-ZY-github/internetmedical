@@ -19,17 +19,16 @@ public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse serverHttpResponse, WebSocketHandler webSocketHandler, Map<String, Object> attributes) throws Exception {  
         if (request instanceof ServletServerHttpRequest) {  
             ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;  
-            HttpSession session = servletRequest.getServletRequest().getSession(false);  
-            System.out.println("session"+session);
-            if (session != null) {  
-                //使用userName区分WebSocketHandler，以便定向发送消息  
-                String userName = (String) session.getAttribute("SESSION_USERNAME"); 
-                System.out.println("sessionname"+userName);
-                if (userName == null) {  
-                    userName = "system-" + session.getId();  
-                }  
-                attributes.put("WEBSOCKET_USERNAME", userName);  
+            String path = servletRequest.getServletRequest().getRequestURI();
+            String userId = "";
+            if (path.split("/").length == 5)
+            {
+            	userId = path.split("/")[4];
+            }
+            if (userId == null) {  
+            	userId = "system-1";  
             }  
+            attributes.put("WEBSOCKET_USERNAME", userId);  
         }  
         return true;  
     }  

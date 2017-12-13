@@ -3,6 +3,7 @@
  */
 package com.medical.service.impl.hospital;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,9 +62,15 @@ public class HospitalPurseServiceImpl implements HospitalPurseService{
 		List<Map<String, Object>> list = hosppurseMapperCustom.selectAllInfoByHosploginid(hosploginid);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
 		if (pageInfo != null && !pageInfo.getList().isEmpty()) {
-			return DataResult.success("获取数据成功", pageInfo.getList());
+			System.out.println("数据"+pageInfo.getList());
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("rows", pageInfo.getList());
+			// 总共页数
+			map.put("total", pageInfo.getTotal());
+		
+			return DataResult.success("获取成功", map);
 		} else {
-			return DataResult.success("获取数据为空", null);
+			return DataResult.success("获取成功", null);
 		}
 		
 	}
@@ -77,9 +84,15 @@ public class HospitalPurseServiceImpl implements HospitalPurseService{
 		List<Map<String, Object>> list = payMapperCustom.selectByLoginIdAndType(hosploginid, 3);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
 		if (pageInfo != null && !pageInfo.getList().isEmpty()) {
-			return DataResult.success("获取数据成功", pageInfo.getList());
+			System.out.println("数据"+pageInfo.getList());
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("rows", pageInfo.getList());
+			// 总共页数
+			map.put("total", pageInfo.getTotal());
+		
+			return DataResult.success("获取成功", map);
 		} else {
-			return DataResult.success("获取数据为空", null);
+			return DataResult.success("获取成功", null);
 		}
 	}
 	/* (non-Javadoc)

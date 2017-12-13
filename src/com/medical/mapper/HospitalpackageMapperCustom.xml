@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.HospitalpackageMapperCustom" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Hospitalpackage" >
+    <id column="PackageId" property="packageid" jdbcType="INTEGER" />
+    <result column="HospLoginId" property="hosploginid" jdbcType="INTEGER" />
+    <result column="PackageName" property="packagename" jdbcType="VARCHAR" />
+    <result column="PackageNumber" property="packagenumber" jdbcType="INTEGER" />
+    <result column="PackageAbs" property="packageabs" jdbcType="VARCHAR" />
+    <result column="PackageSTime" property="packagestime" jdbcType="TIMESTAMP" />
+    <result column="PackageETime" property="packageetime" jdbcType="TIMESTAMP" />
+    <result column="PackageSusTime" property="packagesustime" jdbcType="INTEGER" />
+    <result column="PackageTime" property="packagetime" jdbcType="TIMESTAMP" />
+    <result column="PackageOperateTime" property="packageoperatetime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    packageid, hosploginid, packagename, packagenumber, packageabs, packagestime, packageetime, 
+    packagesustime, packagetime, packageoperatetime
+  </sql>
+  <select id="selectByHospLoginId" resultType="map" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from hospitalpackage
+    where HospLoginId = #{0,jdbcType=INTEGER}
+  </select>
+  
+</mapper>

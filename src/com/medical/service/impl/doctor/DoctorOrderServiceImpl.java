@@ -48,6 +48,7 @@ import com.medical.po.Userlogininfo;
 import com.medical.po.Userorder;
 import com.medical.po.Usersick;
 import com.medical.service.iface.CommonService;
+import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.doctor.DoctorAccountService;
 import com.medical.service.iface.doctor.DoctorOrderService;
 import com.medical.service.iface.hospital.HospitalOrderService;
@@ -57,6 +58,13 @@ import com.sun.org.apache.regexp.internal.recompile;
 
 import net.sf.json.JSONObject;
 
+/**
+ * @ClassName:     DoctorOrderServiceImpl.java
+ * @Description:   用户订单功能接口实现类
+ * @author          xyh
+ * @version         V1.0  
+ * @Date           2017年12月9日 下午10:06:42 
+ */
 public class DoctorOrderServiceImpl implements DoctorOrderService {
 	@Autowired
 	private DoctorinfoMapperCustom doctorinfoMapperCustom;
@@ -111,10 +119,29 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 	private HosporderMapper hosporderMapper;
 	@Autowired
 	private HosporderMapperCustom hosporderMapperCustom;
+	@Autowired 
+	private SenderNotificationService senderNotificationService;
 
-	// 医生抢单
+	/* (非 Javadoc)  
+	* <p>Title: creatPreOrder</p>  
+	* <p>Description: 医生申请病情</p>  
+	* @param usersickid
+	* @param docloginid
+	* @param preorderprice
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorOrderService#creatPreOrder(java.lang.Integer, java.lang.Integer, java.lang.Double)  
+	*/  
 	@Override
-	public String creatPreOrder(int usersickid, int docloginid, Double preorderprice) throws Exception {
+	public String creatPreOrder(Integer usersickid, Integer docloginid, Double preorderprice) throws Exception {
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo==null) {
+			return DataResult.error("用户不存在");
+		}
+		int type = doctorlogininfo.getDoclogintype();
+		if (type!=3) {
+			return DataResult.error("账户未审核");
+		}
 		Preorder preorder = new Preorder();
 		preorder.setPreorderdocloginid(docloginid);
 		preorder.setPreorderstate(1);
@@ -122,7 +149,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			preorder.setPreorderprice(new BigDecimal(preorderprice));
 		}
 		preorder.setUsersickid(usersickid);
-		// 医生抢单
+		// 2医生抢单
 		preorder.setPreordertype(2);
 		// 申请时间
 		preorder.setPreordertime(new Date());
@@ -135,7 +162,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		preorder.setPreorderuserloginid(usersick.getUserloginid());
 		List<Preorder> list = preorderMapperCustom.selectByDocLoginIdAndUserSickId(docloginid, usersickid, 2);
 		if (list.size() > 0) {
-			return DataResult.error("该订单已申请");
+			return DataResult.error("该病情已申请");
 		}
 		// 插入预订单
 		boolean result = preorderMapper.insertSelective(preorder) > 0;
@@ -144,7 +171,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			jsonCustormCont.put("doc_id", docloginid);
 			jsonCustormCont.put("sick_id", usersickid);
 			jsonCustormCont.put("type", "1");
-			boolean push = commonService.createMsgDoctorToUser(docloginid, usersick.getUserloginid(), "等待确认", "申请了您的病情",
+			boolean push = senderNotificationService.createMsgDoctorToUser(docloginid, usersick.getUserloginid(), "等待确认", "申请了您的病情",
 					jsonCustormCont);
 			if (push) {
 				return DataResult.success("申请成功，且消息发送成功");
@@ -156,23 +183,43 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		}
 	}
 
-	// 获取已抢订单
+	/* (非 Javadoc)  
+	* <p>Title: listGrabOrders</p>  
+	* <p>Description: 获取已抢订单</p>  
+	* @param docloginid
+	* @param pageNo
+	* @param pageSize
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorOrderService#listGrabOrders(java.lang.Integer, java.lang.Integer, java.lang.Integer)  
+	*/  
 	@Override
-	public String listGrabOrders(Integer docloginid, Integer pageNo, Integer pageSize) throws Exception {
-		PageHelper.startPage(pageNo, pageSize);
+	public String listGrabOrders(Integer docloginid, Integer pageNo) throws Exception {
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo==null) {
+			return DataResult.error("账号不存在");
+		}
+		PageHelper.startPage(pageNo, 5);
 		List<Map<String, Object>> list = preorderMapperCustom.listByDocLoginId(docloginid);
 		PageInfo<Map<String, Object>> page = new PageInfo<Map<String, Object>>(list);
-		if (page != null && page.getTotal() > 0) {
-
-			return DataResult.success("获取数据成功", page.getList());
-		} else {
-			return DataResult.success("获取数据为空",null);
-		}
+		return DataResult.success("获取成功", page.getList());
 	}
 
-	// 医生取消抢单
+	/* (非 Javadoc)  
+	* <p>Title: deletePreOrder</p>  
+	* <p>Description:  医生取消抢单</p>  
+	* @param docloginid
+	* @param preorderid
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorOrderService#deletePreOrder(java.lang.Integer, java.lang.Integer)  
+	*/  
 	@Override
 	public String deletePreOrder(Integer docloginid, Integer preorderid) throws Exception {
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo==null) {
+			return DataResult.error("账号不存在");
+		}
 		Preorder preorder = preorderMapper.selectByPrimaryKey(preorderid);
 		if (preorder == null) {
 			return DataResult.error("无申请记录");
@@ -181,86 +228,120 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		Integer userloginid = preorder.getPreorderuserloginid();
 		Integer userSickId = preorder.getUsersickid();
 		if (docloginid != docLoginId) {
-			return DataResult.error("该申请记录与医生不匹配");
+			return DataResult.error("账号信息不匹配");
 		}
 		int result = preorderMapper.deleteByPrimaryKey(preorderid);
 		if (result > 0) {
 			JSONObject jsonCustormCont = new JSONObject();
-			/*
-			 * jsonCustormCont.put("doc_id", docloginid); jsonCustormCont.put("sick_id",
-			 * usersickid); jsonCustormCont.put("type", "1");
-			 */
-			boolean push = commonService.createMsgDoctorToUser(docloginid, userloginid, "消息通知", "取消申请了您的病情",
+			senderNotificationService.createMsgDoctorToUser(docloginid, userloginid, "消息通知", "取消申请了您的病情",
 					jsonCustormCont);
-			if (push) {
-				return DataResult.success("取消成功，且消息发送成功");
-			} else {
-				return DataResult.success("取消成功，但消息发送失败");
-			}
+			return DataResult.success("取消成功");
 		} else {
-			return DataResult.error("取消申请失败");
+			return DataResult.error("取消失败");
 
 		}
 	}
 
-	// 获取选择我的订单
+	/* (非 Javadoc)  
+	* <p>Title: listOrderToConfirm</p>  
+	* <p>Description: 获取选择我的订单</p>  
+	* @param docloginid
+	* @param pageNo
+	* @param pageSize
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorOrderService#listOrderToConfirm(java.lang.Integer, java.lang.Integer, java.lang.Integer)  
+	*/  
 	@Override
-	public String listOrderToConfirm(Integer docloginid, Integer pageNo, Integer pageSize) throws Exception {
-		Map<String, Object> map = new HashMap<String, Object>();
-		PageHelper.startPage(pageNo, pageSize);
+	public String listOrderToConfirm(Integer docloginid, Integer pageNo) throws Exception {
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo==null) {
+			return DataResult.error("账号不存在");
+		}
+		PageHelper.startPage(pageNo, 5);
 		List<Map<String, Object>> list = userorderMapperCustom.listOrderToConfirmByDocLoginId(docloginid);
 		PageInfo<Map<String, Object>> page = new PageInfo<Map<String, Object>>(list);
-		if (page != null && page.getTotal() > 0) {
-			// 获取数据成功
-			return DataResult.success("获取数据成功", page.getList());
-
-		} else {
-			return DataResult.success("获取数据为空", null);
-		}
+		return DataResult.success("获取成功", page.getList());
 
 	}
 
 	// 获取订单
+	
+	/* (非 Javadoc)  
+	* <p>Title: listOrder</p>  
+	* <p>Description: </p>  
+	* @param docLoginId
+	* @param type
+	* @param pageNo
+	* @param pageSize
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorOrderService#listOrder(java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer)  
+	*/  
 	@Override
-	public String listOrder(Integer docLoginId, Integer type, Integer pageNo, Integer pageSize) throws Exception {
-		PageHelper.startPage(pageNo, pageSize);
-		List<Map<String, Object>> list = userorderMapperCustom.listByDocLoginIdAndState(docLoginId, type);
+	public String listOrders(Integer docloginid, Integer type, Integer pageno) throws Exception {
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo==null) {
+			return DataResult.error("账号不存在");
+		}
+		PageHelper.startPage(pageno, 5);
+		List<Map<String, Object>> list = userorderMapperCustom.listByDocLoginIdAndState(docloginid, type);
 		PageInfo<Map<String, Object>> page = new PageInfo<Map<String, Object>>(list);
-		if (page != null && page.getTotal() > 0) {
-			return DataResult.success("获取数据成功", page.getList());
-		} else {
-			return DataResult.success("获取数据为空", null);
-		}
+		return DataResult.success("获取成功", page.getList());
 	}
 
-	// 获取订单详情
+	/* (非 Javadoc)  
+	* <p>Title: getOrderDetail</p>  
+	* <p>Description: 获取订单详情</p>  
+	* @param docloginid
+	* @param userorderid
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorOrderService#getOrderDetail(java.lang.Integer, java.lang.Integer)  
+	*/  
 	@Override
-	public String getOrderDetail(Integer docLoginId, Integer userOrderId) throws Exception{
-		Map<String, Object> data = userorderMapperCustom.selectAllInfoByUserOrderId(docLoginId, userOrderId);
+	public String getOrderDetail(Integer docloginid, Integer userorderid) throws Exception{
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo==null) {
+			return DataResult.error("账号不存在");
+		}
+		Map<String, Object> data = userorderMapperCustom.selectAllInfoByUserOrderId(docloginid, userorderid);
 		if (data != null && !data.isEmpty()) {
-			return DataResult.success("获取数据成功", data);
+			return DataResult.success("获取成功", data);
 		} else {
-			return DataResult.success("获取数据为空", null);
+			return DataResult.error("订单不存在");
 		}
 	}
 
-	// 医生拒绝接单并推荐其他
+	/* (非 Javadoc)  
+	* <p>Title: updateOrderToRefuse</p>  
+	* <p>Description:医生拒绝接单(推荐其他医生) </p>  
+	* @param docloginid
+	* @param userorderid
+	* @param redocloginid
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorOrderService#updateOrderToRefuse(java.lang.Integer, java.lang.Integer, java.lang.Integer)  
+	*/  
 	@Override
 	public String updateOrderToRefuse(Integer docloginid, Integer userorderid, Integer redocloginid) throws Exception {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo==null) {
+			return DataResult.error("账号不存在");
+		}
 		Userorder userorder = userorderMapper.selectByPrimaryKey(userorderid);
 		if (userorder == null) {
 			return DataResult.error("订单不存在");
 		}
 		Integer doc = userorder.getUserorderdocloginid();
 		if (docloginid != doc) {
-			return DataResult.error("订单与账户信息不符");
+			return DataResult.error("账号信息不匹配");
 		}
 		Integer userorderstateid = userorder.getUserorderstateid();
 		Integer usersickid = userorder.getUsersickid();
 		// 1为等待医生确认
 		if (userorderstateid != 1) {
-			return DataResult.error("该订单状态不支持取消");
+			return DataResult.error("该订单状态不支持拒绝");
 		}
 		// 订单信息
 		Userorder record = new Userorder();
@@ -297,6 +378,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		record.setUserorderetime(new Date());
 		Usersick usersick = usersickMapper.selectByPrimaryKey(usersickid);
 		if (usersick == null) {
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return DataResult.error("病情不存在，取消失败");
 		}
 		// 病情信息
@@ -321,26 +403,32 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			jsonCustormCont.put("sick_id", usersickid);
 			jsonCustormCont.put("order_id", userorderid);
 			jsonCustormCont.put("type", "3");
-			boolean push = commonService.createMsgDoctorToUser(docloginid, userorder.getUserloginid(), "通知消息", msg,
+			boolean push = senderNotificationService.createMsgDoctorToUser(docloginid, userorder.getUserloginid(), "通知消息", msg,
 					jsonCustormCont);
 
-			if (push) {
-				return DataResult.success("取消成功，且消息发送成功");
-			} else {
-				return DataResult.success("取消成功，但消息发送失败");
-			}
-
+			return DataResult.success("取消成功");
 		} else {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-			return DataResult.error("取消失败，未知错误");
+			return DataResult.error("取消失败");
 
 		}
 
 	}
 
-	// 医生确认
+	/* (非 Javadoc)  
+	* <p>Title: updateOrderConfirm</p>  
+	* <p>Description:医生确认订单 </p>  
+	* @param userorder
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorOrderService#updateOrderConfirm(com.medical.po.Userorder)  
+	*/  
 	@Override
 	public String updateOrderConfirm(Userorder userorder) throws Exception {
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(userorder.getUserorderdocloginid());
+		if (doctorlogininfo==null) {
+			return DataResult.error("账号不存在");
+		}
 		Integer userorderid = userorder.getUserorderid();
 		Userorder order = userorderMapper.selectByPrimaryKey(userorderid);
 		// 订单存在
@@ -405,7 +493,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			jsonCustormCont.put("sick_id", order.getUsersickid());
 			jsonCustormCont.put("order_id", userorderid);
 			jsonCustormCont.put("type", "3");
-			boolean push = commonService.createMsgDoctorToUser(order.getUserorderdocloginid(), order.getUserloginid(),
+			boolean push = senderNotificationService.createMsgDoctorToUser(order.getUserorderdocloginid(), order.getUserloginid(),
 					"等待确认", "接受了您的订单", jsonCustormCont);
 			if (push) {
 				return DataResult.success("确认成功,且消息发送成功");
@@ -417,17 +505,28 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		}
 	}
 
-	// 待修改
-	// 医生取消订单
+	/* (非 Javadoc)  
+	* <p>Title: updateOrderToCancle</p>  
+	* <p>Description: 医生取消订单</p>  
+	* @param docloginid
+	* @param userorderid
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorOrderService#updateOrderToCancle(java.lang.Integer, java.lang.Integer)  
+	*/  
 	@Override
-	public String updateOrderToCancle(Integer docLoginId, Integer userorderid) throws Exception {
+	public String updateOrderToCancle(Integer docloginid, Integer userorderid) throws Exception {
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo==null) {
+			return DataResult.error("账号不存在");
+		}
 		Userorder userorder = userorderMapper.selectByPrimaryKey(userorderid);
 		if (userorder == null) {
-			return DataResult.error("该订单状态不存在");
+			return DataResult.error("该订单不存在");
 		}
 		Integer doc = userorder.getUserorderdocloginid();
-		if (docLoginId != doc) {
-			return DataResult.error("账户信息不匹配");
+		if (docloginid != doc) {
+			return DataResult.error("账号信息不匹配");
 		}
 		Integer userorderstateid = userorder.getUserorderstateid();
 		Integer usersickid = userorder.getUsersickid();
@@ -452,13 +551,9 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		int sickResult = usersickMapper.updateByPrimaryKeySelective(sick);
 		if (orderResult > 0 && sickResult > 0) {
 			JSONObject jsonCustormCont = new JSONObject();
-			boolean push = commonService.createMsgDoctorToUser(docLoginId, userorder.getUserloginid(), "通知消息", "取消了您订单",
+			boolean push = senderNotificationService.createMsgDoctorToUser(docloginid, userorder.getUserloginid(), "通知消息", "取消了您订单",
 					jsonCustormCont);
-			if (push) {
-				return DataResult.success("取消成功,且消息发送成功");
-			} else {
-				return DataResult.success("取消成功,但消息发送失败");
-			}
+			return DataResult.success("取消成功");
 		} else {
 			// 取消失败，未知错误
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -466,11 +561,25 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		}
 
 	}
-
+	
+	/* (非 Javadoc)  
+	* <p>Title: updateOrderTofinish</p>  
+	* <p>Description:结束订单 </p>  
+	* @param docloginid
+	* @param userorderid
+	* @param userorderhstate
+	* @param userorderhospid
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorOrderService#finishOrder(java.lang.Integer, java.lang.Integer, java.lang.Boolean, java.lang.Integer)  
+	*/  
 	@Override
-	public String finishOrder(Integer docloginid, Integer userorderid, Boolean userorderhstate,
+	public String updateOrderTofinish(Integer docloginid, Integer userorderid, Boolean userorderhstate,
 			Integer userorderhospid) throws Exception {
-		
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo==null) {
+			return DataResult.error("账号不存在");
+		}
 		Userorder order = userorderMapperCustom.selectByDocLoginIdAndUserOrderId(docloginid, userorderid);
 		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
 		if (order == null) {
@@ -502,13 +611,10 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 				jsonCustormCont.put("doc_id", order.getUserloginid());
 				jsonCustormCont.put("order_id", userorderid);
 				jsonCustormCont.put("type", "5");
-				boolean push = commonService.createMsgDoctorToUser(docloginid, order.getUserloginid(), "通知消息",
+				boolean push = senderNotificationService.createMsgDoctorToUser(docloginid, order.getUserloginid(), "通知消息",
 						"就诊已完成,需要住院", jsonCustormCont);
-				if (push) {
-					return DataResult.success("结束成功,且消息发送成功");
-				} else {
-					return DataResult.success("结束成功,但消息发送失败");
-				}
+				senderNotificationService.createMsgDoctorToHospital(docloginid,userorderhospid,"通知消息","申请了一个住院订单", jsonCustormCont);
+				return DataResult.success("订单结束成功");
 			} else {
 				return DataResult.error("结束失败");
 			}
@@ -529,13 +635,9 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 				jsonCustormCont.put("doc_id", order.getUserloginid());
 				jsonCustormCont.put("order_id", userorderid);
 				jsonCustormCont.put("type", "5");
-				boolean push = commonService.createMsgDoctorToUser(docloginid, order.getUserloginid(), "通知消息",
+				boolean push = senderNotificationService.createMsgDoctorToUser(docloginid, order.getUserloginid(), "通知消息",
 						"就诊已完成,等待评价该医生", jsonCustormCont);
-				if (push) {
-					return DataResult.success("结束成功,且消息发送成功");
-				} else {
-					return DataResult.success("结束成功,但消息发送失败");
-				}
+				return DataResult.success("订单结束成功");
 			} else {
 				return DataResult.error("结束失败");
 			}
@@ -543,17 +645,25 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 
 	}
 
-	// 获取历史订单
+	/* (非 Javadoc)  
+	* <p>Title: listHistoryOrder</p>  
+	* <p>Description: 获取历史订单</p>  
+	* @param docloginid
+	* @param page
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorOrderService#listHistoryOrder(java.lang.Integer, java.lang.Integer)  
+	*/  
 	@Override
 	public String listHistoryOrder(Integer docloginid, Integer page) throws Exception{
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo==null) {
+			return DataResult.error("账号不存在");
+		}
 		PageHelper.startPage(page, 5);
 		List<Map<String, Object>> list = userorderMapperCustom.listHistortOrderByDocLoginId(docloginid);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
-		if (pageInfo != null && pageInfo.getTotal() > 0) {
-			return DataResult.success("获取数据成功", pageInfo.getList());
-		} else {
-			return DataResult.success("获取数据为空", null);
-		}
+		return DataResult.success("获取成功", pageInfo.getList());
 
 	}
 

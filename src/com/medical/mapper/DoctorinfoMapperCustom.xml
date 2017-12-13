@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.medical.mapper.DoctorinfoMapperCustom" >
 	
+	<select id="selectAllDoctorInAdmin"  resultType="map">
+  		select a.docloginid,b.dochuanxinaccount,b.docloginpix,b.docloginphone,a.docname,a.docmale,a.doctitle,a.dochosp,a.docalipayaccount,a.docpursebalance
+  		from doctorinfo as a 
+  			left join  doctorlogininfo as b on a.docloginid= b.docloginid
+  			
+  		where b.doclogintype = 3 and a.docPurseBalance >0
+	  	Order by a.docPurseBalance DESC
+  	</select>
 	<!--管理员查询医生列表  -->
   	<select id="selectByDocLoginTypeInAdmin" parameterType="java.lang.Integer" resultType="map">
   		select a.docloginid,b.dochuanxinaccount,b.docloginpix,b.docloginphone,a.docname,a.docmale,a.doctitle,a.dochosp,b.doclogintype,c.accounttypename as doclogintypename

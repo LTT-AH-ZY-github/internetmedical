@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.medical.mapper.HospinfoMapperCustom" >
+	<select id="selectAllHospitalInAdmin" resultType="map" >
+	    select a.hosploginid,c.hosphuanxinaccount,c.hosploginpix,
+	   		c.hosploginphone,a.hospname, a.hospgrade as hosplevelname,a.hospalipayaccount,a.hosppursebalance
+	 	from hospinfo as a 
+	 			left join hosplogininfo as c on a.hosploginid = c.hosploginid
+	 	where c.hospLoginType = 3 and  a.hospPurseBalance > 0
+        order by a.hospPurseBalance desc 
+   </select>
 	<!--管理员获取医院列表信息  -->
     <select id="selectByHospTypeInAdmin" resultType="map" parameterType="java.lang.Integer" >
 	    select a.hosploginid,c.hosphuanxinaccount,c.hosploginpix,c.hosplogintype,d.accounttypename as hosplogintypename,

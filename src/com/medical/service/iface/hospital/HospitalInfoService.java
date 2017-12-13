@@ -41,8 +41,9 @@ public interface HospitalInfoService {
 	 * @param hosploginid
 	 * @return
 	 * @return: String
+	 * @throws Exception 
 	 */
-	String updateToReview(Integer hosploginid);
+	String updateToReview(Integer hosploginid) throws Exception;
 
 	/**
 	 * @Title: getInfo

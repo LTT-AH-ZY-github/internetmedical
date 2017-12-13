@@ -5,6 +5,7 @@ package com.medical.controller.hopital;
 
 import java.math.BigDecimal;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,7 +48,23 @@ public class HospitalOrderController {
 		}
 		return hospitalOrderService.listUserOrder(hosploginid, type, limit, offset);
 	}
-
+	
+	@RequestMapping(value = "/checkberthempty", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "医院获取需要住院的病人订单", httpMethod = "POST", notes = "医院获取需要住院的病人订单")
+	public @ResponseBody String checkberthempty(
+			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid,
+			@ApiParam(name = "userorderhospprimarydept", value = "一级部门") @RequestParam String userorderhospprimarydept,
+			@ApiParam(name = "userorderhospseconddept",  value = "二级部门") @RequestParam(required = false) String userorderhospseconddept
+			)
+			throws Exception {
+		if (hosploginid == null) {
+			return DataResult.error("医院id为空");
+		}
+		if (StringUtils.isBlank(userorderhospprimarydept)) {
+			return DataResult.error("一级部门为空");
+		}
+		return hospitalOrderService.getHospBerthNum(hosploginid, userorderhospprimarydept, userorderhospseconddept);
+	}
 	// 医院确认需要住院的病人订单
 	@RequestMapping(value = "/confirmuserorder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "医院确认需要住院的病人订单", httpMethod = "POST", notes = "医院确认需要住院的病人订单")

@@ -15,12 +15,13 @@
      		left join     usersickstate as c on a.usersickstateid= c.usersickstateid
      where a.userLoginId = #{0,jdbcType=INTEGER} and a.userSickIsDelete=0
      <if test="param2==1">
-    	 and  a.userSickStateId = 1
+    	 and  (a.userSickStateId = 1 or a.userSickStateId = 4)
+    	  order by userSickTime  desc
      </if>
      <if test="param2==2">
     	 and  a.userSickStateId >= 2 and a.userSickStateId <![CDATA[<=]]> 3
-     </if>
-   	 order by userSickStateId desc, userSickTime  desc 
+    </if>
+    
   </select>
   <!--用户获取病情详情  -->
   <select id="selectById" resultType="map" parameterType="java.lang.Integer" >

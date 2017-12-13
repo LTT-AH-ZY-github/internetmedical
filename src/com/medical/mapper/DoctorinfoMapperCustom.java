@@ -21,6 +21,7 @@ import com.medical.po.custom.HospSearchDoc;
  */
 public interface DoctorinfoMapperCustom {
     
+	List<Map<String, Object>> selectAllDoctorInAdmin();
 	/**
 	 * @Title: selectByDocLoginId
 	 * @Description: 根据登录Id查询医生

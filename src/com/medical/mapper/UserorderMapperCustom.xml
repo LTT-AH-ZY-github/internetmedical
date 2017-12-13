@@ -534,5 +534,19 @@
 		  	and a.userOrderStateId=9
 		  </if>
 	</select>
-	
+	<select id="listOrderToFundInAdmin" parameterType="int" resultType="map">
+		  select  a.userorderid,a.userorderchosehosptime,a.userorderhospconfirmtime,a.userorderleavehosptime,
+		  		a.userorderdeposit,a.userordertotaldeposit,a.userorderhprice,a.userorderstateid,c.userorderstatename,
+		  		a.userorderdocloginid,b.docname,
+		  		a.userorderhospprimarydept,a.userorderhospseconddept,
+		  		a.usersickpic,a.familyname,a.familymale,a.familyage,
+		  		a.userorderactualhospitalizationid,f.actualhospitalizationstatename
+		   from userorder as a
+		  		left join doctorinfo as b on a.userOrderDocLoginId=b.docLoginId 
+		  		left join userorderstate as c on a.userOrderStateId = c.userOrderStateId
+		  		left join usersick as d on a.userSickId = d.userSickId
+	  			left join familyinfo as e on e.familyId = d.familyId
+	  			left join actualhospitalizationstate as f on a.userorderactualhospitalizationid=f.ActualHospitalizationStateId
+		  where  a.userOrderStateId = 8 
+	</select>
 </mapper>

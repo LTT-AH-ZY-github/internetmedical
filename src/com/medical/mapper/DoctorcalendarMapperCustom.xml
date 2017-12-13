@@ -28,7 +28,7 @@
   <!--查询日程及地址信息  -->
   <select id="selectAllInfoByDocloginid" resultType="map" parameterType="com.medical.po.custom.CalendarParmas" >
     select a.doccalendarid,a.doccalendarday,a.doccalendartime,a.doccalendaraffair,a.doccalendaradressid,
-    	b.docaddresslocation,b.docaddressprovince,b.docaddresscity,b.docaddressarea,b.docaddressother,b.docaddresslon,b.docaddresslat
+    	a.docaddresslocation,a.docaddressprovince,a.docaddresscity,a.docaddressarea,a.docaddressother,a.docaddresslon,a.docaddresslat
    	from doctorcalendar as a 
    		left join doctoraddress as b on a.docCalendarAdressId = b.docAddressId 
     where a.docLoginId = #{id}
@@ -38,7 +38,7 @@
   </select>
    <select id="selectAllInfoByDocCalendarId" resultType="map" parameterType="java.lang.Integer" >
     select a.doccalendarid,a.doccalendarday,a.doccalendartime,a.doccalendaraffair,a.doccalendaradressid,
-    	b.docaddresslocation,b.docaddressprovince,b.docaddresscity,b.docaddressarea,b.docaddressother,b.docaddresslon,b.docaddresslat
+    	a.docaddresslocation,a.docaddressprovince,a.docaddresscity,a.docaddressarea,a.docaddressother,a.docaddresslon,a.docaddresslat
    	from doctorcalendar as a 
    		left join doctoraddress as b on a.docCalendarAdressId = b.docAddressId 
     where a.doccalendarid = #{0}
@@ -53,7 +53,7 @@
  </select>
  <select id="selectAllInfoByDocloginidInUser" resultType="map" parameterType="java.lang.Integer" >
     select a.doccalendarid,a.doccalendarday,a.doccalendartime,a.doccalendaraffair,a.doccalendaradressid,
-    	b.docaddresslocation,b.docaddressprovince,b.docaddresscity,b.docaddressarea,b.docaddressother,b.docaddresslon,b.docaddresslat
+    	a.docaddresslocation,a.docaddressprovince,a.docaddresscity,a.docaddressarea,a.docaddressother,a.docaddresslon,a.docaddresslat
    	from doctorcalendar as a 
    		left join doctoraddress as b on a.docCalendarAdressId = b.docAddressId 
     where  a.docLoginId=#{0}  and date_add(CURDATE(), INTERVAL 30 DAY) <![CDATA[ >= ]]> a.docCalendarDay and a.docCalendarDay<![CDATA[ >= ]]>CURDATE()
@@ -80,6 +80,30 @@
       <if test="docloginid != null" >
         docLoginId,
       </if>
+      <if test="doccalendarischeck != null" >
+        docCalendarIsCheck,
+      </if>
+      <if test="docaddresslocation != null" >
+        docAddressLocation,
+      </if>
+      <if test="docaddressprovince != null" >
+        docAddressProvince,
+      </if>
+      <if test="docaddresscity != null" >
+        docAddressCity,
+      </if>
+      <if test="docaddressarea != null" >
+        docAddressArea,
+      </if>
+      <if test="docaddressother != null" >
+        docAddressOther,
+      </if>
+      <if test="docaddresslon != null" >
+        docAddressLon,
+      </if>
+      <if test="docaddresslat != null" >
+        docAddressLat,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="doccalendarid != null" >
@@ -99,6 +123,30 @@
       </if>
       <if test="docloginid != null" >
         #{docloginid,jdbcType=INTEGER},
+      </if>
+      <if test="doccalendarischeck != null" >
+        #{doccalendarischeck,jdbcType=BIT},
+      </if>
+      <if test="docaddresslocation != null" >
+        #{docaddresslocation,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressprovince != null" >
+        #{docaddressprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresscity != null" >
+        #{docaddresscity,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressarea != null" >
+        #{docaddressarea,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddressother != null" >
+        #{docaddressother,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslon != null" >
+        #{docaddresslon,jdbcType=VARCHAR},
+      </if>
+      <if test="docaddresslat != null" >
+        #{docaddresslat,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

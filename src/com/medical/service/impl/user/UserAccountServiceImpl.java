@@ -3,7 +3,6 @@ package com.medical.service.impl.user;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,10 +26,8 @@ import com.medical.utils.result.DataResult;
 import com.netease.code.MsgCode;
 
 /**
- * 用户账号
- * 
  * @ClassName: UserAccountServiceImpl
- * @Description: TODO
+ * @Description: 用户账号管理
  * @author: xyh
  * @date: 2017年7月31日 下午4:38:41
  */
@@ -48,22 +45,47 @@ public class UserAccountServiceImpl implements UserAccountService {
 	@Autowired
 	private AccounttypeMapper accounttypeMapper;
 
-	Logger logger = Logger.getLogger(UserAccountService.class);
-
-	// 查找账号是否注册
+	/*
+	 * (非 Javadoc) <p>Title: findAccountExit</p> <p>Description: 查找账号是否注册</p>
+	 * 
+	 * @param phone
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.user.UserAccountService#findAccountExit(java.lang.
+	 * String)
+	 */
 	@Override
-	public String findAccountExit(String phone) {
-		// 查询病人登录表
+	public String findAccountExit(String phone) throws Exception {
+		// 查询用户登录表
 		int userCount = userlogininfoMapperCustom.findUserCountByPhone(phone);
 		if (userCount > 0) {
 			return DataResult.error("该号码已注册");
-
 		} else {
 			return DataResult.success("该号码未注册");
 		}
 	}
 
-	// 用户注册
+	/*
+	 * (非 Javadoc) <p>Title: createUserAccount</p> <p>Description: 用户注册</p>
+	 * 
+	 * @param phone
+	 * 
+	 * @param password
+	 * 
+	 * @param code
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.user.UserAccountService#createUserAccount(java.lang
+	 * .String, java.lang.String, java.lang.String)
+	 */
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public String createUserAccount(String phone, String password, String code) throws Exception {
@@ -99,9 +121,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 		userinfoRecord.setUserphone(phone);
 		// 用户信息表
 		int infoResult = userinfoMapper.insertSelective(userinfoRecord);
-
 		if (result > 0 && infoResult > 0) {
-			addHuanXinAccout(userlogininfoRecord.getUserloginid(), password);
+			createHuanXinAccout(userlogininfoRecord.getUserloginid(), password);
 			return DataResult.success("注册成功");
 		} else {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -109,7 +130,23 @@ public class UserAccountServiceImpl implements UserAccountService {
 		}
 	}
 
-	// 普通登录
+	/*
+	 * (非 Javadoc) <p>Title: updateUserToNormalLogin</p> <p>Description: 普通登录</p>
+	 * 
+	 * @param userloginphone
+	 * 
+	 * @param userloginpwd
+	 * 
+	 * @param userlogindev
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.user.UserAccountService#updateUserToNormalLogin(
+	 * java.lang.String, java.lang.String, java.lang.Integer)
+	 */
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public String updateUserToNormalLogin(String userloginphone, String userloginpwd, Integer userlogindev)
@@ -164,7 +201,25 @@ public class UserAccountServiceImpl implements UserAccountService {
 		}
 	}
 
-	// 自动登录
+	/*
+	 * (非 Javadoc) <p>Title: updateUserToAutoLogin</p> <p>Description: 自动登录</p>
+	 * 
+	 * @param userloginphone
+	 * 
+	 * @param userloginpwd
+	 * 
+	 * @param userlogintoken
+	 * 
+	 * @param userlogindev
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.user.UserAccountService#updateUserToAutoLogin(java.
+	 * lang.String, java.lang.String, java.lang.String, java.lang.Integer)
+	 */
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public String updateUserToAutoLogin(String userloginphone, String userloginpwd, String userlogintoken,
@@ -222,19 +277,47 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 	}
 
-	// 用户退出登录
+	/*
+	 * (非 Javadoc) <p>Title: updateUserToExit</p> <p>Description:用户退出登录 </p>
+	 * 
+	 * @param userloginid
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.user.UserAccountService#updateUserToExit(java.lang.
+	 * Integer)
+	 */
 	@Override
 	public String updateUserToExit(Integer userloginid) throws Exception {
-		Userlogininfo list = userlogininfoMapper.selectByPrimaryKey(userloginid);
-		if (list != null) {
-			TokeManager.deleteToken(list.getUserlogintoken());
+		Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
+		if (user != null) {
+			TokeManager.deleteToken(user.getUserlogintoken());
 			return DataResult.success("退出登录成功");
 		} else {
 			return DataResult.error("该用户不存在");
 		}
 	}
 
-	// 修改密码
+	/*
+	 * (非 Javadoc) <p>Title: updatePassword</p> <p>Description: 修改密码</p>
+	 * 
+	 * @param phone
+	 * 
+	 * @param password
+	 * 
+	 * @param code
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.user.UserAccountService#updatePassword(java.lang.
+	 * String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public String updatePassword(String phone, String password, String code) throws Exception {
 		boolean msgResult = MsgCode.checkMsg(phone, code);
@@ -254,7 +337,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		userlogininfoRecord.setUserloginsalt(str[1]);
 		boolean result = userlogininfoMapper.updateByPrimaryKeySelective(userlogininfoRecord) > 0;
 		if (result) {
-			editHuanXinPassword(list.getUserloginid(), password);
+			updateHuanXinPassword(list.getUserloginid(), password);
 			return DataResult.success("修改成功");
 		} else {
 			return DataResult.error("修改失败");
@@ -262,9 +345,23 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 	}
 
-	// 注册环信
+	/*
+	 * (非 Javadoc) <p>Title: addHuanXinAccout</p> <p>Description: 注册环信</p>
+	 * 
+	 * @param userloginid
+	 * 
+	 * @param password
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.user.UserAccountService#addHuanXinAccout(java.lang.
+	 * Integer, java.lang.String)
+	 */
 	@Override
-	public String addHuanXinAccout(Integer userloginid, String password) throws Exception {
+	public String createHuanXinAccout(Integer userloginid, String password) throws Exception {
 		boolean registerResult = UserManger.register("user_" + userloginid, password);
 		if (registerResult) {
 			Userlogininfo userlogininfo = new Userlogininfo();
@@ -279,7 +376,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 	// 修改环信密码
 	@Override
-	public String editHuanXinPassword(Integer userloginid, String password) throws Exception {
+	public String updateHuanXinPassword(Integer userloginid, String password) throws Exception {
 		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
 		if (userlogininfo == null) {
 			return DataResult.error("账号不存在");

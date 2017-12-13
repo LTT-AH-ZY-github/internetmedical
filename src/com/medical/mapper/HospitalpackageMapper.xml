@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.HospitalpackageMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Hospitalpackage" >
+    <id column="PackageId" property="packageid" jdbcType="INTEGER" />
+    <result column="HospLoginId" property="hosploginid" jdbcType="INTEGER" />
+    <result column="PackageName" property="packagename" jdbcType="VARCHAR" />
+    <result column="PackageNumber" property="packagenumber" jdbcType="DECIMAL" />
+    <result column="PackageAbs" property="packageabs" jdbcType="VARCHAR" />
+    <result column="PackageSTime" property="packagestime" jdbcType="TIMESTAMP" />
+    <result column="PackageETime" property="packageetime" jdbcType="TIMESTAMP" />
+    <result column="PackageSusTime" property="packagesustime" jdbcType="INTEGER" />
+    <result column="PackageTime" property="packagetime" jdbcType="TIMESTAMP" />
+    <result column="PackageOperateTime" property="packageoperatetime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    PackageId, HospLoginId, PackageName, PackageNumber, PackageAbs, PackageSTime, PackageETime, 
+    PackageSusTime, PackageTime, PackageOperateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HospitalpackageExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hospitalpackage
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from hospitalpackage
+    where PackageId = #{packageid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from hospitalpackage
+    where PackageId = #{packageid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.HospitalpackageExample" >
+    delete from hospitalpackage
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Hospitalpackage" >
+    insert into hospitalpackage (PackageId, HospLoginId, PackageName, 
+      PackageNumber, PackageAbs, PackageSTime, 
+      PackageETime, PackageSusTime, PackageTime, 
+      PackageOperateTime)
+    values (#{packageid,jdbcType=INTEGER}, #{hosploginid,jdbcType=INTEGER}, #{packagename,jdbcType=VARCHAR}, 
+      #{packagenumber,jdbcType=DECIMAL}, #{packageabs,jdbcType=VARCHAR}, #{packagestime,jdbcType=TIMESTAMP}, 
+      #{packageetime,jdbcType=TIMESTAMP}, #{packagesustime,jdbcType=INTEGER}, #{packagetime,jdbcType=TIMESTAMP}, 
+      #{packageoperatetime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Hospitalpackage" >
+    insert into hospitalpackage
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="packageid != null" >
+        PackageId,
+      </if>
+      <if test="hosploginid != null" >
+        HospLoginId,
+      </if>
+      <if test="packagename != null" >
+        PackageName,
+      </if>
+      <if test="packagenumber != null" >
+        PackageNumber,
+      </if>
+      <if test="packageabs != null" >
+        PackageAbs,
+      </if>
+      <if test="packagestime != null" >
+        PackageSTime,
+      </if>
+      <if test="packageetime != null" >
+        PackageETime,
+      </if>
+      <if test="packagesustime != null" >
+        PackageSusTime,
+      </if>
+      <if test="packagetime != null" >
+        PackageTime,
+      </if>
+      <if test="packageoperatetime != null" >
+        PackageOperateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="packageid != null" >
+        #{packageid,jdbcType=INTEGER},
+      </if>
+      <if test="hosploginid != null" >
+        #{hosploginid,jdbcType=INTEGER},
+      </if>
+      <if test="packagename != null" >
+        #{packagename,jdbcType=VARCHAR},
+      </if>
+      <if test="packagenumber != null" >
+        #{packagenumber,jdbcType=DECIMAL},
+      </if>
+      <if test="packageabs != null" >
+        #{packageabs,jdbcType=VARCHAR},
+      </if>
+      <if test="packagestime != null" >
+        #{packagestime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="packageetime != null" >
+        #{packageetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="packagesustime != null" >
+        #{packagesustime,jdbcType=INTEGER},
+      </if>
+      <if test="packagetime != null" >
+        #{packagetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="packageoperatetime != null" >
+        #{packageoperatetime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.HospitalpackageExample" resultType="java.lang.Integer" >
+    select count(*) from hospitalpackage
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update hospitalpackage
+    <set >
+      <if test="record.packageid != null" >
+        PackageId = #{record.packageid,jdbcType=INTEGER},
+      </if>
+      <if test="record.hosploginid != null" >
+        HospLoginId = #{record.hosploginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.packagename != null" >
+        PackageName = #{record.packagename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packagenumber != null" >
+        PackageNumber = #{record.packagenumber,jdbcType=DECIMAL},
+      </if>
+      <if test="record.packageabs != null" >
+        PackageAbs = #{record.packageabs,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packagestime != null" >
+        PackageSTime = #{record.packagestime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.packageetime != null" >
+        PackageETime = #{record.packageetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.packagesustime != null" >
+        PackageSusTime = #{record.packagesustime,jdbcType=INTEGER},
+      </if>
+      <if test="record.packagetime != null" >
+        PackageTime = #{record.packagetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.packageoperatetime != null" >
+        PackageOperateTime = #{record.packageoperatetime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update hospitalpackage
+    set PackageId = #{record.packageid,jdbcType=INTEGER},
+      HospLoginId = #{record.hosploginid,jdbcType=INTEGER},
+      PackageName = #{record.packagename,jdbcType=VARCHAR},
+      PackageNumber = #{record.packagenumber,jdbcType=DECIMAL},
+      PackageAbs = #{record.packageabs,jdbcType=VARCHAR},
+      PackageSTime = #{record.packagestime,jdbcType=TIMESTAMP},
+      PackageETime = #{record.packageetime,jdbcType=TIMESTAMP},
+      PackageSusTime = #{record.packagesustime,jdbcType=INTEGER},
+      PackageTime = #{record.packagetime,jdbcType=TIMESTAMP},
+      PackageOperateTime = #{record.packageoperatetime,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Hospitalpackage" >
+    update hospitalpackage
+    <set >
+      <if test="hosploginid != null" >
+        HospLoginId = #{hosploginid,jdbcType=INTEGER},
+      </if>
+      <if test="packagename != null" >
+        PackageName = #{packagename,jdbcType=VARCHAR},
+      </if>
+      <if test="packagenumber != null" >
+        PackageNumber = #{packagenumber,jdbcType=DECIMAL},
+      </if>
+      <if test="packageabs != null" >
+        PackageAbs = #{packageabs,jdbcType=VARCHAR},
+      </if>
+      <if test="packagestime != null" >
+        PackageSTime = #{packagestime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="packageetime != null" >
+        PackageETime = #{packageetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="packagesustime != null" >
+        PackageSusTime = #{packagesustime,jdbcType=INTEGER},
+      </if>
+      <if test="packagetime != null" >
+        PackageTime = #{packagetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="packageoperatetime != null" >
+        PackageOperateTime = #{packageoperatetime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PackageId = #{packageid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Hospitalpackage" >
+    update hospitalpackage
+    set HospLoginId = #{hosploginid,jdbcType=INTEGER},
+      PackageName = #{packagename,jdbcType=VARCHAR},
+      PackageNumber = #{packagenumber,jdbcType=DECIMAL},
+      PackageAbs = #{packageabs,jdbcType=VARCHAR},
+      PackageSTime = #{packagestime,jdbcType=TIMESTAMP},
+      PackageETime = #{packageetime,jdbcType=TIMESTAMP},
+      PackageSusTime = #{packagesustime,jdbcType=INTEGER},
+      PackageTime = #{packagetime,jdbcType=TIMESTAMP},
+      PackageOperateTime = #{packageoperatetime,jdbcType=VARCHAR}
+    where PackageId = #{packageid,jdbcType=INTEGER}
+  </update>
+</mapper>

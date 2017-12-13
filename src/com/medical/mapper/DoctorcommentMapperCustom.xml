@@ -7,6 +7,7 @@
 	 			
 	 	from doctorcomment as a 
 	 	where a.docLoginId =#{0} 
+	 	order by a.docCommentTime desc
  	</select>
  	<select id="selectByUserLoginIdAndUserOrderId" parameterType="java.lang.Integer" resultType="com.medical.po.Doctorcomment">
 	 	select *

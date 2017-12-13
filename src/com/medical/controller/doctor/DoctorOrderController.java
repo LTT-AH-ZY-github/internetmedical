@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.medical.po.Userorder;
 import com.medical.service.iface.doctor.DoctorOrderService;
+import com.medical.utils.CheckUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
@@ -28,13 +29,13 @@ import com.wordnik.swagger.annotations.ApiParam;
  */
 @RestController
 @RequestMapping(value = "/doctor")
-public class DoctorUserOrderController {
+public class DoctorOrderController {
 	@Autowired
 	private DoctorOrderService doctorOrderService;
 
-	// 医生抢单
+	
 	@RequestMapping(value = "/graborder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "医生抢单", httpMethod = "POST", notes = "医生抢单", produces = "application/json")
+	@ApiOperation(value = "医生申请病情", httpMethod = "POST", notes = "医生申请病情", produces = "application/json")
 	public String grabOrder(
 			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(value = "docloginid") Integer docloginid,
 			@ApiParam(name = "usersickid", required = true, value = "病情id") @RequestParam(value = "usersickid") Integer usersickid,
@@ -59,14 +60,10 @@ public class DoctorUserOrderController {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
-		if (page == null) {
-			return DataResult.error("page为空");
-		} else {
-			if (page < 0) {
-				return DataResult.error("page需大于0");
-			}
+		if (!CheckUtils.isPageLegal(page)) {
+			return DataResult.error("当前页有误");
 		}
-		return doctorOrderService.listGrabOrders(docloginid, page, 5);
+		return doctorOrderService.listGrabOrders(docloginid, page);
 	}
 
 	// 医生取消抢单
@@ -95,14 +92,10 @@ public class DoctorUserOrderController {
 		if (docloginid == null) {
 			return DataResult.error("登录id为空");
 		}
-		if (page == null) {
-			return DataResult.error("当前页为空");
-		} else {
-			if (page < 0) {
-				return DataResult.error("当前页不可小于0");
-			}
+		if (!CheckUtils.isPageLegal(page)) {
+			return DataResult.error("当前页有误");
 		}
-		return doctorOrderService.listOrderToConfirm(docloginid, page, 5);
+		return doctorOrderService.listOrderToConfirm(docloginid, page);
 	}
 
 	// 医生获取订单
@@ -116,17 +109,13 @@ public class DoctorUserOrderController {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
-		if (page == null) {
-			return DataResult.error("当前页为空");
-		} else {
-			if (page < 0) {
-				return DataResult.error("当前页为大于0的整数");
-			}
+		if (!CheckUtils.isPageLegal(page)) {
+			return DataResult.error("当前页有误");
 		}
 		if (type != null && type > 2) {
 			return DataResult.error("type值超出范围");
 		}
-		return doctorOrderService.listOrder(docloginid, type, page, 5);
+		return doctorOrderService.listOrders(docloginid, type, page);
 	}
 
 	// 医生获取订单
@@ -139,14 +128,9 @@ public class DoctorUserOrderController {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
-		if (page == null) {
-			return DataResult.error("当前页为空");
-		} else {
-			if (page < 0) {
-				return DataResult.error("当前页为大于0的整数");
-			}
+		if (!CheckUtils.isPageLegal(page)) {
+			return DataResult.error("当前页有误");
 		}
-
 		return doctorOrderService.listHistoryOrder(docloginid, page);
 	}
 
@@ -202,7 +186,9 @@ public class DoctorUserOrderController {
 		Integer userordertpricetype = userorder.getUserordertpricetype();
 		Integer userorderapricetype = userorder.getUserorderapricetype();
 		Integer userorderepricetype = userorder.getUserorderepricetype();
-		System.out.println("交通类型测试" + userorderapricetype);
+		if (docloginid==null) {
+			return DataResult.error("医生登录id为空");
+		}
 		if (userorderid == null) {
 			return DataResult.error("订单id为空");
 		}
@@ -215,6 +201,7 @@ public class DoctorUserOrderController {
 		if (userorderepricetype == null) {
 			return DataResult.error("餐饮类型为空");
 		}
+		userorder.setUserorderdocloginid(docloginid);
 		return doctorOrderService.updateOrderConfirm(userorder);
 	}
 
@@ -251,7 +238,10 @@ public class DoctorUserOrderController {
 		if (userorderid == null) {
 			return DataResult.error("订单id为空");
 		}
-		return doctorOrderService.finishOrder(docloginid, userorderid, userorderhstate,
+		if (userorderhstate == null) {
+			return DataResult.error("住院状态为空");
+		}
+		return doctorOrderService.updateOrderTofinish(docloginid, userorderid, userorderhstate,
 					userorderhospid);
 			
 		

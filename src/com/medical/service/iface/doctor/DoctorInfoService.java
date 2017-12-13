@@ -1,133 +1,206 @@
 package com.medical.service.iface.doctor;
 
-import java.util.Date;
-import java.util.Map;
-
 import org.springframework.web.multipart.MultipartFile;
-
 import com.medical.po.Doctoraddress;
+import com.medical.po.Doctorcalendar;
 import com.medical.po.Doctorinfo;
 
+/**
+ * @ClassName:     DoctorInfoService.java
+ * @Description:   医生个人信息接口
+ * @author          xyh
+ * @version         V1.0  
+ * @Date           2017年12月9日 下午8:10:11 
+ */
 public interface DoctorInfoService {
 
 	/**
-	 * 更新头像
+	 * @Title: updatePix
+	 * @Description: 更新头像
+	 * @param docloginid 医生登录id
+	 * @param picture 头像
 	 * @return
-	 * @param
-	 * */
+	 * @throws Exception
+	 * @return: String
+	 */
 	String updatePix(Integer docloginid, MultipartFile picture) throws Exception;
+	
 	/**
-	 * 获取我的介绍和我的擅长
+	 * @Title: getNormalInfo
+	 * @Description: 获取我的介绍和我的擅长
+	 * @param docloginid 医生登录id
 	 * @return
-	 * @param
-	 * */
-	String getNormalInfo(Integer docloginid) throws Exception;
+	 * @throws Exception
+	 * @return: String
+	 */
+	String getAbsAndExpert(Integer docloginid) throws Exception;
+	
 	/**
-	 * 更新我的介绍和我的擅长
+	 * @Title: updateNormalInfo
+	 * @Description: 更新我的介绍和我的擅长
+	 * @param docloginid 医生登录id
+	 * @param docexpert 擅长
+	 * @param docabs 简介
 	 * @return
-	 * @param
-	 * */
-	String updateNormalInfo(Integer docloginid, String docexpert, String docabs) throws Exception;
+	 * @throws Exception
+	 * @return: String
+	 */
+	String updateAbsAndExpert(Integer docloginid, String docexpert, String docabs) throws Exception;
+	
 	/**
-	 * 更新第二页图片
+	 * @Title: getInfo
+	 * @Description: 获取医生个人信息
+	 * @param docloginid 医生登录id
+	 * @param flag 类型 1为获取普通信息，2为获取照片
 	 * @return
-	 * @param
-	 * */
-	String updateSecondInfo(Integer docloginid, Integer type, String oldpicture, MultipartFile[] picture)throws Exception;
+	 * @throws Exception
+	 * @return: String
+	 */
+	String getInfo(Integer docloginid, Integer flag) throws Exception;
+	
 	/**
-	 * 新增日程
+	 * @Title: updateNormalInfo
+	 * @Description: 更新个人信息
+	 * @param doctor 
 	 * @return
-	 * @param
-	 * */
-	String getInfo(Integer docLoginId, Integer flag) throws Exception;
+	 * @throws Exception
+	 * @return: String
+	 */
+	String updateNormalInfo(Doctorinfo doctor) throws Exception;
 	/**
-	 * 更新第一页信息
+	 * @Title: updateSomePicture
+	 * @Description: 更新不同类型图片
+	 * @param docloginid 医生登录id
+	 * @param type 照片类型 1为身份证照片，2为职称照片，3为行医资格证照片，4为工作证照片，5为其他照片
+	 * @param oldpicture 原照片路径
+	 * @param picture 上传的照片
 	 * @return
-	 * @param
-	 * */
-	String updateFirstInfo(Doctorinfo doctor) throws Exception;
+	 * @throws Exception
+	 * @return: String
+	 */
+	String updateSomePicture(Integer docloginid, Integer type, String oldpicture, MultipartFile[] picture)throws Exception;
+	
 	/**
-	 * 获取常用地址
+	 * @Title: listAddress
+	 * @Description: 获取常用地址
+	 * @param docloginid 医生登录id
+	 * @param page 当前页
 	 * @return
-	 * @param
-	 * */
-	String getAddress(Integer docloginid, Integer page) throws Exception;
+	 * @throws Exception
+	 * @return: String
+	 */
+	String listAddress(Integer docloginid, Integer page) throws Exception;
 
 	/**
-	 * 获取所有地址 无分页
+	 * @Title: listAllAddress
+	 * @Description: 获取全部地址(无分页)
+	 * @param docloginid 医生登录id
 	 * @return
-	 * @param
-	 * */
-	String getAllAddress(Integer docloginid) throws Exception;
+	 * @throws Exception
+	 * @return: String
+	 */
+	String listAllAddress(Integer docloginid) throws Exception;
+	
 	/**
-	 * 添加常用地址
+	 * @Title: addAddress
+	 * @Description:  添加常用地址
+	 * @param doctoraddress
 	 * @return
-	 * @param
-	 * */
+	 * @throws Exception
+	 * @return: String
+	 */
 	String addAddress(Doctoraddress doctoraddress) throws Exception;
+	
 	/**
-	 * 修改常用地址
+	 * @Title: editAddress
+	 * @Description: 修改常用地址
+	 * @param doctoraddress
 	 * @return
-	 * @param
-	 * */
-	String editAddress(Doctoraddress doctoraddress) throws Exception;
+	 * @throws Exception
+	 * @return: String
+	 */
+	String updateAddress(Doctoraddress doctoraddress) throws Exception;
+	
 	/**
-	 * 删除常用地址
+	 * @Title: delAddress
+	 * @Description: 删除地址
+	 * @param docloginid 医生登录id
+	 * @param docaddressid 地址id
 	 * @return
-	 * @param
-	 * */
+	 * @throws Exception
+	 * @return: String
+	 */
 	String delAddress(Integer docloginid, Integer docaddressid) throws Exception;
+	
 	/**
-	 * 设置接诊地址
+	 * @Title: updateAddressToCheck
+	 * @Description: 设置接诊地址
+	 * @param docloginid 医生登录id
+	 * @param docaddressid 地址id
 	 * @return
-	 * @param
-	 * */
-	String updateAddress(Integer docloginid, Integer docaddressid) throws Exception;
+	 * @throws Exception
+	 * @return: String
+	 */
+	String updateAddressToCheck(Integer docloginid, Integer docaddressid) throws Exception;
+	
 	/**
-	 * 新增日程
+	 * @Title: listCalendars
+	 * @Description: 获取日程
+	 * @param docloginid 医生登录id
+	 * @param page 当前页
 	 * @return
-	 * @param
-	 * */
-	String addCalendar(Integer docloginid, Date doccalendarday, String doccalendartime, String doccalendaraffair,
-			Integer doccalendaradressid) throws Exception;
+	 * @throws Exception
+	 * @return: String
+	 */
+	String listCalendars(Integer docloginid, Integer page) throws Exception;
+	
 	/**
-	 * 修改日程
+	 * @Title: listCalendarsByMonth
+	 * @Description:根据月份获取日程
+	 * @param docloginid 医生登录id
+	 * @param year 年 格式（2017）
+	 * @param month 月（09）
 	 * @return
-	 * @param
-	 * */
-	String editCalendar(Integer doccalendarid, Integer docloginid, Date doccalendarday, String doccalendartime,
-			String doccalendaraffair, Integer doccalendaradressid) throws Exception;
+	 * @throws Exception
+	 * @return: String
+	 */
+	String listCalendarsByMonth(Integer docloginid, String year, String month) throws Exception;
+	
 	/**
-	 * 删除日程
+	 * @Title: addCalendar
+	 * @Description:  新增日程
+	 * @param doctorcalendar
 	 * @return
-	 * @param
-	 * */
+	 * @throws Exception
+	 * @return: String
+	 */
+	String addCalendar(Doctorcalendar doctorcalendar) throws Exception;
+	
+	/**
+	 * @Title: updateCalendar
+	 * @Description: 修改日程
+	 * @param doctorcalendar
+	 * @return
+	 * @return: String
+	 */
+	String updateCalendar(Doctorcalendar doctorcalendar) throws Exception;
+	
+	/**
+	 * @Title: deleteCalendar
+	 * @Description: 删除日程
+	 * @param doccalendarid 日程id
+	 * @param docloginid 医生登录id
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
 	String deleteCalendar(Integer doccalendarid, Integer docloginid) throws Exception;
-	/**
-	 * 获取日程
-	 * @return
-	 * @param
-	 * */
-	String getCalendar(Integer docloginid, Integer page) throws Exception;
-	/**
-	 * 根据月份获取日程
-	 * @return
-	 * @param
-	 * */
-	String getCalendarByMonth(Integer docloginid, String year, String month) throws Exception;
-
-	/**
-	 * 获取部门
-	 * @return
-	 * @param
-	 * */
-	Map<String, Object> getDept() throws Exception;
-	String setLocation(String time) throws Exception;
+	
 	/**
 	 * @Title: updateChannelId
-	 * @Description: TODO
-	 * @param docloginid
-	 * @param channelid
+	 * @Description: 更新百度云ChannelId
+	 * @param docloginid 医生登录id
+	 * @param channelid 百度云ChannelId
 	 * @return
 	 * @throws Exception
 	 * @return: String
@@ -135,20 +208,30 @@ public interface DoctorInfoService {
 	String updateChannelId(Integer docloginid, String channelid) throws Exception;
 	/**
 	 * @Title: updateInfoToReview
-	 * @Description: TODO
-	 * @param docloginid
+	 * @Description: 提交审核
+	 * @param docloginid 医生登录id
 	 * @return
 	 * @return: String
 	 */
 	String updateInfoToReview(Integer docloginid) throws Exception;
 	/**
 	 * @Title: updateInfoToCancelReview
-	 * @Description: TODO
-	 * @param docloginid
+	 * @Description: 撤销审核
+	 * @param docloginid 医生登录id
 	 * @return
 	 * @return: String
 	 */
 	String updateInfoToCancelReview(Integer docloginid)throws Exception;
+
+	/**
+	 * @Title: setLocation
+	 * @Description: 更新医生位置
+	 * @param time
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String setLocation(String time) throws Exception;
 
 	
 

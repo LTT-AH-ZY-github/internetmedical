@@ -52,6 +52,7 @@ import com.medical.po.Pay;
 import com.medical.po.Userorder;
 import com.medical.po.custom.HospSearchDoc;
 import com.medical.service.iface.CommonService;
+import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.hospital.HospitalConsultationService;
 import com.medical.utils.TimeUtil;
 import com.medical.utils.result.DataResult;
@@ -103,6 +104,8 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 	private HospitaldeptMapper hospitaldeptMapper;
 	@Autowired
 	private DoctorcalendarMapper doctorcalendarMapper;
+	@Autowired 
+	private SenderNotificationService senderNotificationService;
 
 	
 	/* (non-Javadoc)
@@ -240,7 +243,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		int result = hosporderMapper.insertSelective(hosporder);
 		if (result > 0) {
 			JSONObject jsonCustormCont = new JSONObject();
-			boolean push = commonService.createMsgHospitalToDoctor(hosploginid, docloginid, "通知", "发送会诊请求",
+			boolean push = senderNotificationService.createMsgHospitalToDoctor(hosploginid, docloginid, "通知", "发送会诊请求",
 					jsonCustormCont);
 			if (push) {
 				return DataResult.success("创建会诊成功，且消息发送成功");
@@ -272,7 +275,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		boolean result = hosporderMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
-			boolean push = commonService.createMsgHospitalToDoctor(hosploginid, hosporder.getDoctorid(), "通知", "发送会诊请求",
+			boolean push = senderNotificationService.createMsgHospitalToDoctor(hosploginid, hosporder.getDoctorid(), "通知", "发送会诊请求",
 					jsonCustormCont);
 			if (push) {
 				return DataResult.success("创建会诊成功，且消息发送成功");
@@ -308,7 +311,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 			if (orderResult) {
 				JSONObject jsonCustormCont = new JSONObject();
 
-				boolean push = commonService.createMsgHospitalToDoctor(hosporder.getHospid(), hosporder.getDoctorid(),
+				boolean push = senderNotificationService.createMsgHospitalToDoctor(hosporder.getHospid(), hosporder.getDoctorid(),
 						"消息通知", "已支付会诊费用", jsonCustormCont);
 				if (push) {
 					return DataResult.success("支付成功,且消息发送成功");
@@ -467,7 +470,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 
 		if (doctorinfoResult && purseResult && payResult && orderResult) {
 			JSONObject jsonCustormCont = new JSONObject();
-			commonService.createMsgHospitalToDoctor(hosporder.getHospid(), docloginid, "消息通知", "已支付会诊费用",
+			senderNotificationService.createMsgHospitalToDoctor(hosporder.getHospid(), docloginid, "消息通知", "已支付会诊费用",
 					jsonCustormCont);
 			return DataResult.success("支付成功");
 		} else {

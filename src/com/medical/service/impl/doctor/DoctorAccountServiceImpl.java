@@ -47,7 +47,14 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 	@Autowired
 	private UserlogininfoMapperCustom userlogininfoMapperCustom;
 	
-	// 查找账号是否注册
+	/* (非 Javadoc)  
+	* <p>Title: findAccountExit</p>  
+	* <p>Description: 查找账号是否注册</p>  
+	* @param phone
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorAccountService#findAccountExit(java.lang.String)  
+	*/  
 	@Override
 	public String findAccountExit(String phone) throws Exception{
 		// 查询医生登录表
@@ -59,7 +66,16 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		}
 	}
 	
-	// 注册
+	/* (非 Javadoc)  
+	* <p>Title: createDoctor</p>  
+	* <p>Description: 注册</p>  
+	* @param docloginphone
+	* @param magCode
+	* @param docLoginPwd
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorAccountService#createDoctor(java.lang.String, java.lang.String, java.lang.String)  
+	*/  
 	@Override
 	public String createDoctor(String docloginphone, String magCode, String docLoginPwd) throws Exception {
 		boolean msgResult = MsgCode.checkMsg(docloginphone, magCode);
@@ -103,10 +119,17 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 
 	}
 
-	// 普通登录
+	
+	/* (非 Javadoc)  
+	* <p>Title: updateDoctorToNormalLogin</p>  
+	* <p>Description: 登录</p>  
+	* @param doctor
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorAccountService#updateDoctorToNormalLogin(com.medical.po.Doctorlogininfo)  
+	*/  
 	@Override
 	public String updateDoctorToNormalLogin(Doctorlogininfo doctor) throws Exception {
-
 		// 登录信息
 		Doctorlogininfo logininfoRecord = new Doctorlogininfo();
 		logininfoRecord.setDocloginip(doctor.getDocloginip());
@@ -176,7 +199,14 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 
 	}
 
-	// 自动登录
+	/* (非 Javadoc)  
+	* <p>Title: updateDoctorToAutoLogin</p>  
+	* <p>Description: 自动登录</p>  
+	* @param doctor
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorAccountService#updateDoctorToAutoLogin(com.medical.po.Doctorlogininfo)  
+	*/  
 	@Override
 	public String updateDoctorToAutoLogin(Doctorlogininfo doctor) throws Exception {
 		// 登录信息
@@ -248,9 +278,15 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		}
 	}
 	
-	
-	
-	// 注册环信
+	/* (非 Javadoc)  
+	* <p>Title: addHuanXinAccout</p>  
+	* <p>Description: 注册环信</p>  
+	* @param docloginid
+	* @param password
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorAccountService#addHuanXinAccout(java.lang.Integer, java.lang.String)  
+	*/  
 	@Override
 	public boolean addHuanXinAccout(Integer docloginid, String password) throws Exception {
 		boolean registerResult =  UserManger.register("doc_" + docloginid, password);
@@ -267,7 +303,15 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 
 	}
 
-	// 修改环信密码
+	/* (非 Javadoc)  
+	* <p>Title: editHuanXinPassword</p>  
+	* <p>Description: 修改环信密码</p>  
+	* @param docloginid
+	* @param password
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorAccountService#editHuanXinPassword(java.lang.Integer, java.lang.String)  
+	*/  
 	@Override
 	public String editHuanXinPassword(Integer docloginid, String password) throws Exception {
 		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
@@ -282,7 +326,17 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 			}
 		}
 	}
-	// 修改密码
+	
+	/* (非 Javadoc)  
+	* <p>Title: updatePassword</p>  
+	* <p>Description: 修改密码</p>  
+	* @param docloginphone
+	* @param docloginpwd
+	* @param msgCode
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorAccountService#updatePassword(java.lang.String, java.lang.String, java.lang.String)  
+	*/  
 	@Override
 	public String updatePassword(String docloginphone, String docloginpwd,String msgCode) throws Exception {
 		boolean msgResult = MsgCode.checkMsg(docloginphone, msgCode);
@@ -308,7 +362,14 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 
 	}
 	
-	//退出登录
+	/* (非 Javadoc)  
+	* <p>Title: updateAccountToExit</p>  
+	* <p>Description: 退出登录</p>  
+	* @param docloginid
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorAccountService#updateAccountToExit(java.lang.Integer)  
+	*/  
 	@Override
 	public String updateAccountToExit(Integer docloginid) throws Exception {
 		Doctorlogininfo list = doctorlogininfoMapper.selectByPrimaryKey(docloginid);

@@ -7,16 +7,38 @@ import com.medical.po.Userorder;
 
 public interface UserOrderService {
 	/**
-	 * 生成订单
-	 * */
+	 * @Title: createOrder
+	 * @Description: 生成订单
+	 * @param docloginid 医生登录id
+	 * @param userloginid 用户登录id
+	 * @param userorderappointment 预约时间
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
 	String createOrder(Integer docloginid, Integer userloginid, String userorderappointment) throws Exception;
+	
 	/**
-	 * 取消医生订单
-	 * */
-	String updateOrderStateToCancel(Integer userOrderId, Integer userLoginId) throws Exception;
+	 * @Title: updateOrderStateToCancel
+	 * @Description: 取消医生订单
+	 * @param userorderid 订单id
+	 * @param userloginid 病人登录id 
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String updateOrderStateToCancel(Integer userorderid, Integer userloginid) throws Exception;
+	
 	/**
-	 * 获取不同类型订单
-	 * */
+	 * @Title: listOrders
+	 * @Description: 获取不同类型订单
+	 * @param userloginid 用户登录id
+	 * @param page 当前页
+	 * @param type 订单类型
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
 	String listOrders(Integer userloginid, Integer page, Integer type)throws Exception;
 	/**
 	 * 获取订单详情

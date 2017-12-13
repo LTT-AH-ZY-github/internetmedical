@@ -44,7 +44,7 @@ public class UserPursueController {
 
 	}
 	*/
-	@RequestMapping(value = "/listbalancerecord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	/*@RequestMapping(value = "/listbalancerecord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取账户余额变动记录", httpMethod = "POST", notes = "获取账户余额变动记录", produces = "application/json")
 	public String listBalanceRecord(
 			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam(value = "userloginid") Integer userloginid,
@@ -57,7 +57,7 @@ public class UserPursueController {
 		return userPursueService.listBalanceRecord(userloginid,page);
 		// TODO Auto-generated method stub
 
-	}
+	}*/
 	@RequestMapping(value = "/getalipayaccount", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取支付宝账号", httpMethod = "POST", notes = "获取支付宝账号", produces = "application/json")
 	public String getBalance(
@@ -67,11 +67,11 @@ public class UserPursueController {
 			return DataResult.error("用户登录id为空");
 		}
 		return userPursueService.getAliPayAccount(userloginid);
-		// TODO Auto-generated method stub
+		
 
 	}
 	@RequestMapping(value = "/updatealipayaccount", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "修改支付宝账号", httpMethod = "POST", notes = "修改支付宝账号", produces = "application/json")
+	@ApiOperation(value = "更新用户绑定的支付宝账号", httpMethod = "POST", notes = "更新用户绑定的支付宝账号", produces = "application/json")
 	public String updatealipayaccount(
 			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam(value = "userloginid") Integer userloginid,
 			@ApiParam(name="alipayaccount",required=true,value="支付宝账号")@RequestParam String alipayaccount
@@ -82,7 +82,7 @@ public class UserPursueController {
 		if (StringUtils.isEmpty(alipayaccount)) {
 			return DataResult.error("支付宝账号为空");
 		}
-		return userPursueService.addAliPayAccount(userloginid, alipayaccount);
+		return userPursueService.updateAliPayAccount(userloginid, alipayaccount);
 	}
 	@RequestMapping(value = "/listtraderecord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取交易记录", httpMethod = "POST", notes = "获取交易记录", produces = "application/json")

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.HospitalberthMapperCustom" >
+ <resultMap id="BaseResultMap" type="com.medical.po.Hospitalberth" >
+    <id column="hospBerthId" property="hospberthid" jdbcType="INTEGER" />
+    <result column="hospBerthDeptId" property="hospberthdeptid" jdbcType="INTEGER" />
+    <result column="hospBerthName" property="hospberthname" jdbcType="VARCHAR" />
+    <result column="hospBerthAbs" property="hospberthabs" jdbcType="VARCHAR" />
+    <result column="hosploginid" property="hosploginid" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="selectCountByHospLoginIdAndHospDerthDeptId" resultType="int" parameterType="java.lang.Integer" >
+    select count(*)
+    from hospitalberth
+    where hospBerthDeptId = #{0,jdbcType=INTEGER} and hosploginid = #{1,jdbcType=INTEGER}
+  </select>
+  <!--获取指定医院的床位数  -->
+  <select id="selectBerthCountByHospLoginId" resultType="map" parameterType="java.lang.Integer" >
+    select a.hospdeptid,a.hospdeptfatherid,a.hospdeptname,total from hospitaldept as a LEFT JOIN (
+  			select *,COUNT(hospitalberth.hospBerthId) as total 
+  				from hospitalberth  where hospitalberth.hosploginid=#{0} 
+	  			
+  					GROUP BY hospBerthDeptId 
+  		) as b on a.hospDeptId=b.hospBerthDeptId  
+  	where a.hospDeptIsCheck=1 
+  	order by hospDeptId ASC
+  </select>
+  
+  
+  <select id="selectByHospLoginIdAndHospDerthDeptId" resultMap="BaseResultMap"  parameterType="java.lang.Integer" >
+    select  *
+    from hospitalberth
+    where hospBerthDeptId = #{0,jdbcType=INTEGER} and hosploginid = #{1,jdbcType=INTEGER}
+  </select>
+  
+  <insert id="insertSelectiveReturnId" keyProperty="hospberthid" useGeneratedKeys="true" parameterType="com.medical.po.Hospitalberth" >
+    insert into hospitalberth
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hospberthid != null" >
+        hospBerthId,
+      </if>
+      <if test="hospberthdeptid != null" >
+        hospBerthDeptId,
+      </if>
+      <if test="hospberthname != null" >
+        hospBerthName,
+      </if>
+      <if test="hospberthabs != null" >
+        hospBerthAbs,
+      </if>
+      <if test="hosploginid != null" >
+        hosploginid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hospberthid != null" >
+        #{hospberthid,jdbcType=INTEGER},
+      </if>
+      <if test="hospberthdeptid != null" >
+        #{hospberthdeptid,jdbcType=INTEGER},
+      </if>
+      <if test="hospberthname != null" >
+        #{hospberthname,jdbcType=VARCHAR},
+      </if>
+      <if test="hospberthabs != null" >
+        #{hospberthabs,jdbcType=VARCHAR},
+      </if>
+      <if test="hosploginid != null" >
+        #{hosploginid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>
