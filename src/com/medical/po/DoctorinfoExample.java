@@ -2662,6 +2662,76 @@ public class DoctorinfoExample {
             addCriterion("docPurseBalance not between", value1, value2, "docpursebalance");
             return (Criteria) this;
         }
+
+        public Criteria andDocalipaynameIsNull() {
+            addCriterion("docAlipayName is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipaynameIsNotNull() {
+            addCriterion("docAlipayName is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipaynameEqualTo(String value) {
+            addCriterion("docAlipayName =", value, "docalipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipaynameNotEqualTo(String value) {
+            addCriterion("docAlipayName <>", value, "docalipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipaynameGreaterThan(String value) {
+            addCriterion("docAlipayName >", value, "docalipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipaynameGreaterThanOrEqualTo(String value) {
+            addCriterion("docAlipayName >=", value, "docalipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipaynameLessThan(String value) {
+            addCriterion("docAlipayName <", value, "docalipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipaynameLessThanOrEqualTo(String value) {
+            addCriterion("docAlipayName <=", value, "docalipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipaynameLike(String value) {
+            addCriterion("docAlipayName like", value, "docalipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipaynameNotLike(String value) {
+            addCriterion("docAlipayName not like", value, "docalipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipaynameIn(List<String> values) {
+            addCriterion("docAlipayName in", values, "docalipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipaynameNotIn(List<String> values) {
+            addCriterion("docAlipayName not in", values, "docalipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipaynameBetween(String value1, String value2) {
+            addCriterion("docAlipayName between", value1, value2, "docalipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocalipaynameNotBetween(String value1, String value2) {
+            addCriterion("docAlipayName not between", value1, value2, "docalipayname");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

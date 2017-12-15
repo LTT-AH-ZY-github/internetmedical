@@ -1,28 +1,38 @@
 package com.medical.service.impl.admin;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
+import com.medical.mapper.AdminexamineMapper;
 import com.medical.mapper.AdminlogininfoMapper;
+import com.medical.mapper.DoctoraddressMapper;
+import com.medical.mapper.DoctoraddressMapperCustom;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
+import com.medical.mapper.FamilyinfoMapper;
+import com.medical.mapper.FamilyinfoMapperCustom;
 import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.HospitaldeptMapper;
 import com.medical.mapper.HospitaldeptMapperCustom;
 import com.medical.mapper.HosplogininfoMapper;
 import com.medical.mapper.UserinfoMapperCustom;
 import com.medical.mapper.UserlogininfoMapper;
-
+import com.medical.po.Adminexamine;
 import com.medical.po.Adminlogininfo;
+import com.medical.po.Doctoraddress;
+import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
+import com.medical.po.Familyinfo;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Hosplogininfo;
+import com.medical.po.Userinfo;
 import com.medical.po.Userlogininfo;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.admin.AdminFunctionService;
@@ -54,6 +64,16 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	private HospitaldeptMapper hospitaldeptMapper;
 	@Autowired
 	private SenderNotificationService senderNotificationService;
+	@Autowired
+	private FamilyinfoMapperCustom familyinfoMapperCustom;
+	@Autowired
+	private FamilyinfoMapper familyinfoMapper;
+	@Autowired
+	private DoctoraddressMapper doctoraddressMapper;
+	@Autowired
+	private DoctoraddressMapperCustom doctoraddressMapperCustom;
+	@Autowired
+	private AdminexamineMapper adminexamineMapper;
 
 	
 	//管理员根据用户账号类型查询用户 
@@ -83,7 +103,7 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	
 	//获取用户详细信息
 	@Override
-	public String getUserDetail(Integer adminloginid, Integer userloginid) {
+	public String getUserDetail(Integer adminloginid, Integer userloginid) throws Exception{
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo==null) {
 			return DataResult.error("该管理员账号不存在");
@@ -98,12 +118,13 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	
 	//用户审核
 	@Override
-	public String updateUserType(Integer adminloginid, Integer userloginid, Boolean type) throws Exception {
+	public String updateUserType(Integer adminloginid, Integer userloginid, Boolean type,String idea) throws Exception {
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo==null) {
 			return DataResult.error("该管理员账号不存在");
 		}
 		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
+		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userloginid);
 		if (userlogininfo == null) {
 			return DataResult.error("用户账号不存在");
 		}
@@ -120,16 +141,45 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		Userlogininfo record = new Userlogininfo();
 		record.setUserloginid(userloginid);
 		if (type) {
+			List<Familyinfo> list = familyinfoMapperCustom.selectByUserLoginIdAndType(userloginid, 1);
+			if (list==null || list.size() == 0) {
+				Familyinfo familyinfo = new Familyinfo();
+				familyinfo.setFamilyname(userinfo.getUsername());
+				familyinfo.setFamilyage(userinfo.getUserage());
+				familyinfo.setFamilymale(userinfo.getUsermale());
+				familyinfo.setFamilytype(true);
+				// 插入到亲属信息表
+				int result = familyinfoMapper.insertSelective(familyinfo);
+				if (result<=0) {
+					return DataResult.error("审核失败");
+				}
+			}
 			//通过审核
 			record.setUserlogintype(3);
 		} else {
 			//未通过审核
 			record.setUserlogintype(4);
 		}
+		Adminexamine adminexamine = new Adminexamine();
+		adminexamine.setExamineideas(idea);
+		adminexamine.setExamineresult(type);
+		adminexamine.setExaminetargetid(userloginid);
+		//1为审核用户
+		adminexamine.setExaminetype(1);
+		adminexamine.setExaminetime(new Date());
+		boolean examineresult = adminexamineMapper.insertSelective(adminexamine)>0;
 		boolean result = userlogininfoMapper.updateByPrimaryKeySelective(record)>0;
-		if (result) {
+		if (result && examineresult) {
 			JSONObject jsonCustormCont = new JSONObject();
-			senderNotificationService.createMsgAdminToUser(adminloginid, userloginid, "消息通知", "已审核通过", jsonCustormCont);
+			String words = "已通过审核申请";
+			if (!type) {
+				words="未通过审核申请";
+				if (StringUtils.isNotBlank(idea)) {
+					words+=","+idea;
+				}
+				
+			}
+			senderNotificationService.createMsgAdminToUser(adminloginid, userloginid, "消息通知", words, jsonCustormCont);
 			return DataResult.success("审核成功");
 		} else {
 			return DataResult.error("审核失败");
@@ -177,12 +227,13 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	}
 	//审核医生
 	@Override
-	public String updateDoctorType(Integer adminloginid, Integer docloginid, Boolean type) throws Exception{
+	public String updateDoctorType(Integer adminloginid, Integer docloginid, Boolean type,String idea) throws Exception{
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo==null) {
 			return DataResult.error("该管理员账号不存在");
 		}
 		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
 		if (doctorlogininfo==null) {
 			return DataResult.error("医生账号不存在");
 		}
@@ -199,14 +250,48 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		Doctorlogininfo record = new Doctorlogininfo();
 		record.setDocloginid(docloginid);
 		if (type) {
+			List<Doctoraddress> address = doctoraddressMapperCustom.selectByDocloginidAndType(docloginid, 1);
+			if (address==null || address.size()==0) {
+				Doctoraddress doctoraddress = new Doctoraddress();
+				doctoraddress.setDocaddresslocation(doctorinfo.getDochosp());;
+				doctoraddress.setDocaddressprovince(doctorinfo.getDochospprovince());
+				doctoraddress.setDocaddressarea(doctorinfo.getDochosparea());
+				doctoraddress.setDocaddresscity(doctorinfo.getDochospcity());
+				doctoraddress.setDocaddressother(doctorinfo.getDochospother());
+				doctoraddress.setDocaddresslat(doctorinfo.getDochosplat());
+				doctoraddress.setDocaddresslon(doctorinfo.getDochosplon());
+				doctoraddress.setDocaddresstype(true);
+				doctoraddress.setDocaddresschecked(false);
+				int result = doctoraddressMapper.insertSelective(doctoraddress);
+				if (result<=0) {
+					return DataResult.error("审核失败");
+				}
+			}
 			record.setDoclogintype(3);
+			
 		} else {
 			record.setDoclogintype(4);
 		}
+		Adminexamine adminexamine = new Adminexamine();
+		adminexamine.setExamineideas(idea);
+		adminexamine.setExamineresult(type);
+		adminexamine.setExaminetargetid(docloginid);
+		//2为审核医生
+		adminexamine.setExaminetype(2);
+		adminexamine.setExaminetime(new Date());
+		boolean examineresult = adminexamineMapper.insertSelective(adminexamine)>0;
 		boolean result = doctorlogininfoMapper.updateByPrimaryKeySelective(record)>0;
-		if (result) {
+		if (result&&examineresult) {
 			JSONObject jsonCustormCont = new JSONObject();
-			senderNotificationService.createMsgAdminToDoctor(adminloginid, docloginid, "消息通知", "已审核通过", jsonCustormCont);
+			String words = "已通过审核申请";
+			if (!type) {
+				words="未通过审核申请";
+				if (StringUtils.isNotBlank(idea)) {
+					words+=","+idea;
+				}
+				
+			}
+			senderNotificationService.createMsgAdminToDoctor(adminloginid, docloginid, "消息通知", words, jsonCustormCont);
 			return DataResult.success("审核成功");
 		} else {
 			return DataResult.error("审核失败");
@@ -254,7 +339,7 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	}
 	//审核医院
 	@Override
-	public String updateHospitalType(Integer adminloginid, Integer hosploginid, Boolean type) throws Exception{
+	public String updateHospitalType(Integer adminloginid, Integer hosploginid, Boolean type,String idea) throws Exception{
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo==null) {
 			return DataResult.error("该管理员账号不存在");
@@ -280,10 +365,26 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		} else {
 			record.setHosplogintype(4);
 		}
+		Adminexamine adminexamine = new Adminexamine();
+		adminexamine.setExamineideas(idea);
+		adminexamine.setExamineresult(type);
+		adminexamine.setExaminetargetid(hosploginid);
+		//3为审核医院
+		adminexamine.setExaminetype(3);
+		adminexamine.setExaminetime(new Date());
+		boolean examineresult = adminexamineMapper.insertSelective(adminexamine)>0;
 		boolean result = hosplogininfoMapper.updateByPrimaryKeySelective(record)>0;
-		if (result) {
+		if (result && examineresult ) {
 			JSONObject jsonCustormCont = new JSONObject();
-			senderNotificationService.createMsgAdminToHospital(adminloginid, hosploginid, "消息通知", "已审核通过", jsonCustormCont);
+			String words = "已通过审核申请";
+			if (!type) {
+				words="未通过审核申请";
+				if (StringUtils.isNotBlank(idea)) {
+					words+=","+idea;
+				}
+				
+			}
+			senderNotificationService.createMsgAdminToHospital(adminloginid, hosploginid, "消息通知", words, jsonCustormCont);
 			return DataResult.success("审核成功");
 		} else {
 			return DataResult.error("审核失败");
@@ -292,7 +393,7 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 
 	
 	@Override
-	public String listDept(Integer adminloginid, Integer limit, Integer offset,Integer check) {
+	public String listDept(Integer adminloginid, Integer limit, Integer offset,Integer check) throws Exception{
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo==null) {
 			return DataResult.error("该管理员账号不存在");
@@ -320,7 +421,7 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	 * @see com.medical.service.iface.admin.AdminFunctionService#checkDept(java.lang.Integer, java.lang.Integer, java.lang.Integer)
 	 */
 	@Override
-	public String checkDept(Integer adminloginid, Integer hospdeptid, Integer hospdeptfatherid) {
+	public String checkDept(Integer adminloginid, Integer hospdeptid, Integer hospdeptfatherid) throws Exception{
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo==null) {
 			return DataResult.error("该管理员账号不存在");
@@ -330,7 +431,8 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 			Hospitaldept record = new Hospitaldept();
 			record.setHospdeptid(hospdeptid);
 			record.setHospdeptfatherid(0);
-			record.setHospdeptischeck(true);
+			//2为审核
+			record.setHospdeptischeck(2);
 			boolean result = hospitaldeptMapper.updateByPrimaryKeySelective(record)>0;
 			if (result) {
 				return DataResult.success("审核成功");
@@ -342,14 +444,15 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 			if (hospitaldept == null) {
 				return DataResult.error("该一级部门不存在");
 			}
-			boolean check = hospitaldept.getHospdeptischeck();
-			if (!check) {
+			int check = hospitaldept.getHospdeptischeck();
+			if (check==1) {
 				return DataResult.error("该一级部门未审核");
 			}
 			Hospitaldept record = new Hospitaldept();
 			record.setHospdeptid(hospdeptid);
 			record.setHospdeptfatherid(hospdeptfatherid);
-			record.setHospdeptischeck(true);
+			//2为审核
+			record.setHospdeptischeck(2);
 			boolean result = hospitaldeptMapper.updateByPrimaryKeySelective(record)>0;
 			if (result) {
 				return DataResult.success("审核成功");
@@ -363,7 +466,7 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	 * @see com.medical.service.iface.admin.AdminFunctionService#listFirstDept(java.lang.Integer, java.lang.Integer, java.lang.Integer)
 	 */
 	@Override
-	public String listFirstDept(Integer adminloginid) {
+	public String listFirstDept(Integer adminloginid) throws Exception{
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo==null) {
 			return DataResult.error("该管理员账号不存在");

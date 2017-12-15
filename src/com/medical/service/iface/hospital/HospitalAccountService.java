@@ -8,8 +8,9 @@ public interface HospitalAccountService {
 	 * @param phone
 	 * @return
 	 * @return: String
+	 * @throws Exception 
 	 */
-	String findAccountExit(String phone);
+	String findAccountExit(String phone) throws Exception;
 
 	/**
 	 * @Title: createAccount

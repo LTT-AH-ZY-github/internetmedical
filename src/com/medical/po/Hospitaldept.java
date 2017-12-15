@@ -9,7 +9,11 @@ public class Hospitaldept {
 
     private Integer hospdeptfatherid;
 
-    private Boolean hospdeptischeck;
+    private Integer hospdeptischeck;
+
+    private Integer hospdeptsubmitter;
+
+    private Integer hospdeptsubmittertype;
 
     public Integer getHospdeptid() {
         return hospdeptid;
@@ -43,11 +47,27 @@ public class Hospitaldept {
         this.hospdeptfatherid = hospdeptfatherid;
     }
 
-    public Boolean getHospdeptischeck() {
+    public Integer getHospdeptischeck() {
         return hospdeptischeck;
     }
 
-    public void setHospdeptischeck(Boolean hospdeptischeck) {
+    public void setHospdeptischeck(Integer hospdeptischeck) {
         this.hospdeptischeck = hospdeptischeck;
+    }
+
+    public Integer getHospdeptsubmitter() {
+        return hospdeptsubmitter;
+    }
+
+    public void setHospdeptsubmitter(Integer hospdeptsubmitter) {
+        this.hospdeptsubmitter = hospdeptsubmitter;
+    }
+
+    public Integer getHospdeptsubmittertype() {
+        return hospdeptsubmittertype;
+    }
+
+    public void setHospdeptsubmittertype(Integer hospdeptsubmittertype) {
+        this.hospdeptsubmittertype = hospdeptsubmittertype;
     }
 }

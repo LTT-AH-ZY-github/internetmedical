@@ -3,7 +3,7 @@
 <mapper namespace="com.medical.mapper.HospinfoMapperCustom" >
 	<select id="selectAllHospitalInAdmin" resultType="map" >
 	    select a.hosploginid,c.hosphuanxinaccount,c.hosploginpix,
-	   		c.hosploginphone,a.hospname, a.hospgrade as hosplevelname,a.hospalipayaccount,a.hosppursebalance
+	   		c.hosploginphone,a.hospname, a.hospgrade as hosplevelname,a.hospalipayaccount,a.hosppursebalance,a.hospalipayname
 	 	from hospinfo as a 
 	 			left join hosplogininfo as c on a.hosploginid = c.hosploginid
 	 	where c.hospLoginType = 3 and  a.hospPurseBalance > 0

@@ -3,6 +3,7 @@
  */
 package com.medical.controller.admin;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,10 +35,13 @@ public class AdminFunctionController {
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "limit", required = true, value = "每页多少数据") @RequestParam(value = "limit") Integer limit,
 			@ApiParam(name = "offset", required = true, value = "从第几条开始") @RequestParam(value = "offset") Integer offset,
-			@ApiParam(name = "type", value = "为空时获取全部用户，为1时获取未审核的用户，为2时获取待审核的用户，为3时获取审核通过的用户，为4时获取未通过审核的用户") @RequestParam(required=false) Integer type
+			@ApiParam(name = "type", value = "为0时获取全部用户，为1时获取未审核的用户，为2时获取待审核的用户，为3时获取审核通过的用户，为4时获取未通过审核的用户") @RequestParam(required=false) Integer type
 			)throws Exception{
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
+		}
+		if (type==0) {
+			type=null;
 		}
 		return adminFunctionService.listUser(adminloginid, limit, offset, type);
 	}
@@ -61,7 +65,8 @@ public class AdminFunctionController {
 	public String checkuser(
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
-			@ApiParam(name = "type", value = "账户状态1代表通过审核，2代表为通过审核") @RequestParam Boolean type
+			@ApiParam(name = "type", value = "账户状态1代表通过审核，2代表为通过审核") @RequestParam Boolean type,
+			@ApiParam(name = "idea", value = "审核意见") @RequestParam String idea
 			)throws Exception{
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
@@ -72,7 +77,7 @@ public class AdminFunctionController {
 		if (type==null) {
 			return DataResult.error("审核状态为空");
 		}
-		return adminFunctionService.updateUserType(adminloginid,userloginid,type);
+		return adminFunctionService.updateUserType(adminloginid,userloginid,type,idea);
 	}
 	
 	@RequestMapping(value="/listdoctor", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -81,10 +86,13 @@ public class AdminFunctionController {
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "limit", required = true, value = "每页多少数据") @RequestParam(value = "limit") Integer limit,
 			@ApiParam(name = "offset", required = true, value = "从第几条开始") @RequestParam(value = "offset") Integer offset,
-			@ApiParam(name = "type", value = "为空时获取全部医生，为1时获取未审核的医生，为2时获取待审核的医生，为3时获取审核通过的医生，为4时获取未通过审核的医生") @RequestParam(required=false) Integer type
+			@ApiParam(name = "type", value = "为0时获取全部医生，为1时获取未审核的医生，为2时获取待审核的医生，为3时获取审核通过的医生，为4时获取未通过审核的医生") @RequestParam Integer type
 			)throws Exception{
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
+		}
+		if (type==0) {
+			type=null;
 		}
 		return adminFunctionService.listDoctor(adminloginid, limit, offset, type);
 	}
@@ -109,7 +117,8 @@ public class AdminFunctionController {
 	public String checkDoctor(
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
-			@ApiParam(name = "type", value = "账户状态1代表通过审核，2代表为通过审核") @RequestParam Boolean type
+			@ApiParam(name = "type", value = "账户状态1代表通过审核，2代表为通过审核") @RequestParam Boolean type,
+			@ApiParam(name = "idea", value = "审核意见") @RequestParam String idea
 			)throws Exception{
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
@@ -120,7 +129,7 @@ public class AdminFunctionController {
 		if (type==null) {
 			return DataResult.error("审核状态为空");
 		}
-		return adminFunctionService.updateDoctorType(adminloginid,docloginid,type);
+		return adminFunctionService.updateDoctorType(adminloginid,docloginid,type,idea);
 	}
 	
 	@RequestMapping(value="/listhospital", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -129,10 +138,13 @@ public class AdminFunctionController {
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "limit", required = true, value = "每页多少数据") @RequestParam(value = "limit") Integer limit,
 			@ApiParam(name = "offset", required = true, value = "从第几条开始") @RequestParam(value = "offset") Integer offset,
-			@ApiParam(name = "type", value = "为空时获取全部医院，为1时获取未审核的医院，为2时获取待审核的医院，为3时获取审核通过的医院，为4时获取未通过审核的医院") @RequestParam(required=false) Integer type
+			@ApiParam(name = "type", value = "为0时获取全部医院，为1时获取未审核的医院，为2时获取待审核的医院，为3时获取审核通过的医院，为4时获取未通过审核的医院") @RequestParam(required=false) Integer type
 			)throws Exception{
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
+		}
+		if (type==0) {
+			type=null;
 		}
 		return adminFunctionService.listHospital(adminloginid, limit, offset, type);
 	}
@@ -156,7 +168,8 @@ public class AdminFunctionController {
 	public String checkHospital(
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "hosploginid", value = "医生登录id") @RequestParam Integer hosploginid,
-			@ApiParam(name = "type", value = "账户状态1代表通过审核，2代表为通过审核") @RequestParam Boolean type
+			@ApiParam(name = "type", value = "账户状态1代表通过审核，2代表为通过审核") @RequestParam Boolean type,
+			@ApiParam(name = "idea", value = "审核意见") @RequestParam String idea
 			)throws Exception{
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
@@ -167,7 +180,7 @@ public class AdminFunctionController {
 		if (type==null) {
 			return DataResult.error("审核状态为空");
 		}
-		return adminFunctionService.updateHospitalType(adminloginid,hosploginid,type);
+		return adminFunctionService.updateHospitalType(adminloginid,hosploginid,type,idea);
 	}
 	
 	@RequestMapping(value="/listdept", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -200,6 +213,7 @@ public class AdminFunctionController {
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "hospdeptid", value = "部门id") @RequestParam Integer hospdeptid,
 			@ApiParam(name = "hospfatherdeptid", value = "一级部门id,如审核为一级部门,父部门id为0") @RequestParam(value="hospfatherdeptid") Integer hospdeptfatherid
+			
 			)throws Exception{
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");

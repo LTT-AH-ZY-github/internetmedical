@@ -29,7 +29,7 @@ public interface UserSickService {
 	 * @return
 	 * @return: String
 	 */
-	String listSicks(Integer userloginid, Integer type, Integer page);
+	String listSicks(Integer userloginid, Integer type, Integer page) throws Exception;
 
 	/**
 	 * @Title: getSickDetail
@@ -41,7 +41,7 @@ public interface UserSickService {
 	 * @return
 	 * @return: String
 	 */
-	String getSickDetail(Integer userloginid, Integer usersickid);
+	String getSickDetail(Integer userloginid, Integer usersickid) throws Exception;
 
 	/**
 	 * @Title: deleteSick

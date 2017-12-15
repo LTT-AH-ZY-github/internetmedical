@@ -31,7 +31,7 @@ public class UserManger {
                     .ignoreContentType(true)
                     .requestBody(new Gson().toJson(new UserRequest(name, password)))
                     .post();
-       	 
+            
         } catch (IOException e) {
         
         	System.out.println();

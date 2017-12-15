@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.AdminexamineMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Adminexamine" >
+    <id column="examineId" property="examineid" jdbcType="INTEGER" />
+    <result column="examineType" property="examinetype" jdbcType="INTEGER" />
+    <result column="examineTargetId" property="examinetargetid" jdbcType="INTEGER" />
+    <result column="examineResult" property="examineresult" jdbcType="BIT" />
+    <result column="examineIdeas" property="examineideas" jdbcType="VARCHAR" />
+    <result column="examineTime" property="examinetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    examineId, examineType, examineTargetId, examineResult, examineIdeas, examineTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.AdminexamineExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from adminexamine
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from adminexamine
+    where examineId = #{examineid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from adminexamine
+    where examineId = #{examineid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.AdminexamineExample" >
+    delete from adminexamine
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Adminexamine" >
+    insert into adminexamine (examineId, examineType, examineTargetId, 
+      examineResult, examineIdeas, examineTime
+      )
+    values (#{examineid,jdbcType=INTEGER}, #{examinetype,jdbcType=INTEGER}, #{examinetargetid,jdbcType=INTEGER}, 
+      #{examineresult,jdbcType=BIT}, #{examineideas,jdbcType=VARCHAR}, #{examinetime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Adminexamine" >
+    insert into adminexamine
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="examineid != null" >
+        examineId,
+      </if>
+      <if test="examinetype != null" >
+        examineType,
+      </if>
+      <if test="examinetargetid != null" >
+        examineTargetId,
+      </if>
+      <if test="examineresult != null" >
+        examineResult,
+      </if>
+      <if test="examineideas != null" >
+        examineIdeas,
+      </if>
+      <if test="examinetime != null" >
+        examineTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="examineid != null" >
+        #{examineid,jdbcType=INTEGER},
+      </if>
+      <if test="examinetype != null" >
+        #{examinetype,jdbcType=INTEGER},
+      </if>
+      <if test="examinetargetid != null" >
+        #{examinetargetid,jdbcType=INTEGER},
+      </if>
+      <if test="examineresult != null" >
+        #{examineresult,jdbcType=BIT},
+      </if>
+      <if test="examineideas != null" >
+        #{examineideas,jdbcType=VARCHAR},
+      </if>
+      <if test="examinetime != null" >
+        #{examinetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.AdminexamineExample" resultType="java.lang.Integer" >
+    select count(*) from adminexamine
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update adminexamine
+    <set >
+      <if test="record.examineid != null" >
+        examineId = #{record.examineid,jdbcType=INTEGER},
+      </if>
+      <if test="record.examinetype != null" >
+        examineType = #{record.examinetype,jdbcType=INTEGER},
+      </if>
+      <if test="record.examinetargetid != null" >
+        examineTargetId = #{record.examinetargetid,jdbcType=INTEGER},
+      </if>
+      <if test="record.examineresult != null" >
+        examineResult = #{record.examineresult,jdbcType=BIT},
+      </if>
+      <if test="record.examineideas != null" >
+        examineIdeas = #{record.examineideas,jdbcType=VARCHAR},
+      </if>
+      <if test="record.examinetime != null" >
+        examineTime = #{record.examinetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update adminexamine
+    set examineId = #{record.examineid,jdbcType=INTEGER},
+      examineType = #{record.examinetype,jdbcType=INTEGER},
+      examineTargetId = #{record.examinetargetid,jdbcType=INTEGER},
+      examineResult = #{record.examineresult,jdbcType=BIT},
+      examineIdeas = #{record.examineideas,jdbcType=VARCHAR},
+      examineTime = #{record.examinetime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Adminexamine" >
+    update adminexamine
+    <set >
+      <if test="examinetype != null" >
+        examineType = #{examinetype,jdbcType=INTEGER},
+      </if>
+      <if test="examinetargetid != null" >
+        examineTargetId = #{examinetargetid,jdbcType=INTEGER},
+      </if>
+      <if test="examineresult != null" >
+        examineResult = #{examineresult,jdbcType=BIT},
+      </if>
+      <if test="examineideas != null" >
+        examineIdeas = #{examineideas,jdbcType=VARCHAR},
+      </if>
+      <if test="examinetime != null" >
+        examineTime = #{examinetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where examineId = #{examineid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Adminexamine" >
+    update adminexamine
+    set examineType = #{examinetype,jdbcType=INTEGER},
+      examineTargetId = #{examinetargetid,jdbcType=INTEGER},
+      examineResult = #{examineresult,jdbcType=BIT},
+      examineIdeas = #{examineideas,jdbcType=VARCHAR},
+      examineTime = #{examinetime,jdbcType=TIMESTAMP}
+    where examineId = #{examineid,jdbcType=INTEGER}
+  </update>
+</mapper>

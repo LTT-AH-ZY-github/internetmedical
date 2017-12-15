@@ -1822,6 +1822,76 @@ public class UserinfoExample {
             addCriterion("userPurseBalance not between", value1, value2, "userpursebalance");
             return (Criteria) this;
         }
+
+        public Criteria andUseralipaynameIsNull() {
+            addCriterion("userAlipayName is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipaynameIsNotNull() {
+            addCriterion("userAlipayName is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipaynameEqualTo(String value) {
+            addCriterion("userAlipayName =", value, "useralipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipaynameNotEqualTo(String value) {
+            addCriterion("userAlipayName <>", value, "useralipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipaynameGreaterThan(String value) {
+            addCriterion("userAlipayName >", value, "useralipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipaynameGreaterThanOrEqualTo(String value) {
+            addCriterion("userAlipayName >=", value, "useralipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipaynameLessThan(String value) {
+            addCriterion("userAlipayName <", value, "useralipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipaynameLessThanOrEqualTo(String value) {
+            addCriterion("userAlipayName <=", value, "useralipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipaynameLike(String value) {
+            addCriterion("userAlipayName like", value, "useralipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipaynameNotLike(String value) {
+            addCriterion("userAlipayName not like", value, "useralipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipaynameIn(List<String> values) {
+            addCriterion("userAlipayName in", values, "useralipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipaynameNotIn(List<String> values) {
+            addCriterion("userAlipayName not in", values, "useralipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipaynameBetween(String value1, String value2) {
+            addCriterion("userAlipayName between", value1, value2, "useralipayname");
+            return (Criteria) this;
+        }
+
+        public Criteria andUseralipaynameNotBetween(String value1, String value2) {
+            addCriterion("userAlipayName not between", value1, value2, "useralipayname");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

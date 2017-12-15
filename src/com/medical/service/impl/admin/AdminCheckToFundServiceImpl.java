@@ -147,7 +147,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		}
 		String prefix = "df";
 		String out_biz_no = MakeOrderNum.getTradeNo(prefix);
-		String payee_account= doctorinfo.getDocalipayaccount();
+		//String payee_account= doctorinfo.getDocalipayaccount();
+		String payee_account= "pwddhi8634@sandbox.com";
 		if (StringUtils.isBlank(payee_account)) {
 			return DataResult.error("该医生支付宝账号为空");
 		}
@@ -249,7 +250,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		}
 		String prefix = "hf";
 		String out_biz_no = MakeOrderNum.getTradeNo(prefix);
-		String payee_account= hospinfo.getHospalipayaccount();
+		//String payee_account= hospinfo.getHospalipayaccount();
+		String payee_account= "pwddhi8634@sandbox.com";
 		if (StringUtils.isBlank(payee_account)) {
 			return DataResult.error("该医院支付宝账号为空");
 		}
@@ -346,7 +348,7 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 	* @see com.medical.service.iface.admin.AdminCheckToFundService#listhospitalsToFund(java.lang.Integer, java.lang.Integer, java.lang.Integer)  
 	*/  
 	@Override
-	public String listhospitalsToFund(Integer adminloginid, Integer limit, Integer offset) {
+	public String listhospitalsToFund(Integer adminloginid, Integer limit, Integer offset) throws Exception{
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo==null) {
 			return DataResult.error("账户不存在");
@@ -391,6 +393,7 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		if (stateid!=8) {
 			return DataResult.error("该订单状态不支持该操作");
 		}
+		Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(userorder.getUserorderhospid());
 		BigDecimal totaldeposit = userorder.getUserordertotaldeposit();
 		BigDecimal actualprice = userorder.getUserorderhprice();
 		if (totaldeposit.compareTo(actualprice)<=0) {
@@ -401,15 +404,17 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userorder.getUserloginid());
 		String prefix = "uf";
 		String out_biz_no = MakeOrderNum.getTradeNo(prefix);
-		String payee_account= userinfo.getUseralipayaccount();
+		//String payee_account= userinfo.getUseralipayaccount();
+		String payee_account= "pwddhi8634@sandbox.com";
 		if (StringUtils.isBlank(payee_account)) {
-			return DataResult.error("该医院支付宝账号为空");
+			return DataResult.error("该用户支付宝账号为空");
 		}
 		String amount = surplus+"";
 		String  payer_show_name = userorder.getFamilyname()+"订单结算"; 
 		String  payee_real_name = "沙箱环境";
 		String remark=payer_show_name;
 		AlipayFundTransToaccountTransferResponse response = AlipayFund.doFund(out_biz_no, payee_account, amount, payer_show_name, payee_real_name, remark);
+		updateFundToUserFinish(response, adminloginid, userorderid, userorder.getUserloginid(), userinfo.getUserid(), userinfo.getUsername(), userorder.getFamilyname(), userorder.getUserorderhospid(), hospinfo.getHospid(),hospinfo.getHospname(), surplus);
 		if (response.isSuccess()) {
 			return DataResult.success("请求成功");
 		}else {
@@ -502,7 +507,7 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 	* @see com.medical.service.iface.admin.AdminCheckToFundService#listOrderToFund(java.lang.Integer)  
 	*/  
 	@Override
-	public String listOrderToFund(Integer adminloginid) {
+	public String listOrderToFund(Integer adminloginid) throws Exception{
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -118,7 +118,7 @@ public interface HospitalConsultationService {
 	 * @return
 	 * @return: String
 	 */
-	String listCalendar(Integer docloginid);
+	String listCalendar(Integer docloginid)throws Exception; 
 
 	/**
 	 * @Title: listDoctor
@@ -135,9 +135,10 @@ public interface HospitalConsultationService {
 	 * @param two_level_dept
 	 * @return
 	 * @return: String
+	 * @throws Exception 
 	 */
 	String listDoctor(Integer page, Integer pageSize, Integer province_code, Integer area_code, Integer city_code,
-			String details, String doctortitle, String hosplevel, Integer one_level_dept, Integer two_level_dept);
+			String details, String doctortitle, String hosplevel, Integer one_level_dept, Integer two_level_dept) throws Exception;
 
 	
 

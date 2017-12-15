@@ -1,8 +1,11 @@
 package com.medical.service.impl.user;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.view.document.AbstractPdfStamperView;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.mapper.PayMapperCustom;
@@ -12,6 +15,7 @@ import com.medical.mapper.UserpurseMapperCustom;
 import com.medical.po.Userinfo;
 import com.medical.service.iface.user.UserPurseService;
 import com.medical.utils.result.DataResult;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 /**
  * @ClassName: UserPursueServiceImpl.java
@@ -49,7 +53,10 @@ public class UserPurseServiceImpl implements UserPurseService {
 		if (userinfo == null) {
 			return DataResult.error("账户不存在");
 		}
-		return DataResult.success("获取成功", userinfo.getUseralipayaccount());
+		Map<String, Object> map = new HashMap<>();
+		map.put("alipayaccount", userinfo.getUseralipayaccount());
+		map.put("alipayname", userinfo.getUseralipayname());
+		return DataResult.success("获取成功",map);
 	}
 
 	/*
@@ -69,7 +76,7 @@ public class UserPurseServiceImpl implements UserPurseService {
 	 * Integer, java.lang.String)
 	 */
 	@Override
-	public String updateAliPayAccount(Integer userloginid, String alipayaccount) throws Exception {
+	public String updateAliPayAccount(Integer userloginid, String alipayaccount,String alipayname) throws Exception {
 		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userloginid);
 		if (userinfo == null) {
 			return DataResult.error("账号不存在");
@@ -77,6 +84,7 @@ public class UserPurseServiceImpl implements UserPurseService {
 		Userinfo record = new Userinfo();
 		record.setUserid(userinfo.getUserid());
 		record.setUseralipayaccount(alipayaccount);
+		record.setUseralipayname(alipayname);
 		boolean result = userinfoMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
 			return DataResult.success("添加成功");
@@ -110,6 +118,10 @@ public class UserPurseServiceImpl implements UserPurseService {
 
 	@Override
 	public String listBalanceRecord(Integer userloginid, Integer page) throws Exception {
+		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userloginid);
+		if (userinfo == null) {
+			return DataResult.error("账户不存在");
+		}
 		PageHelper.startPage(page, 5);
 		List<Map<String, Object>> list = userpurseMapperCustom.selectByUserLoginId(userloginid);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
@@ -123,6 +135,10 @@ public class UserPurseServiceImpl implements UserPurseService {
 
 	@Override
 	public String listTradeRecord(Integer userloginid, Integer page) throws Exception {
+		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userloginid);
+		if (userinfo == null) {
+			return DataResult.error("账户不存在");
+		}
 		PageHelper.startPage(page, 5);
 		List<Map<String, Object>> list = payMapperCustom.selectByLoginIdAndType(userloginid, 1);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);

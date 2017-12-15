@@ -1,5 +1,8 @@
 package com.medical.controller.user;
 
+import static org.junit.Assert.fail;
+
+import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,15 +77,16 @@ public class UserPursueController {
 	@ApiOperation(value = "更新用户绑定的支付宝账号", httpMethod = "POST", notes = "更新用户绑定的支付宝账号", produces = "application/json")
 	public String updatealipayaccount(
 			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam(value = "userloginid") Integer userloginid,
-			@ApiParam(name="alipayaccount",required=true,value="支付宝账号")@RequestParam String alipayaccount
-	) throws Exception{
+			@ApiParam(name="alipayaccount",value="支付宝账号")@RequestParam(required =false) String alipayaccount,
+			@ApiParam(name="alipayname",value="支付宝账号")@RequestParam(required =false) String alipayname
+			) throws Exception{
 		if (userloginid == null) {
 			return DataResult.error("用户登录id为空");
 		}
-		if (StringUtils.isEmpty(alipayaccount)) {
-			return DataResult.error("支付宝账号为空");
+		if (StringUtils.isBlank(alipayaccount) && StringUtils.isBlank(alipayname)) {
+			return DataResult.error("支付宝账号和姓名不可同时为空");
 		}
-		return userPursueService.updateAliPayAccount(userloginid, alipayaccount);
+		return userPursueService.updateAliPayAccount(userloginid, alipayaccount,alipayname);
 	}
 	@RequestMapping(value = "/listtraderecord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取交易记录", httpMethod = "POST", notes = "获取交易记录", produces = "application/json")

@@ -26,7 +26,7 @@ public interface HospitalPackageService {
 	 * @return
 	 * @return: String
 	 */
-	String addPackage(Hospitalpackage hospitalpackage);
+	String addPackage(Hospitalpackage hospitalpackage) throws Exception;
 
 	/**
 	 * @Title: listPackages
@@ -37,7 +37,7 @@ public interface HospitalPackageService {
 	 * @return
 	 * @return: String
 	 */
-	String listPackages(Integer hosploginid, Integer limit, Integer offset);
+	String listPackages(Integer hosploginid, Integer limit, Integer offset) throws Exception;
 
 	/**
 	 * @Title: editPackage
@@ -46,7 +46,7 @@ public interface HospitalPackageService {
 	 * @return
 	 * @return: String
 	 */
-	String editPackage(Hospitalpackage hospitalpackage);
+	String editPackage(Hospitalpackage hospitalpackage) throws Exception;
 
 	/**
 	 * @Title: deletePackage
@@ -56,6 +56,6 @@ public interface HospitalPackageService {
 	 * @return
 	 * @return: String
 	 */
-	String deletePackage(Integer hosploginid, Integer packageid);
+	String deletePackage(Integer hosploginid, Integer packageid) throws Exception;
 
 }

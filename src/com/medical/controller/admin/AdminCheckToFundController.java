@@ -71,7 +71,7 @@ public class AdminCheckToFundController {
 	}
 	
 	@RequestMapping(value="/fundtohospital", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value="医生提现",httpMethod="POST",notes="医生提现")
+	@ApiOperation(value="医院提现",httpMethod="POST",notes="医院提现")
 	public String refundhosp(
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "hosploginid", value = "医院登录id") @RequestParam Integer hosploginid

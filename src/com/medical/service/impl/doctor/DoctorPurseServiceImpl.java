@@ -1,9 +1,12 @@
 package com.medical.service.impl.doctor;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.view.document.AbstractPdfStamperView;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.mapper.DoctorinfoMapper;
@@ -45,7 +48,10 @@ public class DoctorPurseServiceImpl implements DoctorPurseService {
 		if (doctorinfo == null) {
 			return DataResult.error("用户不存在");
 		}
-		return DataResult.success("获取成功", doctorinfo.getDocalipayaccount());
+		Map<String, Object> map = new HashMap<>();
+		map.put("alipayaccount", doctorinfo.getDocalipayaccount());
+		map.put("alipayname", doctorinfo.getDocalipayname());
+		return DataResult.success("获取成功",map);
 	}
 	
 	/* (非 Javadoc)  
@@ -58,7 +64,7 @@ public class DoctorPurseServiceImpl implements DoctorPurseService {
 	* @see com.medical.service.iface.doctor.DoctorPurseService#updateAliPayAccount(java.lang.Integer, java.lang.String)  
 	*/  
 	@Override
-	public String updateAliPayAccount(Integer docloginid, String alipayaccount) throws Exception{
+	public String updateAliPayAccount(Integer docloginid, String alipayaccount, String alipayname) throws Exception{
 		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
 		if (doctorinfo == null) {
 			return DataResult.error("用户不存在");
@@ -66,6 +72,7 @@ public class DoctorPurseServiceImpl implements DoctorPurseService {
 		Doctorinfo record = new Doctorinfo();
 		record.setDocid(doctorinfo.getDocid());
 		record.setDocalipayaccount(alipayaccount);
+		record.setDocalipayname(alipayname);
 		boolean result = doctorinfoMapper.updateByPrimaryKeySelective(record)>0;
 		if (result) {
 			return DataResult.success("更新成功");

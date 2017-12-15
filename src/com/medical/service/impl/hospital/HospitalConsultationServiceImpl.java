@@ -58,6 +58,7 @@ import com.medical.utils.TimeUtil;
 import com.medical.utils.result.DataResult;
 import com.medical.utils.result.DataResult2;
 import com.pay.alipay.AliPayNotify;
+import com.pay.alipay.AlipayConfig;
 import com.pay.alipay.GetSign;
 import com.pay.alipay.MakeOrderNum;
 
@@ -114,7 +115,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 	@Override
 	public String listDoctor(Integer pageNo, Integer pageSize, Integer province_code, Integer city_code, Integer area_code,
 			String details, String doctortitle, String hosplevel, Integer one_level_dept,
-			Integer two_level_dept) {
+			Integer two_level_dept)throws Exception {
 		pageNo = pageNo == null ? 1 : pageNo;
 		pageSize = pageSize == null ? 3 : pageSize;
 		String province=null;
@@ -342,7 +343,8 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		String prefix = "h" + hosporderid + "d";
 		String outTradeNo = MakeOrderNum.getTradeNo(prefix);
 		// 回调地址
-		String notifyUrl = "http://1842719ny8.iok.la:14086/internetmedical/hospital/paydoctorfinishbyalipay";
+		//String notifyUrl = "http://1842719ny8.iok.la:14086/internetmedical/hospital/paydoctorfinishbyalipay";
+		String notifyUrl = AlipayConfig.WEB_HSOP_NOTIFY_URL;
 		String result = GetSign.webGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
 		Pay pay = new Pay();
 		pay.setPaycreattime(new Date());
@@ -535,7 +537,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 	 * @see com.medical.service.iface.hospital.HospitalConsultationService#listCalendar(java.lang.Integer)
 	 */
 	@Override
-	public String listCalendar(Integer docloginid) {
+	public String listCalendar(Integer docloginid) throws Exception{
 		List<Map<String, Object>> list =  doctorcalendarMapperCustom.selectAllInfoByDocloginidInUser(docloginid);
 		if (list != null && list.size()>0) {
 			return DataResult2.success("获取数据成功", list);

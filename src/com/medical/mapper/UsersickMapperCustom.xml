@@ -346,7 +346,7 @@ insert into usersick
   	  left join userinfo as d on a.userLoginId =d.userLoginId 
   where a.userSickStateId=2 
 	  <if test="province!=null">
-		  and 	b.userLoginProvince=#{province}
+		  and b.userLoginProvince=#{province}
 	  </if>
 	  <if test="city!=null">
 	 	and  b.userLoginCity=#{city}

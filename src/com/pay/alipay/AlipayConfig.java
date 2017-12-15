@@ -3,6 +3,8 @@
 import java.io.FileWriter;
 import java.io.IOException;
 
+import com.medical.utils.Global;
+
 /* *
  *类名：AlipayConfig
  *功能：基础配置类
@@ -43,9 +45,16 @@ public class AlipayConfig {
 	
 	// 支付宝网关
 	public static String LOG_PATH = "C:\\";
-
-
-//↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+	
+	//病人支付医生回调路径
+	public static String DOCTOR_NOTIFY_URL = Global.HTTP_URL+"internetmedical/user/paydoctorfinishbyalipay";
+	
+	//病人支付医院回调路径
+	public static String HSOP_NOTIFY_URL = Global.HTTP_URL+"internetmedical/user/payhospitalfinishbyalipay";
+	
+	//医院支付医生回调路径
+	public static String WEB_HSOP_NOTIFY_URL = Global.HTTP_URL+"internetmedical/hospital/paydoctorfinishbyalipay";
+    //↑↑↑↑↑↑↑↑↑↑请在这里配置您的基本信息↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
     /** 
      * 写日志，方便测试（看网站需求，也可以改成把记录存入数据库）

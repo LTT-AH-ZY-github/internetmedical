@@ -54,16 +54,19 @@ public interface HospitalPurseService {
 	 * @return
 	 * @return: String
 	 */
-	String getAliPayAccount(Integer hosploginid);
+	String getAliPayAccount(Integer hosploginid) throws Exception;
+
+	
 
 	/**
 	 * @Title: updateAliPayAccount
 	 * @Description: TODO
 	 * @param hosploginid
 	 * @param alipayaccount
+	 * @param alipayname
 	 * @return
 	 * @return: String
 	 */
-	String updateAliPayAccount(Integer hosploginid, String alipayaccount);
+	String updateAliPayAccount(Integer hosploginid, String alipayaccount, String alipayname);
 
 }

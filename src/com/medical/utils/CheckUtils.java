@@ -47,8 +47,11 @@ public class CheckUtils {
 	/**
 	 * 检查年龄是否合法
 	 * */
-	public static boolean isAgeLegal(int num) throws PatternSyntaxException {  
-        if (num>0 && num<150) {
+	public static boolean isAgeLegal(Integer num) throws PatternSyntaxException {  
+		if (num==null) {
+			return false;
+		}
+        if (num>=0 && num<150) {
 			return true;
 		} 
         return false;
@@ -63,7 +66,10 @@ public class CheckUtils {
 	 * @return: boolean
 	 */
 	public static boolean isPageLegal(Integer page) throws PatternSyntaxException {  
-        if (page!=null && page>0) {
+		if (page==null) {
+			return false;
+		}
+		if (page!=null && page>0) {
         	return true;
 		}
         return false;

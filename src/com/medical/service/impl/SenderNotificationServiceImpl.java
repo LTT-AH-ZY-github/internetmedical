@@ -27,9 +27,9 @@ import com.medical.mapper.UserlogininfoMapperCustom;
 import com.medical.po.Doctorlogininfo;
 import com.medical.po.Notification;
 import com.medical.po.Userlogininfo;
-import com.medical.push.PushToDoctor;
-import com.medical.push.PushToUser;
 import com.medical.service.iface.SenderNotificationService;
+import com.push.baidu.PushToDoctor;
+import com.push.baidu.PushToUser;
 import com.push.websocket.WebSocketHandler;
 
 import net.sf.json.JSONObject;

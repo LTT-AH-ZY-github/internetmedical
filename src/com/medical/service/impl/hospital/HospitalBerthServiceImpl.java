@@ -103,7 +103,7 @@ public class HospitalBerthServiceImpl implements HospitalBerthService {
 	* @see com.medical.service.iface.hospital.HospitalBerthService#addHospBerth(com.medical.po.Hospitalberth)  
 	*/  
 	@Override
-	public String addHospBerth(Hospitalberth hospitalberth) {
+	public String addHospBerth(Hospitalberth hospitalberth) throws Exception{
 		int hosploginid =  hospitalberth.getHosploginid();
 		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
 		if (hosplogininfo==null) {

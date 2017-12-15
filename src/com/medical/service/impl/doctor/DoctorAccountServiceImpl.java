@@ -1,6 +1,5 @@
 package com.medical.service.impl.doctor;
 
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,10 +25,11 @@ import com.medical.utils.Global;
 import com.medical.utils.MD5Util;
 import com.medical.utils.TokeManager;
 import com.medical.utils.result.DataResult;
-import com.netease.code.MsgCode;
+import com.netease.utils.MsgCode;
+
 @Service
 public class DoctorAccountServiceImpl implements DoctorAccountService {
-	
+
 	@Autowired
 	private DoctorlogininfoMapper doctorlogininfoMapper;
 	@Autowired
@@ -46,17 +46,22 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 	private AccounttypeMapper accounttypeMapper;
 	@Autowired
 	private UserlogininfoMapperCustom userlogininfoMapperCustom;
-	
-	/* (非 Javadoc)  
-	* <p>Title: findAccountExit</p>  
-	* <p>Description: 查找账号是否注册</p>  
-	* @param phone
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.doctor.DoctorAccountService#findAccountExit(java.lang.String)  
-	*/  
+
+	/*
+	 * (非 Javadoc) <p>Title: findAccountExit</p> <p>Description: 查找账号是否注册</p>
+	 * 
+	 * @param phone
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.doctor.DoctorAccountService#findAccountExit(java.
+	 * lang.String)
+	 */
 	@Override
-	public String findAccountExit(String phone) throws Exception{
+	public String findAccountExit(String phone) throws Exception {
 		// 查询医生登录表
 		int doctorCount = doctorlogininfoMapperCustom.findDocCountByPhone(phone);
 		if (doctorCount > 0) {
@@ -65,32 +70,41 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 			return DataResult.success("该号码未注册");
 		}
 	}
-	
-	/* (非 Javadoc)  
-	* <p>Title: createDoctor</p>  
-	* <p>Description: 注册</p>  
-	* @param docloginphone
-	* @param magCode
-	* @param docLoginPwd
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.doctor.DoctorAccountService#createDoctor(java.lang.String, java.lang.String, java.lang.String)  
-	*/  
+
+	/*
+	 * (非 Javadoc) <p>Title: createDoctor</p> <p>Description: 注册</p>
+	 * 
+	 * @param docloginphone
+	 * 
+	 * @param magCode
+	 * 
+	 * @param docLoginPwd
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.doctor.DoctorAccountService#createDoctor(java.lang.
+	 * String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public String createDoctor(String docloginphone, String magCode, String docLoginPwd) throws Exception {
+		// 查询医生登录表
+		int doctorCount = doctorlogininfoMapperCustom.findDocCountByPhone(docloginphone);
+		// 查询病人登录表
+		// int userCount =
+		// userlogininfoMapperCustom.findUserCountByPhone(docloginphone);
+		if (doctorCount > 0) {
+			return DataResult.error("该号码已注册");
+		}
 		boolean msgResult = MsgCode.checkMsg(docloginphone, magCode);
 		if (!msgResult) {
 			return DataResult.error("验证码错误");
 		}
-		// 查询医生登录表
-	   int doctorCount = doctorlogininfoMapperCustom.findDocCountByPhone(docloginphone);
-	   // 查询病人登录表
-	  // int userCount = userlogininfoMapperCustom.findUserCountByPhone(docloginphone);
-	   if (doctorCount>0 ) {
-			return DataResult.error("该号码已注册");
-		}
+
 		Doctorlogininfo doctorlogininfo = new Doctorlogininfo();
-	
+
 		doctorlogininfo.setDocloginphone(docloginphone);
 		doctorlogininfo.setDocloginname(docloginphone);
 		String[] str = MD5Util.generate(docLoginPwd);
@@ -101,14 +115,16 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		// 未审核用户
 		doctorlogininfo.setDoclogintype(1);
 		doctorlogininfo.setDocloginpix("http://oytv6cmyw.bkt.clouddn.com/20171103064014944735.jpg");
+		String phoneNumber = docloginphone.substring(0, 3) + "****" + docloginphone.substring(7, docloginphone.length());
 		// 插入登录信息表
 		int result = doctorlogininfoMapperCustom.insertSelectiveReturnId(doctorlogininfo);
 		Doctorinfo doctorinfo = new Doctorinfo();
 		doctorinfo.setDocloginid(doctorlogininfo.getDocloginid());
+		doctorinfo.setDocname(phoneNumber);
 		// 创建信息表
 		int infoResult = doctorinfoMapper.insertSelective(doctorinfo);
 		// 操作成功
-		if (result > 0 && infoResult > 0 ) {
+		if (result > 0 && infoResult > 0) {
 			addHuanXinAccout(doctorlogininfo.getDocloginid(), docLoginPwd);
 			return DataResult.success("注册成功");
 		} else {
@@ -119,15 +135,18 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 
 	}
 
-	
-	/* (非 Javadoc)  
-	* <p>Title: updateDoctorToNormalLogin</p>  
-	* <p>Description: 登录</p>  
-	* @param doctor
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.doctor.DoctorAccountService#updateDoctorToNormalLogin(com.medical.po.Doctorlogininfo)  
-	*/  
+	/*
+	 * (非 Javadoc) <p>Title: updateDoctorToNormalLogin</p> <p>Description: 登录</p>
+	 * 
+	 * @param doctor
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see com.medical.service.iface.doctor.DoctorAccountService#
+	 * updateDoctorToNormalLogin(com.medical.po.Doctorlogininfo)
+	 */
 	@Override
 	public String updateDoctorToNormalLogin(Doctorlogininfo doctor) throws Exception {
 		// 登录信息
@@ -199,14 +218,19 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 
 	}
 
-	/* (非 Javadoc)  
-	* <p>Title: updateDoctorToAutoLogin</p>  
-	* <p>Description: 自动登录</p>  
-	* @param doctor
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.doctor.DoctorAccountService#updateDoctorToAutoLogin(com.medical.po.Doctorlogininfo)  
-	*/  
+	/*
+	 * (非 Javadoc) <p>Title: updateDoctorToAutoLogin</p> <p>Description: 自动登录</p>
+	 * 
+	 * @param doctor
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.doctor.DoctorAccountService#updateDoctorToAutoLogin
+	 * (com.medical.po.Doctorlogininfo)
+	 */
 	@Override
 	public String updateDoctorToAutoLogin(Doctorlogininfo doctor) throws Exception {
 		// 登录信息
@@ -277,41 +301,53 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 			return DataResult.error("账号过期");
 		}
 	}
-	
-	/* (非 Javadoc)  
-	* <p>Title: addHuanXinAccout</p>  
-	* <p>Description: 注册环信</p>  
-	* @param docloginid
-	* @param password
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.doctor.DoctorAccountService#addHuanXinAccout(java.lang.Integer, java.lang.String)  
-	*/  
+
+	/*
+	 * (非 Javadoc) <p>Title: addHuanXinAccout</p> <p>Description: 注册环信</p>
+	 * 
+	 * @param docloginid
+	 * 
+	 * @param password
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.doctor.DoctorAccountService#addHuanXinAccout(java.
+	 * lang.Integer, java.lang.String)
+	 */
 	@Override
 	public boolean addHuanXinAccout(Integer docloginid, String password) throws Exception {
-		boolean registerResult =  UserManger.register("doc_" + docloginid, password);
+		boolean registerResult = UserManger.register("doc_" + docloginid, password);
 		if (registerResult) {
 			Doctorlogininfo doctorlogininfo = new Doctorlogininfo();
 			doctorlogininfo.setDocloginid(docloginid);
 			doctorlogininfo.setDochuanxinaccount("doc_" + docloginid);
 			doctorlogininfoMapper.updateByPrimaryKeySelective(doctorlogininfo);
 			return true;
-			
+
 		} else {
 			return false;
 		}
 
 	}
 
-	/* (非 Javadoc)  
-	* <p>Title: editHuanXinPassword</p>  
-	* <p>Description: 修改环信密码</p>  
-	* @param docloginid
-	* @param password
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.doctor.DoctorAccountService#editHuanXinPassword(java.lang.Integer, java.lang.String)  
-	*/  
+	/*
+	 * (非 Javadoc) <p>Title: editHuanXinPassword</p> <p>Description: 修改环信密码</p>
+	 * 
+	 * @param docloginid
+	 * 
+	 * @param password
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.doctor.DoctorAccountService#editHuanXinPassword(
+	 * java.lang.Integer, java.lang.String)
+	 */
 	@Override
 	public String editHuanXinPassword(Integer docloginid, String password) throws Exception {
 		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
@@ -326,19 +362,26 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 			}
 		}
 	}
-	
-	/* (非 Javadoc)  
-	* <p>Title: updatePassword</p>  
-	* <p>Description: 修改密码</p>  
-	* @param docloginphone
-	* @param docloginpwd
-	* @param msgCode
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.doctor.DoctorAccountService#updatePassword(java.lang.String, java.lang.String, java.lang.String)  
-	*/  
+
+	/*
+	 * (非 Javadoc) <p>Title: updatePassword</p> <p>Description: 修改密码</p>
+	 * 
+	 * @param docloginphone
+	 * 
+	 * @param docloginpwd
+	 * 
+	 * @param msgCode
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.doctor.DoctorAccountService#updatePassword(java.
+	 * lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
-	public String updatePassword(String docloginphone, String docloginpwd,String msgCode) throws Exception {
+	public String updatePassword(String docloginphone, String docloginpwd, String msgCode) throws Exception {
 		boolean msgResult = MsgCode.checkMsg(docloginphone, msgCode);
 		if (!msgResult) {
 			return DataResult.error("验证码错误");
@@ -354,22 +397,27 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		doctorlogininfo.setDocloginsalt(str[1]);
 		boolean result = doctorlogininfoMapper.updateByPrimaryKeySelective(doctorlogininfo) > 0;
 		if (result) {
-			editHuanXinPassword(logininfo.getDocloginid(),docloginpwd);
+			editHuanXinPassword(logininfo.getDocloginid(), docloginpwd);
 			return DataResult.success("修改成功");
 		} else {
 			return DataResult.error("修改失败");
 		}
 
 	}
-	
-	/* (非 Javadoc)  
-	* <p>Title: updateAccountToExit</p>  
-	* <p>Description: 退出登录</p>  
-	* @param docloginid
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.doctor.DoctorAccountService#updateAccountToExit(java.lang.Integer)  
-	*/  
+
+	/*
+	 * (非 Javadoc) <p>Title: updateAccountToExit</p> <p>Description: 退出登录</p>
+	 * 
+	 * @param docloginid
+	 * 
+	 * @return
+	 * 
+	 * @throws Exception
+	 * 
+	 * @see
+	 * com.medical.service.iface.doctor.DoctorAccountService#updateAccountToExit(
+	 * java.lang.Integer)
+	 */
 	@Override
 	public String updateAccountToExit(Integer docloginid) throws Exception {
 		Doctorlogininfo list = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
@@ -380,6 +428,5 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 			return DataResult.error("该用户不存在");
 		}
 	}
-	
 	
 }

@@ -47,7 +47,8 @@ public class HospitalPurseController {
 	@ApiOperation(value = "修改支付宝账号", httpMethod = "POST", notes = "修改支付宝账号", produces = "application/json")
 	public String updatealipayaccount(
 			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid,
-			@ApiParam(name="alipayaccount",required=true,value="支付宝账号")@RequestParam String alipayaccount
+			@ApiParam(name="alipayaccount",required=true,value="支付宝账号")@RequestParam String alipayaccount,
+			@ApiParam(name="alipayname",required=true,value="支付宝姓名")@RequestParam String alipayname
 	) throws Exception{
 		if (hosploginid == null) {
 			return DataResult.error("医院登录id为空");
@@ -55,7 +56,7 @@ public class HospitalPurseController {
 		if (StringUtils.isEmpty(alipayaccount)) {
 			return DataResult.error("支付宝账号为空");
 		}
-		return hospitalPurseService.updateAliPayAccount(hosploginid, alipayaccount);
+		return hospitalPurseService.updateAliPayAccount(hosploginid, alipayaccount,alipayname);
 	}
 	@RequestMapping(value = "/getbalance", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取账户余额", httpMethod = "POST", notes = "获取账户余额", produces = "application/json")

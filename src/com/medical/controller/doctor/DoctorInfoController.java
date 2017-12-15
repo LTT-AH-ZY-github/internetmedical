@@ -146,6 +146,10 @@ public class DoctorInfoController {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
+		String docmale = doctorinfo.getDocmale();
+		if (!"男".equals(docmale) && !"女".equals(docmale)) {
+			return DataResult.error("性别输入不合法");
+		}
 		return doctorInfoService.updateNormalInfo(doctorinfo);
 
 	}
@@ -187,6 +191,16 @@ public class DoctorInfoController {
 			return DataResult.error("id为空");
 		}
 		return doctorInfoService.updateInfoToReview(docloginid);
+	}
+	
+	@RequestMapping(value = "/getreviewinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "提交审核", httpMethod = "POST", notes = "提交审核")
+	public String getreviewInfo(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
+			throws Exception {
+		if (docloginid == null) {
+			return DataResult.error("id为空");
+		}
+		return doctorInfoService.getReviewInfo(docloginid);
 	}
 
 	// 获取常用地址

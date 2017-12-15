@@ -13,9 +13,10 @@ public interface AdminFunctionService {
 	String getUserDetail(Integer adminloginid, Integer userloginid) throws Exception;
 	/**
 	 * 管理审核用户信息
+	 * @param idea 
 	 *  
 	 * */
-	String updateUserType(Integer adminloginid, Integer userloginid, Boolean type) throws Exception;
+	String updateUserType(Integer adminloginid, Integer userloginid, Boolean type, String idea) throws Exception;
 	/**
 	 * 管理员获取不同类型的医生
 	 * @param 
@@ -28,9 +29,10 @@ public interface AdminFunctionService {
 	String getDoctorDetail(Integer adminloginid, Integer userloginid)throws Exception;
 	/**
 	 * 管理审核医生信息
+	 * @param idea 
 	 *  
 	 * */
-	String updateDoctorType(Integer adminloginid, Integer docloginid, Boolean type)throws Exception;
+	String updateDoctorType(Integer adminloginid, Integer docloginid, Boolean type, String idea)throws Exception;
 	/**
 	 * 管理获取医生列表信息
 	 * @param 
@@ -43,9 +45,10 @@ public interface AdminFunctionService {
 	String getHospitalDetail(Integer adminloginid, Integer hosploginid)throws Exception;
 	/**
 	 * 管理审核医院信息
+	 * @param idea 
 	 *  
 	 * */
-	String updateHospitalType(Integer adminloginid, Integer hosploginid, Boolean type)throws Exception;
+	String updateHospitalType(Integer adminloginid, Integer hosploginid, Boolean type, String idea)throws Exception;
 	
 	/**
 	 * @Title: listDept
@@ -57,7 +60,7 @@ public interface AdminFunctionService {
 	 * @return
 	 * @return: String
 	 */
-	String listDept(Integer adminloginid, Integer limit, Integer offset, Integer check);
+	String listDept(Integer adminloginid, Integer limit, Integer offset, Integer check) throws Exception;
 	/**
 	 * @Title: checkDept
 	 * @Description: TODO
@@ -67,7 +70,7 @@ public interface AdminFunctionService {
 	 * @return
 	 * @return: String
 	 */
-	String checkDept(Integer adminloginid, Integer hospdeptid, Integer hospdeptfatherid);
+	String checkDept(Integer adminloginid, Integer hospdeptid, Integer hospdeptfatherid) throws Exception;
 	
 	/**
 	 * @Title: listFirstDept
@@ -76,7 +79,7 @@ public interface AdminFunctionService {
 	 * @return
 	 * @return: String
 	 */
-	String listFirstDept(Integer adminloginid);
+	String listFirstDept(Integer adminloginid) throws Exception;
 	
 	
 	

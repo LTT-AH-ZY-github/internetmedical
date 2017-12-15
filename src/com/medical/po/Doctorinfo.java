@@ -78,6 +78,8 @@ public class Doctorinfo {
 
     private BigDecimal docpursebalance;
 
+    private String docalipayname;
+
     public Integer getDocid() {
         return docid;
     }
@@ -372,5 +374,13 @@ public class Doctorinfo {
 
     public void setDocpursebalance(BigDecimal docpursebalance) {
         this.docpursebalance = docpursebalance;
+    }
+
+    public String getDocalipayname() {
+        return docalipayname;
+    }
+
+    public void setDocalipayname(String docalipayname) {
+        this.docalipayname = docalipayname == null ? null : docalipayname.trim();
     }
 }

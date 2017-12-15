@@ -52,7 +52,7 @@ public interface UserPurseService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	String updateAliPayAccount(Integer userloginid, String alipayaccount) throws Exception;
+	String updateAliPayAccount(Integer userloginid, String alipayaccount,String alipayname) throws Exception;
 
 	/**
 	 * @Title: getAliPayAccount
@@ -63,5 +63,6 @@ public interface UserPurseService {
 	 * @throws Exception 
 	 */
 	String getAliPayAccount(Integer userloginid) throws Exception;
+
 
 }

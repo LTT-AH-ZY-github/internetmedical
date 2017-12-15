@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.AdminexamineMapperCustom" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Adminexamine" >
+    <id column="examineId" property="examineid" jdbcType="INTEGER" />
+    <result column="examineType" property="examinetype" jdbcType="INTEGER" />
+    <result column="examineTargetId" property="examinetargetid" jdbcType="INTEGER" />
+    <result column="examineResult" property="examineresult" jdbcType="BIT" />
+    <result column="examineIdeas" property="examineideas" jdbcType="VARCHAR" />
+    <result column="examineTime" property="examinetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    examineId, examineType, examineTargetId, examineResult, examineIdeas, examineTime
+  </sql>
+  <select id="selectByExamineTargetIdAndTypeOrderByTime" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+   	select * 
+   	from adminexamine 
+   	where examineTargetId=#{0} and examineType=#{1}
+   	order by examineTime desc
+  </select>
+</mapper>

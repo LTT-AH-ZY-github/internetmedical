@@ -54,6 +54,8 @@ public class Userinfo {
 
     private BigDecimal userpursebalance;
 
+    private String useralipayname;
+
     public Integer getUserid() {
         return userid;
     }
@@ -252,5 +254,13 @@ public class Userinfo {
 
     public void setUserpursebalance(BigDecimal userpursebalance) {
         this.userpursebalance = userpursebalance;
+    }
+
+    public String getUseralipayname() {
+        return useralipayname;
+    }
+
+    public void setUseralipayname(String useralipayname) {
+        this.useralipayname = useralipayname == null ? null : useralipayname.trim();
     }
 }

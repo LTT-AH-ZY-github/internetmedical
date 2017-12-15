@@ -165,12 +165,9 @@ public class DoctorHomeServiceImpl implements DoctorHomeService {
 		doctorSearch.setArea(area);
 		PageHelper.startPage(pageNo, pageSize);
 		List<Map<String, Object>> list = usersickMapperCustom.paginationSickSortByLoc(doctorSearch);
+		System.out.println("数据"+list);
 		PageInfo<Map<String, Object>> page = new PageInfo<Map<String, Object>>(list);
-		if (page != null && page.getTotal() > 0) {
-			return DataResult.success("按距离排序病情获取成功", page.getList());
-		} else {
-			return PaginationResult.success("按距离排序病情获取失败,因数据为空", null);
-		}
+		return DataResult.success("按距离排序病情获取成功", page.getList());
 	}
 
 	// 获取病情详情

@@ -1,4 +1,4 @@
-package com.baidu.yun.push.utils;
+package com.push.baidu;
 
 import net.sf.json.JSONObject;
 
@@ -11,14 +11,20 @@ import com.baidu.yun.push.exception.PushClientException;
 import com.baidu.yun.push.exception.PushServerException;
 import com.baidu.yun.push.model.PushMsgToSingleDeviceRequest;
 import com.baidu.yun.push.model.PushMsgToSingleDeviceResponse;
-import com.medical.push.PushConfig;
 
-public class PushToUserInIOS {
-	public static void pushMsgToSingleDeviceInIOS(String channelid, String title, String msg)
+public class PushToDoctorInIOS {
+	public static void main(String[] args) throws Exception{
+		JSONObject jsonCustormCont = new JSONObject();
+		jsonCustormCont.put("doc_id", 12);
+		jsonCustormCont.put("sick_id", 12);
+		jsonCustormCont.put("type", 2);
+		pushMsgToSingleDevice("5213090325501363445","你好","你好");
+	}
+	public static void pushMsgToSingleDevice(String channelid, String title, String msg)
 			throws PushClientException, PushServerException {
 		
 		// 1. get apiKey and secretKey from developer console
-		PushKeyPair pair = new PushKeyPair(PushConfig.IOSInUserApiKey, PushConfig.IOSInUserSecretKey);
+		PushKeyPair pair = new PushKeyPair(PushConfig.IOSInDoctorApiKey, PushConfig.IOSInDoctorSecretKey);
 
 		// 2. build a BaidupushClient object to access released interfaces
 		BaiduPushClient pushClient = new BaiduPushClient(pair,
@@ -42,7 +48,7 @@ public class PushToUserInIOS {
 			jsonAPS.put("sound", "ttt"); // 设置通知铃声样式
 			jsonAPS.put("badge", 1); // 设置角标，提示消息个数
 			notification.put("aps", jsonAPS);
-			notification.put("key1", "value1"); 
+			notification.put("key1", "value1");
 			notification.put("key2", "value2");
 
 			PushMsgToSingleDeviceRequest request = new PushMsgToSingleDeviceRequest()

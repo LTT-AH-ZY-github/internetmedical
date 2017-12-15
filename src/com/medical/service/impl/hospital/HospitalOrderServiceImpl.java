@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import com.alipay.api.domain.Data;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.exception.custom.HospitalOrderException;
@@ -17,7 +18,9 @@ import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.DoctortitleMapper;
 import com.medical.mapper.HospinfoMapperCustom;
+import com.medical.mapper.HospitalberthMapper;
 import com.medical.mapper.HospitalberthMapperCustom;
+import com.medical.mapper.HospitaldeptMapper;
 import com.medical.mapper.HospitaldeptMapperCustom;
 import com.medical.mapper.HosplogininfoMapper;
 import com.medical.mapper.HosporderMapper;
@@ -28,18 +31,19 @@ import com.medical.mapper.UsersickMapper;
 import com.medical.po.Doctorlogininfo;
 import com.medical.po.HospSearchDocTerm;
 import com.medical.po.Hospinfo;
+import com.medical.po.Hospitalberth;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Hosplogininfo;
 import com.medical.po.Hosporder;
 import com.medical.po.Pay;
 import com.medical.po.Userorder;
 import com.medical.po.Usersick;
-import com.medical.push.PushToUser;
 import com.medical.service.iface.CommonService;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.hospital.HospitalOrderService;
 import com.medical.utils.result.DataResult;
 import com.pay.alipay.AliPayNotify;
+import com.push.baidu.PushToUser;
 
 import net.sf.json.JSONObject;
 
@@ -70,6 +74,8 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 	private PayMapperCustom payMapperCustom;
 	@Autowired
 	private HospitalberthMapperCustom hospitalberthMapperCustom;
+	@Autowired
+	private HospitalberthMapper hospitalberthMapper;
 	@Autowired 
 	private SenderNotificationService senderNotificationService;
 
@@ -96,7 +102,7 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 
 	// 医院获取需要住院的病人订单
 	@Override
-	public String listUserOrder(Integer hosploginid, Integer type, Integer limit, Integer offset) {
+	public String listUserOrder(Integer hosploginid, Integer type, Integer limit, Integer offset) throws Exception{
 
 		int pageNo = 1;
 		if (offset != 0) {
@@ -117,45 +123,115 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 		}
 
 	}
-
+	
+	/* (非 Javadoc)  
+	* <p>Title: getHospBerthNum</p>  
+	* <p>Description: </p>  
+	* @param hosploginid
+	* @param userorderhospprimarydept
+	* @param userorderhospseconddept
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.hospital.HospitalOrderService#getHospBerthNum(java.lang.Integer, java.lang.String, java.lang.String)  
+	*/  
+	@Override
+	public String getHospBerthNum(Integer hosploginid, String userorderhospprimarydept, String userorderhospseconddept)
+			throws Exception {
+		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
+		if (hosplogininfo==null) {
+			return DataResult.error("账号不存在");
+		}
+		int hospberthdeptid = 0;
+		List<Hospitaldept> primarydeptlist = hospitaldeptMapperCustom.selectByDeptNameAndFatherId(userorderhospprimarydept, "0");
+		if (primarydeptlist==null || primarydeptlist.size()==0) {
+			return DataResult.error("该一级部门不存在");
+		}
+		hospberthdeptid = primarydeptlist.get(0).getHospdeptid();
+		if (StringUtils.isNotBlank(userorderhospseconddept)) {
+			List<Hospitaldept> seconddeptlist = hospitaldeptMapperCustom.selectByDeptNameAndFatherId(userorderhospseconddept, hospberthdeptid+"");
+			if (seconddeptlist==null || seconddeptlist.size()==0) {
+				return DataResult.error("该二级部门不存在");
+			}
+			hospberthdeptid = seconddeptlist.get(0).getHospdeptid();
+		}
+		int conut = hospitalberthMapperCustom.selectCountByHospLoginIdAndHospDerthDeptId(hospberthdeptid, hosploginid);
+		Map<String, Object> map = new HashMap<>();
+		map.put("number", conut);
+		return DataResult.success("获取成功", map);
+	}
+	
+	public String deleteHospBerth(Integer hosploginid ,String userorderhospprimarydept, String userorderhospseconddept)
+			throws Exception {
+		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
+		if (hosplogininfo==null) {
+			return DataResult.error("账号不存在");
+		}
+		int hospberthdeptid = 0;
+		List<Hospitaldept> primarydeptlist = hospitaldeptMapperCustom.selectByDeptNameAndFatherId(userorderhospprimarydept, "0");
+		if (primarydeptlist==null || primarydeptlist.size()==0) {
+			return DataResult.error("该一级部门不存在");
+		}
+		hospberthdeptid = primarydeptlist.get(0).getHospdeptid();
+		if (StringUtils.isNotBlank(userorderhospseconddept)) {
+			List<Hospitaldept> seconddeptlist = hospitaldeptMapperCustom.selectByDeptNameAndFatherId(userorderhospseconddept, hospberthdeptid+"");
+			if (seconddeptlist==null || seconddeptlist.size()==0) {
+				return DataResult.error("该二级部门不存在");
+			}
+			hospberthdeptid = seconddeptlist.get(0).getHospdeptid();
+		}
+		List<Hospitalberth> list = hospitalberthMapperCustom.selectByHospLoginIdAndHospDerthDeptId(hospberthdeptid, hosploginid);
+		if (list==null || list.size()==0) {
+			return DataResult.error("床位为空");
+		}
+		Map<String, Object> map = new HashMap<>();
+		boolean result = hospitalberthMapper.deleteByPrimaryKey(list.get(0).getHospberthid())>0;
+		if (result) {
+			return DataResult.success("删除成功");
+		}else {
+			return DataResult.error("删除成功");
+		}
+		
+	}
 	// 医院确认需要住院的病人订单
 	@Override
 	public String confirmUserOrder(Integer hosploginid, Integer userorderid, Double userorderdeposit,
 			String userorderhospprimarydept, String userorderhospseconddept) throws Exception {
 		Userorder order = userorderMapper.selectByPrimaryKey(userorderid);
-		if (order != null) {
-			Integer stateid = order.getUserorderstateid();
-			if (stateid == 5) {
-				Userorder userorder = new Userorder();
-				userorder.setUserorderid(userorderid);
-				userorder.setUserorderdeposit(new BigDecimal(userorderdeposit));
-				userorder.setUserorderstateid(6);
-				userorder.setUserorderhospprimarydept(userorderhospprimarydept);
-				userorder.setUserorderhospseconddept(userorderhospseconddept);
-				boolean result = userorderMapper.updateByPrimaryKeySelective(userorder) > 0;
-				if (result) {
-					JSONObject jsonCustormCont = new JSONObject();
-					boolean push = senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知",
-							"确认了您的订单", jsonCustormCont);
-					if (push) {
-						return DataResult.success("确认成功,且消息发送成功");
-					} else {
-						return DataResult.success("确认成功,但消息发送失败");
-					}
-
-				} else {
-					return DataResult.error("确认失败");
-				}
-
-			} else {
-				return DataResult.error("该订单状态不支持该操作");
-
-			}
-
-		} else {
+		if (order == null) {
 			return DataResult.error("该订单不存在");
-
 		}
+		Integer stateid = order.getUserorderstateid();
+		if (stateid != 5) {
+			return DataResult.error("该订单状态不支持该操作");
+		}
+		String delresult= deleteHospBerth(hosploginid, userorderhospprimarydept, userorderhospseconddept);
+		JSONObject jsonObject = JSONObject.fromObject(delresult);
+		if ("200".equals(jsonObject.get("code"))) {
+			return delresult;
+		}
+		Userorder userorder = new Userorder();
+		userorder.setUserorderid(userorderid);
+		userorder.setUserorderdeposit(new BigDecimal(userorderdeposit));
+		userorder.setUserorderstateid(6);
+		userorder.setUserorderhospprimarydept(userorderhospprimarydept);
+	    userorder.setUserorderhospseconddept(userorderhospseconddept);
+	    boolean result = userorderMapper.updateByPrimaryKeySelective(userorder) > 0;
+	    if (result) {
+			JSONObject jsonCustormCont = new JSONObject();
+			boolean push = senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知",
+				"确认了您的订单", jsonCustormCont);
+			if (push) {
+					return DataResult.success("确认成功,且消息发送成功");
+			} else {
+					return DataResult.success("确认成功,但消息发送失败");
+			}
+         } else {
+		      return DataResult.error("确认失败");
+		}
+
+			
+
+		
 
 	}
 
@@ -286,7 +362,7 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 	}
 
 	@Override
-	public String updateUserOrderToEnd(Integer hosploginid, Integer userorderid) {
+	public String updateUserOrderToEnd(Integer hosploginid, Integer userorderid) throws Exception{
 		Userorder order = userorderMapper.selectByPrimaryKey(userorderid);
 		if (order != null) {
 
@@ -473,40 +549,6 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 		}
 	}
 
-	/* (非 Javadoc)  
-	* <p>Title: getHospBerthNum</p>  
-	* <p>Description: </p>  
-	* @param hosploginid
-	* @param userorderhospprimarydept
-	* @param userorderhospseconddept
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.hospital.HospitalOrderService#getHospBerthNum(java.lang.Integer, java.lang.String, java.lang.String)  
-	*/  
-	@Override
-	public String getHospBerthNum(Integer hosploginid, String userorderhospprimarydept, String userorderhospseconddept)
-			throws Exception {
-		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
-		if (hosplogininfo==null) {
-			return DataResult.error("账号不存在");
-		}
-		int hospberthdeptid = 0;
-		List<Hospitaldept> primarydeptlist = hospitaldeptMapperCustom.selectByDeptNameAndFatherId(userorderhospprimarydept, "0");
-		if (primarydeptlist==null || primarydeptlist.size()==0) {
-			return DataResult.error("该一级部门不存在");
-		}
-		hospberthdeptid = primarydeptlist.get(0).getHospdeptid();
-		if (StringUtils.isNotBlank(userorderhospseconddept)) {
-			List<Hospitaldept> seconddeptlist = hospitaldeptMapperCustom.selectByDeptNameAndFatherId(userorderhospseconddept, hospberthdeptid+"");
-			if (seconddeptlist==null || seconddeptlist.size()==0) {
-				return DataResult.error("该二级部门不存在");
-			}
-			hospberthdeptid = seconddeptlist.get(0).getHospdeptid();
-		}
-		int conut = hospitalberthMapperCustom.selectCountByHospLoginIdAndHospDerthDeptId(hospberthdeptid, hosploginid);
-		Map<String, Object> map = new HashMap<>();
-		map.put("number", conut);
-		return DataResult.success("获取成功", map);
-	}
+	
 
 }

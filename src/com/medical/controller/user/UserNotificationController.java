@@ -42,7 +42,7 @@ public class UserNotificationController {
 	 * @return: String
 	 */
 	@RequestMapping(value = "/listreceivenotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "获取需要接收的通知", httpMethod = "psot", notes = "获取其他发送的通知")
+	@ApiOperation(value = "获取需要接收的通知", httpMethod = "POST", notes = "获取其他发送的通知")
 	public @ResponseBody String listreceivenotification(
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
 			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page,
@@ -78,7 +78,7 @@ public class UserNotificationController {
 	 * @return: String
 	 */
 	@RequestMapping(value = "/listsendernotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "获取发送的通知", httpMethod = "psot", notes = "获取发送的通知")
+	@ApiOperation(value = "获取发送的通知", httpMethod = "POST", notes = "获取发送的通知")
 	public @ResponseBody String listsendernotification(
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
 			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page,
@@ -113,7 +113,7 @@ public class UserNotificationController {
 	 * @return: String
 	 */
 	@RequestMapping(value = "/updatenotificationtoread", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "将通知置为已读", httpMethod = "psot", notes = "将通知置为已读")
+	@ApiOperation(value = "将通知置为已读", httpMethod = "POST", notes = "将通知置为已读")
 	public @ResponseBody String updateNotificationToRead(
 			@ApiParam(name = "notificationid", required = true, value = "通知id") @RequestParam Integer notificationid,
 			@ApiParam(name = "userloginid", required = true, value = "用户登陆id") @RequestParam Integer userloginid)
@@ -148,7 +148,7 @@ public class UserNotificationController {
 	 * @return: String
 	 */
 	@RequestMapping(value = "/updateallnotificationtoread", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "将该用户的所有未读通知置为已读", httpMethod = "psot", notes = "将该用户的所有未读通知置为已读")
+	@ApiOperation(value = "将该用户的所有未读通知置为已读", httpMethod = "POST", notes = "将该用户的所有未读通知置为已读")
 	public @ResponseBody String updateAllNotificationToRead(
 			@ApiParam(name = "userloginid", required = true, value = "用户登陆id") @RequestParam Integer userloginid)
 			throws Exception {
@@ -168,7 +168,7 @@ public class UserNotificationController {
 	 * @return: String
 	 */
 	@RequestMapping(value = "/deletereceivenotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "删除接收的通知", httpMethod = "psot", notes = "删除接收的通知")
+	@ApiOperation(value = "删除接收的通知", httpMethod = "POST", notes = "删除接收的通知")
 	public @ResponseBody String deleteNotification(
 			@ApiParam(name = "notificationid", required = true, value = "通知id") @RequestParam Integer notificationid,
 			@ApiParam(name = "userloginid", required = true, value = "用户登陆id") @RequestParam Integer userloginid)
@@ -203,7 +203,7 @@ public class UserNotificationController {
 	 * @return: String
 	 */
 	@RequestMapping(value = "/deleteallreceivenotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "删除接收的所有通知", httpMethod = "psot", notes = "删除接收的所有通知")
+	@ApiOperation(value = "删除接收的所有通知", httpMethod = "POST", notes = "删除接收的所有通知")
 	public @ResponseBody String deleteAllNotification(
 			@ApiParam(name = "userloginid", required = true, value = "用户登陆id") @RequestParam Integer userloginid)
 			throws Exception {

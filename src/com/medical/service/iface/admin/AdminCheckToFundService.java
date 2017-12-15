@@ -59,7 +59,7 @@ public interface AdminCheckToFundService {
 	 * @return
 	 * @return: String
 	 */
-	String listhospitalsToFund(Integer adminloginid, Integer limit, Integer offset);
+	String listhospitalsToFund(Integer adminloginid, Integer limit, Integer offset) throws Exception;
 
 	/**
 	 * @Title: updateFundToUser
@@ -79,7 +79,7 @@ public interface AdminCheckToFundService {
 	 * @return
 	 * @return: String
 	 */
-	String listOrderToFund(Integer adminloginid);
+	String listOrderToFund(Integer adminloginid) throws Exception;
 
 	/**
 	 * @Title: listOrderToFund

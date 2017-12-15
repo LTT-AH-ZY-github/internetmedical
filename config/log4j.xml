@@ -13,7 +13,7 @@
           所有下面输出的是debug到warn不会有error和fatal
       -->  
         <filter class="org.apache.log4j.varia.LevelRangeFilter">  
-            <param name="levelMin" value="debug" />  
+            <param name="levelMin" value="error" />  
             <param name="levelMax" value="error" />  
             <param name="AcceptOnMatch" value="true" />  <!-- 答案：http://bbs.csdn.net/topics/350195913 -->
         </filter>  

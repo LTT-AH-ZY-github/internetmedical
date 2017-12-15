@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.HosptitaldepositMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Hosptitaldeposit" >
+    <id column="hospDepositId" property="hospdepositid" jdbcType="INTEGER" />
+    <result column="hospDepositNum" property="hospdepositnum" jdbcType="DECIMAL" />
+    <result column="hospDepositRemark" property="hospdepositremark" jdbcType="VARCHAR" />
+    <result column="hospDepositTime" property="hospdeposittime" jdbcType="TIMESTAMP" />
+    <result column="hospLoginId" property="hosploginid" jdbcType="INTEGER" />
+    <result column="userLoginId" property="userloginid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    hospDepositId, hospDepositNum, hospDepositRemark, hospDepositTime, hospLoginId, userLoginId
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HosptitaldepositExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from hosptitaldeposit
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from hosptitaldeposit
+    where hospDepositId = #{hospdepositid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from hosptitaldeposit
+    where hospDepositId = #{hospdepositid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.HosptitaldepositExample" >
+    delete from hosptitaldeposit
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Hosptitaldeposit" >
+    insert into hosptitaldeposit (hospDepositId, hospDepositNum, hospDepositRemark, 
+      hospDepositTime, hospLoginId, userLoginId
+      )
+    values (#{hospdepositid,jdbcType=INTEGER}, #{hospdepositnum,jdbcType=DECIMAL}, #{hospdepositremark,jdbcType=VARCHAR}, 
+      #{hospdeposittime,jdbcType=TIMESTAMP}, #{hosploginid,jdbcType=INTEGER}, #{userloginid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Hosptitaldeposit" >
+    insert into hosptitaldeposit
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hospdepositid != null" >
+        hospDepositId,
+      </if>
+      <if test="hospdepositnum != null" >
+        hospDepositNum,
+      </if>
+      <if test="hospdepositremark != null" >
+        hospDepositRemark,
+      </if>
+      <if test="hospdeposittime != null" >
+        hospDepositTime,
+      </if>
+      <if test="hosploginid != null" >
+        hospLoginId,
+      </if>
+      <if test="userloginid != null" >
+        userLoginId,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hospdepositid != null" >
+        #{hospdepositid,jdbcType=INTEGER},
+      </if>
+      <if test="hospdepositnum != null" >
+        #{hospdepositnum,jdbcType=DECIMAL},
+      </if>
+      <if test="hospdepositremark != null" >
+        #{hospdepositremark,jdbcType=VARCHAR},
+      </if>
+      <if test="hospdeposittime != null" >
+        #{hospdeposittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hosploginid != null" >
+        #{hosploginid,jdbcType=INTEGER},
+      </if>
+      <if test="userloginid != null" >
+        #{userloginid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.HosptitaldepositExample" resultType="java.lang.Integer" >
+    select count(*) from hosptitaldeposit
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update hosptitaldeposit
+    <set >
+      <if test="record.hospdepositid != null" >
+        hospDepositId = #{record.hospdepositid,jdbcType=INTEGER},
+      </if>
+      <if test="record.hospdepositnum != null" >
+        hospDepositNum = #{record.hospdepositnum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.hospdepositremark != null" >
+        hospDepositRemark = #{record.hospdepositremark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hospdeposittime != null" >
+        hospDepositTime = #{record.hospdeposittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.hosploginid != null" >
+        hospLoginId = #{record.hosploginid,jdbcType=INTEGER},
+      </if>
+      <if test="record.userloginid != null" >
+        userLoginId = #{record.userloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update hosptitaldeposit
+    set hospDepositId = #{record.hospdepositid,jdbcType=INTEGER},
+      hospDepositNum = #{record.hospdepositnum,jdbcType=DECIMAL},
+      hospDepositRemark = #{record.hospdepositremark,jdbcType=VARCHAR},
+      hospDepositTime = #{record.hospdeposittime,jdbcType=TIMESTAMP},
+      hospLoginId = #{record.hosploginid,jdbcType=INTEGER},
+      userLoginId = #{record.userloginid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Hosptitaldeposit" >
+    update hosptitaldeposit
+    <set >
+      <if test="hospdepositnum != null" >
+        hospDepositNum = #{hospdepositnum,jdbcType=DECIMAL},
+      </if>
+      <if test="hospdepositremark != null" >
+        hospDepositRemark = #{hospdepositremark,jdbcType=VARCHAR},
+      </if>
+      <if test="hospdeposittime != null" >
+        hospDepositTime = #{hospdeposittime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="hosploginid != null" >
+        hospLoginId = #{hosploginid,jdbcType=INTEGER},
+      </if>
+      <if test="userloginid != null" >
+        userLoginId = #{userloginid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where hospDepositId = #{hospdepositid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Hosptitaldeposit" >
+    update hosptitaldeposit
+    set hospDepositNum = #{hospdepositnum,jdbcType=DECIMAL},
+      hospDepositRemark = #{hospdepositremark,jdbcType=VARCHAR},
+      hospDepositTime = #{hospdeposittime,jdbcType=TIMESTAMP},
+      hospLoginId = #{hosploginid,jdbcType=INTEGER},
+      userLoginId = #{userloginid,jdbcType=INTEGER}
+    where hospDepositId = #{hospdepositid,jdbcType=INTEGER}
+  </update>
+</mapper>

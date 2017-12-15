@@ -107,7 +107,7 @@ public class DoctorNotificationController {
 		
 	}
 	@RequestMapping(value="/updateallnotificationtoread", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value="将该用户的所有未读通知置为已读",httpMethod="psot",notes="将该用户的所有未读通知置为已读")
+	@ApiOperation(value="将该用户的所有未读通知置为已读",httpMethod="POST",notes="将该用户的所有未读通知置为已读")
 	public @ResponseBody String updateAllNotificationToRead(
 			@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid
 			)throws Exception{
@@ -143,7 +143,7 @@ public class DoctorNotificationController {
 		
 	}
 	@RequestMapping(value="/deleteallreceivenotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value="删除接收的所有通知",httpMethod="psot",notes="删除接收的所有通知")
+	@ApiOperation(value="删除接收的所有通知",httpMethod="POST",notes="删除接收的所有通知")
 	public @ResponseBody String deleteAllNotification(
 			@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid
 			)throws Exception{

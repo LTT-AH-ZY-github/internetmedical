@@ -48,7 +48,7 @@ public class HospitalUnitPriceServiceImpl implements HospitalUnitPriceService {
 	* @see com.medical.service.iface.hospital.HospitalUnitPriceService#creatUnitPrice(com.medical.po.Hospitalunitprice)  
 	*/  
 	@Override
-	public String creatUnitPrice(Hospitalunitprice hospitalunitprice) {
+	public String creatUnitPrice(Hospitalunitprice hospitalunitprice) throws Exception{
 		int hosploginid = hospitalunitprice.getHosploginid();
 		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
 		if (hosplogininfo==null) {

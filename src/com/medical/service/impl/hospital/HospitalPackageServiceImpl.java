@@ -53,7 +53,7 @@ public class HospitalPackageServiceImpl implements HospitalPackageService {
 	* @see com.medical.service.iface.hospital.HospitalPackageService#addPackage(com.medical.po.Hospitalpackage)  
 	*/  
 	@Override
-	public String addPackage(Hospitalpackage hospitalpackage) {
+	public String addPackage(Hospitalpackage hospitalpackage) throws Exception{
 		int hosploginid = hospitalpackage.getHosploginid();
 		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
 		if (hosplogininfo==null) {
@@ -76,7 +76,7 @@ public class HospitalPackageServiceImpl implements HospitalPackageService {
 	* @see com.medical.service.iface.hospital.HospitalPackageService#listPackages(java.lang.Integer, java.lang.Integer, java.lang.Integer)  
 	*/  
 	@Override
-	public String listPackages(Integer hosploginid, Integer limit, Integer offset) {
+	public String listPackages(Integer hosploginid, Integer limit, Integer offset) throws Exception{
 		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
 		if (hosplogininfo==null) {
 			return DataResult.error("账号不存在");
@@ -108,7 +108,7 @@ public class HospitalPackageServiceImpl implements HospitalPackageService {
 	* @see com.medical.service.iface.hospital.HospitalPackageService#editPackage(com.medical.po.Hospitalpackage)  
 	*/  
 	@Override
-	public String editPackage(Hospitalpackage hospitalpackage) {
+	public String editPackage(Hospitalpackage hospitalpackage) throws Exception{
 		int hosploginid = hospitalpackage.getHosploginid();
 		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
 		if (hosplogininfo==null) {
@@ -139,7 +139,7 @@ public class HospitalPackageServiceImpl implements HospitalPackageService {
 	* @see com.medical.service.iface.hospital.HospitalPackageService#deletePackage(java.lang.Integer, java.lang.Integer)  
 	*/  
 	@Override
-	public String deletePackage(Integer hosploginid, Integer packageid) {
+	public String deletePackage(Integer hosploginid, Integer packageid) throws Exception{
 		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
 		if (hosplogininfo==null) {
 			return DataResult.error("账号不存在");

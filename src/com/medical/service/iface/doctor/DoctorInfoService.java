@@ -233,6 +233,15 @@ public interface DoctorInfoService {
 	 */
 	String setLocation(String time) throws Exception;
 
+	/**
+	 * @Title: getReviewInfo
+	 * @Description: TODO
+	 * @param docloginid
+	 * @return
+	 * @return: String
+	 */
+	String getReviewInfo(Integer docloginid)throws Exception;
+
 	
 
 

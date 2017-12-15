@@ -46,15 +46,16 @@ public class DoctorPurseController {
 	@ApiOperation(value = "修改支付宝账号", httpMethod = "POST", notes = "修改支付宝账号", produces = "application/json")
 	public String updatealipayaccount(
 			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid,
-			@ApiParam(name="alipayaccount",required=true,value="支付宝账号")@RequestParam String alipayaccount
-	) throws Exception{
+			@ApiParam(name="alipayaccount",value="支付宝账号")@RequestParam(required=false) String alipayaccount,
+			@ApiParam(name="alipayname",value="支付宝账号")@RequestParam(required=false) String alipayname
+			) throws Exception{
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
-		if (StringUtils.isEmpty(alipayaccount)) {
-			return DataResult.error("支付宝账号为空");
+		if (StringUtils.isBlank(alipayaccount) && StringUtils.isBlank(alipayname)) {
+			return DataResult.error("支付宝账号和姓名不可同时为空");
 		}
-		return doctorPurseService.updateAliPayAccount(docloginid, alipayaccount);
+		return doctorPurseService.updateAliPayAccount(docloginid, alipayaccount,alipayname);
 	}
 	@RequestMapping(value = "/getbalance", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取账户余额", httpMethod = "POST", notes = "获取账户余额", produces = "application/json")

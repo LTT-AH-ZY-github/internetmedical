@@ -23,10 +23,11 @@ public interface DoctorPurseService {
 	 * @Description: 更新支付宝账户
 	 * @param docloginid 医生登录id
 	 * @param alipayaccount 支付宝账号
+	 * @param alipayname 
 	 * @return
 	 * @return: String
 	 */
-	String updateAliPayAccount(Integer docloginid, String alipayaccount) throws Exception;
+	String updateAliPayAccount(Integer docloginid, String alipayaccount, String alipayname) throws Exception;
 
 	
 	/**

@@ -66,6 +66,6 @@ public interface UserHomeService {
 	 * @return
 	 * @return: String
 	 */
-	String getEvaluation(Integer docloginid, Integer pageNo);
+	String getEvaluation(Integer docloginid, Integer pageNo) throws Exception;
 
 }

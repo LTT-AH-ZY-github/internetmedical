@@ -24,6 +24,7 @@
     <result column="hospAdrLat" property="hospadrlat" jdbcType="VARCHAR" />
     <result column="hospAlipayAccount" property="hospalipayaccount" jdbcType="VARCHAR" />
     <result column="hospPurseBalance" property="hosppursebalance" jdbcType="DECIMAL" />
+    <result column="hospAlipayName" property="hospalipayname" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -87,7 +88,7 @@
     hospId, hospName, hospAdr, hospPhone, hospAbs, hospGrade, hospDept, hospFeature, 
     hospRegDocQuaCer, hospRegIdCard, hospOrgCodeCer, hospPracLicense, hospLegalCer, hospLoginId, 
     hospAdrProvince, hospAdrCity, hospAdrArea, hospAdrOther, hospAdrLon, hospAdrLat, 
-    hospAlipayAccount, hospPurseBalance
+    hospAlipayAccount, hospPurseBalance, hospAlipayName
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HospinfoExample" >
     select
@@ -127,7 +128,7 @@
       hospLegalCer, hospLoginId, hospAdrProvince, 
       hospAdrCity, hospAdrArea, hospAdrOther, 
       hospAdrLon, hospAdrLat, hospAlipayAccount, 
-      hospPurseBalance)
+      hospPurseBalance, hospAlipayName)
     values (#{hospid,jdbcType=INTEGER}, #{hospname,jdbcType=CHAR}, #{hospadr,jdbcType=VARCHAR}, 
       #{hospphone,jdbcType=CHAR}, #{hospabs,jdbcType=VARCHAR}, #{hospgrade,jdbcType=CHAR}, 
       #{hospdept,jdbcType=VARCHAR}, #{hospfeature,jdbcType=VARCHAR}, #{hospregdocquacer,jdbcType=VARCHAR}, 
@@ -135,7 +136,7 @@
       #{hosplegalcer,jdbcType=VARCHAR}, #{hosploginid,jdbcType=INTEGER}, #{hospadrprovince,jdbcType=VARCHAR}, 
       #{hospadrcity,jdbcType=VARCHAR}, #{hospadrarea,jdbcType=VARCHAR}, #{hospadrother,jdbcType=VARCHAR}, 
       #{hospadrlon,jdbcType=VARCHAR}, #{hospadrlat,jdbcType=VARCHAR}, #{hospalipayaccount,jdbcType=VARCHAR}, 
-      #{hosppursebalance,jdbcType=DECIMAL})
+      #{hosppursebalance,jdbcType=DECIMAL}, #{hospalipayname,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Hospinfo" >
     insert into hospinfo
@@ -206,6 +207,9 @@
       <if test="hosppursebalance != null" >
         hospPurseBalance,
       </if>
+      <if test="hospalipayname != null" >
+        hospAlipayName,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="hospid != null" >
@@ -273,6 +277,9 @@
       </if>
       <if test="hosppursebalance != null" >
         #{hosppursebalance,jdbcType=DECIMAL},
+      </if>
+      <if test="hospalipayname != null" >
+        #{hospalipayname,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -351,6 +358,9 @@
       <if test="record.hosppursebalance != null" >
         hospPurseBalance = #{record.hosppursebalance,jdbcType=DECIMAL},
       </if>
+      <if test="record.hospalipayname != null" >
+        hospAlipayName = #{record.hospalipayname,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -379,7 +389,8 @@
       hospAdrLon = #{record.hospadrlon,jdbcType=VARCHAR},
       hospAdrLat = #{record.hospadrlat,jdbcType=VARCHAR},
       hospAlipayAccount = #{record.hospalipayaccount,jdbcType=VARCHAR},
-      hospPurseBalance = #{record.hosppursebalance,jdbcType=DECIMAL}
+      hospPurseBalance = #{record.hosppursebalance,jdbcType=DECIMAL},
+      hospAlipayName = #{record.hospalipayname,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -450,6 +461,9 @@
       <if test="hosppursebalance != null" >
         hospPurseBalance = #{hosppursebalance,jdbcType=DECIMAL},
       </if>
+      <if test="hospalipayname != null" >
+        hospAlipayName = #{hospalipayname,jdbcType=VARCHAR},
+      </if>
     </set>
     where hospId = #{hospid,jdbcType=INTEGER}
   </update>
@@ -475,7 +489,8 @@
       hospAdrLon = #{hospadrlon,jdbcType=VARCHAR},
       hospAdrLat = #{hospadrlat,jdbcType=VARCHAR},
       hospAlipayAccount = #{hospalipayaccount,jdbcType=VARCHAR},
-      hospPurseBalance = #{hosppursebalance,jdbcType=DECIMAL}
+      hospPurseBalance = #{hosppursebalance,jdbcType=DECIMAL},
+      hospAlipayName = #{hospalipayname,jdbcType=VARCHAR}
     where hospId = #{hospid,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -41,7 +41,7 @@ public interface HospitalOrderService {
 	/**
 	 * 结束三方订单
 	 * */
-	String updateUserOrderToEnd(Integer hosploginid, Integer userorderid);
+	String updateUserOrderToEnd(Integer hosploginid, Integer userorderid) throws Exception;
 	/**
 	 * 创建会诊
 	 * @param orderabs 

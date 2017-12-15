@@ -2,8 +2,11 @@ package com.medical.service.impl.user;
 
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,8 +27,10 @@ import com.medical.po.Userlogininfo;
 import com.medical.po.Usersick;
 import com.medical.po.UsersickCustom;
 import com.medical.service.iface.CommonService;
+import com.medical.service.iface.DeleteFileService;
 import com.medical.service.iface.user.UserSickService;
 import com.medical.utils.PictureTool;
+import com.medical.utils.StringTools;
 import com.medical.utils.result.DataResult;
 
 
@@ -47,6 +52,8 @@ public class UserSickServiceImpl implements UserSickService {
 	private CommonService commonService;
 	@Autowired
 	private FamilyinfoMapper familyinfoMapper;
+	@Autowired
+	private DeleteFileService deleteFileService;
 	
 	/* (非 Javadoc)  
 	* <p>Title: addSick</p>  
@@ -103,7 +110,7 @@ public class UserSickServiceImpl implements UserSickService {
 	* @see com.medical.service.iface.user.UserSickService#listSicks(java.lang.Integer, java.lang.Integer, java.lang.Integer)  
 	*/  
 	@Override
-	public String listSicks(Integer userloginid, Integer type,Integer page) {
+	public String listSicks(Integer userloginid, Integer type,Integer page) throws Exception{
 		Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
 		if (user == null) {
 			return DataResult.error("账号不存在");
@@ -124,7 +131,7 @@ public class UserSickServiceImpl implements UserSickService {
 	* @see com.medical.service.iface.user.UserSickService#getSickDetail(java.lang.Integer, java.lang.Integer)  
 	*/  
 	@Override
-	public String getSickDetail(Integer userloginid,Integer usersickid) {
+	public String getSickDetail(Integer userloginid,Integer usersickid) throws Exception{
 		Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
 		if (user == null) {
 			return DataResult.error("账号不存在");
@@ -162,6 +169,10 @@ public class UserSickServiceImpl implements UserSickService {
 			return DataResult.error("账号信息不匹配");
 		}*/
 		// 发布状态 删除相关医生
+		String path = usersick.getUsersickpic();
+		if (StringUtils.isNotBlank(path)) {
+			deleteFileService.addFileName(path);
+		}
 		Usersick sickrecord = new Usersick();
 		sickrecord.setUsersickid(usersickid);
 		sickrecord.setUsersickisdelete(true);
@@ -170,8 +181,6 @@ public class UserSickServiceImpl implements UserSickService {
 			boolean preResult = preorderMapperCustom.deleteAllByUserSickId(usersickid)>0;
 			result = preResult && result;
 		}   
-		
-		
 		if (result) {
 			return DataResult.success("删除成功");
 		} else {
@@ -201,6 +210,18 @@ public class UserSickServiceImpl implements UserSickService {
 		int userSickStateId = sick.getUsersickstateid();
 		if (userSickStateId == 1) {
 			String oldpath = usersickCustom.getUsersickpic();
+			/*String savepath = sick.getUsersickpic();
+			if (StringUtils.isBlank(savepath)) {
+				savepath="";
+			}
+			
+			if (StringUtils.isBlank(oldpath)) {
+				oldpath="";
+			}
+			String[] saves = savepath.split(",");
+			String[] olds = oldpath.split(",");
+			StringTools.getParamOneDifferent(saves, olds);*/
+			
 			String path = PictureTool.SavePictures(pictureFile);
 			if (oldpath != null) {
 				if (path != null) {
@@ -272,7 +293,6 @@ public class UserSickServiceImpl implements UserSickService {
 			int result = usersickMapper.updateByPrimaryKeySelective(user);
 			Map<String, Object> resultMap = commonService.listRecommendDoctors(usersick.getUsersickdesc(),
 					usersick.getUsersickprimarydept(), usersick.getUsersickseconddept());
-			boolean flag = false;
 			if ("1".equals(resultMap.get("state"))) {
 				List<Doctorinfo> list = (List<Doctorinfo>) resultMap.get("data");
 				for (Doctorinfo doctorinfo : list) {
@@ -283,20 +303,11 @@ public class UserSickServiceImpl implements UserSickService {
 					preorder.setPreordertime(new Date());
 					int preResult = preorderMapper.insertSelective(preorder);
 					if (preResult <= 0) {
-						flag = true;
 						break;
 					}
 				}
-				if (flag) {
-					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-					return DataResult.error("发布病情失败");
-
-				}
-			} else {
-				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-				return DataResult.error("发布病情失败");
 			}
-			if (result > 0 && !flag) {
+			if (result > 0) {
 				return DataResult.success("发布病情成功");
 			} else {
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

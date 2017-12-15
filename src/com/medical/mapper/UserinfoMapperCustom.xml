@@ -14,7 +14,7 @@
   	<!--管理员根据用户账号类型查询用户  -->
   	<select id="selectByUserLoginTypeInAdmin" parameterType="java.lang.Integer"
   		 resultType="map">
-  		SELECT b.userloginid,b.userloginphone,b.userloginpix,a.username,a.usermale,a.usercardnum,b.userlogintype,c.accounttypename as userlogintypename 
+  		SELECT b.userloginid,b.userloginphone,b.userloginpix,a.username,a.usermale,a.usercardnum,b.userlogintype,c.accounttypename as userlogintypename
   		FROM userinfo as a 
   			left join userlogininfo as b on b.userloginid = a.userloginid
   			left join accounttype as c  on b.userLoginType= c.accounttypeid

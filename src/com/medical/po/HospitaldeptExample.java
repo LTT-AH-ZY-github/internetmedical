@@ -374,53 +374,173 @@ public class HospitaldeptExample {
             return (Criteria) this;
         }
 
-        public Criteria andHospdeptischeckEqualTo(Boolean value) {
+        public Criteria andHospdeptischeckEqualTo(Integer value) {
             addCriterion("hospDeptIsCheck =", value, "hospdeptischeck");
             return (Criteria) this;
         }
 
-        public Criteria andHospdeptischeckNotEqualTo(Boolean value) {
+        public Criteria andHospdeptischeckNotEqualTo(Integer value) {
             addCriterion("hospDeptIsCheck <>", value, "hospdeptischeck");
             return (Criteria) this;
         }
 
-        public Criteria andHospdeptischeckGreaterThan(Boolean value) {
+        public Criteria andHospdeptischeckGreaterThan(Integer value) {
             addCriterion("hospDeptIsCheck >", value, "hospdeptischeck");
             return (Criteria) this;
         }
 
-        public Criteria andHospdeptischeckGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andHospdeptischeckGreaterThanOrEqualTo(Integer value) {
             addCriterion("hospDeptIsCheck >=", value, "hospdeptischeck");
             return (Criteria) this;
         }
 
-        public Criteria andHospdeptischeckLessThan(Boolean value) {
+        public Criteria andHospdeptischeckLessThan(Integer value) {
             addCriterion("hospDeptIsCheck <", value, "hospdeptischeck");
             return (Criteria) this;
         }
 
-        public Criteria andHospdeptischeckLessThanOrEqualTo(Boolean value) {
+        public Criteria andHospdeptischeckLessThanOrEqualTo(Integer value) {
             addCriterion("hospDeptIsCheck <=", value, "hospdeptischeck");
             return (Criteria) this;
         }
 
-        public Criteria andHospdeptischeckIn(List<Boolean> values) {
+        public Criteria andHospdeptischeckIn(List<Integer> values) {
             addCriterion("hospDeptIsCheck in", values, "hospdeptischeck");
             return (Criteria) this;
         }
 
-        public Criteria andHospdeptischeckNotIn(List<Boolean> values) {
+        public Criteria andHospdeptischeckNotIn(List<Integer> values) {
             addCriterion("hospDeptIsCheck not in", values, "hospdeptischeck");
             return (Criteria) this;
         }
 
-        public Criteria andHospdeptischeckBetween(Boolean value1, Boolean value2) {
+        public Criteria andHospdeptischeckBetween(Integer value1, Integer value2) {
             addCriterion("hospDeptIsCheck between", value1, value2, "hospdeptischeck");
             return (Criteria) this;
         }
 
-        public Criteria andHospdeptischeckNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andHospdeptischeckNotBetween(Integer value1, Integer value2) {
             addCriterion("hospDeptIsCheck not between", value1, value2, "hospdeptischeck");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmitterIsNull() {
+            addCriterion("hospDeptSubmitter is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmitterIsNotNull() {
+            addCriterion("hospDeptSubmitter is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmitterEqualTo(Integer value) {
+            addCriterion("hospDeptSubmitter =", value, "hospdeptsubmitter");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmitterNotEqualTo(Integer value) {
+            addCriterion("hospDeptSubmitter <>", value, "hospdeptsubmitter");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmitterGreaterThan(Integer value) {
+            addCriterion("hospDeptSubmitter >", value, "hospdeptsubmitter");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmitterGreaterThanOrEqualTo(Integer value) {
+            addCriterion("hospDeptSubmitter >=", value, "hospdeptsubmitter");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmitterLessThan(Integer value) {
+            addCriterion("hospDeptSubmitter <", value, "hospdeptsubmitter");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmitterLessThanOrEqualTo(Integer value) {
+            addCriterion("hospDeptSubmitter <=", value, "hospdeptsubmitter");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmitterIn(List<Integer> values) {
+            addCriterion("hospDeptSubmitter in", values, "hospdeptsubmitter");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmitterNotIn(List<Integer> values) {
+            addCriterion("hospDeptSubmitter not in", values, "hospdeptsubmitter");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmitterBetween(Integer value1, Integer value2) {
+            addCriterion("hospDeptSubmitter between", value1, value2, "hospdeptsubmitter");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmitterNotBetween(Integer value1, Integer value2) {
+            addCriterion("hospDeptSubmitter not between", value1, value2, "hospdeptsubmitter");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmittertypeIsNull() {
+            addCriterion("hospDeptSubmitterType is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmittertypeIsNotNull() {
+            addCriterion("hospDeptSubmitterType is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmittertypeEqualTo(Integer value) {
+            addCriterion("hospDeptSubmitterType =", value, "hospdeptsubmittertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmittertypeNotEqualTo(Integer value) {
+            addCriterion("hospDeptSubmitterType <>", value, "hospdeptsubmittertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmittertypeGreaterThan(Integer value) {
+            addCriterion("hospDeptSubmitterType >", value, "hospdeptsubmittertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmittertypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("hospDeptSubmitterType >=", value, "hospdeptsubmittertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmittertypeLessThan(Integer value) {
+            addCriterion("hospDeptSubmitterType <", value, "hospdeptsubmittertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmittertypeLessThanOrEqualTo(Integer value) {
+            addCriterion("hospDeptSubmitterType <=", value, "hospdeptsubmittertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmittertypeIn(List<Integer> values) {
+            addCriterion("hospDeptSubmitterType in", values, "hospdeptsubmittertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmittertypeNotIn(List<Integer> values) {
+            addCriterion("hospDeptSubmitterType not in", values, "hospdeptsubmittertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmittertypeBetween(Integer value1, Integer value2) {
+            addCriterion("hospDeptSubmitterType between", value1, value2, "hospdeptsubmittertype");
+            return (Criteria) this;
+        }
+
+        public Criteria andHospdeptsubmittertypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("hospDeptSubmitterType not between", value1, value2, "hospdeptsubmittertype");
             return (Criteria) this;
         }
     }

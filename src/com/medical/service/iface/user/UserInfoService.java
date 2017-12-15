@@ -21,11 +21,15 @@ public interface UserInfoService {
 	 *            经度
 	 * @param userloginlat
 	 *            纬度
+	 * @param userloginother 
+	 * @param userloginarea 
+	 * @param userlogincity 
+	 * @param userloginprovince 
 	 * @return
 	 * @throws Exception
 	 * @return: String
 	 */
-	String updateLocation(Integer userloginid, String userloginlon, String userloginlat) throws Exception;
+	String updateLocation(Integer userloginid, String userloginlon, String userloginlat, String userloginprovince, String userlogincity, String userloginarea, String userloginother) throws Exception;
 
 	/**
 	 * @Title: updateChannelId
@@ -144,11 +148,12 @@ public interface UserInfoService {
 	 * @Description: 删除亲属信息
 	 * @param familyid
 	 *            亲属id
+	 * @param userloginid 
 	 * @return
 	 * @throws Exception
 	 * @return: String
 	 */
-	String deleteFamily(Integer familyid) throws Exception;
+	String deleteFamily(Integer familyid, Integer userloginid) throws Exception;
 
 	/**
 	 * @Title: updateInfoToCancelReview
@@ -158,6 +163,15 @@ public interface UserInfoService {
 	 * @return
 	 * @return: String
 	 */
-	String updateInfoToCancelReview(Integer userloginid);
+	String updateInfoToCancelReview(Integer userloginid) throws Exception;
+
+	/**
+	 * @Title: getReviewInfo
+	 * @Description: TODO
+	 * @param userloginid
+	 * @return
+	 * @return: String
+	 */
+	String getReviewInfo(Integer userloginid) throws Exception;
 
 }

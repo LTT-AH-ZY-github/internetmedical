@@ -47,6 +47,8 @@ public class Hospinfo {
 
     private BigDecimal hosppursebalance;
 
+    private String hospalipayname;
+
     public Integer getHospid() {
         return hospid;
     }
@@ -221,5 +223,13 @@ public class Hospinfo {
 
     public void setHosppursebalance(BigDecimal hosppursebalance) {
         this.hosppursebalance = hosppursebalance;
+    }
+
+    public String getHospalipayname() {
+        return hospalipayname;
+    }
+
+    public void setHospalipayname(String hospalipayname) {
+        this.hospalipayname = hospalipayname == null ? null : hospalipayname.trim();
     }
 }

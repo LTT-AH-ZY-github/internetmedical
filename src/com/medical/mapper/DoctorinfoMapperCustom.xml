@@ -3,7 +3,7 @@
 <mapper namespace="com.medical.mapper.DoctorinfoMapperCustom" >
 	
 	<select id="selectAllDoctorInAdmin"  resultType="map">
-  		select a.docloginid,b.dochuanxinaccount,b.docloginpix,b.docloginphone,a.docname,a.docmale,a.doctitle,a.dochosp,a.docalipayaccount,a.docpursebalance
+  		select a.docloginid,b.dochuanxinaccount,b.docloginpix,b.docloginphone,a.docname,a.docmale,a.doctitle,a.dochosp,a.docalipayaccount,a.docpursebalance,a.docalipayname
   		from doctorinfo as a 
   			left join  doctorlogininfo as b on a.docloginid= b.docloginid
   			

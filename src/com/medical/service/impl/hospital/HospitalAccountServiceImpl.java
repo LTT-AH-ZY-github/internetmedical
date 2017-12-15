@@ -27,7 +27,7 @@ import com.medical.utils.Global;
 import com.medical.utils.MD5Util;
 import com.medical.utils.TokeManager;
 import com.medical.utils.result.DataResult;
-import com.netease.code.MsgCode;
+import com.netease.utils.MsgCode;
 
 public class HospitalAccountServiceImpl implements HospitalAccountService{
 	@Autowired
@@ -40,7 +40,7 @@ public class HospitalAccountServiceImpl implements HospitalAccountService{
 	private  HosplogMapper hosplogMapper;
 	// 查找账号是否注册
 		@Override
-		public String findAccountExit(String hosploginphone) {
+		public String findAccountExit(String hosploginphone) throws Exception{
 			// 查询医生登录表
 			Hosplogininfo hosplogininfo = hosplogininfoMapperCustom.selectByHospLoginPhone(hosploginphone);
 
@@ -127,6 +127,7 @@ public class HospitalAccountServiceImpl implements HospitalAccountService{
 				Map<String, Object> map = new HashMap<>();
 				map.put("hosploginid", hosplogininfo.getHosploginid());
 				map.put("huanxinaccount", hosplogininfo.getHosphuanxinaccount());
+				map.put("hosploginpix", hosplogininfo.getHosploginpix());
 				return DataResult.success("登录成功",map);
 			} else {
 				return DataResult.error("登录失败");

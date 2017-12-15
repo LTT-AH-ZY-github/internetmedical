@@ -13,6 +13,8 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.medical.mapper.AccounttypeMapper;
+import com.medical.mapper.AdminexamineMapperCustom;
 import com.medical.mapper.DoctoraddressMapper;
 import com.medical.mapper.DoctoraddressMapperCustom;
 import com.medical.mapper.DoctorcalendarMapper;
@@ -21,6 +23,8 @@ import com.medical.mapper.DoctorinfoMapper;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.HospitaldeptMapperCustom;
+import com.medical.po.Accounttype;
+import com.medical.po.Adminexamine;
 import com.medical.po.Doctoraddress;
 import com.medical.po.Doctorcalendar;
 import com.medical.po.Doctorinfo;
@@ -63,7 +67,11 @@ public class DoctorInfoServiceImpl implements DoctorInfoService {
 	private CommonService commonService;
 	@Autowired 
 	private SenderNotificationService senderNotificationService;
-
+	@Autowired 
+	private  AccounttypeMapper accounttypeMapper;
+	@Autowired
+	private AdminexamineMapperCustom adminexamineMapperCustom;
+ 
 	/*
 	 * (非 Javadoc) <p>Title: updatePix</p> <p>Description: 修改头像</p>
 	 * 
@@ -891,6 +899,38 @@ public class DoctorInfoServiceImpl implements DoctorInfoService {
 			}
 		}
 		return "success";
+	}
+
+	/* (非 Javadoc)  
+	* <p>Title: getReviewInfo</p>  
+	* <p>Description: </p>  
+	* @param docloginid
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorInfoService#getReviewInfo(java.lang.Integer)  
+	*/  
+	@Override
+	public String getReviewInfo(Integer docloginid) throws Exception {
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+			if (doctorlogininfo==null) {
+			return DataResult.error("账户不存在");
+		}
+		int userlogintype =  doctorlogininfo.getDoclogintype();
+		Accounttype accounttype = accounttypeMapper.selectByPrimaryKey(userlogintype);
+		Map<String, Object> map = new HashMap<>(16);
+		map.put("type", userlogintype);
+		map.put("typename", accounttype.getAccounttypename());
+		if (userlogintype==3) {
+			List<Adminexamine> list = adminexamineMapperCustom.selectByExamineTargetIdAndTypeOrderByTime(docloginid, 2);
+			if (list!=null && list.size()>0) {
+				map.put("msg", list.get(0).getExamineideas());
+			}else {
+				map.put("msg", "");
+			}
+		}else {
+			map.put("msg", "");
+		}
+		return DataResult.success("获取成功", map);
 	}
 
 }

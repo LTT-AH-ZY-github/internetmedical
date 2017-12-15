@@ -1,7 +1,11 @@
 package com.medical.utils;
 
 import java.io.File;
+import java.util.Date;
+
 import org.apache.commons.lang.StringUtils;
+
+import com.medical.po.Deletefile;
 
 
 
@@ -15,8 +19,7 @@ public class FileUtil {
      * @return: String
      */
     public static String getFileName(String fullpath) { 
-    	
-        if (StringUtils.isEmpty(fullpath)) {  
+    	if (StringUtils.isEmpty(fullpath)) {  
             return "";  
         }  
         int lastindex = fullpath.lastIndexOf(File.separator);  
@@ -27,4 +30,13 @@ public class FileUtil {
   
         return name;  
     } 
+    
+    public static String getFileNameFromUrl(String url) {
+
+        String filename = url.substring(url.lastIndexOf('/') + 1);
+
+        return filename;
+    }
+    
+    
 }

@@ -23,7 +23,7 @@ import com.medical.utils.Global;
 import com.medical.utils.MD5Util;
 import com.medical.utils.TokeManager;
 import com.medical.utils.result.DataResult;
-import com.netease.code.MsgCode;
+import com.netease.utils.MsgCode;
 
 /**
  * @ClassName: UserAccountServiceImpl
@@ -89,18 +89,16 @@ public class UserAccountServiceImpl implements UserAccountService {
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public String createUserAccount(String phone, String password, String code) throws Exception {
-		boolean msgResult = MsgCode.checkMsg(phone, code);
-		if (!msgResult) {
-			return DataResult.error("验证码错误");
-		}
-		// 查询医生登录表
-		// int doctorCount = doctorlogininfoMapperCustom.findDocCountByPhone(phone);
 		// 查询病人登录表
 		int userCount = userlogininfoMapperCustom.findUserCountByPhone(phone);
 		if (userCount > 0) {
 			return DataResult.error("该号码已注册");
 		}
-		// 用户登录信息
+		boolean msgResult = MsgCode.checkMsg(phone, code);
+		if (!msgResult) {
+			return DataResult.error("验证码错误");
+		}
+        // 用户登录信息
 		Userlogininfo userlogininfoRecord = new Userlogininfo();
 		userlogininfoRecord.setUserloginphone(phone);
 		String[] str = MD5Util.generate(password);

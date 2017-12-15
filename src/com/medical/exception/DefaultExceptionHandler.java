@@ -28,15 +28,9 @@ public class DefaultExceptionHandler implements HandlerExceptionResolver {
         response.setCharacterEncoding("UTF-8"); //避免乱码
         response.setHeader("Cache-Control", "no-cache, must-revalidate");
         try {
-			MyException myException = (MyException)ex;
-			myException.getCode();
-			 System.out.println("状态吗"+myException.getCode());
-		} catch (Exception e) {
-			log.error("系统错误"+ex);
-		}
-        try {
             //response.getWriter().write("{\"success\":false,\"msg\":\"" + ex.getMessage() + "\"}");
-        	 System.out.println("状态吗"+ex.toString());
+        	System.out.println("状态吗"+ex.toString());
+        	log.error(ex);
         	response.getWriter().write(DataResult.error(ex.getMessage()));
         } catch (IOException e) {
            log.error("与客户端通讯异常:"+ e.getMessage(), e);

@@ -39,6 +39,7 @@
     <result column="docDept" property="docdept" jdbcType="VARCHAR" />
     <result column="docAlipayAccount" property="docalipayaccount" jdbcType="VARCHAR" />
     <result column="docPurseBalance" property="docpursebalance" jdbcType="DECIMAL" />
+    <result column="docAlipayName" property="docalipayname" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -104,7 +105,7 @@
     docHospOther, docHospLon, docHospLat, docPrimaryDept, docSecondDept, docTitlePhoto, 
     docWorkCardPhoto, docQualPhoto, docExpert, docOtherPhoto, docAllDay, docAbs, docAddressLocation, 
     docAddressProvince, docAddressCity, docAddressArea, docAddressOther, docAddressLon, 
-    docAddressLat, docDept, docAlipayAccount, docPurseBalance
+    docAddressLat, docDept, docAlipayAccount, docPurseBalance, docAlipayName
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.DoctorinfoExample" >
     select
@@ -149,7 +150,8 @@
       docAddressLocation, docAddressProvince, 
       docAddressCity, docAddressArea, docAddressOther, 
       docAddressLon, docAddressLat, docDept, 
-      docAlipayAccount, docPurseBalance)
+      docAlipayAccount, docPurseBalance, docAlipayName
+      )
     values (#{docid,jdbcType=INTEGER}, #{docloginid,jdbcType=INTEGER}, #{docname,jdbcType=VARCHAR}, 
       #{docmale,jdbcType=CHAR}, #{docage,jdbcType=INTEGER}, #{doctitle,jdbcType=VARCHAR}, 
       #{doccardnum,jdbcType=CHAR}, #{doccardphoto,jdbcType=VARCHAR}, #{docbirthdate,jdbcType=DATE}, 
@@ -162,7 +164,8 @@
       #{docaddresslocation,jdbcType=VARCHAR}, #{docaddressprovince,jdbcType=VARCHAR}, 
       #{docaddresscity,jdbcType=VARCHAR}, #{docaddressarea,jdbcType=VARCHAR}, #{docaddressother,jdbcType=VARCHAR}, 
       #{docaddresslon,jdbcType=VARCHAR}, #{docaddresslat,jdbcType=VARCHAR}, #{docdept,jdbcType=VARCHAR}, 
-      #{docalipayaccount,jdbcType=VARCHAR}, #{docpursebalance,jdbcType=DECIMAL})
+      #{docalipayaccount,jdbcType=VARCHAR}, #{docpursebalance,jdbcType=DECIMAL}, #{docalipayname,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Doctorinfo" >
     insert into doctorinfo
@@ -278,6 +281,9 @@
       <if test="docpursebalance != null" >
         docPurseBalance,
       </if>
+      <if test="docalipayname != null" >
+        docAlipayName,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="docid != null" >
@@ -390,6 +396,9 @@
       </if>
       <if test="docpursebalance != null" >
         #{docpursebalance,jdbcType=DECIMAL},
+      </if>
+      <if test="docalipayname != null" >
+        #{docalipayname,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -513,6 +522,9 @@
       <if test="record.docpursebalance != null" >
         docPurseBalance = #{record.docpursebalance,jdbcType=DECIMAL},
       </if>
+      <if test="record.docalipayname != null" >
+        docAlipayName = #{record.docalipayname,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -556,7 +568,8 @@
       docAddressLat = #{record.docaddresslat,jdbcType=VARCHAR},
       docDept = #{record.docdept,jdbcType=VARCHAR},
       docAlipayAccount = #{record.docalipayaccount,jdbcType=VARCHAR},
-      docPurseBalance = #{record.docpursebalance,jdbcType=DECIMAL}
+      docPurseBalance = #{record.docpursebalance,jdbcType=DECIMAL},
+      docAlipayName = #{record.docalipayname,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -672,6 +685,9 @@
       <if test="docpursebalance != null" >
         docPurseBalance = #{docpursebalance,jdbcType=DECIMAL},
       </if>
+      <if test="docalipayname != null" >
+        docAlipayName = #{docalipayname,jdbcType=VARCHAR},
+      </if>
     </set>
     where docId = #{docid,jdbcType=INTEGER}
   </update>
@@ -712,7 +728,8 @@
       docAddressLat = #{docaddresslat,jdbcType=VARCHAR},
       docDept = #{docdept,jdbcType=VARCHAR},
       docAlipayAccount = #{docalipayaccount,jdbcType=VARCHAR},
-      docPurseBalance = #{docpursebalance,jdbcType=DECIMAL}
+      docPurseBalance = #{docpursebalance,jdbcType=DECIMAL},
+      docAlipayName = #{docalipayname,jdbcType=VARCHAR}
     where docId = #{docid,jdbcType=INTEGER}
   </update>
 </mapper>

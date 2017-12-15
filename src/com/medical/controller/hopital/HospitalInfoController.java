@@ -92,7 +92,7 @@ public class HospitalInfoController {
 	}
 	
 	@RequestMapping(value = "/updatepic", method = RequestMethod.POST, consumes = "multipart/form-data", produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "修改用户头像", httpMethod = "POST", consumes = "multipart/form-data", notes = "修改用户头像和昵称")
+	@ApiOperation(value = "修改用户头像", httpMethod = "POST", consumes = "multipart/form-data", notes = "修改用户头像")
 	public String addUserInfo(
 			@ApiParam(name = "pictureFile", required = false, value = "图片") @RequestParam(required = false) MultipartFile pictureFile
 			)
@@ -102,15 +102,15 @@ public class HospitalInfoController {
 		return hospitalInfoService.updateUserPix(pictureFile);
 	}
 	
-	@RequestMapping(value = "/updatepicture", method = RequestMethod.POST, consumes = "multipart/form-data", produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "上传图片", httpMethod = "POST", consumes = "multipart/form-data", notes = "上传图片")
+	@RequestMapping(value = "/updatepicture", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "上传图片", httpMethod = "POST", notes = "上传图片")
 	public String updatepicture(
 			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid,
 			@ApiParam(name = "type", required = true, value = "1为当地质量技术监督部门办理组织机构代码证，2为注册医院执业许可证书照片3为医院法人证明照片4为平台注册人医师资格证照片") @RequestParam Integer type,
-			@ApiParam(name = "pictureFile", required = false, value = "图片") @RequestParam(required = false) MultipartFile[]  pictureFile
+			@ApiParam(name = "picturefile", required = false, value = "图片") @RequestParam String[]   picturefile
 			)
 			throws Exception {
-		return hospitalInfoService.updateHospPic(hosploginid,type,pictureFile);
+		return hospitalInfoService.updateHospPic(hosploginid,type,picturefile);
 	}
 	@RequestMapping(value = "/reviewinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "提交审核资料", httpMethod = "POST", notes = "提交审核资料")

@@ -60,7 +60,8 @@ public class MD5Util {
                     sb.append("0");  
                 }  
             }  
-            String salt = sb.toString();  
+            String salt = md5Hex(sb.toString()); 
+            
             password = md5Hex(password + salt);  
             char[] cs = new char[48];  
             for (int i = 0; i < 48; i += 3) {  

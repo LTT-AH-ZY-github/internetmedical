@@ -3,6 +3,9 @@
  */
 package com.medical.service.impl.admin;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.medical.mapper.AdminlogininfoMapperCustom;
@@ -29,7 +32,10 @@ public class AdminAccountServiceImpl implements AdminAccountService {
 		}
 		String pwd = adminlogininfo.getAdminloginpwd();
 		if (pwd.equals(adminloginpwd)) {
-			return DataResult.success("登录成功");
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", adminlogininfo.getAdminloginid());
+			map.put("pic", adminlogininfo.getAdminloginpix());
+			return DataResult.success("登录成功",map);
 		}else {
 			return DataResult.error("密码错误");
 		}

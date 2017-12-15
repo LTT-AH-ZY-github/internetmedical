@@ -26,5 +26,8 @@ public class Global {
 	//图片上传本地路径
 	public static final String uploadLocalPath="C:\\upload\\";
 	
+	//部署路径
+	public static final String HTTP_URL="http://1842719ny8.iok.la:14086/";
+	//public static final String HTTP_URL="http://120.77.32.15:8080/";
 	public static Map<String , Object> globalToken =new HashMap<String, Object>();
 }

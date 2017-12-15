@@ -1,17 +1,24 @@
 package com.medical.service.impl.user;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.medical.mapper.AccounttypeMapper;
+import com.medical.mapper.AdminexamineMapper;
+import com.medical.mapper.AdminexamineMapperCustom;
 import com.medical.mapper.FamilyinfoMapper;
 import com.medical.mapper.FamilyinfoMapperCustom;
 import com.medical.mapper.UserinfoMapper;
 import com.medical.mapper.UserinfoMapperCustom;
 import com.medical.mapper.UserlogininfoMapper;
 import com.medical.mapper.UsersickMapperCustom;
+import com.medical.po.Accounttype;
+import com.medical.po.Adminexamine;
 import com.medical.po.Familyinfo;
 import com.medical.po.Userinfo;
 import com.medical.po.Userlogininfo;
@@ -48,6 +55,12 @@ public class UserInfoServiceImpl implements UserInfoService {
 	private CommonService commonService;
 	@Autowired 
 	private SenderNotificationService senderNotificationService;
+	@Autowired
+	private AccounttypeMapper accounttypeMapper;
+	@Autowired
+	private AdminexamineMapper adminexamineMapper;
+	@Autowired
+	private AdminexamineMapperCustom adminexamineMapperCustom;
 
 	/*
 	 * (非 Javadoc) <p>Title: updateLocation</p> <p>Description: 每次登录更新位置信息</p>
@@ -66,11 +79,19 @@ public class UserInfoServiceImpl implements UserInfoService {
 	 * Integer, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public String updateLocation(Integer userloginid, String userloginlon, String userloginlat) throws Exception {
+	public String updateLocation(Integer userloginid, String userloginlon, String userloginlat, String userloginprovince, String userlogincity, String userloginarea, String userloginother) throws Exception {
+		Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
+		if (user==null) {
+			return DataResult.error("账户不存在");
+		}
 		Userlogininfo userlogininfo = new Userlogininfo();
 		userlogininfo.setUserloginid(userloginid);
 		userlogininfo.setUserloginlat(userloginlat);
 		userlogininfo.setUserloginlon(userloginlon);
+		userlogininfo.setUserloginprovince(userloginprovince);
+		userlogininfo.setUserloginarea(userloginarea);
+		userlogininfo.setUserlogincity(userlogincity);
+		userlogininfo.setUserloginother(userloginother);
 		boolean result = userlogininfoMapper.updateByPrimaryKeySelective(userlogininfo) > 0;
 		if (result) {
 			return DataResult.success("更新位置信息成功");
@@ -96,6 +117,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 	 */
 	@Override
 	public String updateChannelId(Integer userloginid, String channelid) throws Exception {
+		Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
+		if (user==null) {
+			return DataResult.error("账户不存在");
+		}
 		Userlogininfo record = new Userlogininfo();
 		record.setUserloginid(userloginid);
 		record.setUserloginchannelid(channelid);
@@ -133,14 +158,13 @@ public class UserInfoServiceImpl implements UserInfoService {
 
 		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
 		if (userlogininfo == null) {
-			return DataResult.error("用户不存在");
+			return DataResult.error("账户不存在");
 		}
 		String file = null;
 		if (pictureFile != null && !pictureFile.isEmpty()) {
 			file = PictureTool.SaveOnePicture(pictureFile);
 		}
-
-		UserlogininfoCustom userlogininfoCustom = new UserlogininfoCustom();
+        UserlogininfoCustom userlogininfoCustom = new UserlogininfoCustom();
 		userlogininfoCustom.setUserloginid(userloginid);
 		userlogininfoCustom.setUserloginname(username);
 		userlogininfoCustom.setUserloginpix(file);
@@ -214,7 +238,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
 		Userinfo user = userinfoMapperCustom.selectByLoginId(userloginid);
 		if (user == null) {
-			return DataResult.error("用户不存在");
+			return DataResult.error("账户不存在");
 		}
 		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
 		int type = userlogininfo.getUserlogintype();
@@ -223,6 +247,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		} else if (type == 3) {
 			return DataResult.error("已通过审核，不可修改");
 		} else {
+			
 			Userinfo userinfo = new Userinfo();
 			userinfo.setUseradrprovince(useradrprovince);
 			userinfo.setUseradrcity(useradrcity);
@@ -235,25 +260,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 			userinfo.setUsermale(usermale);
 			userinfo.setUsercardphoto(PictureTool.SavePictures(pictureFile));
 			boolean result = userinfoMapper.updateByPrimaryKeySelective(userinfo) > 0;
-			Familyinfo familyinfo = new Familyinfo();
-			familyinfo.setFamilyage(userage);
-			familyinfo.setFamilymale(usermale);
-			familyinfo.setFamilyname(username);
-			familyinfo.setUserloginid(userloginid);
-			familyinfo.setFamilytype(true);
-			// "1"为用户本人
-			List<Familyinfo> list = familyinfoMapperCustom.selectByUserLoginIdAndType(userloginid, 1);
-			boolean familyResult = false;
-			// 第一次填写信息
-			if (list==null || list.size() == 0) {
-				// 插入到亲属信息表
-				familyResult = familyinfoMapper.insertSelective(familyinfo) > 0;
-			} else {
-				Integer id = list.get(0).getFamilyid();
-				familyinfo.setFamilyid(id);
-				familyResult = familyinfoMapper.updateByPrimaryKey(familyinfo) > 0;
-			}
-			if (result && familyResult) {
+			if (result) {
 				return DataResult.success("信息修改成功");
 			} else {
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -280,7 +287,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 	public String updateInfoToReview(Integer userloginid) throws Exception {
 		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
 		if (userlogininfo == null) {
-			return DataResult.error("用户不存在");
+			return DataResult.error("账户不存在");
 		}
 		int type = userlogininfo.getUserlogintype();
 		if (type == 2) {
@@ -317,6 +324,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 	 */
 	@Override
 	public String findFamily(Integer userloginid) throws Exception {
+		Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
+		if (user==null) {
+			return DataResult.error("账户不存在");
+		}
 		List<Familyinfo> list = familyinfoMapperCustom.findByUserLoginId(userloginid);
 		return DataResult.success("获取成功", list);
 	}
@@ -337,7 +348,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 	public String addFamily(Familyinfo familyinfo) throws Exception {
 		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(familyinfo.getUserloginid());
 		if (userlogininfo == null) {
-			return DataResult.error("用户不存在");
+			return DataResult.error("账户不存在");
 		}
 		List<Familyinfo> lists = familyinfoMapperCustom.selectByUserLoginIdAndInfo(familyinfo);
 		if (lists.size() == 0) {
@@ -368,6 +379,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 	 */
 	@Override
 	public String updateFamily(Familyinfo familyinfo) throws Exception {
+		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(familyinfo.getUserloginid());
+		if (userlogininfo==null) {
+			return DataResult.error("账户不存在");
+		}
 		Familyinfo family = familyinfoMapper.selectByPrimaryKey(familyinfo.getFamilyid());
 		if (family == null) {
 			return DataResult.error("亲属不存在");
@@ -403,16 +418,19 @@ public class UserInfoServiceImpl implements UserInfoService {
 	 * Integer)
 	 */
 	@Override
-	public String deleteFamily(Integer familyid) throws Exception {
+	public String deleteFamily(Integer familyid, Integer userloginid) throws Exception {
+		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
+		if (userlogininfo==null) {
+			return DataResult.error("账户不存在");
+		}
 		Familyinfo family = familyinfoMapper.selectByPrimaryKey(familyid);
 		if (family == null) {
 			return DataResult.error("亲属不存在");
 		}
-		/*
-		 * int user = familyinfo.getUserloginid(); int userloginid =
-		 * family.getUserloginid(); if (user != userloginid) { return
-		 * DataResult.error("账户信息不匹配"); }
-		 */
+		int user = family.getUserloginid(); 
+		if (user != userloginid) { 
+			return  DataResult.error("账户信息不匹配"); 
+		}
 		boolean type = family.getFamilytype();
 		if (type) {
 			return DataResult.error("本人信息无法删除");
@@ -443,10 +461,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 	 * lang.Integer)
 	 */
 	@Override
-	public String updateInfoToCancelReview(Integer userloginid) {
+	public String updateInfoToCancelReview(Integer userloginid) throws Exception{
 		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
 		if (userlogininfo == null) {
-			return DataResult.error("用户不存在");
+			return DataResult.error("账户不存在");
 		}
 		int type = userlogininfo.getUserlogintype();
 		if (type == 1) {
@@ -468,6 +486,39 @@ public class UserInfoServiceImpl implements UserInfoService {
 		} else {
 			return DataResult.error("撤销审核失败");
 		}
+	}
+
+	/* (非 Javadoc)  
+	* <p>Title: getReviewInfo</p>  
+	* <p>Description: </p>  
+	* @param userloginid
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.user.UserInfoService#getReviewInfo(java.lang.Integer)  
+	*/  
+	@Override
+	public String getReviewInfo(Integer userloginid) throws Exception {
+		Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
+		if (userlogininfo==null) {
+			return DataResult.error("账户不存在");
+		}
+		int userlogintype =  userlogininfo.getUserlogintype();
+		Accounttype accounttype = accounttypeMapper.selectByPrimaryKey(userlogintype);
+		
+		Map<String, Object> map = new HashMap<>(16);
+		map.put("type", userlogintype);
+		map.put("typename", accounttype.getAccounttypename());
+		if (userlogintype==3) {
+			List<Adminexamine> list = adminexamineMapperCustom.selectByExamineTargetIdAndTypeOrderByTime(userloginid, 1);
+			if (list!=null && list.size()>0) {
+				map.put("msg", list.get(0).getExamineideas());
+			}else {
+				map.put("msg", "");
+			}
+		}else {
+			map.put("msg", "");
+		}
+		return DataResult.success("获取成功", map);
 	}
 
 }

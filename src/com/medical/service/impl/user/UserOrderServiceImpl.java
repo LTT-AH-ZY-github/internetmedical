@@ -23,6 +23,7 @@ import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.HospitalcommentMapper;
 import com.medical.mapper.HosppurseMapper;
 import com.medical.mapper.HosppurseMapperCustom;
+import com.medical.mapper.HosptitaldepositMapper;
 import com.medical.mapper.PayMapper;
 import com.medical.mapper.PayMapperCustom;
 import com.medical.mapper.PreorderMapperCustom;
@@ -42,6 +43,7 @@ import com.medical.po.Doctorpurse;
 import com.medical.po.Hospinfo;
 import com.medical.po.Hospitalcomment;
 import com.medical.po.Hosppurse;
+import com.medical.po.Hosptitaldeposit;
 import com.medical.po.Pay;
 import com.medical.po.Preorder;
 import com.medical.po.Userlogininfo;
@@ -54,6 +56,7 @@ import com.medical.service.iface.user.UserOrderService;
 import com.medical.utils.StringReplaceUtil;
 import com.medical.utils.result.DataResult;
 import com.pay.alipay.AliPayNotify;
+import com.pay.alipay.AlipayConfig;
 import com.pay.alipay.GetSign;
 import com.pay.alipay.MakeOrderNum;
 import net.sf.json.JSONObject;
@@ -115,6 +118,8 @@ public class UserOrderServiceImpl implements UserOrderService {
 	private DoctorcalendarMapperCustom doctorcalendarMapperCustom;
 	@Autowired
 	private DoctoraddressMapper doctoraddressMapper;
+	@Autowired
+	private HosptitaldepositMapper hosptitaldepositMapper;
 	@Autowired 
 	private SenderNotificationService senderNotificationService;
 	
@@ -295,7 +300,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 	* @see com.medical.service.iface.user.UserOrderService#listOrders(java.lang.Integer, java.lang.Integer, java.lang.Integer)  
 	*/  
 	@Override
-	public String listOrders(Integer userloginid, Integer page, Integer type) {
+	public String listOrders(Integer userloginid, Integer page, Integer type) throws Exception{
 		Userlogininfo user = userloginiinfoMapper.selectByPrimaryKey(userloginid);
 		if (user==null) {
 			return DataResult.error("账户不存在");
@@ -315,7 +320,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 	* @see com.medical.service.iface.user.UserOrderService#getOrderDetail(java.lang.Integer, java.lang.Integer)  
 	*/  
 	@Override
-	public String getOrderDetail(Integer userloginid, Integer userorderid) {
+	public String getOrderDetail(Integer userloginid, Integer userorderid) throws Exception{
 		Userlogininfo user = userloginiinfoMapper.selectByPrimaryKey(userloginid);
 		if (user==null) {
 			return DataResult.error("账户不存在");
@@ -387,7 +392,8 @@ public class UserOrderServiceImpl implements UserOrderService {
 		String prefix = "u" + userorder.getUserorderid() + "d";
 		String outTradeNo = MakeOrderNum.getTradeNo(prefix);
 		// 回调地址
-		String notifyUrl = "http://1842719ny8.iok.la:14086/internetmedical/user/paydoctorfinishbyalipay";
+		//String notifyUrl = "http://1842719ny8.iok.la:14086/internetmedical/user/paydoctorfinishbyalipay";
+		String notifyUrl = AlipayConfig.DOCTOR_NOTIFY_URL;
 		String result = GetSign.appGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
 		
 		//支付信息
@@ -631,7 +637,8 @@ public class UserOrderServiceImpl implements UserOrderService {
 		String prefix = "u" + userorderid + "h";
 		String outTradeNo = MakeOrderNum.getTradeNo(prefix);
 		// 回调地址
-		String notifyUrl = "http://1842719ny8.iok.la:14086/internetmedical/user/payhospitalfinishbyalipay";
+		//String notifyUrl = "http://1842719ny8.iok.la:14086/internetmedical/user/payhospitalfinishbyalipay";
+		String notifyUrl = AlipayConfig.HSOP_NOTIFY_URL;
 		String result = GetSign.appGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
 		Pay pay = new Pay();
 		pay.setPaycreattime(new Date());
@@ -748,15 +755,23 @@ public class UserOrderServiceImpl implements UserOrderService {
 			Hosppurse hosppurse = new Hosppurse();
 			hosppurse.setHosploginid(order.getUserorderhospid());
 			hosppurse.setHosppurseamount(new BigDecimal(amount));
-			String name = pay.getPaybuyername();
-			hosppurse.setHosppurseremark("收到病人"+name+"押金");
+			String sickname = pay.getPaybuyername();
+			hosppurse.setHosppurseremark("收到病人"+sickname+"押金");
 			hosppurse.setHosppursetime(new Date());
 			// 1为转入
 			hosppurse.setHosppursetypeid(1);
 			hosppurse.setPayid(pay.getPayid());
 			hosppurse.setHosppursebalance(total);
 			boolean purse = hosppurseMapper.insertSelective(hosppurse) > 0;
-			if (orderResult && payResult && purse && hospinfoResult) {
+			//押金记录表
+			Hosptitaldeposit hosptitaldeposit = new Hosptitaldeposit();
+			hosptitaldeposit.setHospdepositnum(new BigDecimal(amount));
+			hosptitaldeposit.setHospdepositremark(sickname+"缴纳"+hospinfo.getHospname()+"押金");
+			hosptitaldeposit.setHospdeposittime(new Date());
+			hosptitaldeposit.setHosploginid(order.getUserorderhospid());
+			hosptitaldeposit.setUserloginid(order.getUserloginid());
+			boolean depositresult = hosptitaldepositMapper.insertSelective(hosptitaldeposit)>0;
+			if (orderResult && payResult && purse && hospinfoResult && depositresult) {
 				JSONObject jsonCustormCont = new JSONObject();
 				senderNotificationService.createMsgUserToHospital(order.getUserloginid(), order.getUserorderhospid(), "消息通知", "已缴纳押金",
 						jsonCustormCont);

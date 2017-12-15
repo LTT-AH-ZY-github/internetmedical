@@ -1,16 +1,20 @@
 package com.medical.service.impl.hospital;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.medical.mapper.AccounttypeMapper;
+import com.medical.mapper.AdminexamineMapper;
+import com.medical.mapper.AdminexamineMapperCustom;
 import com.medical.mapper.HospinfoMapper;
 import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.HosplogininfoMapper;
 import com.medical.po.Accounttype;
+import com.medical.po.Adminexamine;
 import com.medical.po.Hospinfo;
 import com.medical.po.Hosplogininfo;
 import com.medical.po.Hosporder;
@@ -35,8 +39,11 @@ public class HospitalInfoServiceImpl implements HospitalInfoService {
 	private CommonService commonService;
 	@Autowired 
 	private SenderNotificationService senderNotificationService;
+	@Autowired 
+	private AdminexamineMapperCustom adminexamineMapperCustom;
+	
 	@Override
-	public String updateInfo(Hospinfo hospinfo) {
+	public String updateInfo(Hospinfo hospinfo) throws Exception{
 		Integer hosploginid = hospinfo.getHosploginid();
 		Hospinfo info = hospinfoMapperCustom.selectByHospLoginId(hosploginid);
 		if (info == null) {
@@ -65,14 +72,14 @@ public class HospitalInfoServiceImpl implements HospitalInfoService {
 	 * @see com.medical.service.iface.hospital.HospitalInfoService#updateHospPic(java.lang.Integer, java.lang.Integer, org.springframework.web.multipart.MultipartFile)
 	 */
 	@Override
-	public String updateHospPic(Integer hosploginid, Integer type, MultipartFile[] pictureFile) throws Exception {
+	public String updateHospPic(Integer hosploginid, Integer type, String[] pictureFile) throws Exception {
 		Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(hosploginid);
 		if (hospinfo==null) {
 			return DataResult.error("账号不存在");
 		}
 		Hospinfo hospinforecord = new Hospinfo();
 		hospinforecord.setHospid(hospinfo.getHospid());
-		String path = PictureTool.SavePictures(pictureFile);
+		String path = PictureTool.SavePicturesByPath(pictureFile);
 		if (type==1) {
 			//当地质量技术监督部门办理组织机构代码证
 			hospinforecord.setHosporgcodecer(path);
@@ -153,7 +160,7 @@ public class HospitalInfoServiceImpl implements HospitalInfoService {
 	 * @see com.medical.service.iface.hospital.HospitalInfoService#getLoginInfo(java.lang.Integer)
 	 */
 	@Override
-	public String getLoginInfo(Integer hosploginid) {
+	public String getLoginInfo(Integer hosploginid) throws Exception{
 		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
 		if (hosplogininfo==null) {
 			return DataResult.error("账号信息不存在");
@@ -164,6 +171,13 @@ public class HospitalInfoServiceImpl implements HospitalInfoService {
 		map.put("hosplogintype", hosplogininfo.getHosplogintype());
 		Accounttype accounttype = accounttypeMapper.selectByPrimaryKey(hosplogininfo.getHosplogintype());
 		map.put("hosplogintypename", accounttype.getAccounttypename());
+		List<Adminexamine> list = adminexamineMapperCustom.selectByExamineTargetIdAndTypeOrderByTime(hosploginid, 3);
+		if (list!=null && list.size()>0) {
+			map.put("examineideas", list.get(0).getExamineideas());
+		}else {
+			map.put("examineideas", "");
+		}
+		map.put("hosploginpix", hosplogininfo.getHosploginpix());
 		return DataResult.success("获取成功", map);
 	}
 }

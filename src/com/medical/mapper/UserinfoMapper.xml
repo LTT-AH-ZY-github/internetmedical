@@ -27,6 +27,7 @@
     <result column="userLoginId" property="userloginid" jdbcType="INTEGER" />
     <result column="userAlipayAccount" property="useralipayaccount" jdbcType="VARCHAR" />
     <result column="userPurseBalance" property="userpursebalance" jdbcType="DECIMAL" />
+    <result column="userAlipayName" property="useralipayname" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -90,7 +91,7 @@
     userId, userName, userMale, userAge, userCardNum, userCardPhoto, userBirthDate, userAdrProvince, 
     userAdrCity, userAdrArea, userAdrOther, userMarry, userNation, userCareer, userAllergy, 
     userDisease, userOperate, userDegree, userPhone, userEmail, userCollectDoc, userRelation, 
-    userLoginId, userAlipayAccount, userPurseBalance
+    userLoginId, userAlipayAccount, userPurseBalance, userAlipayName
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.UserinfoExample" >
     select
@@ -131,7 +132,7 @@
       userDisease, userOperate, userDegree, 
       userPhone, userEmail, userCollectDoc, 
       userRelation, userLoginId, userAlipayAccount, 
-      userPurseBalance)
+      userPurseBalance, userAlipayName)
     values (#{userid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{usermale,jdbcType=CHAR}, 
       #{userage,jdbcType=INTEGER}, #{usercardnum,jdbcType=CHAR}, #{usercardphoto,jdbcType=VARCHAR}, 
       #{userbirthdate,jdbcType=DATE}, #{useradrprovince,jdbcType=VARCHAR}, #{useradrcity,jdbcType=VARCHAR}, 
@@ -140,7 +141,7 @@
       #{userdisease,jdbcType=VARCHAR}, #{useroperate,jdbcType=VARCHAR}, #{userdegree,jdbcType=CHAR}, 
       #{userphone,jdbcType=CHAR}, #{useremail,jdbcType=CHAR}, #{usercollectdoc,jdbcType=VARCHAR}, 
       #{userrelation,jdbcType=VARCHAR}, #{userloginid,jdbcType=INTEGER}, #{useralipayaccount,jdbcType=VARCHAR}, 
-      #{userpursebalance,jdbcType=DECIMAL})
+      #{userpursebalance,jdbcType=DECIMAL}, #{useralipayname,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Userinfo" >
     insert into userinfo
@@ -220,6 +221,9 @@
       <if test="userpursebalance != null" >
         userPurseBalance,
       </if>
+      <if test="useralipayname != null" >
+        userAlipayName,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userid != null" >
@@ -296,6 +300,9 @@
       </if>
       <if test="userpursebalance != null" >
         #{userpursebalance,jdbcType=DECIMAL},
+      </if>
+      <if test="useralipayname != null" >
+        #{useralipayname,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -383,6 +390,9 @@
       <if test="record.userpursebalance != null" >
         userPurseBalance = #{record.userpursebalance,jdbcType=DECIMAL},
       </if>
+      <if test="record.useralipayname != null" >
+        userAlipayName = #{record.useralipayname,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -414,7 +424,8 @@
       userRelation = #{record.userrelation,jdbcType=VARCHAR},
       userLoginId = #{record.userloginid,jdbcType=INTEGER},
       userAlipayAccount = #{record.useralipayaccount,jdbcType=VARCHAR},
-      userPurseBalance = #{record.userpursebalance,jdbcType=DECIMAL}
+      userPurseBalance = #{record.userpursebalance,jdbcType=DECIMAL},
+      userAlipayName = #{record.useralipayname,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -494,6 +505,9 @@
       <if test="userpursebalance != null" >
         userPurseBalance = #{userpursebalance,jdbcType=DECIMAL},
       </if>
+      <if test="useralipayname != null" >
+        userAlipayName = #{useralipayname,jdbcType=VARCHAR},
+      </if>
     </set>
     where userId = #{userid,jdbcType=INTEGER}
   </update>
@@ -522,7 +536,8 @@
       userRelation = #{userrelation,jdbcType=VARCHAR},
       userLoginId = #{userloginid,jdbcType=INTEGER},
       userAlipayAccount = #{useralipayaccount,jdbcType=VARCHAR},
-      userPurseBalance = #{userpursebalance,jdbcType=DECIMAL}
+      userPurseBalance = #{userpursebalance,jdbcType=DECIMAL},
+      userAlipayName = #{useralipayname,jdbcType=VARCHAR}
     where userId = #{userid,jdbcType=INTEGER}
   </update>
 </mapper>

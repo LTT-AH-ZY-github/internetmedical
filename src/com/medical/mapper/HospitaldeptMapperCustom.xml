@@ -4,14 +4,14 @@
 	
 	<select id="selectByDeptNameAndFatherId" resultType="com.medical.po.Hospitaldept" parameterType="String">
 	select * from hospitaldept
-    where hospDeptIsCheck=1 and  hospDeptName =#{0} and hospDeptFatherId=#{1} 
+    where hospDeptIsCheck=2 and  hospDeptName =#{0} and hospDeptFatherId=#{1} 
 	</select>
   <select id="selectByFatherId" resultType="com.medical.po.Hospitaldept" parameterType="int" >
     select * from hospitaldept
-    where	hospDeptIsCheck=1 and  hospDeptFatherId=#{id} 
+    where	hospDeptIsCheck=2 and  hospDeptFatherId=#{id} 
   </select>
  <select id="selectAll" resultType="com.medical.po.Hospitaldept">
- 	select * from hospitaldept where hospDeptIsCheck=1 
+ 	select * from hospitaldept where hospDeptIsCheck=2 
  </select>
  <select id="selectByPrimaryDeptAndSecondDeptAndCheck" resultType="com.medical.po.Hospitaldept" parameterType="String">
  	select * from hospitaldept 
@@ -23,10 +23,10 @@
 	 		and hospDeptName=#{1} and hospDeptFatherId!=0
 	 	</if>
 	 	<if test="param3==1">
-	 		and hospDeptIsCheck=1 
+	 		and hospDeptIsCheck=2 
 	 	</if>
 	 	<if test="param3==0">
-	 		and hospDeptIsCheck=0 
+	 		and hospDeptIsCheck=1
 	 	</if>
  	</where>
  </select>
@@ -36,16 +36,16 @@
  		left join hospitaldept as b on a.hospdeptfatherid=b.hospdeptid
  	where 1=1
  	<if test="param1==1">
- 		and a.hospDeptIsCheck=1
+ 		and a.hospDeptIsCheck=2
  	</if> 
 	<if test="param1==2">
- 		and a.hospDeptIsCheck=0
+ 		and a.hospDeptIsCheck=1
  	</if> 
  </select>
  <select id="selectFirstDept" resultType="map" parameterType="java.lang.Integer">
  	select hospdeptid,hospdeptname
  	from hospitaldept 
- 	where hospDeptIsCheck=1
+ 	where hospDeptIsCheck=2
   </select>
  <insert id="insertSelectiveReturnId"  useGeneratedKeys="true" keyProperty="hospdeptid" parameterType="com.medical.po.Hospitaldept" >
     insert into hospitaldept
@@ -65,6 +65,12 @@
       <if test="hospdeptischeck != null" >
         hospDeptIsCheck,
       </if>
+      <if test="hospdeptsubmitter != null" >
+        hospDeptSubmitter,
+      </if>
+      <if test="hospdeptsubmittertype != null" >
+        hospDeptSubmitterType,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="hospdeptid != null" >
@@ -80,8 +86,14 @@
         #{hospdeptfatherid,jdbcType=INTEGER},
       </if>
       <if test="hospdeptischeck != null" >
-        #{hospdeptischeck,jdbcType=BIT},
+        #{hospdeptischeck,jdbcType=INTEGER},
+      </if>
+      <if test="hospdeptsubmitter != null" >
+        #{hospdeptsubmitter,jdbcType=INTEGER},
+      </if>
+      <if test="hospdeptsubmittertype != null" >
+        #{hospdeptsubmittertype,jdbcType=INTEGER},
       </if>
     </trim>
-  </insert>
+   </insert>
 </mapper>

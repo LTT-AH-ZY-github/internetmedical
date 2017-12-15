@@ -12,8 +12,9 @@ public interface HospitalInfoService {
 	 * @param hospinfo
 	 * @return
 	 * @return: String
+	 * @throws Exception 
 	 */
-	String updateInfo(Hospinfo hospinfo);
+	String updateInfo(Hospinfo hospinfo) throws Exception;
 
 	/**
 	 * @Title: updateUserPix
@@ -29,11 +30,11 @@ public interface HospitalInfoService {
 	 * @Description: TODO
 	 * @param hosploginid
 	 * @param type
-	 * @param pictureFile
+	 * @param picturefile
 	 * @return
 	 * @return: String
 	 */
-	String updateHospPic(Integer hosploginid, Integer type, MultipartFile[] pictureFile)  throws Exception;
+	String updateHospPic(Integer hosploginid, Integer type, String[]  picturefile)  throws Exception;
 
 	/**
 	 * @Title: updateToReview
@@ -61,6 +62,6 @@ public interface HospitalInfoService {
 	 * @return
 	 * @return: String
 	 */
-	String getLoginInfo(Integer hosploginid);
+	String getLoginInfo(Integer hosploginid) throws Exception;
 
 }

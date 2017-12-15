@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.medical.push;
+package com.push.baidu;
 
 /**
  * @ClassName:     PushConfig.java

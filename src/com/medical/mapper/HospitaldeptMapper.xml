@@ -6,7 +6,9 @@
     <result column="hospDeptName" property="hospdeptname" jdbcType="VARCHAR" />
     <result column="hospDeptAbs" property="hospdeptabs" jdbcType="VARCHAR" />
     <result column="hospDeptFatherId" property="hospdeptfatherid" jdbcType="INTEGER" />
-    <result column="hospDeptIsCheck" property="hospdeptischeck" jdbcType="BIT" />
+    <result column="hospDeptIsCheck" property="hospdeptischeck" jdbcType="INTEGER" />
+    <result column="hospDeptSubmitter" property="hospdeptsubmitter" jdbcType="INTEGER" />
+    <result column="hospDeptSubmitterType" property="hospdeptsubmittertype" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,7 +69,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    hospDeptId, hospDeptName, hospDeptAbs, hospDeptFatherId, hospDeptIsCheck
+    hospDeptId, hospDeptName, hospDeptAbs, hospDeptFatherId, hospDeptIsCheck, hospDeptSubmitter, 
+    hospDeptSubmitterType
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.HospitaldeptExample" >
     select
@@ -101,9 +104,11 @@
   </delete>
   <insert id="insert" parameterType="com.medical.po.Hospitaldept" >
     insert into hospitaldept (hospDeptId, hospDeptName, hospDeptAbs, 
-      hospDeptFatherId, hospDeptIsCheck)
+      hospDeptFatherId, hospDeptIsCheck, hospDeptSubmitter, 
+      hospDeptSubmitterType)
     values (#{hospdeptid,jdbcType=INTEGER}, #{hospdeptname,jdbcType=VARCHAR}, #{hospdeptabs,jdbcType=VARCHAR}, 
-      #{hospdeptfatherid,jdbcType=INTEGER}, #{hospdeptischeck,jdbcType=BIT})
+      #{hospdeptfatherid,jdbcType=INTEGER}, #{hospdeptischeck,jdbcType=INTEGER}, #{hospdeptsubmitter,jdbcType=INTEGER}, 
+      #{hospdeptsubmittertype,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Hospitaldept" >
     insert into hospitaldept
@@ -123,6 +128,12 @@
       <if test="hospdeptischeck != null" >
         hospDeptIsCheck,
       </if>
+      <if test="hospdeptsubmitter != null" >
+        hospDeptSubmitter,
+      </if>
+      <if test="hospdeptsubmittertype != null" >
+        hospDeptSubmitterType,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="hospdeptid != null" >
@@ -138,7 +149,13 @@
         #{hospdeptfatherid,jdbcType=INTEGER},
       </if>
       <if test="hospdeptischeck != null" >
-        #{hospdeptischeck,jdbcType=BIT},
+        #{hospdeptischeck,jdbcType=INTEGER},
+      </if>
+      <if test="hospdeptsubmitter != null" >
+        #{hospdeptsubmitter,jdbcType=INTEGER},
+      </if>
+      <if test="hospdeptsubmittertype != null" >
+        #{hospdeptsubmittertype,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -164,7 +181,13 @@
         hospDeptFatherId = #{record.hospdeptfatherid,jdbcType=INTEGER},
       </if>
       <if test="record.hospdeptischeck != null" >
-        hospDeptIsCheck = #{record.hospdeptischeck,jdbcType=BIT},
+        hospDeptIsCheck = #{record.hospdeptischeck,jdbcType=INTEGER},
+      </if>
+      <if test="record.hospdeptsubmitter != null" >
+        hospDeptSubmitter = #{record.hospdeptsubmitter,jdbcType=INTEGER},
+      </if>
+      <if test="record.hospdeptsubmittertype != null" >
+        hospDeptSubmitterType = #{record.hospdeptsubmittertype,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -177,7 +200,9 @@
       hospDeptName = #{record.hospdeptname,jdbcType=VARCHAR},
       hospDeptAbs = #{record.hospdeptabs,jdbcType=VARCHAR},
       hospDeptFatherId = #{record.hospdeptfatherid,jdbcType=INTEGER},
-      hospDeptIsCheck = #{record.hospdeptischeck,jdbcType=BIT}
+      hospDeptIsCheck = #{record.hospdeptischeck,jdbcType=INTEGER},
+      hospDeptSubmitter = #{record.hospdeptsubmitter,jdbcType=INTEGER},
+      hospDeptSubmitterType = #{record.hospdeptsubmittertype,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -195,7 +220,13 @@
         hospDeptFatherId = #{hospdeptfatherid,jdbcType=INTEGER},
       </if>
       <if test="hospdeptischeck != null" >
-        hospDeptIsCheck = #{hospdeptischeck,jdbcType=BIT},
+        hospDeptIsCheck = #{hospdeptischeck,jdbcType=INTEGER},
+      </if>
+      <if test="hospdeptsubmitter != null" >
+        hospDeptSubmitter = #{hospdeptsubmitter,jdbcType=INTEGER},
+      </if>
+      <if test="hospdeptsubmittertype != null" >
+        hospDeptSubmitterType = #{hospdeptsubmittertype,jdbcType=INTEGER},
       </if>
     </set>
     where hospDeptId = #{hospdeptid,jdbcType=INTEGER}
@@ -205,7 +236,9 @@
     set hospDeptName = #{hospdeptname,jdbcType=VARCHAR},
       hospDeptAbs = #{hospdeptabs,jdbcType=VARCHAR},
       hospDeptFatherId = #{hospdeptfatherid,jdbcType=INTEGER},
-      hospDeptIsCheck = #{hospdeptischeck,jdbcType=BIT}
+      hospDeptIsCheck = #{hospdeptischeck,jdbcType=INTEGER},
+      hospDeptSubmitter = #{hospdeptsubmitter,jdbcType=INTEGER},
+      hospDeptSubmitterType = #{hospdeptsubmittertype,jdbcType=INTEGER}
     where hospDeptId = #{hospdeptid,jdbcType=INTEGER}
   </update>
 </mapper>

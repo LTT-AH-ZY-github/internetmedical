@@ -1,4 +1,4 @@
-package com.baidu.yun.push.utils;
+package com.push.baidu;
 
 import com.baidu.yun.core.log.YunLogEvent;
 import com.baidu.yun.core.log.YunLogHandler;
@@ -9,7 +9,6 @@ import com.baidu.yun.push.exception.PushClientException;
 import com.baidu.yun.push.exception.PushServerException;
 import com.baidu.yun.push.model.PushMsgToSingleDeviceRequest;
 import com.baidu.yun.push.model.PushMsgToSingleDeviceResponse;
-import com.medical.push.PushConfig;
 import com.medical.utils.Global;
 
 import net.sf.json.JSONObject;

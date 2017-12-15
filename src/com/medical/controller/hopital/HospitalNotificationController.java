@@ -28,7 +28,7 @@ public class HospitalNotificationController {
 	private CommonService commonService;
 
 	@RequestMapping(value = "/listreceivenotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "获取需要接收的通知", httpMethod = "psot", notes = "获取其他发送的通知")
+	@ApiOperation(value = "获取需要接收的通知", httpMethod = "POST", notes = "获取其他发送的通知")
 	public @ResponseBody String listreceivenotification(
 			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid,
 			@ApiParam(name = "limit", required = true, value = "每页多少数据") @RequestParam(value = "limit") Integer limit,
@@ -51,7 +51,7 @@ public class HospitalNotificationController {
 
 	}
 	@RequestMapping(value = "/getunreadnotificationnum", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "获取未读的通知数量", httpMethod = "psot", notes = "获取未读的通知数量")
+	@ApiOperation(value = "获取未读的通知数量", httpMethod = "POST", notes = "获取未读的通知数量")
 	public @ResponseBody String getUnreadNotificationNum(
 			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid
 			)
@@ -63,7 +63,7 @@ public class HospitalNotificationController {
 
 	}
 	@RequestMapping(value = "/listsendernotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "获取发送的通知", httpMethod = "psot", notes = "获取发送的通知")
+	@ApiOperation(value = "获取发送的通知", httpMethod = "POST", notes = "获取发送的通知")
 	public @ResponseBody String listsendernotification(
 			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid,
 			@ApiParam(name = "limit", required = true, value = "每页多少数据") @RequestParam(value = "limit") Integer limit,
@@ -83,7 +83,7 @@ public class HospitalNotificationController {
 	}
 
 	@RequestMapping(value = "/readnotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "将通知置为已读", httpMethod = "psot", notes = "将通知置为已读")
+	@ApiOperation(value = "将通知置为已读", httpMethod = "POST", notes = "将通知置为已读")
 	public @ResponseBody String readnotification(
 			@ApiParam(name = "notificationid", required = true, value = "通知id") @RequestParam Integer notificationid,
 			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid)
@@ -104,7 +104,7 @@ public class HospitalNotificationController {
 	}
 
 	@RequestMapping(value = "/deletereceivenotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "删除接收的通知", httpMethod = "psot", notes = "删除接收的通知")
+	@ApiOperation(value = "删除接收的通知", httpMethod = "POST", notes = "删除接收的通知")
 	public @ResponseBody String deleteNotification(
 			@ApiParam(name = "notificationid", required = true, value = "通知id") @RequestParam Integer notificationid,
 			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid)

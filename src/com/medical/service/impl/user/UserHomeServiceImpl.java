@@ -140,7 +140,7 @@ public class UserHomeServiceImpl implements UserHomeService {
 	 * Integer, java.lang.Integer)
 	 */
 	@Override
-	public String getEvaluation(Integer docloginid, Integer pageNo) {
+	public String getEvaluation(Integer docloginid, Integer pageNo) throws Exception{
 		PageHelper.startPage(pageNo, 5);
 		List<Map<String, Object>> list = doctorcommentMapperCustom.selectByDocLoginId(docloginid);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);

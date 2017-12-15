@@ -1,7 +1,6 @@
 package com.medical.service.impl;
 
 import java.util.ArrayList;
-import com.push.websocket.WebSocketHandler;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,12 +36,14 @@ import com.medical.po.Doctorlogininfo;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Notification;
 import com.medical.po.Userlogininfo;
-import com.medical.push.PushToDoctor;
-import com.medical.push.PushToUser;
 import com.medical.service.iface.CommonService;
 import com.medical.utils.KeyWords;
 import com.medical.utils.result.DataResult;
-import com.netease.code.MsgCode;
+import com.netease.utils.MsgCode;
+import com.push.baidu.PushToDoctor;
+import com.push.baidu.PushToUser;
+import com.push.websocket.WebSocketHandler;
+
 import net.sf.json.JSONObject;
 
 public class CommonServiceImpl implements CommonService {
@@ -261,7 +262,7 @@ public class CommonServiceImpl implements CommonService {
 	public String getUnreadNotificationNum(Integer hosploginid) {
 		
 		List<Map<String, Object>> list = notificationMapperCustom.selectByReceiverAndType(hosploginid,
-				1, 0);
+				1, 2);
 		Map<String, Object> map = new HashMap<>();
 		map.put("number", list.size());
 		return DataResult.success("获取成功", map);
@@ -454,7 +455,10 @@ public class CommonServiceImpl implements CommonService {
 			seconddeptRecord.setHospdeptname(seconddept);
 			// -1为二级部门
 			seconddeptRecord.setHospdeptfatherid(-1);
-			seconddeptRecord.setHospdeptischeck(false);
+			seconddeptRecord.setHospdeptischeck(1);
+			seconddeptRecord.setHospdeptsubmitter(docloginid);
+			//1为医生提交审核
+			seconddeptRecord.setHospdeptsubmittertype(1);
 			boolean result = hospitaldeptMapper.insertSelective(seconddeptRecord) > 0;
 			if (result) {
 				return DataResult.success("新增成功");
@@ -474,7 +478,11 @@ public class CommonServiceImpl implements CommonService {
 			Hospitaldept primarydeptRecord = new Hospitaldept();
 			primarydeptRecord.setHospdeptname(primarydept);
 			primarydeptRecord.setHospdeptfatherid(0);
-			primarydeptRecord.setHospdeptischeck(false);
+			//1为未审核
+			primarydeptRecord.setHospdeptischeck(1);
+			primarydeptRecord.setHospdeptsubmitter(docloginid);
+			//1为医生提交审核
+			primarydeptRecord.setHospdeptsubmittertype(1);
 			boolean primarydeptResult = hospitaldeptMapperCustom.insertSelectiveReturnId(primarydeptRecord) > 0;
 			if (primarydeptResult) {
 				return DataResult.success("新增成功");
@@ -496,7 +504,9 @@ public class CommonServiceImpl implements CommonService {
 			Hospitaldept seconddeptRecord = new Hospitaldept();
 			seconddeptRecord.setHospdeptname(seconddept);
 			seconddeptRecord.setHospdeptfatherid(primarydeptlist.get(0).getHospdeptid());
-			seconddeptRecord.setHospdeptischeck(false);
+			//1为未审核
+			seconddeptRecord.setHospdeptischeck(1);
+			
 			boolean result = hospitaldeptMapper.insertSelective(seconddeptRecord) > 0;
 			if (result) {
 				return DataResult.success("新增成功");
@@ -507,12 +517,20 @@ public class CommonServiceImpl implements CommonService {
 			Hospitaldept primarydeptRecord = new Hospitaldept();
 			primarydeptRecord.setHospdeptname(primarydept);
 			primarydeptRecord.setHospdeptfatherid(0);
-			primarydeptRecord.setHospdeptischeck(false);
+			//1为未审核
+			primarydeptRecord.setHospdeptischeck(1);
+			primarydeptRecord.setHospdeptsubmitter(docloginid);
+			//1为医生提交审核
+			primarydeptRecord.setHospdeptsubmittertype(1);
 			boolean primarydeptResult = hospitaldeptMapperCustom.insertSelectiveReturnId(primarydeptRecord) > 0;
 			Hospitaldept seconddeptRecord = new Hospitaldept();
 			seconddeptRecord.setHospdeptname(seconddept);
 			seconddeptRecord.setHospdeptfatherid(primarydeptRecord.getHospdeptid());
-			seconddeptRecord.setHospdeptischeck(false);
+			//1为未审核
+			seconddeptRecord.setHospdeptischeck(1);
+			seconddeptRecord.setHospdeptsubmitter(docloginid);
+			//1为医生提交审核
+			seconddeptRecord.setHospdeptsubmittertype(1);
 			boolean result = hospitaldeptMapper.insertSelective(seconddeptRecord) > 0;
 			if (result && primarydeptResult) {
 				return DataResult.success("新增成功");
@@ -537,7 +555,8 @@ public class CommonServiceImpl implements CommonService {
 		Hospitaldept seconddeptRecord = new Hospitaldept();
 		seconddeptRecord.setHospdeptname(seconddept);
 		seconddeptRecord.setHospdeptfatherid(primarydeptlist.get(0).getHospdeptid());
-		seconddeptRecord.setHospdeptischeck(false);
+		//1为未审核
+		seconddeptRecord.setHospdeptischeck(1);
 		boolean result = hospitaldeptMapper.insertSelective(seconddeptRecord) > 0;
 		if (result) {
 			return DataResult.success("新增成功");

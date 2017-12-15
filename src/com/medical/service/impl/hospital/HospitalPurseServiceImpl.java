@@ -99,18 +99,21 @@ public class HospitalPurseServiceImpl implements HospitalPurseService{
 	 * @see com.medical.service.iface.hospital.HospitalPurseService#getAliPayAccount(java.lang.Integer)
 	 */
 	@Override
-	public String getAliPayAccount(Integer hosploginid) {
+	public String getAliPayAccount(Integer hosploginid) throws Exception{
 		Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(hosploginid);
 		if (hospinfo == null) {
 			return DataResult.error("账户不存在");
 		}
-		return DataResult.success("获取成功", hospinfo.getHospalipayaccount());
+		Map<String, Object> map = new HashMap<>();
+		map.put("alipayaccount", hospinfo.getHospalipayaccount());
+		map.put("alipayname", hospinfo.getHospalipayname());
+		return DataResult.success("获取成功", map);
 	}
 	/* (non-Javadoc)
 	 * @see com.medical.service.iface.hospital.HospitalPurseService#updateAliPayAccount(java.lang.Integer, java.lang.String)
 	 */
 	@Override
-	public String updateAliPayAccount(Integer hosploginid, String alipayaccount) {
+	public String updateAliPayAccount(Integer hosploginid, String alipayaccount,String alipayname) {
 		Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(hosploginid);
 		if (hospinfo == null) {
 			return DataResult.error("账户不存在");
@@ -118,6 +121,7 @@ public class HospitalPurseServiceImpl implements HospitalPurseService{
 		Hospinfo record = new Hospinfo();
 		record.setHospid(hospinfo.getHospid());
 		record.setHospalipayaccount(alipayaccount);
+		record.setHospalipayname(alipayname);
 		boolean result = hospinfoMapper.updateByPrimaryKeySelective(record)>0;
 		if (result) {
 			return DataResult.success("修改成功");
@@ -125,5 +129,6 @@ public class HospitalPurseServiceImpl implements HospitalPurseService{
 			return DataResult.error("修改失败");
 		}
 	}
+	
 
 }

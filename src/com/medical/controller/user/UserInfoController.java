@@ -44,8 +44,13 @@ public class UserInfoController {
 	@ApiOperation(value = "更新用户位置信息", httpMethod = "POST", notes = "更新用户位置信息")
 	public String updateLocation(
 			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam(value = "userloginid") Integer userloginid,
-			@ApiParam(name = "userloginlon", value = "精度") @RequestParam(value = "userloginlon") String userloginlon,
-			@ApiParam(name = "userloginlat", value = "纬度") @RequestParam(value = "userloginlat") String userloginlat)
+			@ApiParam(name = "userloginlon", value = "精度") @RequestParam String userloginlon,
+			@ApiParam(name = "userloginlat", value = "纬度") @RequestParam String userloginlat,
+			@ApiParam(name = "userloginprovince", value = "省") @RequestParam(required=false) String userloginprovince,
+			@ApiParam(name = "userlogincity", value = "市") @RequestParam(required=false)  String userlogincity,
+			@ApiParam(name = "userloginarea", value = "区县") @RequestParam(required=false)  String userloginarea,
+			@ApiParam(name = "userloginother", value = "具体地址") @RequestParam(required=false)  String userloginother
+			)
 			throws Exception {
 		if (userloginid == null) {
 			return DataResult.error("用户登陆id为空");
@@ -56,7 +61,7 @@ public class UserInfoController {
 		if (StringUtils.isBlank(userloginlat)) {
 			return DataResult.error("纬度为空");
 		}
-		return userInfoService.updateLocation(userloginid, userloginlon, userloginlat);
+		return userInfoService.updateLocation(userloginid, userloginlon, userloginlat,userloginprovince,userlogincity,userloginarea,userloginother);
 	}
 
 	/**
@@ -96,15 +101,14 @@ public class UserInfoController {
 	public String addUserInfo(
 			@ApiParam(name = "pictureFile", required = false, value = "图片") @RequestParam(required = false) MultipartFile pictureFile,
 			@ApiParam(name = "userloginname", required = false, value = "昵称") @RequestParam(required = false) String userloginname,
-			@ApiParam(name = "userloginid", required = true, value = "登录id") @RequestParam Integer userloginid)
+			@ApiParam(name = "userloginid", required = true, value = "登录id") @RequestParam  Integer userloginid)
 			throws Exception {
-		System.out.println("测试"+userloginname);
 		if (userloginid == null) {
 			return DataResult.error("用户登陆id为空");
 		}
-		/*if (StringUtils.isBlank(userloginname) && (pictureFile == null || pictureFile.isEmpty())) {
+		if (StringUtils.isBlank(userloginname) && (pictureFile == null || pictureFile.isEmpty())) {
 			return DataResult.error("头像和昵称不可同时为空");
-		}*/
+		}
 		return userInfoService.updateUserPixAndUserName(pictureFile, userloginid, userloginname);
 	}
 
@@ -185,6 +189,17 @@ public class UserInfoController {
 		return userInfoService.updateInfoToReview(userloginid);
 	}
 	
+	@RequestMapping(value = "/getreviewinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取审核信息", httpMethod = "POST", notes = "获取审核信息")
+	public String getReviewInfo(
+			@ApiParam(name = "userloginid", value = "登录id") @RequestParam(required = true) Integer userloginid)
+			throws Exception {
+		if (userloginid == null) {
+			return DataResult.error("id为空");
+		}
+		return userInfoService.getReviewInfo(userloginid);
+	}
+	
 	@RequestMapping(value = "/cancelreview", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "撤销审核", httpMethod = "POST", notes = "撤销审核")
 	public String cancelreview(
@@ -236,22 +251,13 @@ public class UserInfoController {
 		if (userloginid == null) {
 			return DataResult.error("id为空");
 		}
-		if (StringUtils.isBlank(familyname)) {
-			return DataResult.error("亲属姓名为空");
-		}
-		if (StringUtils.isNotBlank(familyname) && !CheckUtils.isChineseNameLegal(familyname)) {
+		if (!CheckUtils.isChineseNameLegal(familyname)) {
 			return DataResult.error("中文名只允许二到七个汉字");
 		}
-		if (StringUtils.isBlank(familymale)) {
-			return DataResult.error("亲属性别为空");
-		}
-		if (StringUtils.isNotBlank(familymale) && !CheckUtils.isSexLegal(familymale)) {
+		if (!CheckUtils.isSexLegal(familymale)) {
 			return DataResult.error("性别输入不合法");
 		}
-		if (familyage == null) {
-			return DataResult.error("亲属年龄为空");
-		}
-		if (familyage != null && !CheckUtils.isAgeLegal(familyage)) {
+		if (!CheckUtils.isAgeLegal(familyage)) {
 			return DataResult.error("年龄输入不合法");
 		}
 		Familyinfo familyinfo = new Familyinfo();
@@ -330,7 +336,7 @@ public class UserInfoController {
 		if (familyid == null) {
 			return DataResult.error("亲属id为空");
 		}
-		return userInfoService.deleteFamily(familyid);
+		return userInfoService.deleteFamily(familyid,userloginid);
 
 	}
 	

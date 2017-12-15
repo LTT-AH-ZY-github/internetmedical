@@ -1,4 +1,4 @@
-package com.netease.code;
+package com.netease.utils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -20,7 +20,6 @@ import org.apache.http.util.EntityUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.medical.exception.custom.MsgErrorException;
-import com.netease.checksum.CheckSumBuilder;
 import com.sun.xml.internal.ws.api.client.ThrowableInPacketCompletionFeature;
 
 import sun.net.www.content.image.gif;

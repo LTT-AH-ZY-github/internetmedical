@@ -1,4 +1,4 @@
-package com.medical.push;
+package com.push.baidu;
 
 import com.baidu.yun.core.log.YunLogEvent;
 import com.baidu.yun.core.log.YunLogHandler;
@@ -13,13 +13,13 @@ import com.baidu.yun.push.model.PushMsgToSingleDeviceResponse;
 import net.sf.json.JSONObject;
 
 /**
- * @ClassName:     PushToUser.java
- * @Description:   异步向用户发送百度云消息 
+ * @ClassName:     PushToDoctor.java
+ * @Description:   异步向医生发送百度云消息
  * @author          xyh
  * @version         V1.0  
- * @Date           2017年11月27日 下午9:49:44 
+ * @Date           2017年11月27日 下午9:48:43 
  */
-public class PushToUser {
+public class PushToDoctor {
 	private String channelid;
 
 	private String title;
@@ -28,7 +28,7 @@ public class PushToUser {
 
 	private Integer dev;
 
-	public PushToUser(String channelid, String title, String msg, Integer dev) {
+	public PushToDoctor(String channelid, String title, String msg, Integer dev) {
 		super();
 		this.channelid = channelid;
 		this.title = title;
@@ -59,10 +59,10 @@ public class PushToUser {
 		}.start();
 	}
 	
-	public static boolean pushMsgToSingleDeviceInAndroid(String channelId, String title, String msg)
+	public static boolean pushMsgToSingleDeviceInAndroid(String channelid, String title, String msg)
 			throws PushClientException, PushServerException {
 		// 1. get apiKey and secretKey from developer console
-		PushKeyPair pair = new PushKeyPair(PushConfig.AndroidInUserApiKey, PushConfig.AndroidInUserSecretKey);
+		PushKeyPair pair = new PushKeyPair(PushConfig.AndroidInDoctorApiKey, PushConfig.AndroidInDoctorSecretKey);
 
 		// 2. build a BaidupushClient object to access released interfaces
 		BaiduPushClient pushClient = new BaiduPushClient(pair, BaiduPushConstants.CHANNEL_REST_URL);
@@ -90,7 +90,7 @@ public class PushToUser {
 			 * "value"); //自定义内容，key-value
 			 */ // notification.put("custom_content", jsonCustormCont);
 
-			PushMsgToSingleDeviceRequest request = new PushMsgToSingleDeviceRequest().addChannelId(channelId)
+			PushMsgToSingleDeviceRequest request = new PushMsgToSingleDeviceRequest().addChannelId(channelid)
 					.addMsgExpires(new Integer(3600)). // message有效时间
 					addMessageType(1).// 1：通知,0:透传消息. 默认为0 注：IOS只有通知.
 					addMessage(notification.toString()).addDeviceType(3);// deviceType => 3:android, 4:ios
@@ -125,7 +125,7 @@ public class PushToUser {
 			throws PushClientException, PushServerException {
 		
 		// 1. get apiKey and secretKey from developer console
-		PushKeyPair pair = new PushKeyPair(PushConfig.IOSInUserApiKey, PushConfig.IOSInUserSecretKey);
+		PushKeyPair pair = new PushKeyPair(PushConfig.IOSInDoctorApiKey, PushConfig.IOSInDoctorSecretKey);
 
 		// 2. build a BaidupushClient object to access released interfaces
 		BaiduPushClient pushClient = new BaiduPushClient(pair,
@@ -149,7 +149,7 @@ public class PushToUser {
 			jsonAPS.put("sound", "ttt"); // 设置通知铃声样式
 			jsonAPS.put("badge", 1); // 设置角标，提示消息个数
 			notification.put("aps", jsonAPS);
-			notification.put("key1", "value1"); 
+			notification.put("key1", "value1");
 			notification.put("key2", "value2");
 
 			PushMsgToSingleDeviceRequest request = new PushMsgToSingleDeviceRequest()
