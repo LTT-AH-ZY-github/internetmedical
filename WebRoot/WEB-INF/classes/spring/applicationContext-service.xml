@@ -12,6 +12,7 @@
 	
 	
     <bean id="commonService" class="com.medical.service.impl.CommonServiceImpl"/>
+     <bean id="commonTradeServiceImpl" class="com.medical.service.impl.CommonTradeServiceImpl"/>
     <bean id="senderNotificationService" class="com.medical.service.impl.SenderNotificationServiceImpl"/>
     <bean id="deleteFileService" class="com.medical.service.impl.DeleteFileServiceImpl"/>
     <!--用户接口  -->

@@ -32,7 +32,7 @@ public class AlipayConfig {
 	public static String NOTIFY_URL = "";
 
 	// 页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问
-	public static String RETURN_URL = "http://189086dm21.imwork.net:30563/Web_Medical/Login/login.action";
+	public static String RETURN_URL = Global.HTTP_URL+"Web_Medical/Main/doctor/PaySuccess.action";
 
 	// 签名方式
 	public static String SIGN_TYPE = "RSA2";

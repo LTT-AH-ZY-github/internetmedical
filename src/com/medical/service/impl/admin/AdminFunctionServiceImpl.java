@@ -34,6 +34,7 @@ import com.medical.po.Hospitaldept;
 import com.medical.po.Hosplogininfo;
 import com.medical.po.Userinfo;
 import com.medical.po.Userlogininfo;
+import com.medical.service.iface.CommonTradeService;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.admin.AdminFunctionService;
 import com.medical.utils.result.DataResult;
@@ -74,7 +75,8 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	private DoctoraddressMapperCustom doctoraddressMapperCustom;
 	@Autowired
 	private AdminexamineMapper adminexamineMapper;
-
+	@Autowired 
+	private CommonTradeService commonTradeService;
 	
 	//管理员根据用户账号类型查询用户 
 	@Override
@@ -144,6 +146,7 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 			List<Familyinfo> list = familyinfoMapperCustom.selectByUserLoginIdAndType(userloginid, 1);
 			if (list==null || list.size() == 0) {
 				Familyinfo familyinfo = new Familyinfo();
+				familyinfo.setUserloginid(userloginid);
 				familyinfo.setFamilyname(userinfo.getUsername());
 				familyinfo.setFamilyage(userinfo.getUserage());
 				familyinfo.setFamilymale(userinfo.getUsermale());
@@ -260,6 +263,7 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 				doctoraddress.setDocaddressother(doctorinfo.getDochospother());
 				doctoraddress.setDocaddresslat(doctorinfo.getDochosplat());
 				doctoraddress.setDocaddresslon(doctorinfo.getDochosplon());
+				doctoraddress.setDocloginid(docloginid);
 				doctoraddress.setDocaddresstype(true);
 				doctoraddress.setDocaddresschecked(false);
 				int result = doctoraddressMapper.insertSelective(doctoraddress);

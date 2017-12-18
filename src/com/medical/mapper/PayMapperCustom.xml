@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.medical.mapper.PayMapperCustom" >
   <insert id="insertSelectiveReturnId" keyProperty="payid" useGeneratedKeys="true" parameterType="com.medical.po.Pay" >
-    insert into pay
+     insert into pay
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="payid != null" >
         payId,
@@ -31,14 +31,14 @@
       <if test="payendtime != null" >
         payEndTime,
       </if>
-      <if test="paybuyerid != null" >
-        payBuyerId,
+      <if test="paysenderid != null" >
+        paySenderId,
       </if>
-      <if test="paysellerid != null" >
-        paySellerId,
+      <if test="payreceiverid != null" >
+        payReceiverId,
       </if>
-      <if test="paysellername != null" >
-        paySellerName,
+      <if test="payreceivername != null" >
+        payReceiverName,
       </if>
       <if test="paytypeid != null" >
         payTypeId,
@@ -52,8 +52,8 @@
       <if test="payremark != null" >
         payRemark,
       </if>
-      <if test="paybuyername != null" >
-        payBuyerName,
+      <if test="paysendername != null" >
+        paySenderName,
       </if>
       <if test="payinfo != null" >
         payInfo,
@@ -87,14 +87,14 @@
       <if test="payendtime != null" >
         #{payendtime,jdbcType=TIMESTAMP},
       </if>
-      <if test="paybuyerid != null" >
-        #{paybuyerid,jdbcType=INTEGER},
+      <if test="paysenderid != null" >
+        #{paysenderid,jdbcType=INTEGER},
       </if>
-      <if test="paysellerid != null" >
-        #{paysellerid,jdbcType=INTEGER},
+      <if test="payreceiverid != null" >
+        #{payreceiverid,jdbcType=INTEGER},
       </if>
-      <if test="paysellername != null" >
-        #{paysellername,jdbcType=VARCHAR},
+      <if test="payreceivername != null" >
+        #{payreceivername,jdbcType=VARCHAR},
       </if>
       <if test="paytypeid != null" >
         #{paytypeid,jdbcType=INTEGER},
@@ -108,8 +108,8 @@
       <if test="payremark != null" >
         #{payremark,jdbcType=VARCHAR},
       </if>
-      <if test="paybuyername != null" >
-        #{paybuyername,jdbcType=VARCHAR},
+      <if test="paysendername != null" >
+        #{paysendername,jdbcType=VARCHAR},
       </if>
       <if test="payinfo != null" >
         #{payinfo,jdbcType=LONGVARCHAR},
@@ -124,21 +124,24 @@
   </select>
   <select id="selectByLoginIdAndType" resultType="map" parameterType="java.lang.Integer" >
     select a.payid,a.payorderid,a.paytradeno,a.paymodeid,b.paymodename,a.payalipaytradeno,a.paywxtradeno,a.paytotalamount,a.payreceiptamount,
-   a.paycreattime,a.payendtime,a.paytypeid,c.paytypename,a.paystateid,d.paystatename,a.payremark,a.paysellername as payreceivername,
-   a.paybuyername as paysendername 
+   a.paycreattime,a.payendtime,a.paytypeid,c.paytypename,a.paystateid,d.paystatename,a.payremark,a.payreceivername,
+   a.paysendername 
     from pay as a
     	left join paymode as b on a.payModeId= b.payModeId
     	left join paytype as c on a.payTypeId =c.payTypeId
     	left join paystate as d on a.payStateId= d.payStateId
     where  
+    <!-- 用户 -->
     <if test="param2==1">
-    	 (a.payBuyerId=#{0} and a.payTypeId=1) or (a.payBuyerId=#{0} and a.payTypeId=2) or (a.paySellerId=#{0} and a.payTypeId=4) 
+    	 (a.paySenderId=#{0} and a.payTypeId=1) or (a.paySenderId=#{0} and a.payTypeId=2) or (a.payReceiverId=#{0} and a.payTypeId=4) 
     </if>
+    <!-- 医生 -->
     <if test="param2==2">
-    (a.paySellerId=#{0} and a.payTypeId=1) or (a.paySellerId=#{0} and a.payTypeId=3) or (a.paySellerId=#{0} and a.payTypeId=5) 
+    (a.payReceiverId=#{0} and a.payTypeId=1) or (a.payReceiverId=#{0} and a.payTypeId=3) or (a.payReceiverId=#{0} and a.payTypeId=5) 
     </if>
+    <!-- 医院 -->
     <if test="param2==3">
-    	 (a.payBuyerId=#{0} and a.payTypeId=3) or (a.paySellerId=#{0} and a.payTypeId=2) or (a.paySellerId=#{0} and a.payTypeId=6)
+    	 (a.paySenderId=#{0} and a.payTypeId=3) or (a.payReceiverId=#{0} and a.payTypeId=2) or (a.payReceiverId=#{0} and a.payTypeId=6)
     </if>
     order by a.payCreatTime desc
   </select>

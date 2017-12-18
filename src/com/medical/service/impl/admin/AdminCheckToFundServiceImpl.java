@@ -39,6 +39,7 @@ import com.medical.mapper.UserinfoMapper;
 import com.medical.mapper.UserinfoMapperCustom;
 import com.medical.mapper.UserorderMapper;
 import com.medical.mapper.UserorderMapperCustom;
+import com.medical.mapper.UsersickMapper;
 import com.medical.po.Adminlogininfo;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorpurse;
@@ -47,7 +48,10 @@ import com.medical.po.Hosppurse;
 import com.medical.po.Pay;
 import com.medical.po.Userinfo;
 import com.medical.po.Userorder;
+import com.medical.po.Usersick;
+
 import com.medical.service.iface.CommonService;
+import com.medical.service.iface.CommonTradeService;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.admin.AdminCheckToFundService;
 import com.medical.utils.result.DataResult;
@@ -66,6 +70,7 @@ import net.sf.json.JSONObject;
  * @Date           2017年12月13日 上午11:27:46 
  */
 public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
+	
 	@Autowired
 	private DoctorinfoMapper doctorinfoMapper;
 	@Autowired
@@ -96,6 +101,11 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 	private UserinfoMapperCustom userinfoMapperCustom;
 	@Autowired
 	private SenderNotificationService senderNotificationService;
+	@Autowired 
+	private CommonTradeService commonTradeService;
+	@Autowired
+	private UsersickMapper usersickMapper;
+	
 	
 	/* (非 Javadoc)  
 	* <p>Title: listDoctorsToFund</p>  
@@ -107,6 +117,7 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 	*/  
 	@Override
 	public String listDoctorsToFund(Integer adminloginid, Integer limit, Integer offset) throws Exception {
+		
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo==null) {
 			return DataResult.error("账户不存在");
@@ -137,6 +148,10 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 	 */
 	@Override
 	public String updateFundToDoctor(Integer adminloginid, Integer docloginid) throws Exception {
+		boolean tradestate = commonTradeService.queryDoctorFundForUpdate(docloginid);
+		if (tradestate) {
+			return DataResult.error("退款中,两分钟后重试");
+		}
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo==null) {
 			return DataResult.error("账户不存在");
@@ -159,7 +174,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		AlipayFundTransToaccountTransferResponse response = AlipayFund.doFund(out_biz_no, payee_account, amount, payer_show_name, payee_real_name, remark);
 		updateFundToDoctorFinish(response, docloginid, doctorinfo.getDocid(), doctorinfo.getDocname(), adminloginid, doctorinfo.getDocpursebalance());
 		if (response.isSuccess()) {
-		    return DataResult.success("请求成功");
+			commonTradeService.queryDoctorFundForFinish(adminloginid);
+			return DataResult.success("退款成功");
 		}else {
 			return DataResult.error(response.getSubMsg());
 		}
@@ -168,14 +184,14 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 	public boolean updateFundToDoctorFinish(AlipayFundTransToaccountTransferResponse response,Integer docloginid,Integer docid,String docname,Integer adminloginid,BigDecimal amount) throws Exception {
 		Pay payrecord = new  Pay();
 		payrecord.setPayalipaytradeno(response.getOrderId());
-		payrecord.setPaybuyerid(docloginid);
-		payrecord.setPaybuyername(docname);
+		payrecord.setPayreceiverid(docloginid);
+		payrecord.setPayreceivername(docname);
 		payrecord.setPaycreattime(new Date());
 		payrecord.setPayinfo(response.toString());
 		payrecord.setPaymodeid(1);
 		payrecord.setPayreceiptamount(amount);
-		payrecord.setPaysellerid(adminloginid);
-		payrecord.setPaysellername("管理员");
+		payrecord.setPaysenderid(adminloginid);
+		payrecord.setPaysendername("管理员");
 		payrecord.setPaytotalamount(amount);
 		payrecord.setPaytradeno(response.getOutBizNo());
 		payrecord.setPayorderid(0);
@@ -240,6 +256,10 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 	
 	@Override
 	public String updateFundToHospital(Integer adminloginid, Integer hosploginid) throws Exception {
+		boolean tradestate = commonTradeService.queryHospitalFundForUpdate(hosploginid);
+		if (tradestate) {
+			return DataResult.error("退款中,两分钟后重试");
+		}
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo==null) {
 			return DataResult.error("账户不存在");
@@ -262,7 +282,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		AlipayFundTransToaccountTransferResponse response = AlipayFund.doFund(out_biz_no, payee_account, amount, payer_show_name, payee_real_name, remark);
 		updateFundToHospitalFinish(response, hosploginid, hospinfo.getHospid(), hospinfo.getHospname(), adminloginid, hospinfo.getHosppursebalance());
 		if (response.isSuccess()) {
-			return DataResult.success("请求成功");
+			commonTradeService.queryHospitalFundForFinish(hosploginid);
+			return DataResult.success("退款成功");
 		}else {
 			return DataResult.error(response.getSubMsg());
 		}
@@ -271,15 +292,15 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 	public boolean updateFundToHospitalFinish(AlipayFundTransToaccountTransferResponse response,Integer hosploginid,Integer hospid,String hospname,Integer adminloginid,BigDecimal amount) throws Exception {
 		Pay payrecord = new  Pay();
 		payrecord.setPayalipaytradeno(response.getOrderId());
-		payrecord.setPaybuyerid(hosploginid);
-		payrecord.setPaybuyername(hospname);
+		payrecord.setPaysenderid(hosploginid);
+		payrecord.setPaysendername(hospname);
 		payrecord.setPaycreattime(new Date());
 		payrecord.setPayinfo(response.toString());
 		payrecord.setPaymodeid(1);
 		payrecord.setPayreceiptamount(amount);
 		
-		payrecord.setPaysellerid(adminloginid);
-		payrecord.setPaysellername("管理员");
+		payrecord.setPayreceiverid(adminloginid);
+		payrecord.setPayreceivername("管理员");
 		payrecord.setPaytotalamount(amount);
 		payrecord.setPaytradeno(response.getOutBizNo());
 		payrecord.setPayorderid(0);
@@ -381,6 +402,10 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 	*/  
 	@Override
 	public String updateFundToUser(Integer adminloginid, Integer userorderid) throws Exception {
+		boolean tradestate = commonTradeService.queryUserFundForUpdate(userorderid);
+		if (tradestate) {
+			return DataResult.error("退款中,两分钟后重试");
+		}
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo==null) {
 			return DataResult.error("账户不存在");
@@ -394,6 +419,9 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 			return DataResult.error("该订单状态不支持该操作");
 		}
 		Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(userorder.getUserorderhospid());
+		if (hospinfo==null) {
+			return DataResult.error("医院不存在");
+		}
 		BigDecimal totaldeposit = userorder.getUserordertotaldeposit();
 		BigDecimal actualprice = userorder.getUserorderhprice();
 		if (totaldeposit.compareTo(actualprice)<=0) {
@@ -402,6 +430,9 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		//需要退的金额
 		BigDecimal surplus = totaldeposit.subtract(actualprice);
 		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userorder.getUserloginid());
+		if (userinfo==null) {
+			return DataResult.error("病人不存在");
+		}
 		String prefix = "uf";
 		String out_biz_no = MakeOrderNum.getTradeNo(prefix);
 		//String payee_account= userinfo.getUseralipayaccount();
@@ -410,30 +441,35 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 			return DataResult.error("该用户支付宝账号为空");
 		}
 		String amount = surplus+"";
-		String  payer_show_name = userorder.getFamilyname()+"订单结算"; 
+		//String  payer_show_name = userorder.getFamilyname()+"订单结算"; 
+		String  payer_show_name = "订单结算";
 		String  payee_real_name = "沙箱环境";
 		String remark=payer_show_name;
+		System.out.println("病人姓名"+userorder.getFamilyname());
 		AlipayFundTransToaccountTransferResponse response = AlipayFund.doFund(out_biz_no, payee_account, amount, payer_show_name, payee_real_name, remark);
-		updateFundToUserFinish(response, adminloginid, userorderid, userorder.getUserloginid(), userinfo.getUserid(), userinfo.getUsername(), userorder.getFamilyname(), userorder.getUserorderhospid(), hospinfo.getHospid(),hospinfo.getHospname(), surplus);
+		System.out.println("病人姓名response"+response);
+		updateFundToUserFinish(response, adminloginid, userorder.getUsersickid(),userorderid, userorder.getUserloginid(), userinfo.getUserid(), userinfo.getUsername(), userorder.getFamilyname(), userorder.getUserorderhospid(), hospinfo.getHospid(),hospinfo.getHospname(), surplus);
 		if (response.isSuccess()) {
-			return DataResult.success("请求成功");
+			commonTradeService.queryUserFundForFinish(userorderid);
+			return DataResult.success("退款成功");
 		}else {
 			return DataResult.error(response.getSubMsg());
 		}
 	}
 	@Transactional(rollbackFor = Exception.class)
-	public boolean updateFundToUserFinish(AlipayFundTransToaccountTransferResponse response,Integer adminloginid,Integer userorderid,Integer userloginid,Integer userid,String username,String famiyname,Integer hosploginid,Integer hospid,String hospname,BigDecimal amount) throws Exception {
+	public boolean updateFundToUserFinish(AlipayFundTransToaccountTransferResponse response,Integer adminloginid,Integer usersickid,Integer userorderid,Integer userloginid,Integer userid,String username,String famiyname,Integer hosploginid,Integer hospid,String hospname,BigDecimal amount) throws Exception {
 		Pay payrecord = new  Pay();
 		payrecord.setPayalipaytradeno(response.getOrderId());
-		payrecord.setPaybuyerid(userloginid);
-		payrecord.setPaybuyername(username);
+		System.out.println("接受者id"+userloginid);
+		payrecord.setPayreceiverid(userloginid);
+		payrecord.setPayreceivername(famiyname);
 		payrecord.setPaycreattime(new Date());
 		payrecord.setPayinfo(response.toString());
 		payrecord.setPaymodeid(1);
 		payrecord.setPayreceiptamount(amount);
 		
-		payrecord.setPaysellerid(hosploginid);
-		payrecord.setPaysellername(hospname);
+		payrecord.setPaysenderid(hosploginid);
+		payrecord.setPaysendername(hospname);
 		payrecord.setPaytotalamount(amount);
 		payrecord.setPaytradeno(response.getOutBizNo());
 		payrecord.setPayorderid(0);
@@ -489,7 +525,11 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		userorderrecord.setUserorderid(userorderid);
 		userorderrecord.setUserorderstateid(9);
 		int orderresult = userorderMapper.updateByPrimaryKeySelective(userorderrecord);
-		if (result<=0 || purseresult<=0 || orderresult<=0) {
+		Usersick usersick = new Usersick();
+		usersick.setUsersickid(usersickid);
+		usersick.setUsersickstateid(4);
+		int sickresult = usersickMapper.updateByPrimaryKeySelective(usersick);
+		if (result<=0 || purseresult<=0 || orderresult<=0 ||sickresult<=0) {
 			
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return false;

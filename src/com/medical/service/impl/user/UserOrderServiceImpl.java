@@ -51,6 +51,7 @@ import com.medical.po.Userorder;
 import com.medical.po.Usersick;
 import com.medical.po.custom.CalendarParmas;
 import com.medical.service.iface.CommonService;
+import com.medical.service.iface.CommonTradeService;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.user.UserOrderService;
 import com.medical.utils.StringReplaceUtil;
@@ -122,6 +123,8 @@ public class UserOrderServiceImpl implements UserOrderService {
 	private HosptitaldepositMapper hosptitaldepositMapper;
 	@Autowired 
 	private SenderNotificationService senderNotificationService;
+	@Autowired
+	private CommonTradeService commonTradeService;
 	
 	/* (非 Javadoc)  
 	* <p>Title: createOrder</p>  
@@ -337,6 +340,11 @@ public class UserOrderServiceImpl implements UserOrderService {
 	// 确认订单
 	@Override
 	public String updateOrderStateToConfirm(Integer userloginid, Integer userorderid, Integer type) throws Exception {
+		//订单锁
+		boolean tradestate = commonTradeService.queryUserPayDoctorForUpdate(userorderid);
+		if (tradestate) {
+			return DataResult.error("退款中,两分钟后重试");
+		}
 		Userlogininfo user = userloginiinfoMapper.selectByPrimaryKey(userloginid);
 		if (user==null) {
 			return DataResult.error("账户不存在");
@@ -363,6 +371,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 					JSONObject jsonCustormCont = new JSONObject();
 					senderNotificationService.createMsgUserToDoctor(order.getUserloginid(),
 							order.getUserorderdocloginid(), "通知消息", "支付成功", jsonCustormCont);
+					commonTradeService.queryUserPayDoctorForFinish(userorderid);
 					return DataResult.success("支付成功");
 				} else {
 					return DataResult.error("支付失败");
@@ -401,12 +410,12 @@ public class UserOrderServiceImpl implements UserOrderService {
 		pay.setPaycreattime(new Date());
 		// 1为支付宝支付
 		pay.setPaymodeid(1);
-		pay.setPaybuyerid(userorder.getUserloginid());
+		pay.setPaysenderid(userorder.getUserloginid());
 		//亲属姓名
-		pay.setPaybuyername(userorder.getFamilyname());
+		pay.setPaysendername(userorder.getFamilyname());
 		pay.setPaytotalamount(new BigDecimal(totalAmount));
-		pay.setPaysellerid(userorder.getUserorderdocloginid());
-		pay.setPaysellername(doctorinfo.getDocname());
+		pay.setPayreceiverid(userorder.getUserorderdocloginid());
+		pay.setPayreceivername(doctorinfo.getDocname());
 		pay.setPayorderid(userorder.getUserorderid());
 		pay.setPaytradeno(outTradeNo);
 		// 1为病人支付给医生
@@ -452,6 +461,8 @@ public class UserOrderServiceImpl implements UserOrderService {
 				// 未付款交易超时关闭，或支付完成后全额退款
 				record.setPaystateid(2);
 				boolean payResult = payMapper.updateByPrimaryKeySelective(record) > 0;
+				//解除订单锁
+				commonTradeService.queryUserPayDoctorForFinish(pay.getPayorderid());
 				if (payResult) {
 					return DataResult.success("支付结束");
 				} else {
@@ -506,7 +517,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 				Doctorpurse doctorpurse = new Doctorpurse();
 				doctorpurse.setDocloginid(order.getUserorderdocloginid());
 				doctorpurse.setDocpurseamount(new BigDecimal(amount));
-				String name = pay.getPaybuyername();
+				String name = pay.getPaysendername();
 				doctorpurse.setDocpurseremark("收到病人"+name+"付款");
 				doctorpurse.setDocpursetime(new Date());
 				// 1为转入
@@ -515,10 +526,13 @@ public class UserOrderServiceImpl implements UserOrderService {
 				doctorpurse.setDocpursebalance(total);
 				boolean purse = doctorpurseMapper.insertSelective(doctorpurse) > 0;
 				preorderMapperCustom.deleteAllByUserSickId(order.getUsersickid());
+				//解除订单锁
+				commonTradeService.queryUserPayDoctorForFinish(pay.getPayorderid());
 				if (result > 0 && payResult && purse && doctorinfoResult) {
 					JSONObject jsonCustormCont = new JSONObject();
 					senderNotificationService.createMsgUserToDoctor(order.getUserloginid(),
 							order.getUserorderdocloginid(), "通知消息", "支付成功", jsonCustormCont);
+					
 					return DataResult.success("支付成功");
 				} else {
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -644,11 +658,11 @@ public class UserOrderServiceImpl implements UserOrderService {
 		pay.setPaycreattime(new Date());
 		// 1为支付宝支付
 		pay.setPaymodeid(1);
-		pay.setPaybuyerid(userloginid);
-		pay.setPaybuyername(userorder.getFamilyname());
+		pay.setPaysenderid(userloginid);
+		pay.setPaysendername(userorder.getFamilyname());
 		pay.setPaytotalamount(new BigDecimal(totalAmount));
-		pay.setPaysellerid(hosploginid);
-		pay.setPaysellername(hospinfo.getHospname());
+		pay.setPayreceiverid(hosploginid);
+		pay.setPayreceivername(hospinfo.getHospname());
 		pay.setPayorderid(userorderid);
 		// 服务器生成交易单号
 		pay.setPaytradeno(outTradeNo);
@@ -755,7 +769,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 			Hosppurse hosppurse = new Hosppurse();
 			hosppurse.setHosploginid(order.getUserorderhospid());
 			hosppurse.setHosppurseamount(new BigDecimal(amount));
-			String sickname = pay.getPaybuyername();
+			String sickname = pay.getPaysendername();
 			hosppurse.setHosppurseremark("收到病人"+sickname+"押金");
 			hosppurse.setHosppursetime(new Date());
 			// 1为转入

@@ -22,11 +22,11 @@ public class Pay {
 
     private Date payendtime;
 
-    private Integer paybuyerid;
+    private Integer paysenderid;
 
-    private Integer paysellerid;
+    private Integer payreceiverid;
 
-    private String paysellername;
+    private String payreceivername;
 
     private Integer paytypeid;
 
@@ -36,7 +36,7 @@ public class Pay {
 
     private String payremark;
 
-    private String paybuyername;
+    private String paysendername;
 
     private String payinfo;
 
@@ -112,28 +112,28 @@ public class Pay {
         this.payendtime = payendtime;
     }
 
-    public Integer getPaybuyerid() {
-        return paybuyerid;
+    public Integer getPaysenderid() {
+        return paysenderid;
     }
 
-    public void setPaybuyerid(Integer paybuyerid) {
-        this.paybuyerid = paybuyerid;
+    public void setPaysenderid(Integer paysenderid) {
+        this.paysenderid = paysenderid;
     }
 
-    public Integer getPaysellerid() {
-        return paysellerid;
+    public Integer getPayreceiverid() {
+        return payreceiverid;
     }
 
-    public void setPaysellerid(Integer paysellerid) {
-        this.paysellerid = paysellerid;
+    public void setPayreceiverid(Integer payreceiverid) {
+        this.payreceiverid = payreceiverid;
     }
 
-    public String getPaysellername() {
-        return paysellername;
+    public String getPayreceivername() {
+        return payreceivername;
     }
 
-    public void setPaysellername(String paysellername) {
-        this.paysellername = paysellername == null ? null : paysellername.trim();
+    public void setPayreceivername(String payreceivername) {
+        this.payreceivername = payreceivername == null ? null : payreceivername.trim();
     }
 
     public Integer getPaytypeid() {
@@ -168,12 +168,12 @@ public class Pay {
         this.payremark = payremark == null ? null : payremark.trim();
     }
 
-    public String getPaybuyername() {
-        return paybuyername;
+    public String getPaysendername() {
+        return paysendername;
     }
 
-    public void setPaybuyername(String paybuyername) {
-        this.paybuyername = paybuyername == null ? null : paybuyername.trim();
+    public void setPaysendername(String paysendername) {
+        this.paysendername = paysendername == null ? null : paysendername.trim();
     }
 
     public String getPayinfo() {

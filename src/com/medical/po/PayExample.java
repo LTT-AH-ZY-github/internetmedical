@@ -676,193 +676,193 @@ public class PayExample {
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyeridIsNull() {
-            addCriterion("payBuyerId is null");
+        public Criteria andPaysenderidIsNull() {
+            addCriterion("paySenderId is null");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyeridIsNotNull() {
-            addCriterion("payBuyerId is not null");
+        public Criteria andPaysenderidIsNotNull() {
+            addCriterion("paySenderId is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyeridEqualTo(Integer value) {
-            addCriterion("payBuyerId =", value, "paybuyerid");
+        public Criteria andPaysenderidEqualTo(Integer value) {
+            addCriterion("paySenderId =", value, "paysenderid");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyeridNotEqualTo(Integer value) {
-            addCriterion("payBuyerId <>", value, "paybuyerid");
+        public Criteria andPaysenderidNotEqualTo(Integer value) {
+            addCriterion("paySenderId <>", value, "paysenderid");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyeridGreaterThan(Integer value) {
-            addCriterion("payBuyerId >", value, "paybuyerid");
+        public Criteria andPaysenderidGreaterThan(Integer value) {
+            addCriterion("paySenderId >", value, "paysenderid");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyeridGreaterThanOrEqualTo(Integer value) {
-            addCriterion("payBuyerId >=", value, "paybuyerid");
+        public Criteria andPaysenderidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("paySenderId >=", value, "paysenderid");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyeridLessThan(Integer value) {
-            addCriterion("payBuyerId <", value, "paybuyerid");
+        public Criteria andPaysenderidLessThan(Integer value) {
+            addCriterion("paySenderId <", value, "paysenderid");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyeridLessThanOrEqualTo(Integer value) {
-            addCriterion("payBuyerId <=", value, "paybuyerid");
+        public Criteria andPaysenderidLessThanOrEqualTo(Integer value) {
+            addCriterion("paySenderId <=", value, "paysenderid");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyeridIn(List<Integer> values) {
-            addCriterion("payBuyerId in", values, "paybuyerid");
+        public Criteria andPaysenderidIn(List<Integer> values) {
+            addCriterion("paySenderId in", values, "paysenderid");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyeridNotIn(List<Integer> values) {
-            addCriterion("payBuyerId not in", values, "paybuyerid");
+        public Criteria andPaysenderidNotIn(List<Integer> values) {
+            addCriterion("paySenderId not in", values, "paysenderid");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyeridBetween(Integer value1, Integer value2) {
-            addCriterion("payBuyerId between", value1, value2, "paybuyerid");
+        public Criteria andPaysenderidBetween(Integer value1, Integer value2) {
+            addCriterion("paySenderId between", value1, value2, "paysenderid");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyeridNotBetween(Integer value1, Integer value2) {
-            addCriterion("payBuyerId not between", value1, value2, "paybuyerid");
+        public Criteria andPaysenderidNotBetween(Integer value1, Integer value2) {
+            addCriterion("paySenderId not between", value1, value2, "paysenderid");
             return (Criteria) this;
         }
 
-        public Criteria andPayselleridIsNull() {
-            addCriterion("paySellerId is null");
+        public Criteria andPayreceiveridIsNull() {
+            addCriterion("payReceiverId is null");
             return (Criteria) this;
         }
 
-        public Criteria andPayselleridIsNotNull() {
-            addCriterion("paySellerId is not null");
+        public Criteria andPayreceiveridIsNotNull() {
+            addCriterion("payReceiverId is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPayselleridEqualTo(Integer value) {
-            addCriterion("paySellerId =", value, "paysellerid");
+        public Criteria andPayreceiveridEqualTo(Integer value) {
+            addCriterion("payReceiverId =", value, "payreceiverid");
             return (Criteria) this;
         }
 
-        public Criteria andPayselleridNotEqualTo(Integer value) {
-            addCriterion("paySellerId <>", value, "paysellerid");
+        public Criteria andPayreceiveridNotEqualTo(Integer value) {
+            addCriterion("payReceiverId <>", value, "payreceiverid");
             return (Criteria) this;
         }
 
-        public Criteria andPayselleridGreaterThan(Integer value) {
-            addCriterion("paySellerId >", value, "paysellerid");
+        public Criteria andPayreceiveridGreaterThan(Integer value) {
+            addCriterion("payReceiverId >", value, "payreceiverid");
             return (Criteria) this;
         }
 
-        public Criteria andPayselleridGreaterThanOrEqualTo(Integer value) {
-            addCriterion("paySellerId >=", value, "paysellerid");
+        public Criteria andPayreceiveridGreaterThanOrEqualTo(Integer value) {
+            addCriterion("payReceiverId >=", value, "payreceiverid");
             return (Criteria) this;
         }
 
-        public Criteria andPayselleridLessThan(Integer value) {
-            addCriterion("paySellerId <", value, "paysellerid");
+        public Criteria andPayreceiveridLessThan(Integer value) {
+            addCriterion("payReceiverId <", value, "payreceiverid");
             return (Criteria) this;
         }
 
-        public Criteria andPayselleridLessThanOrEqualTo(Integer value) {
-            addCriterion("paySellerId <=", value, "paysellerid");
+        public Criteria andPayreceiveridLessThanOrEqualTo(Integer value) {
+            addCriterion("payReceiverId <=", value, "payreceiverid");
             return (Criteria) this;
         }
 
-        public Criteria andPayselleridIn(List<Integer> values) {
-            addCriterion("paySellerId in", values, "paysellerid");
+        public Criteria andPayreceiveridIn(List<Integer> values) {
+            addCriterion("payReceiverId in", values, "payreceiverid");
             return (Criteria) this;
         }
 
-        public Criteria andPayselleridNotIn(List<Integer> values) {
-            addCriterion("paySellerId not in", values, "paysellerid");
+        public Criteria andPayreceiveridNotIn(List<Integer> values) {
+            addCriterion("payReceiverId not in", values, "payreceiverid");
             return (Criteria) this;
         }
 
-        public Criteria andPayselleridBetween(Integer value1, Integer value2) {
-            addCriterion("paySellerId between", value1, value2, "paysellerid");
+        public Criteria andPayreceiveridBetween(Integer value1, Integer value2) {
+            addCriterion("payReceiverId between", value1, value2, "payreceiverid");
             return (Criteria) this;
         }
 
-        public Criteria andPayselleridNotBetween(Integer value1, Integer value2) {
-            addCriterion("paySellerId not between", value1, value2, "paysellerid");
+        public Criteria andPayreceiveridNotBetween(Integer value1, Integer value2) {
+            addCriterion("payReceiverId not between", value1, value2, "payreceiverid");
             return (Criteria) this;
         }
 
-        public Criteria andPaysellernameIsNull() {
-            addCriterion("paySellerName is null");
+        public Criteria andPayreceivernameIsNull() {
+            addCriterion("payReceiverName is null");
             return (Criteria) this;
         }
 
-        public Criteria andPaysellernameIsNotNull() {
-            addCriterion("paySellerName is not null");
+        public Criteria andPayreceivernameIsNotNull() {
+            addCriterion("payReceiverName is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPaysellernameEqualTo(String value) {
-            addCriterion("paySellerName =", value, "paysellername");
+        public Criteria andPayreceivernameEqualTo(String value) {
+            addCriterion("payReceiverName =", value, "payreceivername");
             return (Criteria) this;
         }
 
-        public Criteria andPaysellernameNotEqualTo(String value) {
-            addCriterion("paySellerName <>", value, "paysellername");
+        public Criteria andPayreceivernameNotEqualTo(String value) {
+            addCriterion("payReceiverName <>", value, "payreceivername");
             return (Criteria) this;
         }
 
-        public Criteria andPaysellernameGreaterThan(String value) {
-            addCriterion("paySellerName >", value, "paysellername");
+        public Criteria andPayreceivernameGreaterThan(String value) {
+            addCriterion("payReceiverName >", value, "payreceivername");
             return (Criteria) this;
         }
 
-        public Criteria andPaysellernameGreaterThanOrEqualTo(String value) {
-            addCriterion("paySellerName >=", value, "paysellername");
+        public Criteria andPayreceivernameGreaterThanOrEqualTo(String value) {
+            addCriterion("payReceiverName >=", value, "payreceivername");
             return (Criteria) this;
         }
 
-        public Criteria andPaysellernameLessThan(String value) {
-            addCriterion("paySellerName <", value, "paysellername");
+        public Criteria andPayreceivernameLessThan(String value) {
+            addCriterion("payReceiverName <", value, "payreceivername");
             return (Criteria) this;
         }
 
-        public Criteria andPaysellernameLessThanOrEqualTo(String value) {
-            addCriterion("paySellerName <=", value, "paysellername");
+        public Criteria andPayreceivernameLessThanOrEqualTo(String value) {
+            addCriterion("payReceiverName <=", value, "payreceivername");
             return (Criteria) this;
         }
 
-        public Criteria andPaysellernameLike(String value) {
-            addCriterion("paySellerName like", value, "paysellername");
+        public Criteria andPayreceivernameLike(String value) {
+            addCriterion("payReceiverName like", value, "payreceivername");
             return (Criteria) this;
         }
 
-        public Criteria andPaysellernameNotLike(String value) {
-            addCriterion("paySellerName not like", value, "paysellername");
+        public Criteria andPayreceivernameNotLike(String value) {
+            addCriterion("payReceiverName not like", value, "payreceivername");
             return (Criteria) this;
         }
 
-        public Criteria andPaysellernameIn(List<String> values) {
-            addCriterion("paySellerName in", values, "paysellername");
+        public Criteria andPayreceivernameIn(List<String> values) {
+            addCriterion("payReceiverName in", values, "payreceivername");
             return (Criteria) this;
         }
 
-        public Criteria andPaysellernameNotIn(List<String> values) {
-            addCriterion("paySellerName not in", values, "paysellername");
+        public Criteria andPayreceivernameNotIn(List<String> values) {
+            addCriterion("payReceiverName not in", values, "payreceivername");
             return (Criteria) this;
         }
 
-        public Criteria andPaysellernameBetween(String value1, String value2) {
-            addCriterion("paySellerName between", value1, value2, "paysellername");
+        public Criteria andPayreceivernameBetween(String value1, String value2) {
+            addCriterion("payReceiverName between", value1, value2, "payreceivername");
             return (Criteria) this;
         }
 
-        public Criteria andPaysellernameNotBetween(String value1, String value2) {
-            addCriterion("paySellerName not between", value1, value2, "paysellername");
+        public Criteria andPayreceivernameNotBetween(String value1, String value2) {
+            addCriterion("payReceiverName not between", value1, value2, "payreceivername");
             return (Criteria) this;
         }
 
@@ -1116,73 +1116,73 @@ public class PayExample {
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyernameIsNull() {
-            addCriterion("payBuyerName is null");
+        public Criteria andPaysendernameIsNull() {
+            addCriterion("paySenderName is null");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyernameIsNotNull() {
-            addCriterion("payBuyerName is not null");
+        public Criteria andPaysendernameIsNotNull() {
+            addCriterion("paySenderName is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyernameEqualTo(String value) {
-            addCriterion("payBuyerName =", value, "paybuyername");
+        public Criteria andPaysendernameEqualTo(String value) {
+            addCriterion("paySenderName =", value, "paysendername");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyernameNotEqualTo(String value) {
-            addCriterion("payBuyerName <>", value, "paybuyername");
+        public Criteria andPaysendernameNotEqualTo(String value) {
+            addCriterion("paySenderName <>", value, "paysendername");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyernameGreaterThan(String value) {
-            addCriterion("payBuyerName >", value, "paybuyername");
+        public Criteria andPaysendernameGreaterThan(String value) {
+            addCriterion("paySenderName >", value, "paysendername");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyernameGreaterThanOrEqualTo(String value) {
-            addCriterion("payBuyerName >=", value, "paybuyername");
+        public Criteria andPaysendernameGreaterThanOrEqualTo(String value) {
+            addCriterion("paySenderName >=", value, "paysendername");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyernameLessThan(String value) {
-            addCriterion("payBuyerName <", value, "paybuyername");
+        public Criteria andPaysendernameLessThan(String value) {
+            addCriterion("paySenderName <", value, "paysendername");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyernameLessThanOrEqualTo(String value) {
-            addCriterion("payBuyerName <=", value, "paybuyername");
+        public Criteria andPaysendernameLessThanOrEqualTo(String value) {
+            addCriterion("paySenderName <=", value, "paysendername");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyernameLike(String value) {
-            addCriterion("payBuyerName like", value, "paybuyername");
+        public Criteria andPaysendernameLike(String value) {
+            addCriterion("paySenderName like", value, "paysendername");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyernameNotLike(String value) {
-            addCriterion("payBuyerName not like", value, "paybuyername");
+        public Criteria andPaysendernameNotLike(String value) {
+            addCriterion("paySenderName not like", value, "paysendername");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyernameIn(List<String> values) {
-            addCriterion("payBuyerName in", values, "paybuyername");
+        public Criteria andPaysendernameIn(List<String> values) {
+            addCriterion("paySenderName in", values, "paysendername");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyernameNotIn(List<String> values) {
-            addCriterion("payBuyerName not in", values, "paybuyername");
+        public Criteria andPaysendernameNotIn(List<String> values) {
+            addCriterion("paySenderName not in", values, "paysendername");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyernameBetween(String value1, String value2) {
-            addCriterion("payBuyerName between", value1, value2, "paybuyername");
+        public Criteria andPaysendernameBetween(String value1, String value2) {
+            addCriterion("paySenderName between", value1, value2, "paysendername");
             return (Criteria) this;
         }
 
-        public Criteria andPaybuyernameNotBetween(String value1, String value2) {
-            addCriterion("payBuyerName not between", value1, value2, "paybuyername");
+        public Criteria andPaysendernameNotBetween(String value1, String value2) {
+            addCriterion("paySenderName not between", value1, value2, "paysendername");
             return (Criteria) this;
         }
     }

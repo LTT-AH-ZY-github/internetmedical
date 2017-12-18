@@ -350,12 +350,12 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		pay.setPaycreattime(new Date());
 		// 1为支付宝支付
 		pay.setPaymodeid(1);
-		pay.setPaybuyerid(hosploginid);
+		pay.setPaysenderid(hosploginid);
 		String hospname = hospinfoMapperCustom.selectByHospLoginId(hosploginid).getHospname();
-		pay.setPaybuyername(hospname);
+		pay.setPaysendername(hospname);
 		pay.setPaytotalamount(new BigDecimal(totalAmount));
-		pay.setPaysellerid(hosporder.getDoctorid());
-		pay.setPaysellername(doctorinfo.getDocname());
+		pay.setPayreceiverid(hosporder.getDoctorid());
+		pay.setPayreceivername(doctorinfo.getDocname());
 		pay.setPayorderid(hosporderid);
 		pay.setPaytradeno(outTradeNo);
 		// 1为病人支付给医生

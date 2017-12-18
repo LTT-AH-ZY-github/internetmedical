@@ -165,6 +165,18 @@ public class UserInfoController {
 		if (userloginid == null) {
 			return DataResult.error("该用户的id为空");
 		}
+		if (username!=null && !CheckUtils.isChineseNameLegal(username)) {
+			return DataResult.error("姓名输入不合法");
+		}
+		if (usermale!=null && !CheckUtils.isSexLegal(usermale)) {
+			return DataResult.error("性别输入不合法");
+		}
+		if (usercardnum!=null && usercardnum.length()!=18) {
+			return DataResult.error("身份证输入不合法");
+		}
+		if (userage!=null && !CheckUtils.isAgeLegal(userage)) {
+			return DataResult.error("年龄证输入不合法");
+		}
 		return userInfoService.updateUserInfo(userloginid, username, usermale, usercardnum, useradrprovince,
 				useradrcity, userage, useradrarea, useradrother, pictureFile);
 
