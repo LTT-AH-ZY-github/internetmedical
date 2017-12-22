@@ -38,11 +38,11 @@ public class HospitalNotificationController {
 		if (hosploginid == null) {
 			return DataResult.error("医院登录id为空");
 		}
-		if (limit == null) {
-			return DataResult.error("limit值为空");
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为非零正整数");
 		}
-		if (limit != null && limit < 0) {
-			return DataResult.error("limit值应为大于0的整数");
+		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
+			return DataResult.error("offset应为正整数");
 		}
 		if (type != null && (type != 1 || type != 2)) {
 			return DataResult.error("type值超出范围");
@@ -73,8 +73,11 @@ public class HospitalNotificationController {
 		if (hosploginid == null) {
 			return DataResult.error("医院登录id为空");
 		}
-		if (!CheckUtils.isPositiveIntegerLegal(limit)) {
-			return DataResult.error("limit应为正整数");
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为非零正整数");
+		}
+		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
+			return DataResult.error("offset应为正整数");
 		}
 		if (type != null && (type != 1 || type != 2)) {
 			return DataResult.error("type值超出范围");

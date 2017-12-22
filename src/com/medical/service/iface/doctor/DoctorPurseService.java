@@ -1,5 +1,7 @@
 package com.medical.service.iface.doctor;
 
+import java.math.BigDecimal;
+
 /**
  * @ClassName:     DoctorPurseService.java
  * @Description:   用户钱包功能接口
@@ -61,6 +63,45 @@ public interface DoctorPurseService {
 	 * @return: String
 	 */
 	String listTradeRecord(Integer docloginid, Integer page) throws Exception;
+
+	/**
+	 * @Title: listTradeRecordByOrder
+	 * @Description: TODO
+	 * @param userloginid
+	 * @param userorderid
+	 * @param page
+	 * @return
+	 * @return: String
+	 */
+	String listTradeRecordByOrder(Integer userloginid, Integer userorderid);
+
+	/**
+	 * @Title: listTradeRecordByConsultation
+	 * @Description: TODO
+	 * @param docloginid
+	 * @param hosporderid
+	 * @return
+	 * @return: String
+	 */
+	String listTradeRecordByConsultation(Integer docloginid, Integer hosporderid);
+
+	
+
+
+	/**
+	 * @Title: updateBalance
+	 * @Description: 更新账户余额
+	 * @param docloginid 医生登录id
+	 * @param type 1为转入 2为转出
+	 * @param amount 变动金额
+	 * @param remark 备注
+	 * @param payid 支付id 
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String updateBalance(Integer docloginid, Integer type, BigDecimal amount, String remark, Integer payid)
+			throws Exception;
 
 	
 

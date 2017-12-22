@@ -102,4 +102,22 @@ public class UserPursueController {
 
 	}
 	
+	@RequestMapping(value = "/listtraderecordbyorder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "根据订单获取交易记录", httpMethod = "POST", notes = "根据订单获取交易记录", produces = "application/json")
+	public String listTradeRecordByOrder(
+			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam(value = "userloginid") Integer userloginid,
+			@ApiParam(name = "userorderid", required = true, value = "订单id") @RequestParam Integer userorderid
+			
+	) throws Exception{
+		if (userloginid == null) {
+			return DataResult.error("用户登录id为空");
+		}
+		if (userorderid==null) {
+			return DataResult.error("订单id为空");
+		}
+		return userPursueService.listTradeRecordByOrder(userloginid, userorderid);
+		// TODO Auto-generated method stub
+
+	}
+	
 }

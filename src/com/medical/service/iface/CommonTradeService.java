@@ -74,20 +74,57 @@ public interface CommonTradeService {
 	void queryHospitalFundForFinish(Integer id);
 
 	/**
-	 * @Title: queryUserPayDoctorForUpdate
+	 * @Title: queryUserOrderForCreat
 	 * @Description: TODO
 	 * @param id
 	 * @return
 	 * @return: boolean
 	 */
-	boolean queryUserPayDoctorForUpdate(Integer id);
+	boolean queryUserOrderForCreat(Integer id);
 
 	/**
-	 * @Title: queryUserPayDoctorForFinish
+	 * @Title: queryUserOrderIsExit
+	 * @Description: TODO
+	 * @param id
+	 * @return
+	 * @return: boolean
+	 */
+	boolean queryUserOrderIsExit(Integer id);
+
+	/**
+	 * @Title: queryUserOrderForFinish
 	 * @Description: TODO
 	 * @param id
 	 * @return: void
 	 */
-	void queryUserPayDoctorForFinish(Integer id);
+	void queryUserOrderForFinish(Integer id);
+
+	/**
+	 * @Title: queryHospitalOrderForCreat
+	 * @Description: TODO
+	 * @param id
+	 * @return
+	 * @return: boolean
+	 */
+	boolean queryHospitalOrderForCreat(Integer id);
+
+	/**
+	 * @Title: queryHospitalOrderIsExit
+	 * @Description: TODO
+	 * @param id
+	 * @return
+	 * @return: boolean
+	 */
+	boolean queryHospitalOrderIsExit(Integer id);
+
+	/**
+	 * @Title: queryHospitalOrderForFinish
+	 * @Description: TODO
+	 * @param id
+	 * @return: void
+	 */
+	void queryHospitalOrderForFinish(Integer id);
+
+	
 	
 }

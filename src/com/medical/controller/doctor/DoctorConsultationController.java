@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.service.iface.doctor.DoctorConsultationService;
+import com.medical.utils.CheckUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -37,12 +38,8 @@ public class DoctorConsultationController {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
-		if (page == null) {
-			return DataResult.error("当前页为空");
-		} else {
-			if (page <= 0) {
-				return DataResult.error("当前页为大于0的整数");
-			}
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(page)) {
+			return DataResult.error("当前页为大于0的整数");
 		}
 		if (type != null && (type < 0 || type > 5)) {
 			return DataResult.error("type值超出范围");
@@ -88,40 +85,25 @@ public class DoctorConsultationController {
 			return DataResult.error("订单id为空");
 		}
 		if (orderdoctorprice == null) {
-			return DataResult.error("价格为空");
+			return DataResult.error("医生期望价格为空");
 		}
-		if (orderdoctortpricetype == null) {
-			return DataResult.error("交通类型为空");
-		} else {
-			if (orderdoctortpricetype == 1 || orderdoctortpricetype == 2) {
-				if (orderdoctortpricetype == 2 && orderdoctortprice == null) {
-					return DataResult.error("交通费用为空");
-				}
-			} else {
-				return DataResult.error("交通类型超出范围");
-			}
+		if (orderdoctortpricetype == null ||(orderdoctortpricetype != 1 && orderdoctortpricetype != 2)) {
+			return DataResult.error("交通类型有误");
+		} 
+		if (orderdoctortpricetype == 2 && orderdoctortprice == null) {
+			return DataResult.error("交通费用为空");
 		}
-		if (orderdoctorapricetype == null) {
-			return DataResult.error("住宿类型为空");
-		} else {
-			if (orderdoctorapricetype == 1 || orderdoctorapricetype == 2) {
-				if (orderdoctorapricetype == 2 && orderdoctoraprice == null) {
-					return DataResult.error("住宿费用为空");
-				}
-			} else {
-				return DataResult.error("住宿类型超出范围");
-			}
+		if (orderdoctorapricetype == null || (orderdoctorapricetype != 1 && orderdoctorapricetype != 2)) {
+			return DataResult.error("住宿类型有误");
+		} 
+		if (orderdoctorapricetype == 2 && orderdoctoraprice == null) {
+			return DataResult.error("住宿费用为空");
 		}
-		if (orderdoctorepricetype == null) {
-			return DataResult.error("餐饮类型为空");
-		} else {
-			if (orderdoctorepricetype == 1 || orderdoctorepricetype == 2) {
-				if (orderdoctorepricetype == 2 && orderdoctoreprice == null) {
-					return DataResult.error("餐饮费用为空");
-				}
-			} else {
-				return DataResult.error("餐饮类型超出范围");
-			}
+		if (orderdoctorepricetype == null || (orderdoctorepricetype != 1 && orderdoctorepricetype != 2)) {
+			return DataResult.error("餐饮类型有误");
+		}
+		if (orderdoctorepricetype == 2 && orderdoctoreprice == null) {
+			return DataResult.error("餐饮费用为空");
 		}
 		return doctorConsultationService.updateConsultationToConfirm(docloginid, hosporderid, orderdoctorprice,
 				orderdoctortpricetype, orderdoctortprice, orderdoctorapricetype, orderdoctoraprice,

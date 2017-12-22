@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.service.iface.admin.AdminFunctionService;
+import com.medical.utils.CheckUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -40,11 +41,24 @@ public class AdminFunctionController {
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
 		}
+		if (type==null ) {
+			return DataResult.error("type值为空");
+		}
+		if (type!=null && (type<0||type>4)) {
+			return DataResult.error("type值超出范围");
+		}
 		if (type==0) {
 			type=null;
 		}
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为非零正整数");
+		}
+		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
+			return DataResult.error("offset应为正整数");
+		}
 		return adminFunctionService.listUser(adminloginid, limit, offset, type);
 	}
+	
 	@RequestMapping(value="/getuserdetail", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value="获取用户详情",httpMethod="POST",notes="获取用户详情")
 	public String getUserDetail(
@@ -91,8 +105,20 @@ public class AdminFunctionController {
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
 		}
+		if (type==null ) {
+			return DataResult.error("type值为空");
+		}
+		if (type!=null && (type<0||type>4)) {
+			return DataResult.error("type值超出范围");
+		}
 		if (type==0) {
 			type=null;
+		}
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为非零正整数");
+		}
+		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
+			return DataResult.error("offset应为正整数");
 		}
 		return adminFunctionService.listDoctor(adminloginid, limit, offset, type);
 	}
@@ -143,8 +169,20 @@ public class AdminFunctionController {
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
 		}
+		if (type==null ) {
+			return DataResult.error("type值为空");
+		}
+		if (type!=null && (type<0||type>4)) {
+			return DataResult.error("type值超出范围");
+		}
 		if (type==0) {
 			type=null;
+		}
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为非零正整数");
+		}
+		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
+			return DataResult.error("offset应为正整数");
 		}
 		return adminFunctionService.listHospital(adminloginid, limit, offset, type);
 	}
@@ -194,13 +232,21 @@ public class AdminFunctionController {
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
 		}
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为非零正整数");
+		}
+		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
+			return DataResult.error("offset应为正整数");
+		}
+		if (check==null) {
+			return DataResult.error("审核状态为空");
+		}
 		return adminFunctionService.listDept(adminloginid, limit, offset,check);
 	}
 	@RequestMapping(value="/listfirstdept", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value="获取医院部门",httpMethod="POST",notes="获取医院部门")
 	public String listfirstdept(
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid
-			
 			)throws Exception{
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");

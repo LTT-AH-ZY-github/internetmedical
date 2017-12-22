@@ -4,10 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.mapper.AdminexamineMapper;
@@ -38,12 +36,18 @@ import com.medical.service.iface.CommonTradeService;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.admin.AdminFunctionService;
 import com.medical.utils.result.DataResult;
-
 import net.sf.json.JSONObject;
 
 
 
 
+/**
+ * @ClassName:     AdminFunctionServiceImpl.java
+ * @Description:   TODO(用一句话描述该文件做什么) 
+ * @author          xyh
+ * @version         V1.0  
+ * @Date           2017年12月19日 下午9:08:24 
+ */
 public class AdminFunctionServiceImpl implements AdminFunctionService{
 	@Autowired
 	private AdminlogininfoMapper adminlogininfoMapper;
@@ -75,8 +79,7 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	private DoctoraddressMapperCustom doctoraddressMapperCustom;
 	@Autowired
 	private AdminexamineMapper adminexamineMapper;
-	@Autowired 
-	private CommonTradeService commonTradeService;
+	
 	
 	//管理员根据用户账号类型查询用户 
 	@Override
@@ -97,9 +100,9 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 			data.put("rows", pageInfo.getList());
 			//总共页数
 			data.put("total", pageInfo.getTotal());
-			return DataResult.success("获取数据成功", data);
+			return DataResult.success("获取成功", data);
 		}else {
-			return DataResult.success("获取数据为空", null);
+			return DataResult.success("获取成功", null);
 		}
 	}
 	
@@ -112,9 +115,9 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		}
 		Map<String, Object> map = userinfoMapperCustom.selectInfoByLoginIdInAdmin(userloginid);
 		if (map != null && !map.isEmpty()) {
-			return DataResult.success("获取数据成功", map);
+			return DataResult.success("获取成功", map);
 		}else {
-			return DataResult.success("获取数据为空", null);
+			return DataResult.error("该用户不存在");
 		}
 	}
 	
@@ -208,9 +211,9 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 			data.put("rows", pageInfo.getList());
 			// 总共页数
 			data.put("total", pageInfo.getTotal());
-			return DataResult.success("获取数据成功", data);
+			return DataResult.success("获取成功", data);
 		} else {
-			return DataResult.success("获取数据为空", null);
+			return DataResult.success("获取成功", null);
 		}
 	}
 	
@@ -223,9 +226,9 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		}
 		Map<String, Object> map = doctorinfoMapperCustom.selectInfoByDocLoginIdInAdmin(docloginid);
 		if (map != null && !map.isEmpty()) {
-			return DataResult.success("获取数据成功", map);
+			return DataResult.success("获取成功", map);
 		}else {
-			return DataResult.success("获取数据为空", null);
+			return DataResult.success("获取成功", null);
 		}
 	}
 	//审核医生
@@ -336,9 +339,9 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		}
 		Map<String, Object> map = hospinfoMapperCustom.selectInfoByHospLoginIdInAdmin(hosploginid);
 		if (map != null && !map.isEmpty()) {
-			return DataResult.success("获取数据成功", map);
+			return DataResult.success("获取成功", map);
 		}else {
-			return DataResult.success("获取数据为空", null);
+			return DataResult.success("获取成功", null);
 		}
 	}
 	//审核医院
@@ -415,9 +418,9 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 			// 总共页数
 			data.put("total", pageInfo.getTotal());
 			System.out.println("数据"+pageInfo.getList());
-			return DataResult.success("获取数据成功", data);
+			return DataResult.success("获取成功", data);
 		} else {
-			return DataResult.success("获取数据为空", null);
+			return DataResult.success("获取成功", null);
 		}
 	}
 
@@ -476,7 +479,7 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 			return DataResult.error("该管理员账号不存在");
 		}
 		List<Map<String, Object>> list = hospitaldeptMapperCustom.selectFirstDept();
-		return DataResult.success("获取数据成功", list);
+		return DataResult.success("获取成功", list);
 	}
 
 	

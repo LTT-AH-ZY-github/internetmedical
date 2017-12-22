@@ -3,6 +3,7 @@
  */
 package com.medical.controller.hopital;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.po.Hospitalunitprice;
+import com.medical.service.iface.CommonService;
 import com.medical.service.iface.hospital.HospitalHomeService;
+import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
@@ -26,6 +29,8 @@ import com.wordnik.swagger.annotations.ApiParam;
 public class HospitalHomeController {
 	@Autowired
 	private HospitalHomeService hospitalHomeService;
+	@Autowired
+	private CommonService commonService;
 	@RequestMapping(value = "/listdept", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取部门", httpMethod = "POST", notes = "获取部门")
 	public String listDept(

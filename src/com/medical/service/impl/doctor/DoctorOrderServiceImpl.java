@@ -3,11 +3,13 @@ package com.medical.service.impl.doctor;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.validation.constraints.Null;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
@@ -48,6 +50,7 @@ import com.medical.po.Userlogininfo;
 import com.medical.po.Userorder;
 import com.medical.po.Usersick;
 import com.medical.service.iface.CommonService;
+import com.medical.service.iface.CommonTradeService;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.doctor.DoctorAccountService;
 import com.medical.service.iface.doctor.DoctorOrderService;
@@ -121,6 +124,9 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 	private HosporderMapperCustom hosporderMapperCustom;
 	@Autowired 
 	private SenderNotificationService senderNotificationService;
+	@Autowired
+	private CommonTradeService commonTradeService;
+
 
 	/* (非 Javadoc)  
 	* <p>Title: creatPreOrder</p>  
@@ -135,12 +141,21 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 	@Override
 	public String creatPreOrder(Integer usersickid, Integer docloginid, Double preorderprice) throws Exception {
 		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
-		if (doctorlogininfo==null) {
+		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
+		if (doctorlogininfo==null ||doctorinfo==null) {
 			return DataResult.error("用户不存在");
 		}
 		int type = doctorlogininfo.getDoclogintype();
 		if (type!=3) {
 			return DataResult.error("账户未审核");
+		}
+		String alipayaccount = doctorinfo.getDocalipayaccount();
+		String alipayname = doctorinfo.getDocalipayname();
+		if (StringUtils.isBlank(alipayaccount)) {
+			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
+		}
+		if (StringUtils.isBlank(alipayname)) {
+			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
 		}
 		Preorder preorder = new Preorder();
 		preorder.setPreorderdocloginid(docloginid);
@@ -233,6 +248,9 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		int result = preorderMapper.deleteByPrimaryKey(preorderid);
 		if (result > 0) {
 			JSONObject jsonCustormCont = new JSONObject();
+			jsonCustormCont.put("doc_id", docloginid);
+			jsonCustormCont.put("sick_id", preorder.getUsersickid());
+			jsonCustormCont.put("type", "1");
 			senderNotificationService.createMsgDoctorToUser(docloginid, userloginid, "消息通知", "取消申请了您的病情",
 					jsonCustormCont);
 			return DataResult.success("取消成功");
@@ -359,8 +377,8 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			// 3医生推荐
 			preorder.setPreordertype(3);
 			preorder.setPreorderredocloginid(docloginid);
-			Userlogininfo userlogininfo = userlogininfoMapper.selectByPrimaryKey(redocloginid);
-			if (userlogininfo == null) {
+			Doctorlogininfo redoctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(redocloginid);
+			if (redoctorlogininfo == null) {
 				return DataResult.error("推荐医生不存在");
 			}
 			preorder.setPreorderdocloginid(redocloginid);
@@ -396,6 +414,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 				msg = "拒绝了您的申请并推荐了" + name + "医生";
 				jsonCustormCont.put("redoc_id", redocloginid);
 			} else {
+				jsonCustormCont.put("redoc_id", 0);
 				msg = "拒绝了您的订单";
 			}
 			jsonCustormCont.put("accept", false);
@@ -425,9 +444,23 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 	*/  
 	@Override
 	public String updateOrderConfirm(Userorder userorder) throws Exception {
-		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(userorder.getUserorderdocloginid());
-		if (doctorlogininfo==null) {
+		Integer docloginid = userorder.getUserorderdocloginid(); 
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
+		if (doctorlogininfo==null ||doctorinfo==null) {
 			return DataResult.error("账号不存在");
+		}
+		int type = doctorlogininfo.getDoclogintype();
+		if (type!=3) {
+			return DataResult.error("账户未审核");
+		}
+		String alipayaccount = doctorinfo.getDocalipayaccount();
+		String alipayname = doctorinfo.getDocalipayname();
+		if (StringUtils.isBlank(alipayaccount)) {
+			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
+		}
+		if (StringUtils.isBlank(alipayname)) {
+			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
 		}
 		Integer userorderid = userorder.getUserorderid();
 		Userorder order = userorderMapper.selectByPrimaryKey(userorderid);
@@ -493,6 +526,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			jsonCustormCont.put("sick_id", order.getUsersickid());
 			jsonCustormCont.put("order_id", userorderid);
 			jsonCustormCont.put("type", "3");
+			jsonCustormCont.put("redoc_id", 0);
 			boolean push = senderNotificationService.createMsgDoctorToUser(order.getUserorderdocloginid(), order.getUserloginid(),
 					"等待确认", "接受了您的订单", jsonCustormCont);
 			if (push) {
@@ -528,6 +562,11 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		if (docloginid != doc) {
 			return DataResult.error("账号信息不匹配");
 		}
+		//判断订单是否处于支付中
+		boolean isExit = commonTradeService.queryUserOrderIsExit(userorderid);
+		if (isExit) {
+				return DataResult.error("支付中,不可取消");
+		}
 		Integer userorderstateid = userorder.getUserorderstateid();
 		Integer usersickid = userorder.getUsersickid();
 		if (userorderstateid >= 4) {
@@ -551,7 +590,13 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		int sickResult = usersickMapper.updateByPrimaryKeySelective(sick);
 		if (orderResult > 0 && sickResult > 0) {
 			JSONObject jsonCustormCont = new JSONObject();
-			boolean push = senderNotificationService.createMsgDoctorToUser(docloginid, userorder.getUserloginid(), "通知消息", "取消了您订单",
+			jsonCustormCont.put("accept", false);
+			jsonCustormCont.put("doc_id", userorder.getUserloginid());
+			jsonCustormCont.put("sick_id", userorder.getUsersickid());
+			jsonCustormCont.put("order_id", userorderid);
+			jsonCustormCont.put("type", "3");
+			jsonCustormCont.put("redoc_id", 0);
+			senderNotificationService.createMsgDoctorToUser(docloginid, userorder.getUserloginid(), "通知消息", "取消了您订单",
 					jsonCustormCont);
 			return DataResult.success("取消成功");
 		} else {
@@ -595,6 +640,14 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			if (hospinfo == null) {
 				return DataResult.error("该医院不存在");	
 			}
+			String alipayaccount = hospinfo.getHospalipayaccount();
+			String alipayname = hospinfo.getHospalipayname();
+			if (StringUtils.isBlank(alipayaccount)) {
+				return DataResult.error("该医院绑定的支付宝账号为空,不可进行该操作");
+			}
+			if (StringUtils.isBlank(alipayname)) {
+				return DataResult.error("该医院绑定的支付宝账号姓名为空,不可进行该操作");
+			}
 			Userorder userorder = new Userorder();
 			userorder.setUserorderid(userorderid);
 			// 5需要住院，等待医院确认
@@ -608,10 +661,9 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			int result = userorderMapper.updateByPrimaryKeySelective(userorder);
 			if (result > 0) {
 				JSONObject jsonCustormCont = new JSONObject();
-				jsonCustormCont.put("doc_id", order.getUserloginid());
 				jsonCustormCont.put("order_id", userorderid);
 				jsonCustormCont.put("type", "5");
-				boolean push = senderNotificationService.createMsgDoctorToUser(docloginid, order.getUserloginid(), "通知消息",
+				senderNotificationService.createMsgDoctorToUser(docloginid, order.getUserloginid(), "通知消息",
 						"就诊已完成,需要住院", jsonCustormCont);
 				senderNotificationService.createMsgDoctorToHospital(docloginid,userorderhospid,"通知消息","申请了一个住院订单", jsonCustormCont);
 				return DataResult.success("订单结束成功");
@@ -632,10 +684,9 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			int sickResult = usersickMapper.updateByPrimaryKeySelective(usersick);
 			if (result > 0 && sickResult > 0) {
 				JSONObject jsonCustormCont = new JSONObject();
-				jsonCustormCont.put("doc_id", order.getUserloginid());
 				jsonCustormCont.put("order_id", userorderid);
 				jsonCustormCont.put("type", "5");
-				boolean push = senderNotificationService.createMsgDoctorToUser(docloginid, order.getUserloginid(), "通知消息",
+				senderNotificationService.createMsgDoctorToUser(docloginid, order.getUserloginid(), "通知消息",
 						"就诊已完成,等待评价该医生", jsonCustormCont);
 				return DataResult.success("订单结束成功");
 			} else {
@@ -664,7 +715,6 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		List<Map<String, Object>> list = userorderMapperCustom.listHistortOrderByDocLoginId(docloginid);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
 		return DataResult.success("获取成功", pageInfo.getList());
-
-	}
+   }
 
 }

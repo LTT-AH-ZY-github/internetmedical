@@ -12,6 +12,6 @@ public interface PayMapperCustom {
 	int insertSelectiveReturnId(Pay record);
     Pay selectByPayTradeNo(String paytradeno);
     List<Map<String, Object>> selectByLoginIdAndType(Integer loginid,Integer type);
-
-   
+    List<Map<String, Object>> selectByLoginIdAndTypeAndOrderId(Integer loginid,Integer type, Integer userorderid);
+    List<Map<String, Object>> selectByLoginIdAndTypeAndHospOrderId(Integer loginid,Integer type, Integer hosporderid);
 }

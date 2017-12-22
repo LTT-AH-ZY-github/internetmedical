@@ -96,13 +96,16 @@ public class UserHomeController {
 
 	@RequestMapping(value = "/doctorinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取医生详细信息", httpMethod = "POST", notes = "获取医生详细信息")
-	public String findDoctor(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
+	public String findDoctor(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
+			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid)
 			throws Exception {
 		if (docloginid == null) {
-			return DataResult.error("医生id为空");
-
-		}
-		return userHomeService.findDoctorDetail(docloginid);
+			return DataResult.error("医生登录id为空");
+        }
+		if (userloginid == null) {
+			return DataResult.error("用户登录id为空");
+        }
+		return userHomeService.findDoctorDetail(docloginid,userloginid);
 	}
 
 	
@@ -130,5 +133,5 @@ public class UserHomeController {
 		}
 		return userHomeService.getEvaluation(docloginid, page);
 	}
-
+	
 }

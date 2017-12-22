@@ -36,15 +36,15 @@ public interface HospitalAccountService {
 	String updateDoctorToNormalLogin(String hosploginphone, String hosploginppwd) throws Exception;
 
 	/**
-	 * @Title: addHuanXinAccout
+	 * @Title: creatHuanXinAccout
 	 * @Description: TODO
 	 * @param hosploginid
 	 * @param password
 	 * @return
 	 * @throws Exception
-	 * @return: boolean
+	 * @return: String
 	 */
-	boolean addHuanXinAccout(Integer hosploginid, String password) throws Exception;
+	String creatHuanXinAccout(Integer hosploginid, String password) throws Exception;
 
 	/**
 	 * @Title: editHuanXinPassword

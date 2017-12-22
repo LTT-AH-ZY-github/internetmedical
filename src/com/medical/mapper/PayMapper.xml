@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.medical.po.Pay" >
     <id column="payId" property="payid" jdbcType="INTEGER" />
     <result column="payOrderId" property="payorderid" jdbcType="INTEGER" />
+    <result column="payOrderTypeId" property="payordertypeid" jdbcType="INTEGER" />
     <result column="PayTradeNo" property="paytradeno" jdbcType="VARCHAR" />
     <result column="payAlipayTradeNo" property="payalipaytradeno" jdbcType="VARCHAR" />
     <result column="payWXTradeNo" property="paywxtradeno" jdbcType="VARCHAR" />
@@ -12,13 +13,15 @@
     <result column="payCreatTime" property="paycreattime" jdbcType="TIMESTAMP" />
     <result column="payEndTime" property="payendtime" jdbcType="TIMESTAMP" />
     <result column="paySenderId" property="paysenderid" jdbcType="INTEGER" />
+    <result column="paySenderName" property="paysendername" jdbcType="VARCHAR" />
+    <result column="paySenderAccount" property="paysenderaccount" jdbcType="VARCHAR" />
     <result column="payReceiverId" property="payreceiverid" jdbcType="INTEGER" />
     <result column="payReceiverName" property="payreceivername" jdbcType="VARCHAR" />
     <result column="payTypeId" property="paytypeid" jdbcType="INTEGER" />
     <result column="payStateId" property="paystateid" jdbcType="INTEGER" />
     <result column="payModeId" property="paymodeid" jdbcType="INTEGER" />
     <result column="payRemark" property="payremark" jdbcType="VARCHAR" />
-    <result column="paySenderName" property="paysendername" jdbcType="VARCHAR" />
+    <result column="payReceiverAccount" property="payreceiveraccount" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.medical.po.Pay" extends="BaseResultMap" >
     <result column="payInfo" property="payinfo" jdbcType="LONGVARCHAR" />
@@ -82,9 +85,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    payId, payOrderId, PayTradeNo, payAlipayTradeNo, payWXTradeNo, payTotalAmount, payReceiptAmount, 
-    payCreatTime, payEndTime, paySenderId, payReceiverId, payReceiverName, payTypeId, 
-    payStateId, payModeId, payRemark, paySenderName
+    payId, payOrderId, payOrderTypeId, PayTradeNo, payAlipayTradeNo, payWXTradeNo, payTotalAmount, 
+    payReceiptAmount, payCreatTime, payEndTime, paySenderId, paySenderName, paySenderAccount, 
+    payReceiverId, payReceiverName, payTypeId, payStateId, payModeId, payRemark, payReceiverAccount
   </sql>
   <sql id="Blob_Column_List" >
     payInfo
@@ -138,19 +141,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.medical.po.Pay" >
-    insert into pay (payId, payOrderId, PayTradeNo, 
-      payAlipayTradeNo, payWXTradeNo, payTotalAmount, 
-      payReceiptAmount, payCreatTime, payEndTime, 
-      paySenderId, payReceiverId, payReceiverName, 
+    insert into pay (payId, payOrderId, payOrderTypeId, 
+      PayTradeNo, payAlipayTradeNo, payWXTradeNo, 
+      payTotalAmount, payReceiptAmount, payCreatTime, 
+      payEndTime, paySenderId, paySenderName, 
+      paySenderAccount, payReceiverId, payReceiverName, 
       payTypeId, payStateId, payModeId, 
-      payRemark, paySenderName, payInfo
+      payRemark, payReceiverAccount, payInfo
       )
-    values (#{payid,jdbcType=INTEGER}, #{payorderid,jdbcType=INTEGER}, #{paytradeno,jdbcType=VARCHAR}, 
-      #{payalipaytradeno,jdbcType=VARCHAR}, #{paywxtradeno,jdbcType=VARCHAR}, #{paytotalamount,jdbcType=DECIMAL}, 
-      #{payreceiptamount,jdbcType=DECIMAL}, #{paycreattime,jdbcType=TIMESTAMP}, #{payendtime,jdbcType=TIMESTAMP}, 
-      #{paysenderid,jdbcType=INTEGER}, #{payreceiverid,jdbcType=INTEGER}, #{payreceivername,jdbcType=VARCHAR}, 
+    values (#{payid,jdbcType=INTEGER}, #{payorderid,jdbcType=INTEGER}, #{payordertypeid,jdbcType=INTEGER}, 
+      #{paytradeno,jdbcType=VARCHAR}, #{payalipaytradeno,jdbcType=VARCHAR}, #{paywxtradeno,jdbcType=VARCHAR}, 
+      #{paytotalamount,jdbcType=DECIMAL}, #{payreceiptamount,jdbcType=DECIMAL}, #{paycreattime,jdbcType=TIMESTAMP}, 
+      #{payendtime,jdbcType=TIMESTAMP}, #{paysenderid,jdbcType=INTEGER}, #{paysendername,jdbcType=VARCHAR}, 
+      #{paysenderaccount,jdbcType=VARCHAR}, #{payreceiverid,jdbcType=INTEGER}, #{payreceivername,jdbcType=VARCHAR}, 
       #{paytypeid,jdbcType=INTEGER}, #{paystateid,jdbcType=INTEGER}, #{paymodeid,jdbcType=INTEGER}, 
-      #{payremark,jdbcType=VARCHAR}, #{paysendername,jdbcType=VARCHAR}, #{payinfo,jdbcType=LONGVARCHAR}
+      #{payremark,jdbcType=VARCHAR}, #{payreceiveraccount,jdbcType=VARCHAR}, #{payinfo,jdbcType=LONGVARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Pay" >
@@ -161,6 +166,9 @@
       </if>
       <if test="payorderid != null" >
         payOrderId,
+      </if>
+      <if test="payordertypeid != null" >
+        payOrderTypeId,
       </if>
       <if test="paytradeno != null" >
         PayTradeNo,
@@ -186,6 +194,12 @@
       <if test="paysenderid != null" >
         paySenderId,
       </if>
+      <if test="paysendername != null" >
+        paySenderName,
+      </if>
+      <if test="paysenderaccount != null" >
+        paySenderAccount,
+      </if>
       <if test="payreceiverid != null" >
         payReceiverId,
       </if>
@@ -204,8 +218,8 @@
       <if test="payremark != null" >
         payRemark,
       </if>
-      <if test="paysendername != null" >
-        paySenderName,
+      <if test="payreceiveraccount != null" >
+        payReceiverAccount,
       </if>
       <if test="payinfo != null" >
         payInfo,
@@ -217,6 +231,9 @@
       </if>
       <if test="payorderid != null" >
         #{payorderid,jdbcType=INTEGER},
+      </if>
+      <if test="payordertypeid != null" >
+        #{payordertypeid,jdbcType=INTEGER},
       </if>
       <if test="paytradeno != null" >
         #{paytradeno,jdbcType=VARCHAR},
@@ -242,6 +259,12 @@
       <if test="paysenderid != null" >
         #{paysenderid,jdbcType=INTEGER},
       </if>
+      <if test="paysendername != null" >
+        #{paysendername,jdbcType=VARCHAR},
+      </if>
+      <if test="paysenderaccount != null" >
+        #{paysenderaccount,jdbcType=VARCHAR},
+      </if>
       <if test="payreceiverid != null" >
         #{payreceiverid,jdbcType=INTEGER},
       </if>
@@ -260,8 +283,8 @@
       <if test="payremark != null" >
         #{payremark,jdbcType=VARCHAR},
       </if>
-      <if test="paysendername != null" >
-        #{paysendername,jdbcType=VARCHAR},
+      <if test="payreceiveraccount != null" >
+        #{payreceiveraccount,jdbcType=VARCHAR},
       </if>
       <if test="payinfo != null" >
         #{payinfo,jdbcType=LONGVARCHAR},
@@ -282,6 +305,9 @@
       </if>
       <if test="record.payorderid != null" >
         payOrderId = #{record.payorderid,jdbcType=INTEGER},
+      </if>
+      <if test="record.payordertypeid != null" >
+        payOrderTypeId = #{record.payordertypeid,jdbcType=INTEGER},
       </if>
       <if test="record.paytradeno != null" >
         PayTradeNo = #{record.paytradeno,jdbcType=VARCHAR},
@@ -307,6 +333,12 @@
       <if test="record.paysenderid != null" >
         paySenderId = #{record.paysenderid,jdbcType=INTEGER},
       </if>
+      <if test="record.paysendername != null" >
+        paySenderName = #{record.paysendername,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paysenderaccount != null" >
+        paySenderAccount = #{record.paysenderaccount,jdbcType=VARCHAR},
+      </if>
       <if test="record.payreceiverid != null" >
         payReceiverId = #{record.payreceiverid,jdbcType=INTEGER},
       </if>
@@ -325,8 +357,8 @@
       <if test="record.payremark != null" >
         payRemark = #{record.payremark,jdbcType=VARCHAR},
       </if>
-      <if test="record.paysendername != null" >
-        paySenderName = #{record.paysendername,jdbcType=VARCHAR},
+      <if test="record.payreceiveraccount != null" >
+        payReceiverAccount = #{record.payreceiveraccount,jdbcType=VARCHAR},
       </if>
       <if test="record.payinfo != null" >
         payInfo = #{record.payinfo,jdbcType=LONGVARCHAR},
@@ -340,6 +372,7 @@
     update pay
     set payId = #{record.payid,jdbcType=INTEGER},
       payOrderId = #{record.payorderid,jdbcType=INTEGER},
+      payOrderTypeId = #{record.payordertypeid,jdbcType=INTEGER},
       PayTradeNo = #{record.paytradeno,jdbcType=VARCHAR},
       payAlipayTradeNo = #{record.payalipaytradeno,jdbcType=VARCHAR},
       payWXTradeNo = #{record.paywxtradeno,jdbcType=VARCHAR},
@@ -348,13 +381,15 @@
       payCreatTime = #{record.paycreattime,jdbcType=TIMESTAMP},
       payEndTime = #{record.payendtime,jdbcType=TIMESTAMP},
       paySenderId = #{record.paysenderid,jdbcType=INTEGER},
+      paySenderName = #{record.paysendername,jdbcType=VARCHAR},
+      paySenderAccount = #{record.paysenderaccount,jdbcType=VARCHAR},
       payReceiverId = #{record.payreceiverid,jdbcType=INTEGER},
       payReceiverName = #{record.payreceivername,jdbcType=VARCHAR},
       payTypeId = #{record.paytypeid,jdbcType=INTEGER},
       payStateId = #{record.paystateid,jdbcType=INTEGER},
       payModeId = #{record.paymodeid,jdbcType=INTEGER},
       payRemark = #{record.payremark,jdbcType=VARCHAR},
-      paySenderName = #{record.paysendername,jdbcType=VARCHAR},
+      payReceiverAccount = #{record.payreceiveraccount,jdbcType=VARCHAR},
       payInfo = #{record.payinfo,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -364,6 +399,7 @@
     update pay
     set payId = #{record.payid,jdbcType=INTEGER},
       payOrderId = #{record.payorderid,jdbcType=INTEGER},
+      payOrderTypeId = #{record.payordertypeid,jdbcType=INTEGER},
       PayTradeNo = #{record.paytradeno,jdbcType=VARCHAR},
       payAlipayTradeNo = #{record.payalipaytradeno,jdbcType=VARCHAR},
       payWXTradeNo = #{record.paywxtradeno,jdbcType=VARCHAR},
@@ -372,13 +408,15 @@
       payCreatTime = #{record.paycreattime,jdbcType=TIMESTAMP},
       payEndTime = #{record.payendtime,jdbcType=TIMESTAMP},
       paySenderId = #{record.paysenderid,jdbcType=INTEGER},
+      paySenderName = #{record.paysendername,jdbcType=VARCHAR},
+      paySenderAccount = #{record.paysenderaccount,jdbcType=VARCHAR},
       payReceiverId = #{record.payreceiverid,jdbcType=INTEGER},
       payReceiverName = #{record.payreceivername,jdbcType=VARCHAR},
       payTypeId = #{record.paytypeid,jdbcType=INTEGER},
       payStateId = #{record.paystateid,jdbcType=INTEGER},
       payModeId = #{record.paymodeid,jdbcType=INTEGER},
       payRemark = #{record.payremark,jdbcType=VARCHAR},
-      paySenderName = #{record.paysendername,jdbcType=VARCHAR}
+      payReceiverAccount = #{record.payreceiveraccount,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -388,6 +426,9 @@
     <set >
       <if test="payorderid != null" >
         payOrderId = #{payorderid,jdbcType=INTEGER},
+      </if>
+      <if test="payordertypeid != null" >
+        payOrderTypeId = #{payordertypeid,jdbcType=INTEGER},
       </if>
       <if test="paytradeno != null" >
         PayTradeNo = #{paytradeno,jdbcType=VARCHAR},
@@ -413,6 +454,12 @@
       <if test="paysenderid != null" >
         paySenderId = #{paysenderid,jdbcType=INTEGER},
       </if>
+      <if test="paysendername != null" >
+        paySenderName = #{paysendername,jdbcType=VARCHAR},
+      </if>
+      <if test="paysenderaccount != null" >
+        paySenderAccount = #{paysenderaccount,jdbcType=VARCHAR},
+      </if>
       <if test="payreceiverid != null" >
         payReceiverId = #{payreceiverid,jdbcType=INTEGER},
       </if>
@@ -431,8 +478,8 @@
       <if test="payremark != null" >
         payRemark = #{payremark,jdbcType=VARCHAR},
       </if>
-      <if test="paysendername != null" >
-        paySenderName = #{paysendername,jdbcType=VARCHAR},
+      <if test="payreceiveraccount != null" >
+        payReceiverAccount = #{payreceiveraccount,jdbcType=VARCHAR},
       </if>
       <if test="payinfo != null" >
         payInfo = #{payinfo,jdbcType=LONGVARCHAR},
@@ -443,6 +490,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.medical.po.Pay" >
     update pay
     set payOrderId = #{payorderid,jdbcType=INTEGER},
+      payOrderTypeId = #{payordertypeid,jdbcType=INTEGER},
       PayTradeNo = #{paytradeno,jdbcType=VARCHAR},
       payAlipayTradeNo = #{payalipaytradeno,jdbcType=VARCHAR},
       payWXTradeNo = #{paywxtradeno,jdbcType=VARCHAR},
@@ -451,19 +499,22 @@
       payCreatTime = #{paycreattime,jdbcType=TIMESTAMP},
       payEndTime = #{payendtime,jdbcType=TIMESTAMP},
       paySenderId = #{paysenderid,jdbcType=INTEGER},
+      paySenderName = #{paysendername,jdbcType=VARCHAR},
+      paySenderAccount = #{paysenderaccount,jdbcType=VARCHAR},
       payReceiverId = #{payreceiverid,jdbcType=INTEGER},
       payReceiverName = #{payreceivername,jdbcType=VARCHAR},
       payTypeId = #{paytypeid,jdbcType=INTEGER},
       payStateId = #{paystateid,jdbcType=INTEGER},
       payModeId = #{paymodeid,jdbcType=INTEGER},
       payRemark = #{payremark,jdbcType=VARCHAR},
-      paySenderName = #{paysendername,jdbcType=VARCHAR},
+      payReceiverAccount = #{payreceiveraccount,jdbcType=VARCHAR},
       payInfo = #{payinfo,jdbcType=LONGVARCHAR}
     where payId = #{payid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.medical.po.Pay" >
     update pay
     set payOrderId = #{payorderid,jdbcType=INTEGER},
+      payOrderTypeId = #{payordertypeid,jdbcType=INTEGER},
       PayTradeNo = #{paytradeno,jdbcType=VARCHAR},
       payAlipayTradeNo = #{payalipaytradeno,jdbcType=VARCHAR},
       payWXTradeNo = #{paywxtradeno,jdbcType=VARCHAR},
@@ -472,13 +523,15 @@
       payCreatTime = #{paycreattime,jdbcType=TIMESTAMP},
       payEndTime = #{payendtime,jdbcType=TIMESTAMP},
       paySenderId = #{paysenderid,jdbcType=INTEGER},
+      paySenderName = #{paysendername,jdbcType=VARCHAR},
+      paySenderAccount = #{paysenderaccount,jdbcType=VARCHAR},
       payReceiverId = #{payreceiverid,jdbcType=INTEGER},
       payReceiverName = #{payreceivername,jdbcType=VARCHAR},
       payTypeId = #{paytypeid,jdbcType=INTEGER},
       payStateId = #{paystateid,jdbcType=INTEGER},
       payModeId = #{paymodeid,jdbcType=INTEGER},
       payRemark = #{payremark,jdbcType=VARCHAR},
-      paySenderName = #{paysendername,jdbcType=VARCHAR}
+      payReceiverAccount = #{payreceiveraccount,jdbcType=VARCHAR}
     where payId = #{payid,jdbcType=INTEGER}
   </update>
 </mapper>

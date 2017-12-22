@@ -10,6 +10,7 @@ package com.medical.service.impl;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.TextMessage;
 
@@ -58,9 +59,12 @@ public class SenderNotificationServiceImpl implements SenderNotificationService 
 
 	// 病人发给医生
 		@Override
-		public boolean createMsgUserToDoctor(Integer userloginid, Integer docloginid, String title, String msg,
+		public boolean createMsgUserToDoctor(Integer userloginid, String name,Integer docloginid, String title, String msg,
 				JSONObject jsonCustormCont) throws Exception {
-			String words = userinfoMapperCustom.selectByLoginId(userloginid).getUsername() + msg;
+			if (StringUtils.isBlank(name)) {
+				name = userinfoMapperCustom.selectByLoginId(userloginid).getUsername();
+			}
+			String words =  name+ msg;
 			Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
 			int dev = doctorlogininfo.getDoclogindev();
 			String channelid = doctorlogininfo.getDocloginchannelid();
@@ -87,9 +91,12 @@ public class SenderNotificationServiceImpl implements SenderNotificationService 
 
 		// 病人发给医院
 		@Override
-		public boolean createMsgUserToHospital(Integer userloginid, Integer hosploginid, String title, String msg,
+		public boolean createMsgUserToHospital(Integer userloginid,String name, Integer hosploginid, String title, String msg,
 				JSONObject jsonCustormCont) throws Exception {
-			String words = userinfoMapperCustom.selectByLoginId(userloginid).getUsername() + msg;
+			if (StringUtils.isBlank(name)) {
+				name = userinfoMapperCustom.selectByLoginId(userloginid).getUsername();
+			}
+			String words =  name+ msg;
 			Notification notification = new Notification();
 			notification.setNotificationtitle(title);
 			notification.setNotificationwords(words);
@@ -112,9 +119,12 @@ public class SenderNotificationServiceImpl implements SenderNotificationService 
 
 		// 病人发给医发送管理员
 		@Override
-		public boolean createMsgUserToAdmin(Integer userloginid, Integer adminloginid, String title, String msg,
+		public boolean createMsgUserToAdmin(Integer userloginid,String name, Integer adminloginid, String title, String msg,
 				JSONObject jsonCustormCont) throws Exception {
-			String words = userinfoMapperCustom.selectByLoginId(userloginid).getUsername() + msg;
+			if (StringUtils.isBlank(name)) {
+				name = userinfoMapperCustom.selectByLoginId(userloginid).getUsername();
+			}
+			String words =  name+ msg;
 			Notification notification = new Notification();
 			notification.setNotificationtitle(title);
 			notification.setNotificationwords(words);

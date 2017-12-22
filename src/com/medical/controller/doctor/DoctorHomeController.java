@@ -1,16 +1,13 @@
 package com.medical.controller.doctor;
 
-import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.medical.service.iface.CommonService;
 import com.medical.service.iface.doctor.DoctorHomeService;
+import com.medical.utils.CheckUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -27,8 +24,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 public class DoctorHomeController {
 	@Autowired
 	private DoctorHomeService doctorHomeService;
-	@Autowired
-	private CommonService commonService;
+	
 
 	// 获取病情
 	@RequestMapping(value = "/listsicks", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -46,12 +42,8 @@ public class DoctorHomeController {
 		if (docloginid == null) {
 			return DataResult.error("登录id为空");
 		}
-		if (page == null) {
-			return DataResult.error("当前页为空");
-		} else {
-			if (page < 0) {
-				return DataResult.error("当前页不可小于0");
-			}
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(page)) {
+			return DataResult.error("当前页为大于0的整数");
 		}
 		if (StringUtils.isBlank(lat)) {
 			return DataResult.error("经度为空");
@@ -105,7 +97,7 @@ public class DoctorHomeController {
 		if (usersickid == null) {
 			return DataResult.error("病情id为空");
 		}
-		if (usersickprimarydept == null) {
+		if (StringUtils.isBlank(usersickprimarydept)) {
 			return DataResult.error("一级部门为空");
 		}
 		return doctorHomeService.changeDept(docloginid, usersickid, usersickprimarydept, usersickseconddept);
@@ -118,7 +110,7 @@ public class DoctorHomeController {
 	public String getHosptial(
 			@ApiParam(name = "hospname", required = true, value = "医院名") @RequestParam String hospname)
 			throws Exception {
-		if (hospname == null) {
+		if (StringUtils.isBlank(hospname)) {
 			return DataResult.error("医院名为空");
 		}
 		return doctorHomeService.listHospital(hospname);
@@ -142,17 +134,12 @@ public class DoctorHomeController {
 	@RequestMapping(value = "/getdoctorbyname", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "根据名字查询医生", httpMethod = "POST", notes = "根据名字查询医生")
 	public String getDoctor(@ApiParam(name = "docname", required = true, value = "医生姓名") @RequestParam String docname) throws Exception {
-		if (docname != null && docname.trim().length() != 0) {
-			Map<String, Object> result = doctorHomeService.getDoctorByName(docname);
-			if ("1".equals(result.get("state"))) {
-				return DataResult.success("获取数据成功", result.get("data"));
-			} else if ("2".equals(result.get("state"))) {
-				return DataResult.success("获取数据成功,但数据为空");
-			} else {
-				return DataResult.error("异常错误");
-			}
-		} else {
+		if (StringUtils.isBlank(docname)) {
 			return DataResult.error("医生姓名为空");
 		}
+		return  doctorHomeService.getDoctorByName(docname);
+		
 	}
+	
+	
 }

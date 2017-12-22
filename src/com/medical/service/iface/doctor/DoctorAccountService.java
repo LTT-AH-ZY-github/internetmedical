@@ -48,15 +48,15 @@ public interface DoctorAccountService {
 	String updateDoctorToNormalLogin(Doctorlogininfo doctor) throws Exception;
 	
 	/**
-	 * @Title: addHuanXinAccout
+	 * @Title: creatHuanXinAccout
 	 * @Description: 注册环信
 	 * @param docloginid
 	 * @param password
 	 * @return
 	 * @throws Exception
-	 * @return: boolean
+	 * @return: String
 	 */
-	boolean addHuanXinAccout(Integer docloginid, String password) throws Exception;
+	String creatHuanXinAccout(Integer docloginid, String password) throws Exception;
 	
 	/**
 	 * @Title: updatePassword

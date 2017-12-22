@@ -368,7 +368,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 			userlogininfoMapper.updateByPrimaryKeySelective(userlogininfo);
 			return DataResult.success("注册成功");
 		} else {
-			return DataResult.success("已注册");
+			return DataResult.error("注册失败");
 		}
 	}
 

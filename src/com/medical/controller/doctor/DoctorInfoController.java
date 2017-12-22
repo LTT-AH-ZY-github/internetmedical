@@ -44,8 +44,7 @@ public class DoctorInfoController {
 	@ApiOperation(value = "更新channelId", httpMethod = "POST", notes = "更新channelId")
 	public String updateChannelId(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
 			@ApiParam(name = "channelid", value = "channelid") @RequestParam String channelid) throws Exception {
-
-		if (docloginid == null) {
+        if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
 		if (StringUtils.isBlank(channelid)) {
@@ -194,7 +193,7 @@ public class DoctorInfoController {
 	}
 	
 	@RequestMapping(value = "/getreviewinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "提交审核", httpMethod = "POST", notes = "提交审核")
+	@ApiOperation(value = "获取账户状态", httpMethod = "POST", notes = "获取账户状态")
 	public String getreviewInfo(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
 			throws Exception {
 		if (docloginid == null) {

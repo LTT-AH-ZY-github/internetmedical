@@ -303,7 +303,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 		boolean result = userlogininfoMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
-			boolean push = senderNotificationService.createMsgUserToAdmin(userloginid, 1, "通知消息", "提交审核", jsonCustormCont);
+			jsonCustormCont.put("type", "7");
+			senderNotificationService.createMsgUserToAdmin(userloginid, null,1, "通知消息", "提交审核", jsonCustormCont);
 			return DataResult.success("提交审核成功");
 		} else {
 			return DataResult.error("提交审核失败");

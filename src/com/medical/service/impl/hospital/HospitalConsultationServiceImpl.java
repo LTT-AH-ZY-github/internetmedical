@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.validation.constraints.Null;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -47,12 +48,16 @@ import com.medical.po.Doctorpurse;
 import com.medical.po.HospSearchDocTerm;
 import com.medical.po.Hospinfo;
 import com.medical.po.Hospitaldept;
+import com.medical.po.Hosplogininfo;
 import com.medical.po.Hosporder;
 import com.medical.po.Pay;
 import com.medical.po.Userorder;
 import com.medical.po.custom.HospSearchDoc;
 import com.medical.service.iface.CommonService;
+import com.medical.service.iface.CommonTradeService;
+import com.medical.service.iface.PayService;
 import com.medical.service.iface.SenderNotificationService;
+import com.medical.service.iface.doctor.DoctorPurseService;
 import com.medical.service.iface.hospital.HospitalConsultationService;
 import com.medical.utils.TimeUtil;
 import com.medical.utils.result.DataResult;
@@ -107,7 +112,14 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 	private DoctorcalendarMapper doctorcalendarMapper;
 	@Autowired 
 	private SenderNotificationService senderNotificationService;
-
+	@Autowired
+	private CommonTradeService commonTradeService;
+	@Autowired
+	private DoctorPurseService doctorPurseService;
+	@Autowired
+	private PayService payService;
+	@Autowired
+	private HosplogininfoMapper hosplogininfoMapper;
 	
 	/* (non-Javadoc)
 	 * @see com.medical.service.iface.hospital.HospitalConsultationService#listDoctor(java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.String, java.lang.String, java.lang.String, java.lang.Integer, java.lang.Integer)
@@ -189,8 +201,17 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 			Integer orderhospapricetype, BigDecimal orderhospaprice, Integer orderhospepricetype,
 			BigDecimal orderhospeprice) throws Exception {
 		Doctorlogininfo doc = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
-		if (doc == null) {
+		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
+		if (doc == null  ||doctorinfo==null) {
 			return DataResult.error("创建会诊失败,因医生不存在");
+		}
+		String alipayaccount = doctorinfo.getDocalipayaccount();
+		String alipayname = doctorinfo.getDocalipayname();
+		if (StringUtils.isBlank(alipayaccount)) {
+			return DataResult.error("该医生绑定的支付宝账号为空,不可进行该操作");
+		}
+		if (StringUtils.isBlank(alipayname)) {
+			return DataResult.error("该医生绑定的支付宝账号姓名为空,不可进行该操作");
 		}
 		Hosporder hosporder = new Hosporder();
 		hosporder.setDoctorid(docloginid);
@@ -241,9 +262,11 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		}
 		hosporder.setOrdertotalhospprice(total);
 		//hosporder.setOrdertotaldoctorprice(total);
-		int result = hosporderMapper.insertSelective(hosporder);
+		int result = hosporderMapperCustom.insertSelectiveReturnId(hosporder);
 		if (result > 0) {
 			JSONObject jsonCustormCont = new JSONObject();
+			jsonCustormCont.put("order_id", hosporder.getHosporderid());
+			jsonCustormCont.put("type", "6");
 			boolean push = senderNotificationService.createMsgHospitalToDoctor(hosploginid, docloginid, "通知", "发送会诊请求",
 					jsonCustormCont);
 			if (push) {
@@ -260,9 +283,17 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 	// 取消会诊
 	@Override
 	public String cancelConsultation(Integer hosploginid, Integer hosporderid) throws Exception {
+		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
+		if (hosplogininfo==null) {
+			return DataResult.error("账户不存在");
+		}
 		Hosporder hosporder = hosporderMapper.selectByPrimaryKey(hosporderid);
 		if (hosporder == null) {
 			return DataResult.error("会诊不存在");
+		}
+		int hosp = hosporder.getHospid();
+		if (hosploginid!=hosp) {
+			return DataResult.error("账户信息不匹配");
 		}
 		int orderState = hosporder.getOrderstate();
 		if (orderState > 3) {
@@ -276,6 +307,8 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		boolean result = hosporderMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
+			jsonCustormCont.put("order_id", hosporder.getHosporderid());
+			jsonCustormCont.put("type", "6");
 			boolean push = senderNotificationService.createMsgHospitalToDoctor(hosploginid, hosporder.getDoctorid(), "通知", "发送会诊请求",
 					jsonCustormCont);
 			if (push) {
@@ -293,9 +326,22 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 	 */
 	@Override
 	public String updateStatePayDoctor(Integer hosploginid, Integer hosporderid, Integer type) throws Exception {
+		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
+		if (hosplogininfo==null) {
+			return DataResult.error("账户不存在");
+		}
 		Hosporder hosporder = hosporderMapper.selectByPrimaryKey(hosporderid);
 		if (hosporder == null) {
 			return DataResult.error("会诊不存在");
+		}
+		int hosp = hosporder.getHospid();
+		if (hosploginid!=hosp) {
+			return DataResult.error("账户信息不匹配");
+		}
+		//订单锁
+		boolean tradestate = commonTradeService.queryHospitalOrderForCreat(hosporderid);
+		if (tradestate) {
+			return DataResult.error("退款中,请稍后重试");
 		}
 		int orderState = hosporder.getOrderstate();
 		if (orderState != 2) {
@@ -310,15 +356,14 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 			HosporderRecord.setOrderstate(3);
 			boolean orderResult = hosporderMapper.updateByPrimaryKeySelective(HosporderRecord) > 0;
 			if (orderResult) {
+				//解除订单锁
+				 commonTradeService.queryHospitalOrderForFinish(hosporderid);
 				JSONObject jsonCustormCont = new JSONObject();
-
-				boolean push = senderNotificationService.createMsgHospitalToDoctor(hosporder.getHospid(), hosporder.getDoctorid(),
+				jsonCustormCont.put("order_id", hosporder.getHosporderid());
+				jsonCustormCont.put("type", "6");
+				senderNotificationService.createMsgHospitalToDoctor(hosporder.getHospid(), hosporder.getDoctorid(),
 						"消息通知", "已支付会诊费用", jsonCustormCont);
-				if (push) {
-					return DataResult.success("支付成功,且消息发送成功");
-				} else {
-					return DataResult.success("支付成功,但消息发送失败");
-				}
+				return DataResult.success("支付成功");
 			} else {
 				return DataResult.error("支付失败");
 			}
@@ -340,35 +385,22 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		String boby = "速递医运医生会诊费用";
 		String subject = "缴纳" + doctorinfo.getDocname() + "医生会诊费用";
 		String totalAmount = hosporder.getOrdertotaldoctorprice() + "";
-		String prefix = "h" + hosporderid + "d";
+		String prefix = "hd";
 		String outTradeNo = MakeOrderNum.getTradeNo(prefix);
 		// 回调地址
-		//String notifyUrl = "http://1842719ny8.iok.la:14086/internetmedical/hospital/paydoctorfinishbyalipay";
 		String notifyUrl = AlipayConfig.WEB_HSOP_NOTIFY_URL;
 		String result = GetSign.webGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
-		Pay pay = new Pay();
-		pay.setPaycreattime(new Date());
-		// 1为支付宝支付
-		pay.setPaymodeid(1);
-		pay.setPaysenderid(hosploginid);
 		String hospname = hospinfoMapperCustom.selectByHospLoginId(hosploginid).getHospname();
-		pay.setPaysendername(hospname);
-		pay.setPaytotalamount(new BigDecimal(totalAmount));
-		pay.setPayreceiverid(hosporder.getDoctorid());
-		pay.setPayreceivername(doctorinfo.getDocname());
-		pay.setPayorderid(hosporderid);
-		pay.setPaytradeno(outTradeNo);
-		// 1为病人支付给医生
-		pay.setPaytypeid(1);
-		// 1为交易创建，等待买家付款
-		pay.setPaystateid(1);
-		boolean payResult = payMapper.insertSelective(pay) > 0;
-		if (payResult) {
-			return DataResult.success("获取数据成功", result);
-		} else {
-			return DataResult.error("支付失败");
+		//支付记录
+		String payresult  = payService.updateAlipayRecordToCreat(hosploginid, hospname, hosporder.getOrdertotaldoctorprice(), hosporder.getDoctorid(), doctorinfo.getDocname(), 
+				hosporderid, 2, 3, outTradeNo);
+		JSONObject jsonObject = JSONObject.fromObject(payresult);
+		if ("100".equals(jsonObject.get("code").toString())) {
+			return DataResult.success("获取成功", result); 
+		}else {
+			return payresult;
 		}
-	}
+   }
 
 	/**
 	 * 支付医生会诊费用完成
@@ -383,6 +415,8 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		String amount = params.get("buyer_pay_amount");
 		// 支付宝交易号
 		String trade_no = params.get("trade_no");
+		String buyer_logon_id = params.get("buyer_logon_id");
+		String seller_email = params.get("seller_email"); 
 		// 附加数据
 		// String passback_params = URLDecoder.decode(params.get("passback_params"));
 		// 获取交易记录
@@ -390,23 +424,16 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		if (pay == null) {
 			return DataResult.error("交易不存在");
 		}
-
-		// 交易记录信息
-		Pay record = new Pay();
-		record.setPayid(pay.getPayid());
-		record.setPayalipaytradeno(trade_no);
-		record.setPayendtime(new Date());
-		record.setPayinfo(params.toString());
-		record.setPayreceiptamount(new BigDecimal(amount));
+		int hosporderid = pay.getPayorderid();
 		// 交易支付成功
 		if ("TRADE_CLOSED".equals(params.get("trade_status"))) {
-			// 未付款交易超时关闭，或支付完成后全额退款
-			record.setPaystateid(2);
-			boolean payResult = payMapper.updateByPrimaryKeySelective(record) > 0;
-			if (payResult) {
-				return DataResult.success("支付结束");
-			} else {
-				return DataResult.error("支付失败");
+			
+			String payresult  = payService.updateAlipayRecordToCancle(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id, seller_email, params.toString());
+			JSONObject jsonObject = JSONObject.fromObject(payresult);
+			if ("100".equals(jsonObject.get("code"))) {
+				return DataResult.success("支付结束"); 
+			}else {
+				return payresult;
 			}
 		}
 
@@ -414,64 +441,39 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		if (hosporder == null) {
 			return DataResult.error("订单不存在");
 		}
-		int stateid = hosporder.getOrderstate();
+		int state = hosporder.getOrderstate();
 		int docloginid = hosporder.getDoctorid();
-		if (stateid != 2) {
+		if (state != 2) {
 			return DataResult.success("已支付");
 		}
 
+		int stateid = 3;
 		if ("TRADE_SUCCESS".equals(params.get("trade_status"))) {
-			// 3为交易成功
-			record.setPaystateid(3);
-		} else {
+		// 3为交易成功
+		  stateid = 3;
+	    } else {
 			// 4为交易结束，不可退款
-			record.setPaystateid(4);
+	    	stateid = 4;
 		}
 
 		// 更新交易记录
-		boolean payResult = payMapper.updateByPrimaryKeySelective(record) > 0;
-
-		// 会诊订单
+		String payresult  = payService.updateAlipayRecordToFinish(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id,
+				seller_email,  params.toString(), new BigDecimal(amount), stateid);
+        // 会诊订单
 		Hosporder HosporderRecord = new Hosporder();
 		HosporderRecord.setHosporderid(hosporder.getHosporderid());
 		// 3付款完成，等待医生会诊
 		HosporderRecord.setOrderstate(3);
-		boolean orderResult = hosporderMapper.updateByPrimaryKeySelective(HosporderRecord) > 0;
-
-		// 更新医生钱包
-		BigDecimal total = new BigDecimal(amount);
-		List<Doctorpurse> list = doctorpurseMapperCustom.selectByDocLoginId(docloginid);
-		if (list != null && list.size() > 0) {
-			for (Doctorpurse doctorpurse : list) {
-				int type = doctorpurse.getDocpursetypeid();
-				BigDecimal price = doctorpurse.getDocpurseamount();
-				if (type == 2) {
-					total = total.subtract(price.abs());
-				} else {
-					total = total.add(price.abs());
-				}
-			}
-		}
-
-		Doctorpurse doctorpurse = new Doctorpurse();
-		doctorpurse.setDocloginid(docloginid);
-		doctorpurse.setDocpurseamount(new BigDecimal(amount));
-		doctorpurse.setDocpurseremark("收到医院付款");
-		doctorpurse.setDocpursetime(new Date());
-		// 1为转入
-		doctorpurse.setDocpursetypeid(1);
-		doctorpurse.setPayid(pay.getPayid());
-		doctorpurse.setDocpursebalance(total);
-		boolean purseResult = doctorpurseMapper.insertSelective(doctorpurse) > 0;
-		// 更新医生余额
-		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
-		Doctorinfo doctorinfoRecord = new Doctorinfo();
-		doctorinfoRecord.setDocid(doctorinfo.getDocid());
-		doctorinfoRecord.setDocpursebalance(total);
-		boolean doctorinfoResult = doctorinfoMapper.updateByPrimaryKeySelective(doctorinfoRecord) > 0;
-
-		if (doctorinfoResult && purseResult && payResult && orderResult) {
+		boolean orderresult = hosporderMapper.updateByPrimaryKeySelective(HosporderRecord) > 0;
+		String purseresult = doctorPurseService.updateBalance(docloginid, 1, new BigDecimal(amount), "收到医院付款", pay.getPayid());
+		JSONObject payObject = JSONObject.fromObject(payresult);
+		JSONObject purseObject = JSONObject.fromObject(purseresult);
+		//解除订单锁
+		commonTradeService.queryHospitalOrderForFinish(hosporderid);
+		if ("100".equals(payObject.get("code").toString()) && "100".equals(purseObject.get("code").toString()) && orderresult ) {
 			JSONObject jsonCustormCont = new JSONObject();
+			jsonCustormCont.put("order_id", hosporder.getHosporderid());
+			jsonCustormCont.put("type", "6");
 			senderNotificationService.createMsgHospitalToDoctor(hosporder.getHospid(), docloginid, "消息通知", "已支付会诊费用",
 					jsonCustormCont);
 			return DataResult.success("支付成功");
@@ -484,9 +486,17 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 	// 会诊完成
 	@Override
 	public String updateStateFinishConsultation(Integer hosploginid, Integer hosporderid) throws Exception {
+		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
+		if (hosplogininfo==null) {
+			return DataResult.error("账户不存在");
+		}
 		Hosporder hosporder = hosporderMapper.selectByPrimaryKey(hosporderid);
 		if (hosporder == null) {
 			return DataResult.error("会诊不存在");
+		}
+		int hosp = hosporder.getHospid();
+		if (hosploginid!=hosp) {
+			return DataResult.error("账户信息不匹配");
 		}
 		int orderState = hosporder.getOrderstate();
 		if (orderState != 3) {
@@ -499,6 +509,11 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		record.setOrderetime(new Date());
 		boolean result = hosporderMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
+			JSONObject jsonCustormCont = new JSONObject();
+			jsonCustormCont.put("order_id", hosporder.getHosporderid());
+			jsonCustormCont.put("type", "6");
+			senderNotificationService.createMsgHospitalToDoctor(hosporder.getHospid(), hosporder.getDoctorid(), "消息通知", "已结束会诊",
+					jsonCustormCont);
 			return DataResult.success("会诊完成成功");
 		} else {
 			return DataResult.error("会诊完成失败");
@@ -527,9 +542,9 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 			map.put("rows", pageInfo.getList());
 			// 总共页数
 			map.put("total", pageInfo.getTotal());
-			return DataResult.success("获取数据成功", map);
+			return DataResult.success("获取成功", map);
 		} else {
-			return DataResult.success("获取数据为空", null);
+			return DataResult.success("数据为空", null);
 		}
 	}
 
@@ -538,12 +553,12 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 	 */
 	@Override
 	public String listCalendar(Integer docloginid) throws Exception{
-		List<Map<String, Object>> list =  doctorcalendarMapperCustom.selectAllInfoByDocloginidInUser(docloginid);
-		if (list != null && list.size()>0) {
-			return DataResult2.success("获取数据成功", list);
-		}else {
-			return DataResult2.success("获取数据为空", null);
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo==null) {
+			return DataResult.error("该医生不存在");
 		}
+		List<Map<String, Object>> list =  doctorcalendarMapperCustom.selectAllInfoByDocloginidInUser(docloginid);
+		return DataResult2.success("获取成功", list);
 	}
 
 	

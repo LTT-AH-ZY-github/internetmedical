@@ -3,6 +3,8 @@ package com.medical.service.impl.doctor;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -13,13 +15,10 @@ import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogMapper;
 import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.DoctorlogininfoMapperCustom;
-import com.medical.mapper.DoctorskdMapper;
-import com.medical.mapper.UserlogininfoMapperCustom;
 import com.medical.po.Accounttype;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlog;
 import com.medical.po.Doctorlogininfo;
-import com.medical.po.Doctorskd;
 import com.medical.service.iface.doctor.DoctorAccountService;
 import com.medical.utils.Global;
 import com.medical.utils.MD5Util;
@@ -41,11 +40,8 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 	@Autowired
 	private DoctorlogMapper doctorlogMapper;
 	@Autowired
-	private DoctorskdMapper doctorskdMapper;
-	@Autowired
 	private AccounttypeMapper accounttypeMapper;
-	@Autowired
-	private UserlogininfoMapperCustom userlogininfoMapperCustom;
+	
 
 	/*
 	 * (非 Javadoc) <p>Title: findAccountExit</p> <p>Description: 查找账号是否注册</p>
@@ -89,12 +85,9 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 	 * String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public String createDoctor(String docloginphone, String magCode, String docLoginPwd) throws Exception {
+	public String createDoctor(String docloginphone, String magCode, String docloginpwd) throws Exception {
 		// 查询医生登录表
 		int doctorCount = doctorlogininfoMapperCustom.findDocCountByPhone(docloginphone);
-		// 查询病人登录表
-		// int userCount =
-		// userlogininfoMapperCustom.findUserCountByPhone(docloginphone);
 		if (doctorCount > 0) {
 			return DataResult.error("该号码已注册");
 		}
@@ -106,8 +99,9 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		Doctorlogininfo doctorlogininfo = new Doctorlogininfo();
 
 		doctorlogininfo.setDocloginphone(docloginphone);
-		doctorlogininfo.setDocloginname(docloginphone);
-		String[] str = MD5Util.generate(docLoginPwd);
+		String phoneNumber = docloginphone.substring(0, 3) + "****" + docloginphone.substring(7, docloginphone.length());
+		doctorlogininfo.setDocloginname(phoneNumber);
+		String[] str = MD5Util.generate(docloginpwd);
 		// md5值密码
 		doctorlogininfo.setDocloginpwd(str[0]);
 		// salt值
@@ -115,7 +109,7 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		// 未审核用户
 		doctorlogininfo.setDoclogintype(1);
 		doctorlogininfo.setDocloginpix("http://oytv6cmyw.bkt.clouddn.com/20171103064014944735.jpg");
-		String phoneNumber = docloginphone.substring(0, 3) + "****" + docloginphone.substring(7, docloginphone.length());
+		
 		// 插入登录信息表
 		int result = doctorlogininfoMapperCustom.insertSelectiveReturnId(doctorlogininfo);
 		Doctorinfo doctorinfo = new Doctorinfo();
@@ -125,7 +119,7 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		int infoResult = doctorinfoMapper.insertSelective(doctorinfo);
 		// 操作成功
 		if (result > 0 && infoResult > 0) {
-			addHuanXinAccout(doctorlogininfo.getDocloginid(), docLoginPwd);
+			creatHuanXinAccout(doctorlogininfo.getDocloginid(), docloginpwd);
 			return DataResult.success("注册成功");
 		} else {
 			// 操作失败，回滚
@@ -181,39 +175,38 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 				doctorinfo.getDocloginpwd());
 		if (!state) {
 			return DataResult.error("密码错误");
+		}
+		// 医生登录id
+		logininfoRecord.setDocloginid(doctorinfo.getDocloginid());
+		logRecord.setDocloginid(doctorinfo.getDocloginid());
+		String token = TokeManager.createToken(doctorinfo.getDocloginid(), doctorinfo.getDocloginphone());
+		long expireTime = (long) Global.globalToken.get(token);
+		logininfoRecord.setDoclogintoken(token);
+		logininfoRecord.setDoclogindld(expireTime);
+		// 更新登录信息
+		int upResult = doctorlogininfoMapper.updateByPrimaryKeySelective(logininfoRecord);
+		// 生成登录日志
+		int inResult = doctorlogMapper.insertSelective(logRecord);
+		Doctorinfo info = doctorinfoMapperCustom.selectByDocLoginId(doctorinfo.getDocloginid());
+		Accounttype accounttype = accounttypeMapper.selectByPrimaryKey(doctorinfo.getDoclogintype());
+		String typename = "";
+		if (accounttype != null) {
+			typename = accounttype.getAccounttypename();
+		}
+		if (upResult >0 && inResult  > 0) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("token", token);
+			map.put("id", doctorinfo.getDocloginid());
+			map.put("pix", doctorinfo.getDocloginpix());
+			map.put("name", info.getDocname());
+			map.put("title", info.getDoctitle());
+			map.put("type", doctorinfo.getDoclogintype());
+			map.put("typename", typename);
+			map.put("huanxinaccount", doctorinfo.getDochuanxinaccount());
+			return DataResult.success("登录成功", map);
 		} else {
-			// 医生登录id
-			logininfoRecord.setDocloginid(doctorinfo.getDocloginid());
-			logRecord.setDocloginid(doctorinfo.getDocloginid());
-			String token = TokeManager.createToken(doctorinfo.getDocloginid(), doctorinfo.getDocloginphone());
-			long expireTime = (long) Global.globalToken.get(token);
-			logininfoRecord.setDoclogintoken(token);
-			logininfoRecord.setDoclogindld(expireTime);
-			// 更新登录信息
-			int upResult = doctorlogininfoMapper.updateByPrimaryKeySelective(logininfoRecord);
-			// 生成登录日志
-			int inResult = doctorlogMapper.insertSelective(logRecord);
-			Doctorinfo info = doctorinfoMapperCustom.selectByDocLoginId(doctorinfo.getDocloginid());
-			Accounttype accounttype = accounttypeMapper.selectByPrimaryKey(doctorinfo.getDoclogintype());
-			String typename = "";
-			if (accounttype != null) {
-				typename = accounttype.getAccounttypename();
-			}
-			if (upResult == 1 && inResult == 1) {
-				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("token", token);
-				map.put("id", doctorinfo.getDocloginid());
-				map.put("pix", doctorinfo.getDocloginpix());
-				map.put("name", info.getDocname());
-				map.put("title", info.getDoctitle());
-				map.put("type", doctorinfo.getDoclogintype());
-				map.put("typename", typename);
-				map.put("huanxinaccount", doctorinfo.getDochuanxinaccount());
-				return DataResult.success("登录成功", map);
-			} else {
-				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-				return DataResult.error("登录失败");
-			}
+			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+			return DataResult.error("登录失败");
 		}
 
 	}
@@ -318,17 +311,16 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 	 * lang.Integer, java.lang.String)
 	 */
 	@Override
-	public boolean addHuanXinAccout(Integer docloginid, String password) throws Exception {
+	public String creatHuanXinAccout(Integer docloginid, String password) throws Exception {
 		boolean registerResult = UserManger.register("doc_" + docloginid, password);
 		if (registerResult) {
 			Doctorlogininfo doctorlogininfo = new Doctorlogininfo();
 			doctorlogininfo.setDocloginid(docloginid);
 			doctorlogininfo.setDochuanxinaccount("doc_" + docloginid);
 			doctorlogininfoMapper.updateByPrimaryKeySelective(doctorlogininfo);
-			return true;
-
+			return DataResult.success("注册成功");
 		} else {
-			return false;
+			return DataResult.error("注册失败");
 		}
 
 	}
@@ -354,6 +346,10 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		if (doctorlogininfo == null) {
 			return DataResult.error("账号不存在");
 		} else {
+			String huanxin = doctorlogininfo.getDochuanxinaccount();
+			if (StringUtils.isBlank(huanxin)) {
+				return DataResult.error("环信账号未注册");
+			}
 			boolean registerResult = UserManger.register(doctorlogininfo.getDochuanxinaccount(), password);
 			if (registerResult) {
 				return DataResult.success("修改成功");
@@ -382,15 +378,15 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 	 */
 	@Override
 	public String updatePassword(String docloginphone, String docloginpwd, String msgCode) throws Exception {
+		Doctorlogininfo logininfo = doctorlogininfoMapperCustom.selectDoctorByPhone(docloginphone);
+		if (logininfo == null) {
+			return DataResult.error("账号不存在");
+		}
 		boolean msgResult = MsgCode.checkMsg(docloginphone, msgCode);
 		if (!msgResult) {
 			return DataResult.error("验证码错误");
 		}
 		Doctorlogininfo doctorlogininfo = new Doctorlogininfo();
-		Doctorlogininfo logininfo = doctorlogininfoMapperCustom.selectDoctorByPhone(docloginphone);
-		if (logininfo == null) {
-			return DataResult.error("号码未注册");
-		}
 		doctorlogininfo.setDocloginid(logininfo.getDocloginid());
 		String[] str = MD5Util.generate(docloginpwd);
 		doctorlogininfo.setDocloginpwd(str[0]);

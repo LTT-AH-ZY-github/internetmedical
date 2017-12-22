@@ -15,6 +15,8 @@
      <bean id="commonTradeServiceImpl" class="com.medical.service.impl.CommonTradeServiceImpl"/>
     <bean id="senderNotificationService" class="com.medical.service.impl.SenderNotificationServiceImpl"/>
     <bean id="deleteFileService" class="com.medical.service.impl.DeleteFileServiceImpl"/>
+    <bean id="payService" class="com.medical.service.impl.PayServiceImpl"/>
+    <bean id="recommendDoctorService" class="com.medical.service.impl.RecommendDoctorServiceImpl"/>
     <!--用户接口  -->
     <bean id="userAccountService" class="com.medical.service.impl.user.UserAccountServiceImpl"/>
     <bean id="userInfoService" class="com.medical.service.impl.user.UserInfoServiceImpl"/>

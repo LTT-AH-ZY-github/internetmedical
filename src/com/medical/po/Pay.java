@@ -8,6 +8,8 @@ public class Pay {
 
     private Integer payorderid;
 
+    private Integer payordertypeid;
+
     private String paytradeno;
 
     private String payalipaytradeno;
@@ -24,6 +26,10 @@ public class Pay {
 
     private Integer paysenderid;
 
+    private String paysendername;
+
+    private String paysenderaccount;
+
     private Integer payreceiverid;
 
     private String payreceivername;
@@ -36,7 +42,7 @@ public class Pay {
 
     private String payremark;
 
-    private String paysendername;
+    private String payreceiveraccount;
 
     private String payinfo;
 
@@ -54,6 +60,14 @@ public class Pay {
 
     public void setPayorderid(Integer payorderid) {
         this.payorderid = payorderid;
+    }
+
+    public Integer getPayordertypeid() {
+        return payordertypeid;
+    }
+
+    public void setPayordertypeid(Integer payordertypeid) {
+        this.payordertypeid = payordertypeid;
     }
 
     public String getPaytradeno() {
@@ -120,6 +134,22 @@ public class Pay {
         this.paysenderid = paysenderid;
     }
 
+    public String getPaysendername() {
+        return paysendername;
+    }
+
+    public void setPaysendername(String paysendername) {
+        this.paysendername = paysendername == null ? null : paysendername.trim();
+    }
+
+    public String getPaysenderaccount() {
+        return paysenderaccount;
+    }
+
+    public void setPaysenderaccount(String paysenderaccount) {
+        this.paysenderaccount = paysenderaccount == null ? null : paysenderaccount.trim();
+    }
+
     public Integer getPayreceiverid() {
         return payreceiverid;
     }
@@ -168,12 +198,12 @@ public class Pay {
         this.payremark = payremark == null ? null : payremark.trim();
     }
 
-    public String getPaysendername() {
-        return paysendername;
+    public String getPayreceiveraccount() {
+        return payreceiveraccount;
     }
 
-    public void setPaysendername(String paysendername) {
-        this.paysendername = paysendername == null ? null : paysendername.trim();
+    public void setPayreceiveraccount(String payreceiveraccount) {
+        this.payreceiveraccount = payreceiveraccount == null ? null : payreceiveraccount.trim();
     }
 
     public String getPayinfo() {

@@ -108,7 +108,8 @@ public class UserPurseServiceImpl implements UserPurseService {
 		}
 		return DataResult.success("获取成功", userinfo.getUserpursebalance());
 	}
-
+	
+	
 	/**
 	 * @return
 	 * @Title: listBalanceRecord
@@ -148,5 +149,13 @@ public class UserPurseServiceImpl implements UserPurseService {
 			return DataResult.success("获取数据为空", null);
 		}
 	}
-
+	@Override
+	public String listTradeRecordByOrder(Integer userloginid,Integer userorderid) throws Exception {
+		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userloginid);
+		if (userinfo == null) {
+			return DataResult.error("账户不存在");
+		}
+		List<Map<String, Object>> list = payMapperCustom.selectByLoginIdAndTypeAndOrderId(userloginid,1,userorderid);
+		return DataResult.success("获取数据成功", list);
+	}
 }

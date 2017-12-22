@@ -111,4 +111,25 @@ public interface CommonService {
 	 */
 	String getUnreadNotificationNum(Integer hosploginid);
 
+	/**
+	 * @Title: addFeedBack
+	 * @Description: TODO
+	 * @param feedbackidea
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String addFeedBack(String feedbackidea) throws Exception;
+
+	/**
+	 * @Title: getAppVersion
+	 * @Description: TODO
+	 * @param type
+	 * @param  
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String getAppVersion(Integer apptype, Integer systemtype) throws Exception;
+
 }

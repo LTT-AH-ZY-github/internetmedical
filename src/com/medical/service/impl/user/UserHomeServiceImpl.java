@@ -8,7 +8,11 @@ import com.github.pagehelper.PageInfo;
 import com.medical.mapper.DoctorcalendarMapperCustom;
 import com.medical.mapper.DoctorcommentMapperCustom;
 import com.medical.mapper.DoctorinfoMapperCustom;
+import com.medical.mapper.PreorderMapperCustom;
+import com.medical.mapper.UsersickMapperCustom;
 import com.medical.po.DoctorSearch;
+import com.medical.po.Preorder;
+import com.medical.po.Usersick;
 import com.medical.service.iface.user.UserHomeService;
 import com.medical.utils.GeographyScope;
 import com.medical.utils.result.DataResult;
@@ -29,6 +33,10 @@ public class UserHomeServiceImpl implements UserHomeService {
 	private DoctorcommentMapperCustom doctorcommentMapperCustom;
 	@Autowired
 	private DoctorcalendarMapperCustom doctorcalendarMapperCustom;
+	@Autowired
+	private UsersickMapperCustom usersickMapperCustom;
+	@Autowired
+	private PreorderMapperCustom preorderMapperCustom;
 
 	/*
 	 * (非 Javadoc) <p>Title: listDoctor</p> <p>Description: 获取医生 列表模式</p>
@@ -78,8 +86,8 @@ public class UserHomeServiceImpl implements UserHomeService {
 	public String findDoctorsInMap(String userloginlat, String userloginlon) throws Exception {
 		double latitude = Double.parseDouble(userloginlat);
 		double longitude = Double.parseDouble(userloginlon);
-		// 5千米距离
-		int dis = 50;
+		// 500千米距离
+		int dis = 5000;
 		Map<String, Object> map = GeographyScope.getAround(latitude, longitude, dis);
 		List<Map<String, Object>> list = doctorinfoMapperCustom.findDoctorInfoInMap((double) map.get("minLat"),
 				(double) map.get("maxLat"), (double) map.get("minLon"), (double) map.get("maxLon"));
@@ -100,9 +108,20 @@ public class UserHomeServiceImpl implements UserHomeService {
 	 * Integer)
 	 */
 	@Override
-	public String findDoctorDetail(Integer docloginid) throws Exception {
+	public String findDoctorDetail(Integer docloginid, Integer userloginid) throws Exception {
 		Map<String, Object> map = doctorinfoMapperCustom.findDoctorByDocLoginId(docloginid);
 		if (map != null && !map.isEmpty()) {
+			List<Usersick> list = usersickMapperCustom.selectByUserLoginIdAndState(userloginid, 2);
+			if (list!=null && list.size()>0) {
+				List<Preorder> preorders = preorderMapperCustom.selectByDocLoginIdAndUserSickId(docloginid, list.get(0).getUsersickid(), 4);
+				if (preorders!=null && preorders.size()>0) {
+					map.put("selected", true);
+				}else {
+					map.put("selected", false);
+				}
+			}else {
+				map.put("selected", false);
+			}
 			return DataResult.success("获取成功", map);
 		} else {
 			return DataResult.error("该医生不存在");

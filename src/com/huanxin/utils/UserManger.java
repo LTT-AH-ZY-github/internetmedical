@@ -2,6 +2,8 @@ package com.huanxin.utils;
 
 
 import com.google.gson.Gson;
+
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.springframework.http.HttpStatus;
@@ -18,7 +20,7 @@ import java.util.List;
  * @Date           2017年11月27日 下午9:48:28 
  */
 public class UserManger {
-
+	
     /**
      * 向环信注册一个用户
      */
@@ -32,21 +34,25 @@ public class UserManger {
                     .requestBody(new Gson().toJson(new UserRequest(name, password)))
                     .post();
             
+        } catch (HttpStatusException e) {
+        	int stateCode = e.getStatusCode();
+        	//已注册
+        	if (stateCode==400) {
+				return true ;
+			}
         } catch (IOException e) {
-        
-        	System.out.println();
             e.printStackTrace();
             return false;
         }
         if (document != null) {
-            UserResponse userResponse = new Gson().fromJson(document.body().html(), UserResponse.class);
+            //UserResponse userResponse = new Gson().fromJson(document.body().html(), UserResponse.class);
             return true;
         }
         return false;
     }
     
     /**
-     * 向环信注册一个用户
+     * 更新环信密码
      */
     public static boolean updatePassword(String name, String password) {
         Document document = null;
@@ -70,8 +76,69 @@ public class UserManger {
         }
         return false;
     }
+    /**
+     * 获取用户详细信息
+     */
+    public static boolean getUserInfo(String name) {
+        Document document = null;
+        try {
+            document = Jsoup.connect("https://a1.easemob.com/1133171107115421/medicalclient/users/"+name)
+            		.header("Content-Type", "application/json")
+            		.header("Authorization", "Bearer " + TokenManager.getToken())
+            		.ignoreContentType(true)
+                    .get();
+            
+        }catch (HttpStatusException e) {
+        	
+        	System.out.println(e.getStatusCode());
+           
+            return false;
+        } catch (IOException e) {
+        	// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        if (document != null) {
+            UserResponse userResponse = new Gson().fromJson(document.body().html(), UserResponse.class);
+           System.out.println(userResponse.getEntities().get(0).getUsername());
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * 获取用户详细信息
+     */
+    public static boolean listUser() {
+        Document document = null;
+        try {
+            document = Jsoup.connect("https://a1.easemob.com/1133171107115421/medicalclient/users")
+            		.header("Content-Type", "application/json")
+            		.header("Authorization", "Bearer " + TokenManager.getToken())
+            		.ignoreContentType(true)
+                    .get();
+            
+        }catch (HttpStatusException e) {
+        	
+        	System.out.println(e.getStatusCode());
+           
+            return false;
+        } catch (IOException e) {
+        	// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        if (document != null) {
+            UserResponse userResponse = new Gson().fromJson(document.body().html(), UserResponse.class);
+            List<com.huanxin.utils.UserManger.UserResponse.EntitiesBean> list = userResponse.getEntities();
+            for (com.huanxin.utils.UserManger.UserResponse.EntitiesBean entitiesBean : list) {
+            	System.out.println(entitiesBean.getUsername());
+			}
+             return true;
+        }
+        return false;
+    }
     public static void main(String args[]) {
-    	updatePassword("cs00", "cs004222");
+    	//register("cs00", "cs004222");
+    	listUser();
     }
     
     

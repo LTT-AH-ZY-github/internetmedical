@@ -115,7 +115,7 @@ public class UserAccountController {
 		if (userloginid == null) {
 			return DataResult.error("用户登录id为空");
 		}
-		if (userloginpwd == null) {
+		if (StringUtils.isBlank(userloginpwd)) {
 			return DataResult.error("密码为空");
 		}
 		return userAccountService.createHuanXinAccout(userloginid, userloginpwd);

@@ -31,7 +31,7 @@ public interface SenderNotificationService {
 	 * @throws Exception
 	 * @return: boolean
 	 */
-	boolean createMsgUserToDoctor(Integer userloginid, Integer docloginid, String title, String msg, JSONObject jsonCustormCont) throws Exception;
+	boolean createMsgUserToDoctor(Integer userloginid,String name,Integer docloginid, String title, String msg, JSONObject jsonCustormCont) throws Exception;
 	
 	/**
 	 * @Title: createMsgUserToHospital
@@ -45,7 +45,7 @@ public interface SenderNotificationService {
 	 * @throws Exception
 	 * @return: boolean
 	 */
-	boolean createMsgUserToHospital(Integer userloginid, Integer hosploginid, String title, String msg, JSONObject jsonCustormCont) throws Exception;
+	boolean createMsgUserToHospital(Integer userloginid,String name, Integer hosploginid, String title, String msg, JSONObject jsonCustormCont) throws Exception;
 	
 	/**
 	 * @Title: createMsgUserToAdmin
@@ -59,7 +59,7 @@ public interface SenderNotificationService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	boolean createMsgUserToAdmin(Integer userloginid, Integer adminloginid, String title, String msg,
+	boolean createMsgUserToAdmin(Integer userloginid,String name, Integer adminloginid, String title, String msg,
 			JSONObject jsonCustormCont) throws Exception;
 	
 	/**

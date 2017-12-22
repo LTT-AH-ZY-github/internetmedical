@@ -115,6 +115,9 @@
   <!--根据病情和类型删除相关医生  -->
   <delete id="deleteByUserSickIdAndPreOrderType" parameterType="java.lang.Integer" >
     delete from preorder
-    where userSickId= #{0,jdbcType=INTEGER} and preOrderType=#{1,jdbcType=INTEGER} 
+    where userSickId= #{0,jdbcType=INTEGER} 
+    <if test="param2!=null">
+      and preOrderType=#{1,jdbcType=INTEGER} 
+    </if>
   </delete>
 </mapper>

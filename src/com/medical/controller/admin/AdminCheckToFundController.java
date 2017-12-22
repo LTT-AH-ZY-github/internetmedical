@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.medical.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.service.iface.admin.AdminCheckToFundService;
+import com.medical.utils.CheckUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -29,21 +27,26 @@ public class AdminCheckToFundController {
 	
 	
 	@RequestMapping(value="/listdoctortofund", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value="获取需要提现医生",httpMethod="POST",notes="获取需要提现医生")
+	@ApiOperation(value="获取需要余额提现医生",httpMethod="POST",notes="获取需要余额提现医生")
 	public String listdoctortorefund(
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "limit", required = true, value = "每页多少数据") @RequestParam(value = "limit") Integer limit,
 			@ApiParam(name = "offset", required = true, value = "从第几条开始") @RequestParam(value = "offset") Integer offset
-			
 			)throws Exception{
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
+		}
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为非零正整数");
+		}
+		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
+			return DataResult.error("offset应为正整数");
 		}
 		return adminCheckToFundService.listDoctorsToFund(adminloginid,limit,offset);
 	}
 	
 	@RequestMapping(value="/fundtodoctor", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value="医生提现",httpMethod="POST",notes="医生提现")
+	@ApiOperation(value="医生余额提现",httpMethod="POST",notes="医生余额提现")
 	public String refundDoctor(
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid
@@ -52,12 +55,13 @@ public class AdminCheckToFundController {
 			return DataResult.error("管理员登录id为空");
 		}
 		if (docloginid==null) {
-			return DataResult.error("医生登录id");
+			return DataResult.error("医生登录id为空");
 		}
 		return adminCheckToFundService.updateFundToDoctor(adminloginid,docloginid);
 	}
+	
 	@RequestMapping(value="/listhospitaltofund", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value="获取需要提现医院",httpMethod="POST",notes="获取需要提现医院")
+	@ApiOperation(value="获取需要余额提现医院",httpMethod="POST",notes="获取需要余额提现医院")
 	public String listhospitaltofund(
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "limit", required = true, value = "每页多少数据") @RequestParam(value = "limit") Integer limit,
@@ -67,11 +71,17 @@ public class AdminCheckToFundController {
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
 		}
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为非零正整数");
+		}
+		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
+			return DataResult.error("offset应为正整数");
+		}
 		return adminCheckToFundService.listhospitalsToFund(adminloginid,limit,offset);
 	}
 	
 	@RequestMapping(value="/fundtohospital", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value="医院提现",httpMethod="POST",notes="医院提现")
+	@ApiOperation(value="医院余额提现",httpMethod="POST",notes="医院余额提现")
 	public String refundhosp(
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "hosploginid", value = "医院登录id") @RequestParam Integer hosploginid
@@ -80,12 +90,13 @@ public class AdminCheckToFundController {
 			return DataResult.error("管理员登录id为空");
 		}
 		if (hosploginid==null) {
-			return DataResult.error("医院登录id");
+			return DataResult.error("医院登录id为空");
 		}
 		return adminCheckToFundService.updateFundToHospital(adminloginid, hosploginid);
 	}
+	
 	@RequestMapping(value="/listordertofund", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value="获取需要退款的订单",httpMethod="POST",notes="病人退款")
+	@ApiOperation(value="获取需要退款的订单",httpMethod="POST",notes="获取需要退款的订单")
 	public String listordertofund(
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "limit", required = true, value = "每页多少数据") @RequestParam(value = "limit") Integer limit,
@@ -94,9 +105,15 @@ public class AdminCheckToFundController {
 		if (adminloginid==null) {
 			return DataResult.error("管理员登录id为空");
 		}
-		
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为非零正整数");
+		}
+		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
+			return DataResult.error("offset应为正整数");
+		}
 		return adminCheckToFundService.listOrderToFund(adminloginid,limit,offset);
 	}
+	
 	@RequestMapping(value="/fundtouser", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value="病人退款",httpMethod="POST",notes="病人退款")
 	public String fundtouser(
@@ -107,7 +124,7 @@ public class AdminCheckToFundController {
 			return DataResult.error("管理员登录id为空");
 		}
 		if (userorderid==null) {
-			return DataResult.error("订单id");
+			return DataResult.error("订单id为空");
 		}
 		return adminCheckToFundService.updateFundToUser(adminloginid, userorderid);
 	}

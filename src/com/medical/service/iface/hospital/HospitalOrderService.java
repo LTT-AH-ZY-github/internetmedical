@@ -42,43 +42,8 @@ public interface HospitalOrderService {
 	 * 结束三方订单
 	 * */
 	String updateUserOrderToEnd(Integer hosploginid, Integer userorderid) throws Exception;
-	/**
-	 * 创建会诊
-	 * @param orderabs 
-	 * @param orderstime 
-	 * @return
-	 * @param
-	 * 
-	 * */
-	String creatConsultation(Integer docloginid, Integer hosploginid, String orderabs, String orderstime,
-			BigDecimal orderhospprice, Integer orderhosptpricetype, BigDecimal orderhosptprice,
-			Integer orderhospapricetype, BigDecimal orderhospaprice, Integer orderhospepricetype,
-			BigDecimal orderhospeprice) throws Exception;
-	/**
-	 * 取消会诊
-	 * */
-	String cancelConsultation(Integer hosploginid, Integer hosporderid) throws Exception;
-	/**
-	 * 支付医生会诊费用
-	 * */
-	String payDoctor(Integer hosploginid, Integer hosporderid) throws Exception;
-	/**
-	 * 支付医生会诊费用完成
-	 * */
 	
-	/**
-	 * 结束会诊
-	 * */
-	String finishConsultation(Integer hosploginid, Integer hosporderid) throws Exception;
-	/**
-	 * @Title: payDoctorFinish
-	 * @Description: TODO
-	 * @param requestParams
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
-	String payDoctorFinish(Map<String, String[]> requestParams) throws Exception;
+
 	/**
 	 * @Title: getHospDeptNum
 	 * @Description: 获取医院床位数量

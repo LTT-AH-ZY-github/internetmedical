@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Usersick {
     private Integer usersickid;
-
+    
     private String usersickdesc;
 
     private String usersickpic;

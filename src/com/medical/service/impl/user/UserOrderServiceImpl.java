@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -52,7 +54,10 @@ import com.medical.po.Usersick;
 import com.medical.po.custom.CalendarParmas;
 import com.medical.service.iface.CommonService;
 import com.medical.service.iface.CommonTradeService;
+import com.medical.service.iface.PayService;
 import com.medical.service.iface.SenderNotificationService;
+import com.medical.service.iface.doctor.DoctorPurseService;
+import com.medical.service.iface.hospital.HospitalPurseService;
 import com.medical.service.iface.user.UserOrderService;
 import com.medical.utils.StringReplaceUtil;
 import com.medical.utils.result.DataResult;
@@ -60,6 +65,8 @@ import com.pay.alipay.AliPayNotify;
 import com.pay.alipay.AlipayConfig;
 import com.pay.alipay.GetSign;
 import com.pay.alipay.MakeOrderNum;
+import com.wordnik.swagger.annotations.Authorization;
+
 import net.sf.json.JSONObject;
 
 /**
@@ -125,7 +132,12 @@ public class UserOrderServiceImpl implements UserOrderService {
 	private SenderNotificationService senderNotificationService;
 	@Autowired
 	private CommonTradeService commonTradeService;
-	
+	@Autowired
+	private PayService payService ;
+	@Autowired
+	private DoctorPurseService  doctorPurseService;
+	@Autowired
+	private HospitalPurseService  hospitalPurseService;
 	/* (非 Javadoc)  
 	* <p>Title: createOrder</p>  
 	* <p>Description: 生成订单</p>  
@@ -143,8 +155,21 @@ public class UserOrderServiceImpl implements UserOrderService {
 			return DataResult.error("账户不存在");
 		}
 		Doctorlogininfo doctor = doctorloginiinfoMapper.selectByPrimaryKey(docloginid);
-		if (doctor==null) {
+		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
+		if (doctor==null ||doctorinfo==null) {
 			return DataResult.error("该医生不存在");
+		}
+		int type = doctor.getDoclogintype();
+		if (type!=3) {
+			return DataResult.error("该医生账户未审核");
+		}
+		String alipayaccount = doctorinfo.getDocalipayaccount();
+		String alipayname = doctorinfo.getDocalipayname();
+		if (StringUtils.isBlank(alipayaccount)) {
+			return DataResult.error("该医生绑定的支付宝账号为空,不可进行该操作");
+		}
+		if (StringUtils.isBlank(alipayname)) {
+			return DataResult.error("该医生绑定的支付宝账号姓名为空,不可进行该操作");
 		}
 		// 查询处于发布状态的病情
 		List<Usersick> lists = usersickMapperCustom.selectByUserLoginIdAndState(userloginid, 2);
@@ -214,10 +239,11 @@ public class UserOrderServiceImpl implements UserOrderService {
 			int upResult = usersickMapper.updateByPrimaryKeySelective(usersick);
 			if (result > 0 && upResult > 0 && delResult > 0) {
 				JSONObject jsonCustormCont = new JSONObject();
-				jsonCustormCont.put("doc_id", docloginid);
+				jsonCustormCont.put("sick_id", usersickid);
+				jsonCustormCont.put("user_id", userloginid);
 				jsonCustormCont.put("order_id", userorder.getUserorderid());
 				jsonCustormCont.put("type", "2");
-				senderNotificationService.createMsgUserToDoctor(userloginid, docloginid, "等待确认", "选择了您",
+				senderNotificationService.createMsgUserToDoctor(userloginid, sick.getFamilyname(),docloginid, "等待确认", "选择了您",
 						jsonCustormCont);
 				return DataResult.success("生成订单成功");
 			} else {
@@ -254,6 +280,11 @@ public class UserOrderServiceImpl implements UserOrderService {
 		if (order == null) {
 			return DataResult.error("订单不存在");
 		}
+		//判断订单是否处于支付中
+		boolean isExit = commonTradeService.queryUserOrderIsExit(userorderid);
+		if (isExit) {
+			return DataResult.error("支付中,不可取消");
+		}
 		Integer loginid = order.getUserloginid();
 		if (userloginid != loginid) {
 			return DataResult.error("账号信息不匹配");
@@ -264,6 +295,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 			//订单信息
 			Userorder userorder = new Userorder();
 			userorder.setUserorderid(userorderid);
+			//订单结束时间
 			userorder.setUserorderetime(new Date());
 			// 16为病人取消订单
 			userorder.setUserorderstateid(16);
@@ -280,7 +312,11 @@ public class UserOrderServiceImpl implements UserOrderService {
 			int upResult = usersickMapper.updateByPrimaryKeySelective(usersick);
 			if (result > 0 && upResult > 0) {
 				JSONObject jsonCustormCont = new JSONObject();
-				senderNotificationService.createMsgUserToDoctor(userloginid, order.getUserorderdocloginid(), "通知消息",
+				jsonCustormCont.put("sick_id", order.getUsersickid());
+				jsonCustormCont.put("user_id", userloginid);
+				jsonCustormCont.put("order_id", userorder.getUserorderid());
+				jsonCustormCont.put("type", "2");
+				senderNotificationService.createMsgUserToDoctor(userloginid,order.getFamilyname(), order.getUserorderdocloginid(), "通知消息",
 						"取消了订单", jsonCustormCont);
 				return DataResult.success("取消订单成功");
 			} else {
@@ -341,9 +377,9 @@ public class UserOrderServiceImpl implements UserOrderService {
 	@Override
 	public String updateOrderStateToConfirm(Integer userloginid, Integer userorderid, Integer type) throws Exception {
 		//订单锁
-		boolean tradestate = commonTradeService.queryUserPayDoctorForUpdate(userorderid);
+		boolean tradestate = commonTradeService.queryUserOrderForCreat(userorderid);
 		if (tradestate) {
-			return DataResult.error("退款中,两分钟后重试");
+			return DataResult.error("付款中,请稍后重试");
 		}
 		Userlogininfo user = userloginiinfoMapper.selectByPrimaryKey(userloginid);
 		if (user==null) {
@@ -369,9 +405,13 @@ public class UserOrderServiceImpl implements UserOrderService {
 				boolean result = userorderMapper.updateByPrimaryKeySelective(userorder) > 0;
 				if (result) {
 					JSONObject jsonCustormCont = new JSONObject();
-					senderNotificationService.createMsgUserToDoctor(order.getUserloginid(),
+					jsonCustormCont.put("user_id", order.getUserloginid());
+					jsonCustormCont.put("order_id", order.getUserorderid());
+					jsonCustormCont.put("type", "4");
+					senderNotificationService.createMsgUserToDoctor(order.getUserloginid(),order.getFamilyname(), 
 							order.getUserorderdocloginid(), "通知消息", "支付成功", jsonCustormCont);
-					commonTradeService.queryUserPayDoctorForFinish(userorderid);
+					//解除订单锁
+					commonTradeService.queryUserOrderForFinish(userorderid);
 					return DataResult.success("支付成功");
 				} else {
 					return DataResult.error("支付失败");
@@ -395,41 +435,26 @@ public class UserOrderServiceImpl implements UserOrderService {
 	@Override
 	public String updateOrderStatePayDoctorByAliPay(Userorder userorder) throws Exception {
 		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(userorder.getUserorderdocloginid());
+		if (doctorinfo==null) {
+			return DataResult.error("医生不存在");
+		}
 		String boby = "速递医运病人费用缴纳";
 		String subject = "缴纳" + doctorinfo.getDocname() + "医生费用";
 		String totalAmount = userorder.getUserorderprice() + "";
 		String prefix = "u" + userorder.getUserorderid() + "d";
 		String outTradeNo = MakeOrderNum.getTradeNo(prefix);
 		// 回调地址
-		//String notifyUrl = "http://1842719ny8.iok.la:14086/internetmedical/user/paydoctorfinishbyalipay";
 		String notifyUrl = AlipayConfig.DOCTOR_NOTIFY_URL;
 		String result = GetSign.appGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
-		
-		//支付信息
-		Pay pay = new Pay();
-		pay.setPaycreattime(new Date());
-		// 1为支付宝支付
-		pay.setPaymodeid(1);
-		pay.setPaysenderid(userorder.getUserloginid());
-		//亲属姓名
-		pay.setPaysendername(userorder.getFamilyname());
-		pay.setPaytotalamount(new BigDecimal(totalAmount));
-		pay.setPayreceiverid(userorder.getUserorderdocloginid());
-		pay.setPayreceivername(doctorinfo.getDocname());
-		pay.setPayorderid(userorder.getUserorderid());
-		pay.setPaytradeno(outTradeNo);
-		// 1为病人支付给医生
-		pay.setPaytypeid(1);
-		// 1为交易创建，等待买家付款
-		pay.setPaystateid(1);
-		boolean payResult = payMapper.insertSelective(pay) > 0;
-		if (payResult) {
-			return DataResult.success("获取成功", result);
-		} else {
-			return DataResult.error("支付失败");
+		String payresult  = payService.updateAlipayRecordToCreat(userorder.getUserloginid(), userorder.getFamilyname(), userorder.getUserorderprice(), userorder.getUserorderdocloginid(), doctorinfo.getDocname(), userorder.getUserorderid(), 1, 1, outTradeNo);
+		JSONObject jsonObject = JSONObject.fromObject(payresult);
+		System.out.println("成功"+"100".equals(jsonObject.get("code").toString()));
+		if ("100".equals(jsonObject.get("code").toString())) {
+			return DataResult.success("获取成功", result); 
+		}else {
+			return payresult;
 		}
-
-	}
+   }
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -439,35 +464,26 @@ public class UserOrderServiceImpl implements UserOrderService {
 			// 商户订单号
 			String out_trade_no = params.get("out_trade_no");
 			// 付款金额
-			String amount = params.get("buyer_pay_amount");
+			String receiptamount = params.get("buyer_pay_amount");
 			// 支付宝交易号
 			String trade_no = params.get("trade_no");
-			// 附加数据
-			// String passback_params = URLDecoder.decode(params.get("passback_params"));
+			String buyer_logon_id = params.get("buyer_logon_id");
+			String seller_email = params.get("seller_email"); 
 			// 获取交易记录
 			Pay pay = payMapperCustom.selectByPayTradeNo(out_trade_no);
 			if (pay == null) {
 				return DataResult.error("交易不存在");
 			}
-			// 交易记录信息
-			Pay record = new Pay();
-			record.setPayid(pay.getPayid());
-			record.setPayalipaytradeno(trade_no);
-			record.setPayendtime(new Date());
-			record.setPayinfo(params.toString());
-			record.setPayreceiptamount(new BigDecimal(amount)); 
-			// 交易支付成功
+            // 交易支付成功
 			if ("TRADE_CLOSED".equals(params.get("trade_status"))) {
-				// 未付款交易超时关闭，或支付完成后全额退款
-				record.setPaystateid(2);
-				boolean payResult = payMapper.updateByPrimaryKeySelective(record) > 0;
-				//解除订单锁
-				commonTradeService.queryUserPayDoctorForFinish(pay.getPayorderid());
-				if (payResult) {
-					return DataResult.success("支付结束");
-				} else {
-					return DataResult.error("支付失败");
+				String payresult  = payService.updateAlipayRecordToCancle(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id, seller_email, params.toString());
+				JSONObject jsonObject = JSONObject.fromObject(payresult);
+				if ("100".equals(jsonObject.get("code"))) {
+					return DataResult.success("支付结束"); 
+				}else {
+					return payresult;
 				}
+		
 			}
 			int userorderid = pay.getPayorderid();
 			Userorder order = userorderMapper.selectByPrimaryKey(userorderid);
@@ -477,62 +493,35 @@ public class UserOrderServiceImpl implements UserOrderService {
 			int state = order.getUserorderstateid();
 			// 订单处于等待病人付款状态
 			if (state == 2) {
-
 				Userorder userorder = new Userorder();
 				userorder.setUserorderid(userorderid);
 				// 支付完成等待就诊
 				userorder.setUserorderstateid(4);
-				int result = userorderMapper.updateByPrimaryKeySelective(userorder);
+				boolean orderresult = userorderMapper.updateByPrimaryKeySelective(userorder)>0;
+				int stateid = 3;
 				if ("TRADE_SUCCESS".equals(params.get("trade_status"))) {
-					// 3为交易成功
-					record.setPaystateid(3);
-				} else {
+				// 3为交易成功
+				  stateid = 3;
+			    } else {
 					// 4为交易结束，不可退款
-					record.setPaystateid(4);
+			    	stateid = 4;
 				}
-				boolean payResult = payMapper.updateByPrimaryKeySelective(record) > 0;
-				// 计算余额
-				BigDecimal total = new BigDecimal(amount);
-				List<Doctorpurse> list = doctorpurseMapperCustom.selectByDocLoginId(order.getUserorderdocloginid());
-				if (list != null && list.size() > 0) {
-					for (Doctorpurse doctorpurse : list) {
-						//type为1时转入2为转出
-						int type = doctorpurse.getDocpursetypeid();
-						BigDecimal price = doctorpurse.getDocpurseamount();
-						if (type == 2) {
-							total = total.subtract(price.abs());
-						} else {
-							total = total.add(price.abs());
-						}
-					}
-				}
-				//更新庄账户余额，医生信息表
-				Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(order.getUserorderdocloginid());
-				Doctorinfo doctorinfoRecord = new Doctorinfo();
-				doctorinfoRecord.setDocid(doctorinfo.getDocid());
-				doctorinfoRecord.setDocpursebalance(total);
-				boolean doctorinfoResult = doctorinfoMapper.updateByPrimaryKeySelective(doctorinfoRecord) > 0;
-				
-				// 医生钱包
-				Doctorpurse doctorpurse = new Doctorpurse();
-				doctorpurse.setDocloginid(order.getUserorderdocloginid());
-				doctorpurse.setDocpurseamount(new BigDecimal(amount));
+			   //交易记录
+				String payResult =  payService.updateAlipayRecordToFinish(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id, seller_email, params.toString(),new BigDecimal(receiptamount) , stateid);
+				JSONObject payObject = JSONObject.fromObject(payResult);
 				String name = pay.getPaysendername();
-				doctorpurse.setDocpurseremark("收到病人"+name+"付款");
-				doctorpurse.setDocpursetime(new Date());
-				// 1为转入
-				doctorpurse.setDocpursetypeid(1);
-				doctorpurse.setPayid(pay.getPayid());
-				doctorpurse.setDocpursebalance(total);
-				boolean purse = doctorpurseMapper.insertSelective(doctorpurse) > 0;
-				preorderMapperCustom.deleteAllByUserSickId(order.getUsersickid());
+				//金额记录
+				String purseResult =doctorPurseService.updateBalance(order.getUserorderdocloginid(), 1, new BigDecimal(receiptamount), "收到病人"+name+"付款", pay.getPayid());
+				JSONObject purseObject = JSONObject.fromObject(purseResult);
 				//解除订单锁
-				commonTradeService.queryUserPayDoctorForFinish(pay.getPayorderid());
-				if (result > 0 && payResult && purse && doctorinfoResult) {
+				commonTradeService.queryUserOrderForFinish(pay.getPayorderid());
+			    if ("100".equals(payObject.get("code").toString()) && "100".equals(purseObject.get("code").toString()) && orderresult) {
 					JSONObject jsonCustormCont = new JSONObject();
-					senderNotificationService.createMsgUserToDoctor(order.getUserloginid(),
+				    jsonCustormCont.put("user_id", order.getUserloginid());
+					jsonCustormCont.put("order_id", order.getUserorderid());
+					jsonCustormCont.put("type", "4");
+					senderNotificationService.createMsgUserToDoctor(order.getUserloginid(),order.getFamilyname(), 
 							order.getUserorderdocloginid(), "通知消息", "支付成功", jsonCustormCont);
-					
 					return DataResult.success("支付成功");
 				} else {
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -545,52 +534,14 @@ public class UserOrderServiceImpl implements UserOrderService {
 			}
 	}
 	
-	/*public String updateOrderStateToConfirmHospital(Integer userloginid, Integer userorderid, Integer type) throws Exception {
-		Userlogininfo user = userloginiinfoMapper.selectByPrimaryKey(userloginid);
-		if (user==null) {
-			return DataResult.error("账户不存在");
-		}
-		Userorder order = userorderMapper.selectByPrimaryKey(userorderid);
-		if (order == null) {
-			return DataResult.error("订单不存在");
-		}
-		Integer loginid = order.getUserloginid();
-		if (userloginid != loginid) {
-			return DataResult.error("账户信息不匹配");
-		}
-		// 订单处于等待病人确定状态
-		int state = order.getUserorderstateid(); 
-		if (state == 2) {
-			BigDecimal totalAmount = order.getUserorderprice();
-			if (totalAmount.compareTo(BigDecimal.ZERO) == 0) {
-				Userorder userorder = new Userorder();
-				userorder.setUserorderid(userorderid);
-				// 支付完成等待就诊
-				userorder.setUserorderstateid(4);
-				boolean result = userorderMapper.updateByPrimaryKeySelective(userorder) > 0;
-				if (result) {
-					JSONObject jsonCustormCont = new JSONObject();
-					commonService.createMsgUserToDoctor(order.getUserloginid(),
-							order.getUserorderdocloginid(), "通知消息", "支付成功", jsonCustormCont);
-					return DataResult.success("支付成功");
-				} else {
-					return DataResult.error("支付失败");
-				}
-
-			}
-			if (type == 1) {
-				return updateOrderStatePayDoctorByAliPay(order);
-			} else {
-				return updateOrderStatePayDoctorByAliPay(order);
-			}
-
-		} else {
-			return DataResult.error("该状态不支持确认");
-		}
-
-	}*/
+	
 	@Override
 	public String updateOrderStatePayHospital(Integer userloginid, Integer userorderid, Integer type) throws Exception {
+		//订单锁
+		boolean tradestate = commonTradeService.queryUserOrderForCreat(userorderid);
+		if (tradestate) {
+			return DataResult.error("付款中,请稍后重试");
+		}
 		Userlogininfo user = userloginiinfoMapper.selectByPrimaryKey(userloginid);
 		if (user==null) {
 			return DataResult.error("账户不存在");
@@ -615,9 +566,14 @@ public class UserOrderServiceImpl implements UserOrderService {
 				userorder.setUserorderstateid(7);
 				userorder.setUserorderactualhospitalizationid(4);
 				boolean result = userorderMapper.updateByPrimaryKeySelective(userorder) > 0;
+				
+				//解除订单锁
+				commonTradeService.queryUserOrderForFinish(userorderid);
 				if (result) {
 					JSONObject jsonCustormCont = new JSONObject();
-					senderNotificationService.createMsgUserToHospital(userloginid, order.getUserorderhospid(), "消息通知", "已缴纳押金", jsonCustormCont);
+					jsonCustormCont.put("order_id", order.getUserorderid());
+					jsonCustormCont.put("type", "5");
+					senderNotificationService.createMsgUserToHospital(userloginid,order.getFamilyname(),  order.getUserorderhospid(), "消息通知", "已缴纳押金", jsonCustormCont);
 					return DataResult.success("支付成功");
 				} else {
 					return DataResult.error("支付失败");
@@ -651,32 +607,18 @@ public class UserOrderServiceImpl implements UserOrderService {
 		String prefix = "u" + userorderid + "h";
 		String outTradeNo = MakeOrderNum.getTradeNo(prefix);
 		// 回调地址
-		//String notifyUrl = "http://1842719ny8.iok.la:14086/internetmedical/user/payhospitalfinishbyalipay";
 		String notifyUrl = AlipayConfig.HSOP_NOTIFY_URL;
 		String result = GetSign.appGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
-		Pay pay = new Pay();
-		pay.setPaycreattime(new Date());
-		// 1为支付宝支付
-		pay.setPaymodeid(1);
-		pay.setPaysenderid(userloginid);
-		pay.setPaysendername(userorder.getFamilyname());
-		pay.setPaytotalamount(new BigDecimal(totalAmount));
-		pay.setPayreceiverid(hosploginid);
-		pay.setPayreceivername(hospinfo.getHospname());
-		pay.setPayorderid(userorderid);
-		// 服务器生成交易单号
-		pay.setPaytradeno(outTradeNo);
-		// 2为病人支付给医院
-		pay.setPaytypeid(2);
-		// 1为交易创建，等待买家付款
-		pay.setPaystateid(1);
-		boolean payResult = payMapper.insertSelective(pay) > 0;
-		if (payResult) {
-			return DataResult.success("获取成功", result);
-		} else {
-			return DataResult.error("支付失败");
+		String payresult  = payService.updateAlipayRecordToCreat(userorder.getUserloginid(), userorder.getFamilyname(),new BigDecimal(totalAmount),
+				hosploginid, hospinfo.getHospname(), userorder.getUserorderid(), 1, 2, outTradeNo);
+		JSONObject jsonObject = JSONObject.fromObject(payresult);
+		System.out.println("成功"+"100".equals(jsonObject.get("code").toString()));
+		if ("100".equals(jsonObject.get("code").toString())) {
+			return DataResult.success("获取成功", result); 
+		}else {
+			return payresult;
 		}
-	}
+   }
 
 	// 支付医院回调
 	@Transactional(rollbackFor = Exception.class)
@@ -689,6 +631,8 @@ public class UserOrderServiceImpl implements UserOrderService {
 		String amount = params.get("buyer_pay_amount");
 		// 支付宝交易号
 		String trade_no = params.get("trade_no");
+		String buyer_logon_id = params.get("buyer_logon_id");
+		String seller_email = params.get("seller_email"); 
 		// 附加数据
 		// String passback_params = URLDecoder.decode(params.get("passback_params"));
 		// 获取交易记录
@@ -696,25 +640,18 @@ public class UserOrderServiceImpl implements UserOrderService {
 		if (pay == null) {
 			return DataResult.error("交易不存在");
 		}
-		// 交易记录信息
-		Pay record = new Pay();
-		record.setPayid(pay.getPayid());
-		// 返回的支付宝交易单号
-		record.setPayalipaytradeno(trade_no);
-		record.setPayendtime(new Date());
-		record.setPayinfo(params.toString());
-		// 实收金额
-		record.setPayreceiptamount(new BigDecimal(amount));
-		// 交易支付成功
+		// 交易支付失败
 		if ("TRADE_CLOSED".equals(params.get("trade_status"))) {
-			// 未付款交易超时关闭，或支付完成后全额退款
-			record.setPaystateid(2);
-			boolean payResult = payMapper.updateByPrimaryKeySelective(record) > 0;
-			if (payResult) {
-				return DataResult.success("支付结束");
-			} else {
-				return DataResult.error("支付失败");
+			//解除订单锁
+			commonTradeService.queryUserOrderForFinish(pay.getPayorderid());
+			String payresult  = payService.updateAlipayRecordToCancle(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id, seller_email, params.toString());
+			JSONObject jsonObject = JSONObject.fromObject(payresult);
+			if ("100".equals(jsonObject.get("code"))) {
+				return DataResult.success("支付结束"); 
+			}else {
+				return payresult;
 			}
+	
 		}
 		int userorderid = pay.getPayorderid();
 		Userorder order = userorderMapper.selectByPrimaryKey(userorderid);
@@ -735,49 +672,23 @@ public class UserOrderServiceImpl implements UserOrderService {
 			userorder.setUserorderactualhospitalizationid(4);
 			// 已缴纳的押金
 			userorder.setUserordertotaldeposit(totaldeposit);
-			boolean orderResult = userorderMapper.updateByPrimaryKeySelective(userorder) > 0;
-			if ("TRADE_SUCCESS".equals(params.get("trade_status"))) {
-				// 3为交易成功
-				record.setPaystateid(3);
-			} else {
-				// 4为交易结束，不可退款
-				record.setPaystateid(4);
-			}
-
-			boolean payResult = payMapper.updateByPrimaryKeySelective(record) > 0;
-			// 计算医院余额,默认为此次实收金额
-			BigDecimal total = new BigDecimal(amount);
-			List<Hosppurse> list = hosppurseMapperCustom.selectHosploginid(order.getUserorderhospid());
-			if (list != null && list.size() > 0) {
-				for (Hosppurse doctorpurse : list) {
-					int type = doctorpurse.getHosppursetypeid();
-					BigDecimal price = doctorpurse.getHosppurseamount();
-					if (type == 2) {
-						total = total.subtract(price.abs());
-					} else {
-						total = total.add(price.abs());
-					}
-				}
-			}
-			//更新医院余额
-			Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(order.getUserorderhospid());
-			Hospinfo hospinfoRecord = new Hospinfo();
-			hospinfoRecord.setHospid(hospinfo.getHospid());
-			hospinfoRecord.setHosppursebalance(total);
-			boolean hospinfoResult = hospinfoMapper.updateByPrimaryKeySelective(hospinfoRecord) > 0;
-			// 医生钱包
-			Hosppurse hosppurse = new Hosppurse();
-			hosppurse.setHosploginid(order.getUserorderhospid());
-			hosppurse.setHosppurseamount(new BigDecimal(amount));
+			boolean orderresult = userorderMapper.updateByPrimaryKeySelective(userorder) > 0;
 			String sickname = pay.getPaysendername();
-			hosppurse.setHosppurseremark("收到病人"+sickname+"押金");
-			hosppurse.setHosppursetime(new Date());
-			// 1为转入
-			hosppurse.setHosppursetypeid(1);
-			hosppurse.setPayid(pay.getPayid());
-			hosppurse.setHosppursebalance(total);
-			boolean purse = hosppurseMapper.insertSelective(hosppurse) > 0;
-			//押金记录表
+			int stateid = 3;
+			if ("TRADE_SUCCESS".equals(params.get("trade_status"))) {
+			// 3为交易成功
+			  stateid = 3;
+		    } else {
+				// 4为交易结束，不可退款
+		    	stateid = 4;
+			}
+			String payresult  = payService.updateAlipayRecordToFinish(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id,
+					seller_email, params.toString(), new BigDecimal(amount), stateid);
+			JSONObject payObject = JSONObject.fromObject(payresult);
+			String purseresult = hospitalPurseService.updateBalance(pay.getPayreceiverid(), 1, new BigDecimal(amount), "收到病人"+sickname+"押金", pay.getPayid());
+			JSONObject purseObject = JSONObject.fromObject(purseresult);
+	       //押金记录表
+			Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(order.getUserorderhospid());
 			Hosptitaldeposit hosptitaldeposit = new Hosptitaldeposit();
 			hosptitaldeposit.setHospdepositnum(new BigDecimal(amount));
 			hosptitaldeposit.setHospdepositremark(sickname+"缴纳"+hospinfo.getHospname()+"押金");
@@ -785,10 +696,14 @@ public class UserOrderServiceImpl implements UserOrderService {
 			hosptitaldeposit.setHosploginid(order.getUserorderhospid());
 			hosptitaldeposit.setUserloginid(order.getUserloginid());
 			boolean depositresult = hosptitaldepositMapper.insertSelective(hosptitaldeposit)>0;
-			if (orderResult && payResult && purse && hospinfoResult && depositresult) {
+			//解除订单锁
+			commonTradeService.queryUserOrderForFinish(pay.getPayorderid());
+			if ("100".equals(payObject.get("code").toString()) && "100".equals(purseObject.get("code").toString()) && orderresult && depositresult) {
 				JSONObject jsonCustormCont = new JSONObject();
-				senderNotificationService.createMsgUserToHospital(order.getUserloginid(), order.getUserorderhospid(), "消息通知", "已缴纳押金",
-						jsonCustormCont);
+				jsonCustormCont.put("order_id", order.getUserorderid());
+				jsonCustormCont.put("type", "5");
+				senderNotificationService.createMsgUserToDoctor(order.getUserloginid(),order.getFamilyname(), 
+						order.getUserorderdocloginid(), "通知消息", "支付成功", jsonCustormCont);
 				return DataResult.success("支付成功");
 			} else {
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -816,6 +731,11 @@ public class UserOrderServiceImpl implements UserOrderService {
 		if (order.getUserloginid() != userloginid) {
 			return DataResult.error("账户信息不匹配");
 		}
+		//判断订单是否处于支付中
+		boolean isExit = commonTradeService.queryUserOrderIsExit(userorderid);
+		if (isExit) {
+			return DataResult.error("支付中,不可取消");
+		}
 		int stateid = order.getUserorderstateid();
 		//实际住院状态
 		int actualhospitalization = order.getUserorderactualhospitalizationid();
@@ -826,6 +746,8 @@ public class UserOrderServiceImpl implements UserOrderService {
 			}
 			Userorder userorder = new Userorder();
 			userorder.setUserorderid(userorderid);
+			//订单结束时间
+			userorder.setUserorderetime(new Date());
 			//9为订单结束
 			userorder.setUserorderstateid(9);
 			//2为需要住院，病人取消
@@ -838,7 +760,9 @@ public class UserOrderServiceImpl implements UserOrderService {
 			boolean sickResult = usersickMapper.updateByPrimaryKeySelective(usersick) > 0;
 			if (orderResult && sickResult) {
 				JSONObject jsonCustormCont = new JSONObject();
-				senderNotificationService.createMsgUserToHospital(order.getUserloginid(), order.getUserorderhospid(), "消息通知", "取消住院",
+				jsonCustormCont.put("order_id", order.getUserorderid());
+				jsonCustormCont.put("type", "5");
+				senderNotificationService.createMsgUserToHospital(order.getUserloginid(), order.getFamilyname(), order.getUserorderhospid(), "消息通知", "取消住院",
 						jsonCustormCont);
 				return DataResult.success("取消成功");
 			} else {
@@ -915,10 +839,12 @@ public class UserOrderServiceImpl implements UserOrderService {
 			int userResult = userorderMapper.updateByPrimaryKeySelective(order);
 			if (userResult > 0) {
 				JSONObject jsonCustormCont = new JSONObject();
-				senderNotificationService.createMsgUserToDoctor(userloginid, userorder.getUserorderdocloginid(), "消息通知", "已对订单评价", jsonCustormCont);
+				senderNotificationService.createMsgUserToDoctor(userloginid,order.getFamilyname(),  userorder.getUserorderdocloginid(), "消息通知", "已对订单评价", jsonCustormCont);
 				if (hospitalizationid == 4) {
 					JSONObject jsonCustormCont2 = new JSONObject();
-					senderNotificationService.createMsgUserToHospital(userloginid, userorder.getUserorderhospid(), "消息通知", "已对订单评价", jsonCustormCont2);
+					jsonCustormCont.put("order_id", order.getUserorderid());
+					jsonCustormCont.put("type", "5");
+					senderNotificationService.createMsgUserToHospital(userloginid,order.getFamilyname(),  userorder.getUserorderhospid(), "消息通知", "已对订单评价", jsonCustormCont2);
 				}
 				return DataResult.success("评论成功");
 			} else {

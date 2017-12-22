@@ -101,4 +101,39 @@ public class DoctorPurseController {
 		
 	}
 	
+	@RequestMapping(value = "/listtraderecordbyorder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "根据病人订单获取交易记录", httpMethod = "POST", notes = "根据病人订单获取交易记录", produces = "application/json")
+	public String listTradeRecordByOrder(
+			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid,
+			@ApiParam(name = "userorderid", required = true, value = "订单id") @RequestParam Integer userorderid
+		
+	) throws Exception{
+		if (docloginid == null) {
+			return DataResult.error("医生登录id为空");
+		}
+		if (userorderid==null) {
+			return DataResult.error("订单id为空");
+		}
+		return doctorPurseService.listTradeRecordByOrder(docloginid, userorderid);
+		// TODO Auto-generated method stub
+
+	}
+	
+	@RequestMapping(value = "/listtraderecordbyconsultation", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "根据会诊订单获取交易记录", httpMethod = "POST", notes = "根据会诊订单获取交易记录", produces = "application/json")
+	public String listtraderecordbyconsultation(
+			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid,
+			@ApiParam(name = "hosporderid", required = true, value = "会诊订单id") @RequestParam Integer hosporderid
+	) throws Exception{
+		if (docloginid == null) {
+			return DataResult.error("医生登录id为空");
+		}
+		if (hosporderid==null) {
+			return DataResult.error("会诊订单id为空");
+		}
+		return doctorPurseService.listTradeRecordByConsultation(docloginid, hosporderid);
+		
+
+	}
+	
 }

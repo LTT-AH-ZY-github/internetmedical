@@ -64,5 +64,16 @@ public interface UserPurseService {
 	 */
 	String getAliPayAccount(Integer userloginid) throws Exception;
 
+	/**
+	 * @Title: listTradeRecordByOrder
+	 * @Description: 根据订单获取交易记录
+	 * @param userloginid
+	 * @param userorderid
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String listTradeRecordByOrder(Integer userloginid, Integer userorderid) throws Exception;
+
 
 }

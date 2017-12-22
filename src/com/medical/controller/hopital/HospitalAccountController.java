@@ -102,13 +102,7 @@ public class HospitalAccountController {
 		if (hosploginid == null) {
 			return DataResult.error("id为空");
 		}
-		boolean result = hospitalAccountService.addHuanXinAccout(hosploginid, hosploginpwd);
-		if (result) {
-			return DataResult.success("注册成功");
-		} else {
-			return DataResult.success("已注册");
-		}
-
+		return hospitalAccountService.creatHuanXinAccout(hosploginid, hosploginpwd);
 	}
 
 	// 登录

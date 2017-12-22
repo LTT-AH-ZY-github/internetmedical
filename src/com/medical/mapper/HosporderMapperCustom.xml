@@ -99,4 +99,167 @@
   	 	and (a.OrderState=6 or a.OrderState=7) 
   	 </if>
   	</select>
+  	 <insert id="insertSelectiveReturnId" useGeneratedKeys="true" keyProperty="hosporderid" parameterType="com.medical.po.Hosporder" >
+    insert into hosporder
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="hosporderid != null" >
+        HospOrderId,
+      </if>
+      <if test="hospid != null" >
+        HospId,
+      </if>
+      <if test="doctorid != null" >
+        DoctorId,
+      </if>
+      <if test="orderprice != null" >
+        OrderPrice,
+      </if>
+      <if test="orderabs != null" >
+        OrderAbs,
+      </if>
+      <if test="orderstate != null" >
+        OrderState,
+      </if>
+      <if test="orderptime != null" >
+        OrderPTime,
+      </if>
+      <if test="orderrtime != null" >
+        OrderRTime,
+      </if>
+      <if test="orderetime != null" >
+        OrderETime,
+      </if>
+      <if test="orderstime != null" >
+        OrderSTime,
+      </if>
+      <if test="orderhospprice != null" >
+        OrderHospPrice,
+      </if>
+      <if test="orderdoctorprice != null" >
+        OrderDoctorPrice,
+      </if>
+      <if test="orderhosptpricetype != null" >
+        OrderHospTPriceType,
+      </if>
+      <if test="orderhosptprice != null" >
+        OrderHospTPrice,
+      </if>
+      <if test="orderdoctortpricetype != null" >
+        OrderDoctorTPriceType,
+      </if>
+      <if test="orderdoctortprice != null" >
+        OrderDoctorTPrice,
+      </if>
+      <if test="orderhospapricetype != null" >
+        OrderHospAPriceType,
+      </if>
+      <if test="orderhospaprice != null" >
+        OrderHospAPrice,
+      </if>
+      <if test="orderdoctorapricetype != null" >
+        OrderDoctorAPriceType,
+      </if>
+      <if test="orderdoctoraprice != null" >
+        OrderDoctorAPrice,
+      </if>
+      <if test="orderhospepricetype != null" >
+        OrderHospEPriceType,
+      </if>
+      <if test="orderhospeprice != null" >
+        OrderHospEPrice,
+      </if>
+      <if test="orderdoctorepricetype != null" >
+        OrderDoctorEPriceType,
+      </if>
+      <if test="orderdoctoreprice != null" >
+        OrderDoctorEPrice,
+      </if>
+      <if test="ordertotalhospprice != null" >
+        OrderTotalHospPrice,
+      </if>
+      <if test="ordertotaldoctorprice != null" >
+        OrderTotalDoctorPrice,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="hosporderid != null" >
+        #{hosporderid,jdbcType=INTEGER},
+      </if>
+      <if test="hospid != null" >
+        #{hospid,jdbcType=INTEGER},
+      </if>
+      <if test="doctorid != null" >
+        #{doctorid,jdbcType=INTEGER},
+      </if>
+      <if test="orderprice != null" >
+        #{orderprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderabs != null" >
+        #{orderabs,jdbcType=VARCHAR},
+      </if>
+      <if test="orderstate != null" >
+        #{orderstate,jdbcType=INTEGER},
+      </if>
+      <if test="orderptime != null" >
+        #{orderptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderrtime != null" >
+        #{orderrtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderetime != null" >
+        #{orderetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderstime != null" >
+        #{orderstime,jdbcType=VARCHAR},
+      </if>
+      <if test="orderhospprice != null" >
+        #{orderhospprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderdoctorprice != null" >
+        #{orderdoctorprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderhosptpricetype != null" >
+        #{orderhosptpricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderhosptprice != null" >
+        #{orderhosptprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderdoctortpricetype != null" >
+        #{orderdoctortpricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderdoctortprice != null" >
+        #{orderdoctortprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderhospapricetype != null" >
+        #{orderhospapricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderhospaprice != null" >
+        #{orderhospaprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderdoctorapricetype != null" >
+        #{orderdoctorapricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderdoctoraprice != null" >
+        #{orderdoctoraprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderhospepricetype != null" >
+        #{orderhospepricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderhospeprice != null" >
+        #{orderhospeprice,jdbcType=DECIMAL},
+      </if>
+      <if test="orderdoctorepricetype != null" >
+        #{orderdoctorepricetype,jdbcType=INTEGER},
+      </if>
+      <if test="orderdoctoreprice != null" >
+        #{orderdoctoreprice,jdbcType=DECIMAL},
+      </if>
+      <if test="ordertotalhospprice != null" >
+        #{ordertotalhospprice,jdbcType=DECIMAL},
+      </if>
+      <if test="ordertotaldoctorprice != null" >
+        #{ordertotaldoctorprice,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
 </mapper>

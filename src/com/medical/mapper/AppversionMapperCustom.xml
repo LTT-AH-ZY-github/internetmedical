@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.AppversionMapperCustom" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Appversion" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="appVersion" property="appversion" jdbcType="VARCHAR" />
+    <result column="appPublishTime" property="apppublishtime" jdbcType="TIMESTAMP" />
+    <result column="appType" property="apptype" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="selectByAppyType" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select *
+   
+    from appversion
+    where apptype = #{0,jdbcType=INTEGER} and systemType = #{1}
+    Order by appPublishTime Desc
+  </select>
+  
+</mapper>

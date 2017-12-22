@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.service.iface.hospital.HospitalOrderService;
+import com.medical.utils.CheckUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -43,8 +44,11 @@ public class HospitalOrderController {
 		if (hosploginid == null) {
 			return DataResult.error("医院id为空");
 		}
-		if (limit == null) {
-			return DataResult.error("当前页为空");
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为非零正整数");
+		}
+		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
+			return DataResult.error("offset应为正整数");
 		}
 		return hospitalOrderService.listUserOrder(hosploginid, type, limit, offset);
 	}

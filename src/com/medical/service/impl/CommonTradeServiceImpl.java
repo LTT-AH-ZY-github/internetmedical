@@ -1,4 +1,6 @@
 /**  
+
+
 * @Title: CommonTradeServiceImpl.java  
 * @Package com.medical.service.impl  
 * @Description: TODO(用一句话描述该文件做什么)  
@@ -31,7 +33,8 @@ public class CommonTradeServiceImpl implements CommonTradeService {
 	public static Map<String, Object> UserFundMap = new HashMap<String, Object>();
 	public static Map<String, Object> DoctorFundMap = new HashMap<String, Object>();
 	public static Map<String, Object> HospitalFundMap = new HashMap<String, Object>();
-	public static Map<String, Object> UserPayDoctorMap = new HashMap<String, Object>();
+	public static Map<String, Object> UserOrderMap = new HashMap<String, Object>();
+	public static Map<String, Object> HospitalOrderMap = new HashMap<String, Object>();
 	public static boolean count = true;
 	public static void main(String[] args) {
 	   
@@ -153,18 +156,18 @@ public class CommonTradeServiceImpl implements CommonTradeService {
 	}
 	
 	@Override
-	public  synchronized   boolean queryUserPayDoctorForUpdate( final Integer id) {
-	  boolean isExit = UserPayDoctorMap.containsKey(id+"");
+	public  synchronized   boolean queryUserOrderForCreat( final Integer id) {
+	  boolean isExit = UserOrderMap.containsKey(id+"");
 		if (isExit) {
 			return true;
 		}else {
-			UserPayDoctorMap.put(id+"", "1");
+			UserOrderMap.put(id+"", "1");
 			Timer timer = new Timer();
 			timer.schedule(new TimerTask() {
 				
 				@Override
 				public void run() {
-					UserPayDoctorMap.remove(id+"");
+					UserOrderMap.remove(id+"");
 					System.out.println(id);;
 					
 				}
@@ -174,7 +177,41 @@ public class CommonTradeServiceImpl implements CommonTradeService {
 		return false;
 	}
 	@Override
-	public  synchronized   void queryUserPayDoctorForFinish(Integer id) {
-		UserPayDoctorMap.remove(id+"");
+	public  synchronized   boolean queryUserOrderIsExit(Integer id) {
+		return UserOrderMap.containsKey(id+"");
+	}
+	@Override
+	public  synchronized   void queryUserOrderForFinish(Integer id) {
+		UserOrderMap.remove(id+"");
+	}
+	
+	@Override
+	public  synchronized   boolean queryHospitalOrderForCreat( final Integer id) {
+	  boolean isExit = HospitalOrderMap.containsKey(id+"");
+		if (isExit) {
+			return true;
+		}else {
+			HospitalOrderMap.put(id+"", "1");
+			Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+				
+				@Override
+				public void run() {
+					HospitalOrderMap.remove(id+"");
+					System.out.println(id);;
+					
+				}
+			}, 120000);//2分钟
+			
+		}
+		return false;
+	}
+	@Override
+	public  synchronized   boolean queryHospitalOrderIsExit(Integer id) {
+		return HospitalOrderMap.containsKey(id+"");
+	}
+	@Override
+	public  synchronized   void queryHospitalOrderForFinish(Integer id) {
+		HospitalOrderMap.remove(id+"");
 	}
 }

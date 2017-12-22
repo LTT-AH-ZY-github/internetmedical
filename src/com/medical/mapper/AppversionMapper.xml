@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.AppversionMapper" >
+  <resultMap id="BaseResultMap" type="com.medical.po.Appversion" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="appVersion" property="appversion" jdbcType="VARCHAR" />
+    <result column="appPublishTime" property="apppublishtime" jdbcType="TIMESTAMP" />
+    <result column="appType" property="apptype" jdbcType="INTEGER" />
+    <result column="appUrl" property="appurl" jdbcType="VARCHAR" />
+    <result column="systemType" property="systemtype" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Id, appVersion, appPublishTime, appType, appUrl, systemType
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.AppversionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from appversion
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from appversion
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from appversion
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.medical.po.AppversionExample" >
+    delete from appversion
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.medical.po.Appversion" >
+    insert into appversion (Id, appVersion, appPublishTime, 
+      appType, appUrl, systemType
+      )
+    values (#{id,jdbcType=INTEGER}, #{appversion,jdbcType=VARCHAR}, #{apppublishtime,jdbcType=TIMESTAMP}, 
+      #{apptype,jdbcType=INTEGER}, #{appurl,jdbcType=VARCHAR}, #{systemtype,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.medical.po.Appversion" >
+    insert into appversion
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="appversion != null" >
+        appVersion,
+      </if>
+      <if test="apppublishtime != null" >
+        appPublishTime,
+      </if>
+      <if test="apptype != null" >
+        appType,
+      </if>
+      <if test="appurl != null" >
+        appUrl,
+      </if>
+      <if test="systemtype != null" >
+        systemType,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="appversion != null" >
+        #{appversion,jdbcType=VARCHAR},
+      </if>
+      <if test="apppublishtime != null" >
+        #{apppublishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="apptype != null" >
+        #{apptype,jdbcType=INTEGER},
+      </if>
+      <if test="appurl != null" >
+        #{appurl,jdbcType=VARCHAR},
+      </if>
+      <if test="systemtype != null" >
+        #{systemtype,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.medical.po.AppversionExample" resultType="java.lang.Integer" >
+    select count(*) from appversion
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update appversion
+    <set >
+      <if test="record.id != null" >
+        Id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.appversion != null" >
+        appVersion = #{record.appversion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.apppublishtime != null" >
+        appPublishTime = #{record.apppublishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.apptype != null" >
+        appType = #{record.apptype,jdbcType=INTEGER},
+      </if>
+      <if test="record.appurl != null" >
+        appUrl = #{record.appurl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.systemtype != null" >
+        systemType = #{record.systemtype,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update appversion
+    set Id = #{record.id,jdbcType=INTEGER},
+      appVersion = #{record.appversion,jdbcType=VARCHAR},
+      appPublishTime = #{record.apppublishtime,jdbcType=TIMESTAMP},
+      appType = #{record.apptype,jdbcType=INTEGER},
+      appUrl = #{record.appurl,jdbcType=VARCHAR},
+      systemType = #{record.systemtype,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.medical.po.Appversion" >
+    update appversion
+    <set >
+      <if test="appversion != null" >
+        appVersion = #{appversion,jdbcType=VARCHAR},
+      </if>
+      <if test="apppublishtime != null" >
+        appPublishTime = #{apppublishtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="apptype != null" >
+        appType = #{apptype,jdbcType=INTEGER},
+      </if>
+      <if test="appurl != null" >
+        appUrl = #{appurl,jdbcType=VARCHAR},
+      </if>
+      <if test="systemtype != null" >
+        systemType = #{systemtype,jdbcType=INTEGER},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.medical.po.Appversion" >
+    update appversion
+    set appVersion = #{appversion,jdbcType=VARCHAR},
+      appPublishTime = #{apppublishtime,jdbcType=TIMESTAMP},
+      appType = #{apptype,jdbcType=INTEGER},
+      appUrl = #{appurl,jdbcType=VARCHAR},
+      systemType = #{systemtype,jdbcType=INTEGER}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

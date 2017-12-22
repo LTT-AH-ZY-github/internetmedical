@@ -14,13 +14,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.socket.TextMessage;
 
+import com.alibaba.druid.VERSION;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import com.medical.exception.custom.MyException;
+import com.medical.mapper.AppversionMapper;
+import com.medical.mapper.AppversionMapperCustom;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.DoctorlogininfoMapperCustom;
+import com.medical.mapper.FeedbackMapper;
 import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.HospitaldeptMapper;
 import com.medical.mapper.HospitaldeptMapperCustom;
@@ -30,9 +34,10 @@ import com.medical.mapper.NotificationMapperCustom;
 import com.medical.mapper.UserinfoMapperCustom;
 import com.medical.mapper.UserlogininfoMapper;
 import com.medical.mapper.UserlogininfoMapperCustom;
+import com.medical.po.Appversion;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
-
+import com.medical.po.Feedback;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Notification;
 import com.medical.po.Userlogininfo;
@@ -45,6 +50,7 @@ import com.push.baidu.PushToUser;
 import com.push.websocket.WebSocketHandler;
 
 import net.sf.json.JSONObject;
+import sun.net.www.content.text.plain;
 
 public class CommonServiceImpl implements CommonService {
 	@Autowired
@@ -69,6 +75,11 @@ public class CommonServiceImpl implements CommonService {
 	private HospitaldeptMapperCustom hospitaldeptMapperCustom;
 	@Autowired
 	private HospitaldeptMapper hospitaldeptMapper;
+	@Autowired
+	private FeedbackMapper feedbackMapper;
+	@Autowired
+	private AppversionMapperCustom appversionMapperCustom;
+	
 
 	Logger logger = Logger.getLogger(CommonService.class);
 
@@ -565,5 +576,30 @@ public class CommonServiceImpl implements CommonService {
 		}
 	}
 
+	@Override
+	public String addFeedBack(String feedbackidea) throws Exception{
+		Feedback feedback = new Feedback();
+		feedback.setFeedbackidea(feedbackidea);
+		feedback.setFeedbacktime(new Date());
+		feedback.setFeedbackischeck(false);
+		boolean result = feedbackMapper.insertSelective(feedback) > 0;
+		if (result) {
+			return DataResult.success("添加成功");
+		} else {
+			return DataResult.error("添加失败");
+		}
+	}
 	
+	@Override
+	public String getAppVersion(Integer apptype, Integer systemtype) throws Exception{
+		List<Appversion> list = appversionMapperCustom.selectByAppyType(apptype,systemtype);
+		if (list!=null && list.size()>0) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("version", list.get(0).getAppversion());
+			map.put("url", list.get(0).getAppurl());
+			return DataResult.success("获取成功",map);
+		} else {
+			return DataResult.error("获取失败");
+		}
+	}
 }

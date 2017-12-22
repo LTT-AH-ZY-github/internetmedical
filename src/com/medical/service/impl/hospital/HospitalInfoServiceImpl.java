@@ -122,6 +122,7 @@ public class HospitalInfoServiceImpl implements HospitalInfoService {
 		boolean result = hosplogininfoMapper.updateByPrimaryKeySelective(hosplogininforecord)>0;
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
+			jsonCustormCont.put("type", "7");
 			senderNotificationService.createMsgHospitalToAdmin(hosploginid, 1, "消息通知", "提交审核", jsonCustormCont);
 			return DataResult.success("提交成功");
 		} else {

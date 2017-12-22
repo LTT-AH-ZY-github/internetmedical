@@ -39,11 +39,12 @@ public interface UserHomeService {
 	 * @Description: 获取医生详情
 	 * @param docloginid
 	 *            医生登录id
+	 * @param userloginid 
 	 * @return
 	 * @throws Exception
 	 * @return: String
 	 */
-	String findDoctorDetail(Integer docloginid) throws Exception;
+	String findDoctorDetail(Integer docloginid, Integer userloginid) throws Exception;
 
 	/**
 	 * @Title: listCalendar

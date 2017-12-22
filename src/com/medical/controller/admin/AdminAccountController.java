@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.medical.controller.admin;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +14,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 
 /**
  * @ClassName:     AdminAccountController.java
- * @Description:   TODO(用一句话描述该文件做什么) 
+ * @Description:   管理员账号管理
  * @author          xyh
  * @version         V1.0  
  * @Date           2017年12月1日 下午4:19:47 
@@ -30,16 +27,16 @@ public class AdminAccountController {
 	private AdminAccountService adminAccountService;
 	
 	@RequestMapping(value="/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value="管理员登录",httpMethod="POST",notes="获取用户")
+	@ApiOperation(value="管理员登录",httpMethod="POST",notes="管理员登录")
 	public String listdoctortorefund(
 			@ApiParam(name = "adminloginname", value = "管理员登录账号") @RequestParam String adminloginname,
 			@ApiParam(name = "adminloginpwd", value = "管理员登录密码") @RequestParam String adminloginpwd
 			)throws Exception{
 		if (StringUtils.isBlank(adminloginname)) {
-			return DataResult.error("管理员登录账号为空");
+			return DataResult.error("登录账号为空");
 		}
 		if (StringUtils.isBlank(adminloginpwd)) {
-			return DataResult.error("管理员登录密码为空");
+			return DataResult.error("密码为空");
 		}
 		return adminAccountService.updateAccountStateToLogin(adminloginname,adminloginpwd);
 	}

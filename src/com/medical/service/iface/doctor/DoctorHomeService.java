@@ -53,5 +53,5 @@ public interface DoctorHomeService {
 	 * @return
 	 * @return: Map<String,Object>
 	 */
-	Map<String, Object> getDoctorByName(String docname) throws Exception;
+	String getDoctorByName(String docname) throws Exception;
 }

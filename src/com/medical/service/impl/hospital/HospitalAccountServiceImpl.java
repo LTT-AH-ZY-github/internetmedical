@@ -85,7 +85,7 @@ public class HospitalAccountServiceImpl implements HospitalAccountService{
 			int infoResult = hospinfoMapper.insertSelective(hospinfoRecord);
 			// 操作成功
 			if (result > 0 && infoResult > 0 ) {
-				addHuanXinAccout(hosplogininforecord.getHosploginid(), hosploginppwd);
+				creatHuanXinAccout(hosplogininforecord.getHosploginid(), hosploginppwd);
 				return DataResult.success("注册成功");
 			} else {
 				// 操作失败，回滚
@@ -141,16 +141,16 @@ public class HospitalAccountServiceImpl implements HospitalAccountService{
 		
 		// 注册环信
 		@Override
-		public boolean addHuanXinAccout(Integer hosploginid, String password) throws Exception {
+		public String creatHuanXinAccout(Integer hosploginid, String password) throws Exception {
 			boolean registerResult =  UserManger.register("hosp_" + hosploginid, password);
 			if (registerResult) {
 				Hosplogininfo hosplogininforecord = new Hosplogininfo();
 				hosplogininforecord.setHosploginid(hosploginid);
 				hosplogininforecord.setHosphuanxinaccount("hosp_" + hosploginid);
 				hosplogininfoMapper.updateByPrimaryKeySelective(hosplogininforecord);
-				return true;
+				return DataResult.success("注册成功");
 			} else {
-				return false;
+				return DataResult.error("注册失败");
 			}
 
 		}

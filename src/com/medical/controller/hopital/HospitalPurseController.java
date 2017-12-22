@@ -81,8 +81,11 @@ public class HospitalPurseController {
 		if (hosploginid == null) {
 			return DataResult.error("医院登陆id为空");
 		}
-		if (!CheckUtils.isPositiveIntegerLegal(limit)) {
-			return DataResult.error("limit应为正整数");
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为非零正整数");
+		}
+		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
+			return DataResult.error("offset应为正整数");
 		}
 		return hospitalPurseService.listBalanceRecord(hosploginid,limit,offset);
 		// TODO Auto-generated method stub
@@ -99,8 +102,34 @@ public class HospitalPurseController {
 		if (hosploginid == null) {
 			return DataResult.error("医院登陆id为空");
 		}
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为非零正整数");
+		}
+		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
+			return DataResult.error("offset应为正整数");
+		}
 		return hospitalPurseService.listTradeRecord(hosploginid, limit,offset);
 	}
-	
-
+	@RequestMapping(value = "/listtraderecordbyorder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取病人订单交易记录", httpMethod = "POST", notes = "获取病人订单交易记录", produces = "application/json")
+	public String listTradeRecordByOrder(
+			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid,
+			@ApiParam(name = "userorderid", required = true, value = "订单id") @RequestParam Integer userorderid
+	) throws Exception{
+		if (hosploginid == null) {
+			return DataResult.error("医院登陆id为空");
+		}
+		return hospitalPurseService.listTradeRecordByOrder(hosploginid,userorderid);
+	}
+	@RequestMapping(value = "/listtraderecordbyconsultation", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取会诊订单交易记录", httpMethod = "POST", notes = "获取会诊订单交易记录", produces = "application/json")
+	public String listtraderecordbyconsultation(
+			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid,
+			@ApiParam(name = "hosporderod", required = true, value = "会诊订单id") @RequestParam Integer hosporderod
+	) throws Exception{
+		if (hosploginid == null) {
+			return DataResult.error("医院登陆id为空");
+		}
+		return hospitalPurseService.listTradeRecordByConsultation(hosploginid,hosporderod);
+	}
 }

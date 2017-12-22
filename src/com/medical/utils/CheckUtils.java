@@ -15,7 +15,7 @@ import com.github.pagehelper.Page;
  */
 public class CheckUtils {
 	public static void main(String[] args) {
-		System.out.println(isPositiveIntegerLegal(null));
+		System.out.println();
 	}
 	/**
 	 * 检查手机号码是否合法
@@ -76,6 +76,21 @@ public class CheckUtils {
     } 
 	/**
 	 * @Title: isPositiveIntegerLegal
+	 * @Description: 是否为合法非0正整数
+	 * @param num
+	 * @return
+	 * @throws PatternSyntaxException
+	 * @return: boolean
+	 */
+	public static boolean isNonzeroPositiveIntegerLegal(Integer num) throws PatternSyntaxException {  
+		  String regExp = "^[1-9]\\d*$";
+	      Pattern p = Pattern.compile(regExp);  
+	      Matcher m = p.matcher(num+"");  
+	      return m.matches(); 
+    } 
+	
+	/**
+	 * @Title: isPositiveIntegerLegal
 	 * @Description: 是否为合法正整数
 	 * @param num
 	 * @return
@@ -83,11 +98,9 @@ public class CheckUtils {
 	 * @return: boolean
 	 */
 	public static boolean isPositiveIntegerLegal(Integer num) throws PatternSyntaxException {  
-		  String regExp = "^[1-9]\\d*$";
+		  String regExp = "^[0-9]\\d*$";
 	      Pattern p = Pattern.compile(regExp);  
 	      Matcher m = p.matcher(num+"");  
 	      return m.matches(); 
     } 
-	
-	
 }

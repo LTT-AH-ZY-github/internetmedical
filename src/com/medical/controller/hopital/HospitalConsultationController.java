@@ -148,8 +148,11 @@ public class HospitalConsultationController {
 		if (hosploginid == null) {
 			return DataResult.error("医院id为空");
 		}
-		if (!CheckUtils.isPositiveIntegerLegal(limit)) {
-			return DataResult.error("limit应为正整数");
+		if (!CheckUtils.isNonzeroPositiveIntegerLegal(limit)) {
+			return DataResult.error("limit应为非零正整数");
+		}
+		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
+			return DataResult.error("offset应为正整数");
 		}
 		return hospitalConsultationService.listConsultation(hosploginid,limit,offset,type);
 

@@ -842,6 +842,7 @@ public class DoctorInfoServiceImpl implements DoctorInfoService {
 		boolean result = doctorlogininfoMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
+			jsonCustormCont.put("type", "7");
 			senderNotificationService.createMsgDoctorToAdmin(docloginid, 1, "消息通知", "提交审核", jsonCustormCont);
 			return DataResult.success("提交审核成功");
 		} else {

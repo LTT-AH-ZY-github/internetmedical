@@ -28,7 +28,7 @@ public class PushConfig {
 	
 	//医生IOS端百度云key
 	public static final String IOSInDoctorApiKey = "uf3RsBMfrhLyZhD4G5GPrTxQa2huBIIS";
-	
+		
 	public static final String IOSInDoctorSecretKey = "wweVvzxQudUWjb6wN6mQbIG57RVxOKRc";	
 	
 	

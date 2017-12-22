@@ -358,7 +358,7 @@
   
   <!--医生查找处于等待自己确认的订单-->
   <select id="listOrderToConfirmByDocLoginId" parameterType="int" resultType="map">
-	select a.userorderid,a.userorderptime,
+	select a.userorderid,a.userorderptime,a.userorderappointment,
 			a.usersickdesc,a.usersickid,
 			a.familyname,a.familymale,a.familyage,
 			d.userloginpix,d.userhuanxinaccount,e.username
@@ -404,7 +404,7 @@
 	  		left join userlogininfo as d on a.userLoginId=d.userLoginId 
 	  		left join userorderstate as e on e.userorderstateid= a.userorderstateid
 	  		left join userinfo as g on a.userLoginId=g.userLoginId 
-	 where a.userOrderDocLoginId=#{0}  and a.userOrderStateId<![CDATA[>]]>8 
+	 where a.userOrderDocLoginId=#{0}  and a.userOrderStateId<![CDATA[>]]>4 
 	 ORDER BY a.userOrderETime DESC
   </select>
   <!--医生获取订单详情  -->

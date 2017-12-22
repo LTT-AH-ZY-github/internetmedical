@@ -14,11 +14,7 @@ import com.baidu.yun.push.model.PushMsgToSingleDeviceResponse;
 
 public class PushToDoctorInIOS {
 	public static void main(String[] args) throws Exception{
-		JSONObject jsonCustormCont = new JSONObject();
-		jsonCustormCont.put("doc_id", 12);
-		jsonCustormCont.put("sick_id", 12);
-		jsonCustormCont.put("type", 2);
-		pushMsgToSingleDevice("5213090325501363445","你好","你好");
+		pushMsgToSingleDevice("5166879650408087388","你好","你好");
 	}
 	public static void pushMsgToSingleDevice(String channelid, String title, String msg)
 			throws PushClientException, PushServerException {

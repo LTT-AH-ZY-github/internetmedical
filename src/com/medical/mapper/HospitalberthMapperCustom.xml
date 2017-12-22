@@ -21,7 +21,7 @@
 	  			
   					GROUP BY hospBerthDeptId 
   		) as b on a.hospDeptId=b.hospBerthDeptId  
-  	where a.hospDeptIsCheck=1 
+  	where a.hospDeptIsCheck=2
   	order by hospDeptId ASC
   </select>
   

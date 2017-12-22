@@ -40,14 +40,11 @@ public class DoctorAccountController {
 	@ApiOperation(value = "判断手机号码是否注册", httpMethod = "POST", notes = "判断手机号码是否注册")
 	public String phoneTest(@ApiParam(name = "docloginphone", value = "手机号码") @RequestParam String docloginphone)
 			throws Exception {
-		if (StringUtils.isBlank(docloginphone)) {
-			return Result.error("手机号码为空");
-		} else {
-			if (!CheckUtils.isChinaPhoneLegal(docloginphone)) {
+		if (!CheckUtils.isChinaPhoneLegal(docloginphone)) {
 				return Result.error("手机号码格式错误");
-			}
-			return doctorAccountService.findAccountExit(docloginphone);
 		}
+		return doctorAccountService.findAccountExit(docloginphone);
+	
 	}
 
 	// 发送短信验证码
@@ -55,27 +52,19 @@ public class DoctorAccountController {
 	@ApiOperation(value = "发送短信验证码", httpMethod = "POST", notes = "发送短信验证码")
 	public String getMsgCode(@ApiParam(name = "docloginphone", value = "手机号码") @RequestParam String docloginphone)
 			throws Exception {
-		if (StringUtils.isBlank(docloginphone)) {
-			return Result.error("手机号码为空");
-		} else {
-			if (!CheckUtils.isChinaPhoneLegal(docloginphone)) {
-				return Result.error("手机号码格式错误");
-			}
-			return commonService.getMsgCode(docloginphone);
+		if (!CheckUtils.isChinaPhoneLegal(docloginphone)) {
+			return Result.error("手机号码格式错误");
 		}
-
+		return commonService.getMsgCode(docloginphone);
 	}
 
 	// 注册
 	@RequestMapping(value = "/docregister", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "注册", httpMethod = "POST", notes = "注册")
+	@ApiOperation(value = "医生注册", httpMethod = "POST", notes = "医生注册")
 	public String doctorRegister(@ApiParam(name = "docloginphone", value = "手机号码") @RequestParam String docloginphone,
 			@ApiParam(name = "docloginpwd", value = "密码") @RequestParam String docloginpwd,
 			@ApiParam(name = "code", value = "短信验证码") @RequestParam String code) throws Exception {
-		if (StringUtils.isBlank(docloginphone)) {
-			return DataResult.error("手机号码为空");
-		}
-		if (StringUtils.isNotBlank(docloginphone) && !CheckUtils.isChinaPhoneLegal(docloginphone)) {
+		if (!CheckUtils.isChinaPhoneLegal(docloginphone)) {
 			return Result.error("手机号码格式错误");
 		}
 		if (StringUtils.isBlank(docloginpwd)) {
@@ -94,22 +83,18 @@ public class DoctorAccountController {
 	public String huanXinRegister(
 			@ApiParam(name = "docloginid", required = true, value = "用户登录id") @RequestParam(value = "docloginid") Integer docloginid,
 			@ApiParam(name = "docloginpwd", value = "密码") @RequestParam String docloginpwd) throws Exception {
-		if (docloginid != null) {
-			boolean result = doctorAccountService.addHuanXinAccout(docloginid, docloginpwd);
-			if (result) {
-				return DataResult.success("注册成功");
-			} else {
-				return DataResult.success("已注册");
-			}
-		} else {
-			return DataResult.error("id为空");
+		if (docloginid == null) {
+			return DataResult.error("医生登录id为空");
 		}
-
+		if (StringUtils.isBlank(docloginpwd)) {
+			return DataResult.error("密码为空");
+		}
+		return doctorAccountService.creatHuanXinAccout(docloginid, docloginpwd);
 	}
 
 	// 登录
 	@RequestMapping(value = "/doclogin", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "医生登录,替换/login", httpMethod = "POST", notes = "医生登录")
+	@ApiOperation(value = "医生登录", httpMethod = "POST", notes = "医生登录")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "docloginphone", required = true, value = "手机号码", dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "docloginpwd", required = true, value = "密码", dataType = "String", paramType = "query"),
@@ -119,10 +104,7 @@ public class DoctorAccountController {
 		String docloginphone = doctorlogininfo.getDocloginphone();
 		String docloginpwd = doctorlogininfo.getDocloginpwd();
 		String doclogintoken = doctorlogininfo.getDoclogintoken();
-		if (StringUtils.isBlank(docloginphone)) {
-			return DataResult.error("手机号码为空");
-		}
-		if (StringUtils.isNotBlank(docloginphone) && !CheckUtils.isChinaPhoneLegal(docloginphone)) {
+		if (!CheckUtils.isChinaPhoneLegal(docloginphone)) {
 			return Result.error("手机号码格式错误");
 		}
 		if (StringUtils.isBlank(docloginpwd)) {
@@ -161,10 +143,7 @@ public class DoctorAccountController {
 			@ApiParam(name = "docloginphone", required = true, value = "手机号码") @RequestParam String docloginphone,
 			@ApiParam(name = "docloginpwd", value = "密码") @RequestParam String docloginpwd,
 			@ApiParam(name = "code", required = true, value = "短信验证码") @RequestParam String code) throws Exception {
-		if (StringUtils.isBlank(docloginphone)) {
-			return DataResult.error("手机号码为空");
-		}
-		if (StringUtils.isNotBlank(docloginphone) && !CheckUtils.isChinaPhoneLegal(docloginphone)) {
+		if (!CheckUtils.isChinaPhoneLegal(docloginphone)) {
 			return Result.error("手机号码格式错误");
 		}
 		if (StringUtils.isBlank(docloginpwd)) {

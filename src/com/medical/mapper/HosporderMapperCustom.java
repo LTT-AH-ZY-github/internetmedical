@@ -33,4 +33,6 @@ public interface HosporderMapperCustom {
 	Map<String, Object> selectAllInfoByDocLoginIdAndHospOrderId(Integer docloginid, Integer hosporderid);
 	
 	List<Map<String, Object>> selectByHospLoginId(Integer hosploginid, Integer type);
+	
+	int insertSelectiveReturnId(Hosporder record);
 }

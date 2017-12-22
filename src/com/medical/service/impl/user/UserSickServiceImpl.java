@@ -8,14 +8,18 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.FamilyinfoMapper;
 import com.medical.mapper.PreorderMapper;
 import com.medical.mapper.PreorderMapperCustom;
+import com.medical.mapper.UserinfoMapper;
+import com.medical.mapper.UserinfoMapperCustom;
 import com.medical.mapper.UserlogininfoMapper;
 import com.medical.mapper.UsersickMapper;
 import com.medical.mapper.UsersickMapperCustom;
@@ -23,11 +27,13 @@ import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
 import com.medical.po.Familyinfo;
 import com.medical.po.Preorder;
+import com.medical.po.Userinfo;
 import com.medical.po.Userlogininfo;
 import com.medical.po.Usersick;
 import com.medical.po.UsersickCustom;
 import com.medical.service.iface.CommonService;
 import com.medical.service.iface.DeleteFileService;
+import com.medical.service.iface.RecommendDoctorService;
 import com.medical.service.iface.user.UserSickService;
 import com.medical.utils.PictureTool;
 import com.medical.utils.StringTools;
@@ -38,6 +44,8 @@ public class UserSickServiceImpl implements UserSickService {
 
 	@Autowired
 	private UserlogininfoMapper userlogininfoMapper;
+	@Autowired
+	private UserinfoMapperCustom userinfoMapperCustom;
 	@Autowired
 	private UsersickMapper usersickMapper;
 	@Autowired
@@ -54,6 +62,10 @@ public class UserSickServiceImpl implements UserSickService {
 	private FamilyinfoMapper familyinfoMapper;
 	@Autowired
 	private DeleteFileService deleteFileService;
+	@Autowired
+	private RecommendDoctorService recommendDoctorService;
+	@Autowired
+	private DoctorinfoMapperCustom doctorinfoMapperCustom;
 	
 	/* (非 Javadoc)  
 	* <p>Title: addSick</p>  
@@ -68,13 +80,22 @@ public class UserSickServiceImpl implements UserSickService {
 	public String addSick(MultipartFile[] pictureFile, UsersickCustom usersickCustom) throws Exception {
 		int userloginid = usersickCustom.getUserloginid();
 		Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
-		if (user == null) {
+		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userloginid);
+		if (user == null || userinfo==null) {
 			return DataResult.error("账号不存在");
 		}
 		Usersick usersick = new Usersick();
 		int type = user.getUserlogintype();
 		if (type!=3) {
 			return DataResult.error("账号未审核,不可发布病情");
+		}
+		String alipayaccount = userinfo.getUseralipayaccount();
+		String alipayname = userinfo.getUseralipayname();
+		if (StringUtils.isBlank(alipayaccount)) {
+			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
+		}
+		if (StringUtils.isBlank(alipayname)) {
+			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
 		}
 		//获取对应亲属信息
 		Familyinfo familyinfo = familyinfoMapper.selectByPrimaryKey(usersickCustom.getFamilyid());
@@ -261,6 +282,7 @@ public class UserSickServiceImpl implements UserSickService {
 	* @throws Exception  
 	* @see com.medical.service.iface.user.UserSickService#updateSickStateToPublish(java.lang.Integer, java.lang.Integer)  
 	*/  
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public String updateSickStateToPublish(Integer userloginid, Integer usersickid) throws Exception {
 		Userlogininfo userinfo = userlogininfoMapper.selectByPrimaryKey(userloginid);
@@ -285,29 +307,18 @@ public class UserSickServiceImpl implements UserSickService {
 		}
 		int type = usersick.getUsersickstateid();
 		if (type == 1 || type==4) {
+			if (type==4) {
+				recommendDoctorService.deleteRecommendDoctor(usersickid, null,null);
+			}
 			Usersick user = new Usersick();
 			user.setUsersickid(usersickid);
 			// "2"为发布状态
 			user.setUsersickstateid(2);
 			user.setUsersickptime(new Date());
 			int result = usersickMapper.updateByPrimaryKeySelective(user);
-			Map<String, Object> resultMap = commonService.listRecommendDoctors(usersick.getUsersickdesc(),
-					usersick.getUsersickprimarydept(), usersick.getUsersickseconddept());
-			if ("1".equals(resultMap.get("state"))) {
-				List<Doctorinfo> list = (List<Doctorinfo>) resultMap.get("data");
-				for (Doctorinfo doctorinfo : list) {
-					Preorder preorder = new Preorder();
-					preorder.setPreorderdocloginid(doctorinfo.getDocloginid());
-					preorder.setUsersickid(usersickid);
-					preorder.setPreordertype(1);
-					preorder.setPreordertime(new Date());
-					int preResult = preorderMapper.insertSelective(preorder);
-					if (preResult <= 0) {
-						break;
-					}
-				}
-			}
 			if (result > 0) {
+				recommendDoctorService.addRecommendDoctors(usersickid, userloginid, usersick.getUsersickdesc(), 
+						usersick.getUsersickprimarydept(), usersick.getUsersickseconddept());
 				return DataResult.success("发布病情成功");
 			} else {
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -406,13 +417,18 @@ public class UserSickServiceImpl implements UserSickService {
 			return DataResult.error("用户不存在");
 		}
 		Doctorlogininfo doctorlogininfo =  doctorlogininfoMapper.selectByPrimaryKey(docloginid);
-		if (doctorlogininfo == null) {
+		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
+		if (doctorlogininfo == null ||doctorinfo==null ) {
 			return DataResult.error("该医生不存在");
 		}
-		//int type = user.getUserlogintype();
-				/*
-				 * if (type!=3) { return DataResult.error("账号未审核,不可发布病情"); }
-				 */
+		String alipayaccount = doctorinfo.getDocalipayaccount();
+		String alipayname = doctorinfo.getDocalipayname();
+		if (StringUtils.isBlank(alipayaccount)) {
+			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
+		}
+		if (StringUtils.isBlank(alipayname)) {
+			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
+		}
 		List<Usersick> count = usersickMapperCustom.selectByUserLoginIdAndState(userloginid, 2);
 		if (count.size() == 1) {
 			int usersickid = count.get(0).getUsersickid();
@@ -441,7 +457,7 @@ public class UserSickServiceImpl implements UserSickService {
 			if (count.size() > 1) {
 				return DataResult.error("系统错误，发布的病情超过一个");
 			} else {
-				return DataResult.success("当前无处于发布状态的病情",null);
+				return DataResult.error("当前无处于发布状态的病情");
 
 			}
 		}

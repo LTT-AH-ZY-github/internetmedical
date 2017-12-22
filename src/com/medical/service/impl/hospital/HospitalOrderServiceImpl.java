@@ -211,6 +211,7 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 		}
 		Userorder userorder = new Userorder();
 		userorder.setUserorderid(userorderid);
+		userorder.setUserorderhospconfirmtime(new Date());
 		userorder.setUserorderdeposit(new BigDecimal(userorderdeposit));
 		userorder.setUserorderstateid(6);
 		userorder.setUserorderhospprimarydept(userorderhospprimarydept);
@@ -218,6 +219,8 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 	    boolean result = userorderMapper.updateByPrimaryKeySelective(userorder) > 0;
 	    if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
+			jsonCustormCont.put("order_id", userorderid);
+			jsonCustormCont.put("type", "5");
 			boolean push = senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知",
 				"确认了您的订单", jsonCustormCont);
 			if (push) {
@@ -245,6 +248,8 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 				Userorder userorder = new Userorder();
 				userorder.setUserorderid(userorderid);
 				userorder.setUserorderstateid(9);
+				//订单结束时间
+				userorder.setUserorderetime(new Date());
 				// 3为需要住院，医院拒绝
 				userorder.setUserorderactualhospitalizationid(3);
 				boolean result = userorderMapper.updateByPrimaryKeySelective(userorder) > 0;
@@ -254,6 +259,8 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 				boolean sickResult = usersickMapper.updateByPrimaryKeySelective(usersick) > 0;
 				if (result && sickResult) {
 					JSONObject jsonCustormCont = new JSONObject();
+					jsonCustormCont.put("order_id", userorderid);
+					jsonCustormCont.put("type", "5");
 					boolean push = senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知",
 							"拒绝了您的请求", jsonCustormCont);
 					if (push) {
@@ -293,6 +300,8 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 		boolean result = userorderMapper.updateByPrimaryKeySelective(userorder) > 0;
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
+			jsonCustormCont.put("order_id", userorderid);
+			jsonCustormCont.put("type", "5");
 			boolean push = senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知", "要求增加押金",
 					jsonCustormCont);
 			if (push) {
@@ -318,11 +327,18 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 			BigDecimal price = order.getUserordertotaldeposit();
 			Userorder userorder = new Userorder();
 			userorder.setUserorderid(userorderid);
+			if (price.compareTo(userorderhprice)<0) {
+				return DataResult.error("实际费用不可大于已缴纳的押金");
+			}
 			// 住院实际产生的费用
 			userorder.setUserorderhprice(userorderhprice);
+			//病人离开医院的时间
+			userorder.setUserorderleavehosptime(new Date());
 			if (price.compareTo(userorderhprice)==0) {
 				// 9订单结束
 				userorder.setUserorderstateid(9);
+				//订单结束时间
+				userorder.setUserorderetime(new Date());
 				Usersick usersick = new Usersick();
 				usersick.setUsersickid(order.getUsersickid());
 				usersick.setUsersickstateid(4);
@@ -345,6 +361,8 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 					
 				}
 				JSONObject jsonCustormCont = new JSONObject();
+				jsonCustormCont.put("order_id", userorderid);
+				jsonCustormCont.put("type", "5");
 				boolean push = senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(),"消息通知", msg, jsonCustormCont);
 				if (push) {
 					return DataResult.success("操作成功,且消息发送成功");
@@ -394,161 +412,8 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 
 	}
 
-	// 创建会诊
-	@Override
-	public String creatConsultation(Integer docloginid, Integer hosploginid, String orderabs, String orderstime,
-			BigDecimal orderhospprice, Integer orderhosptpricetype, BigDecimal orderhosptprice,
-			Integer orderhospapricetype, BigDecimal orderhospaprice, Integer orderhospepricetype,
-			BigDecimal orderhospeprice) throws Exception {
-		Doctorlogininfo doc = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
-		if (doc == null) {
-			return DataResult.error("创建会诊失败,因医生不存在");
-		}
-		Hosporder hosporder = new Hosporder();
-		hosporder.setDoctorid(docloginid);
-		hosporder.setOrderabs(orderabs);
-		hosporder.setHospid(hosploginid);
-		hosporder.setOrderptime(new Date());
-		hosporder.setOrderstime(orderstime);
-		// 等待医生确认
-		hosporder.setOrderstate(1);
-		// 医生出诊价格
-		hosporder.setOrderhospprice(orderhospprice);
-		// 交通类型
-		hosporder.setOrderhosptpricetype(orderhosptpricetype);
-		BigDecimal total = orderhospprice;
-		if (orderhosptprice != null) {
-			hosporder.setOrderhosptprice(orderhosptprice);
-		}
-		if (2 == orderhosptpricetype) {
-			total = total.add(orderhosptprice);
-		}
-		// 住宿类型
-		hosporder.setOrderhospapricetype(orderhospapricetype);
-		if (orderhospaprice != null) {
-			hosporder.setOrderhospaprice(orderhospaprice);
-		}
-		if (2 == orderhospapricetype) {
-			total = total.add(orderhospaprice);
-		}
-		// 餐饮类型
-		hosporder.setOrderhospepricetype(orderhosptpricetype);
-		if (orderhospeprice != null) {
-			hosporder.setOrderhospeprice(orderhospeprice);
-		}
-		if (2 == orderhospepricetype) {
-			total = total.add(orderhospeprice);
-		}
-		hosporder.setOrdertotalhospprice(total);
-		int result = hosporderMapper.insertSelective(hosporder);
-		if (result > 0) {
-			JSONObject jsonCustormCont = new JSONObject();
-			boolean push = senderNotificationService.createMsgHospitalToDoctor(hosploginid, docloginid, "通知", "发送会诊请求",
-					jsonCustormCont);
-			if (push) {
-				return DataResult.success("创建会诊成功，且消息发送成功");
-			} else {
-				return DataResult.success("创建会诊成功，但消息发送失败");
-			}
-		} else {
-			return DataResult.error("创建会诊失败");
-		}
 
-	}
-
-	// 取消会诊
-	@Override
-	public String cancelConsultation(Integer hosploginid, Integer hosporderid) throws Exception {
-		Hosporder hosporder = hosporderMapper.selectByPrimaryKey(hosporderid);
-		if (hosporder == null) {
-			return DataResult.error("会诊不存在");
-		}
-		int orderState = hosporder.getOrderstate();
-		if (orderState > 3) {
-			return DataResult.error("该会诊状态不支持取消");
-		}
-		Hosporder record = new Hosporder();
-		record.setHosporderid(hosporderid);
-		// 7为医院取消订单
-		record.setOrderstate(7);
-		record.setOrderetime(new Date());
-		boolean result = hosporderMapper.updateByPrimaryKeySelective(record) > 0;
-		if (result) {
-			JSONObject jsonCustormCont = new JSONObject();
-			boolean push = senderNotificationService.createMsgHospitalToDoctor(hosploginid, hosporder.getDoctorid(), "通知", "发送会诊请求",
-					jsonCustormCont);
-			if (push) {
-				return DataResult.success("创建会诊成功，且消息发送成功");
-			} else {
-				return DataResult.success("创建会诊成功，但消息发送失败");
-			}
-		} else {
-			return DataResult.error("取消会诊失败");
-		}
-	}
-
-	/**
-	 * 支付医生会诊费用
-	 */
-	@Override
-	public String payDoctor(Integer hosploginid, Integer hosporderid) throws Exception {
-		Hosporder hosporder = hosporderMapper.selectByPrimaryKey(hosporderid);
-		if (hosporder == null) {
-			return DataResult.error("会诊不存在");
-		}
-		int orderState = hosporder.getOrderstate();
-		if (orderState != 3) {
-			return DataResult.error("该会诊状态不支持付款");
-		}
-		return null;
-	}
-
-	/**
-	 * 支付医生会诊费用完成
-	 */
-	@Override
-	public String payDoctorFinish(Map<String, String[]> requestParams) throws Exception {
-		Map<String, String> params = AliPayNotify.aliPayNotify(requestParams);
-		// 商户订单号
-		String out_trade_no = params.get("out_trade_no");
-		// 付款金额
-		String amount = params.get("buyer_pay_amount");
-		// 支付宝交易号
-		String trade_no = params.get("trade_no");
-		// 附加数据
-		// String passback_params = URLDecoder.decode(params.get("passback_params"));
-		// 获取交易记录
-		Pay pay = payMapperCustom.selectByPayTradeNo(out_trade_no);
-		if (pay == null) {
-			return DataResult.error("交易不存在");
-		}
-		return null;
-	}
-
-	// 会诊完成
-	@Override
-	public String finishConsultation(Integer hosploginid, Integer hosporderid) throws Exception {
-		Hosporder hosporder = hosporderMapper.selectByPrimaryKey(hosporderid);
-		if (hosporder == null) {
-			return DataResult.error("会诊不存在");
-		}
-		int orderState = hosporder.getOrderstate();
-		if (orderState != 4) {
-			return DataResult.error("该会诊状态不支持该操作");
-		}
-		Hosporder record = new Hosporder();
-		record.setHosporderid(hosporderid);
-		// 5为会诊完成
-		record.setOrderstate(5);
-		record.setOrderetime(new Date());
-		boolean result = hosporderMapper.updateByPrimaryKeySelective(record) > 0;
-		if (result) {
-			return DataResult.success("会诊完成成功");
-		} else {
-			return DataResult.error("会诊完成失败");
-		}
-	}
-
+	
 	
 
 }
