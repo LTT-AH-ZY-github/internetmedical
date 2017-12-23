@@ -3,6 +3,8 @@ package com.huanxin.utils;
 
 import com.google.gson.Gson;
 
+import org.jsoup.Connection;
+import org.jsoup.Connection.Method;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -136,8 +138,28 @@ public class UserManger {
         }
         return false;
     }
+    public static boolean delete(String name) {
+        Document document = null;
+        try {
+            Connection connection = Jsoup.connect("https://a1.easemob.com/1133171107115421/medicalclient/users")
+                     .header("Authorization", "Bearer " + TokenManager.getToken())
+                    .ignoreContentType(true)
+                    .method(Method.DELETE);
+                    
+                    connection.execute();
+        } catch (IOException e) {
+        
+        	System.out.println();
+            e.printStackTrace();
+            return false;
+        }
+       
+        return false;
+    }
     public static void main(String args[]) {
     	//register("cs00", "cs004222");
+    	//listUser();
+    	System.out.println(delete("doc_75"));
     	listUser();
     }
     

@@ -57,8 +57,6 @@ public class UserSickServiceImpl implements UserSickService {
 	@Autowired
 	private PreorderMapperCustom preorderMapperCustom;
 	@Autowired
-	private CommonService commonService;
-	@Autowired
 	private FamilyinfoMapper familyinfoMapper;
 	@Autowired
 	private DeleteFileService deleteFileService;
@@ -99,13 +97,15 @@ public class UserSickServiceImpl implements UserSickService {
 		}
 		//获取对应亲属信息
 		Familyinfo familyinfo = familyinfoMapper.selectByPrimaryKey(usersickCustom.getFamilyid());
+		if (familyinfo==null) {
+			return DataResult.error("亲属不存在");
+		}
 		usersick.setFamilymale(familyinfo.getFamilymale());
 		usersick.setFamilyname(familyinfo.getFamilyname());
 		usersick.setFamilyage(familyinfo.getFamilyage());
 		usersick.setFamilyid(usersickCustom.getFamilyid());
 		//病情图片
 		usersick.setUsersickpic(PictureTool.SavePictures(pictureFile));
-		
 		usersick.setUserloginid(user.getUserloginid());
 		usersick.setUsersickprimarydept(usersickCustom.getUsersickprimarydept());
 		usersick.setUsersickseconddept(usersickCustom.getUsersickseconddept());

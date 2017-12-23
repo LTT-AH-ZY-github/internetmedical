@@ -26,32 +26,22 @@ import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.DoctorpurseMapper;
 import com.medical.mapper.DoctorpurseMapperCustom;
-import com.medical.mapper.DoctortitleMapper;
 import com.medical.mapper.HospinfoMapper;
 import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.HospitaldeptMapper;
-import com.medical.mapper.HospitaldeptMapperCustom;
-import com.medical.mapper.HosplevelMapper;
 import com.medical.mapper.HosplogininfoMapper;
 import com.medical.mapper.HosporderMapper;
 import com.medical.mapper.HosporderMapperCustom;
 import com.medical.mapper.PayMapper;
 import com.medical.mapper.PayMapperCustom;
-import com.medical.mapper.UserorderMapper;
-import com.medical.mapper.UserorderMapperCustom;
-import com.medical.mapper.UsersickMapper;
 import com.medical.po.City;
 import com.medical.po.Doctorcalendar;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
-import com.medical.po.Doctorpurse;
-import com.medical.po.HospSearchDocTerm;
-import com.medical.po.Hospinfo;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Hosplogininfo;
 import com.medical.po.Hosporder;
 import com.medical.po.Pay;
-import com.medical.po.Userorder;
 import com.medical.po.custom.HospSearchDoc;
 import com.medical.service.iface.CommonService;
 import com.medical.service.iface.CommonTradeService;
@@ -66,7 +56,6 @@ import com.pay.alipay.AliPayNotify;
 import com.pay.alipay.AlipayConfig;
 import com.pay.alipay.GetSign;
 import com.pay.alipay.MakeOrderNum;
-
 import net.sf.json.JSONObject;
 
 /**
@@ -265,15 +254,11 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		int result = hosporderMapperCustom.insertSelectiveReturnId(hosporder);
 		if (result > 0) {
 			JSONObject jsonCustormCont = new JSONObject();
-			jsonCustormCont.put("order_id", hosporder.getHosporderid());
+			jsonCustormCont.put("hosp_order_id", hosporder.getHosporderid());
 			jsonCustormCont.put("type", "6");
-			boolean push = senderNotificationService.createMsgHospitalToDoctor(hosploginid, docloginid, "通知", "发送会诊请求",
+			senderNotificationService.createMsgHospitalToDoctor(hosploginid, docloginid, "通知", "发送会诊请求",
 					jsonCustormCont);
-			if (push) {
-				return DataResult.success("创建会诊成功，且消息发送成功");
-			} else {
-				return DataResult.success("创建会诊成功，但消息发送失败");
-			}
+			return DataResult.success("创建会诊成功");
 		} else {
 			return DataResult.error("创建会诊失败");
 		}
@@ -307,15 +292,11 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		boolean result = hosporderMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
-			jsonCustormCont.put("order_id", hosporder.getHosporderid());
+			jsonCustormCont.put("hosp_order_id", hosporder.getHosporderid());
 			jsonCustormCont.put("type", "6");
-			boolean push = senderNotificationService.createMsgHospitalToDoctor(hosploginid, hosporder.getDoctorid(), "通知", "发送会诊请求",
+			senderNotificationService.createMsgHospitalToDoctor(hosploginid, hosporder.getDoctorid(), "通知", "发送会诊请求",
 					jsonCustormCont);
-			if (push) {
-				return DataResult.success("创建会诊成功，且消息发送成功");
-			} else {
-				return DataResult.success("创建会诊成功，但消息发送失败");
-			}
+			return DataResult.success("创建会诊成功");
 		} else {
 			return DataResult.error("取消会诊失败");
 		}
@@ -341,7 +322,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		//订单锁
 		boolean tradestate = commonTradeService.queryHospitalOrderForCreat(hosporderid);
 		if (tradestate) {
-			return DataResult.error("退款中,请稍后重试");
+			return DataResult.error("支付中,请稍后重试");
 		}
 		int orderState = hosporder.getOrderstate();
 		if (orderState != 2) {
@@ -359,7 +340,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 				//解除订单锁
 				 commonTradeService.queryHospitalOrderForFinish(hosporderid);
 				JSONObject jsonCustormCont = new JSONObject();
-				jsonCustormCont.put("order_id", hosporder.getHosporderid());
+				jsonCustormCont.put("hosp_order_id", hosporder.getHosporderid());
 				jsonCustormCont.put("type", "6");
 				senderNotificationService.createMsgHospitalToDoctor(hosporder.getHospid(), hosporder.getDoctorid(),
 						"消息通知", "已支付会诊费用", jsonCustormCont);
@@ -472,7 +453,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		commonTradeService.queryHospitalOrderForFinish(hosporderid);
 		if ("100".equals(payObject.get("code").toString()) && "100".equals(purseObject.get("code").toString()) && orderresult ) {
 			JSONObject jsonCustormCont = new JSONObject();
-			jsonCustormCont.put("order_id", hosporder.getHosporderid());
+			jsonCustormCont.put("hosp_order_id", hosporder.getHosporderid());
 			jsonCustormCont.put("type", "6");
 			senderNotificationService.createMsgHospitalToDoctor(hosporder.getHospid(), docloginid, "消息通知", "已支付会诊费用",
 					jsonCustormCont);
@@ -510,7 +491,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		boolean result = hosporderMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
-			jsonCustormCont.put("order_id", hosporder.getHosporderid());
+			jsonCustormCont.put("hosp_order_id", hosporder.getHosporderid());
 			jsonCustormCont.put("type", "6");
 			senderNotificationService.createMsgHospitalToDoctor(hosporder.getHospid(), hosporder.getDoctorid(), "消息通知", "已结束会诊",
 					jsonCustormCont);

@@ -5,15 +5,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-
 import com.alipay.api.domain.Data;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.medical.exception.custom.HospitalOrderException;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.DoctortitleMapper;

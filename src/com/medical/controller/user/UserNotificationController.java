@@ -118,25 +118,13 @@ public class UserNotificationController {
 			@ApiParam(name = "notificationid", required = true, value = "通知id") @RequestParam Integer notificationid,
 			@ApiParam(name = "userloginid", required = true, value = "用户登陆id") @RequestParam Integer userloginid)
 			throws Exception {
-		if (userloginid != null) {
-			boolean result = commonService.updateNotificationToRead(notificationid, userloginid);
-			if (result) {
-				return DataResult.success("已读成功");
-			} else {
-				return DataResult.success("已读失败");
-			}
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (notificationid == null) {
-				errList.add("通知id为空");
-			}
-			if (userloginid == null) {
-				errList.add("用户登录id为空");
-			}
-
-			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
+		if (userloginid == null) {
+			return DataResult.error("用户登录id为空");
 		}
-
+		if (notificationid == null) {
+			return DataResult.error("通知id为空");
+		}
+		return commonService.updateNotificationToRead(notificationid, userloginid);
 	}
 
 	/**
@@ -173,25 +161,13 @@ public class UserNotificationController {
 			@ApiParam(name = "notificationid", required = true, value = "通知id") @RequestParam Integer notificationid,
 			@ApiParam(name = "userloginid", required = true, value = "用户登陆id") @RequestParam Integer userloginid)
 			throws Exception {
-		if (userloginid != null) {
-			boolean result = commonService.deleteNotification(notificationid, userloginid);
-			if (result) {
-				return DataResult.success("删除成功");
-			} else {
-				return DataResult.error("删除失败");
-			}
-		} else {
-			List<String> errList = new ArrayList<String>();
-			if (notificationid == null) {
-				errList.add("通知id为空");
-			}
-			if (userloginid == null) {
-				errList.add("用户登录id为空");
-			}
-
-			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
+		if (userloginid == null) {
+			return DataResult.error("用户登录id为空");
 		}
-
+		if (notificationid == null) {
+			return DataResult.error("通知id为空");
+		}
+		return commonService.deleteNotification(notificationid, userloginid);
 	}
 
 	/**

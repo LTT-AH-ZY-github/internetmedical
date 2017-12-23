@@ -3,13 +3,10 @@ package com.medical.service.iface;
 import java.util.Map;
 
 import com.github.pagehelper.PageInfo;
-import com.medical.exception.custom.MsgErrorException;
 
-import net.sf.json.JSONObject;
 
 public interface CommonService {
 
-	Map<String, Object> listRecommendDoctors(String keyWord, String primaryDept, String secondDept) throws Exception;
 	
 	//手机号码是否注册
 	String findAccountExit(String phone);
@@ -57,9 +54,9 @@ public interface CommonService {
      * @param 
      * @return 
      */
-	boolean updateNotificationToRead(Integer notificationid, Integer notificationreceiverid) throws Exception;
+	String updateNotificationToRead(Integer notificationid, Integer notificationreceiverid) throws Exception;
 
-	boolean deleteNotification(Integer notificationid, Integer hosploginid) throws Exception;
+	String deleteNotification(Integer notificationid, Integer hosploginid) throws Exception;
 	
 	
 	/**

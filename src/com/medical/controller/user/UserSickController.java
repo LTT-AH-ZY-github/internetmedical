@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -58,17 +59,20 @@ public class UserSickController {
 	public String addSick(
 			@ApiParam(name = "pictureFile", required = false, value = "图片") @RequestParam(required = false) MultipartFile[] pictureFile,
 			@ApiIgnore @Valid UsersickCustom usersickCustom, BindingResult bindingResult) throws Exception {
-		// 获取校验错误信息
-		if (bindingResult.hasErrors()) {
-			List<String> errList = new ArrayList<String>();
-			List<ObjectError> allErrors = bindingResult.getAllErrors();
-			for (ObjectError objectError : allErrors) {
-				errList.add(objectError.getDefaultMessage());
-			}
-			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
-		} else {
-			return userSickService.addSick(pictureFile, usersickCustom);
+		
+		String usersickdesc  = usersickCustom.getUsersickdesc();
+		Integer userloginid  = usersickCustom.getUserloginid();
+		Integer familyid  = usersickCustom.getFamilyid();
+		if (StringUtils.isBlank(usersickdesc)) {
+			return DataResult.error("病情描述为空");
 		}
+		if (userloginid==null) {
+			return DataResult.error("用户登录id为空");
+		}
+		if (familyid==null) {
+			return DataResult.error("亲属为空");
+		}
+		return userSickService.addSick(pictureFile, usersickCustom);
 
 	}
 

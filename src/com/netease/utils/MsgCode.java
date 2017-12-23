@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -16,13 +15,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.medical.exception.custom.MsgErrorException;
-import com.sun.xml.internal.ws.api.client.ThrowableInPacketCompletionFeature;
 
-import sun.net.www.content.image.gif;
 
 /**
  * @ClassName:     MsgCode.java
@@ -93,7 +88,7 @@ public class MsgCode {
 		if (code == 200) {
 			return true;
 		} else {
-			throw new MsgErrorException("错误代码为"+(int)code+"错误信息为"+msg);
+			return false;
 		}
 	}
     public static boolean checkMsg(String phone,String sum) throws Exception {
@@ -131,7 +126,7 @@ public class MsgCode {
 		} else if (code == 413){
 			return false;
 		}else {
-			throw new MsgErrorException("错误代码为"+(int)code+"错误信息为"+msg);
+			return false;
 		}
     }
 

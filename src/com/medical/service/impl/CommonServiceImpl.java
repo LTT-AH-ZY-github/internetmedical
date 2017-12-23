@@ -5,20 +5,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.socket.TextMessage;
-
 import com.alibaba.druid.VERSION;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
-import com.medical.exception.custom.MyException;
 import com.medical.mapper.AppversionMapper;
 import com.medical.mapper.AppversionMapperCustom;
 import com.medical.mapper.DoctorinfoMapperCustom;
@@ -42,7 +37,6 @@ import com.medical.po.Hospitaldept;
 import com.medical.po.Notification;
 import com.medical.po.Userlogininfo;
 import com.medical.service.iface.CommonService;
-import com.medical.utils.KeyWords;
 import com.medical.utils.result.DataResult;
 import com.netease.utils.MsgCode;
 import com.push.baidu.PushToDoctor;
@@ -158,87 +152,7 @@ public class CommonServiceImpl implements CommonService {
 			return DataResult.error("查询失败");
 		}
 	}
-	// 根据条件获取推荐医生
-	@Override
-	public Map<String, Object> listRecommendDoctors(String keyWord, String primaryDept, String secondDept)
-			throws Exception {
-		Map<String, Object> map = new HashMap<String, Object>();
-		if (primaryDept == null && secondDept == null) {
-			Map<String, Object> result = getByKeyWord(keyWord);
-			// 获取成功
-			if ("1".equals(result.get("state"))) {
-				map.put("state", "1");
-				map.put("data", result.get("data"));
-			} else {
-				map.put("state", "2");
-
-			}
-
-		} else {
-			List<Doctorinfo> list = doctorinfoMapperCustom.selectByDept(primaryDept, secondDept);
-			if (list.size() > 0) {
-				// 获取成功
-				map.put("state", "1");
-				map.put("data", list);
-			} else {
-				Map<String, Object> result = getByKeyWord(keyWord);
-				// 获取成功
-				if ("1".equals(result.get("state"))) {
-					map.put("state", "1");
-					map.put("data", result.get("data"));
-				} else {
-					map.put("state", "2");
-
-				}
-			}
-		}
-		return map;
-
-	}
-
-	public Map<String, Object> getByKeyWord(String keyWord) throws Exception {
-		String primaryDept = "内科";
-		String secondDept = null;
-		Map<String, Object> map = new HashMap<String, Object>();
-		boolean headacheresult1 = keyWord.contains(KeyWords.HEADACHE_WORD1);
-		boolean headacheresult2 = keyWord.contains(KeyWords.HEADACHE_WORD2);
-		boolean headacheresult3 = keyWord.contains(KeyWords.HEADACHE_WORD3);
-		boolean headacheresult4 = keyWord.contains(KeyWords.HEADACHE_WORD4);
-		boolean headacheresult5 = keyWord.contains(KeyWords.HEADACHE_WORD5);
-		boolean headacheresult6 = keyWord.contains(KeyWords.HEADACHE_WORD6);
-		boolean headacheresult7 = keyWord.contains(KeyWords.HEADACHE_WORD7);
-		boolean headacheresult8 = keyWord.contains(KeyWords.HEADACHE_WORD8);
-		boolean headacheresult9 = keyWord.contains(KeyWords.HEADACHE_WORD9);
-		boolean headacheresult10 = keyWord.contains(KeyWords.HEADACHE_WORD10);
-		boolean headacheresult11 = keyWord.contains(KeyWords.HEADACHE_WORD11);
-		boolean headacheresult12 = keyWord.contains(KeyWords.HEADACHE_WORD12);
-		boolean headacheresult = headacheresult1 || headacheresult2 || headacheresult3 || headacheresult4
-				|| headacheresult5 || headacheresult6 || headacheresult7 || headacheresult8 || headacheresult9
-				|| headacheresult10 || headacheresult11 || headacheresult12;
-		if (headacheresult) {
-			primaryDept = "内科";
-			secondDept = "神经内科";
-
-		}
-		List<Doctorinfo> list = doctorinfoMapperCustom.selectByDept(primaryDept, secondDept);
-		if (list.size() > 0) {
-			// 获取成功
-			map.put("state", "1");
-			map.put("data", list);
-		} else {
-			List<Doctorinfo> defaultList = doctorinfoMapperCustom.selectByDept(null, null);
-			if (defaultList.size() > 0) {
-				map.put("state", "1");
-				map.put("data", defaultList);
-			} else {
-				map.put("state", "2");
-			}
-
-		}
-		return map;
-
-	}
-
+	
 	// 医院获取需要接收的通知
 	@Override
 	public String listReceiveNotification(Integer notificationreceiverid, Integer notificationType, Integer limit,
@@ -324,33 +238,34 @@ public class CommonServiceImpl implements CommonService {
 
 	// 将消息置为已读
 	@Override
-	public boolean updateNotificationToRead(Integer notificationid, Integer notificationreceiverid) throws Exception {
+	public String updateNotificationToRead(Integer notificationid, Integer notificationreceiverid) throws Exception {
 		Notification notification = notificationMapper.selectByPrimaryKey(notificationid);
-		if (notification != null) {
-			int receiverid = notification.getNotificationreceiverid();
-			boolean read = notification.getNotificationread();
-			boolean remove = notification.getNotificationremove();
-			if (remove) {
-				throw new MyException("该通知不存在");
-			} else {
-				if (notificationreceiverid.equals(receiverid)) {
-					if (read) {
-						throw new MyException("该通知已读");
-					} else {
-						Notification record = new Notification();
-						record.setNotificationid(notificationid);
-						record.setNotificationreadtime(new Date());
-						record.setNotificationread(true);
-						return notificationMapper.updateByPrimaryKeySelective(record) > 0;
-					}
-
-				} else {
-					throw new MyException("该通知不属于该用户");
-				}
-			}
-		} else {
-			throw new MyException("该通知不存在");
+		if (notification == null) {
+			return DataResult.error("该通知不存在");
 		}
+		int receiverid = notification.getNotificationreceiverid();
+		boolean read = notification.getNotificationread();
+		boolean remove = notification.getNotificationremove();
+		if (remove) {
+			return DataResult.error("该通知不存在");
+		} 
+		if (notificationreceiverid!=receiverid) {
+			return DataResult.error("账户信息不匹配");
+		}
+		if (read) {
+			return DataResult.error("该通知已读");			
+		}
+		Notification record = new Notification();
+		record.setNotificationid(notificationid);
+		record.setNotificationreadtime(new Date());
+		record.setNotificationread(true);
+		boolean result = notificationMapper.updateByPrimaryKeySelective(record) > 0;
+		if (result) {
+			return DataResult.success("已读成功");
+		}else {
+			return DataResult.error("已读失败");	
+		}
+		
 	}
 
 	// 将全部未读消息置为已读
@@ -374,27 +289,29 @@ public class CommonServiceImpl implements CommonService {
 
 	// 将消息删除
 	@Override
-	public boolean deleteNotification(Integer notificationid, Integer notificationreceiverid) throws Exception {
+	public String deleteNotification(Integer notificationid, Integer notificationreceiverid) throws Exception {
 		Notification notification = notificationMapper.selectByPrimaryKey(notificationid);
-		if (notification != null) {
-			int receiverid = notification.getNotificationreceiverid();
-			boolean remove = notification.getNotificationremove();
-			if (remove) {
-				throw new MyException("该通知不存在");
-			} else {
-				if (notificationreceiverid.equals(receiverid)) {
-					Notification record = new Notification();
-					record.setNotificationid(notificationid);
-					record.setNotificationremove(true);
-					return notificationMapper.updateByPrimaryKeySelective(record) > 0;
-				} else {
-					throw new MyException("该通知不属于该用户");
-				}
-			}
-
-		} else {
-			throw new MyException("该通知不存在");
+		if (notification == null) {
+			return DataResult.error("该通知不存在");
 		}
+		int receiverid = notification.getNotificationreceiverid();
+		boolean remove = notification.getNotificationremove();
+		if (remove) {
+			return DataResult.error("该通知不存在");
+		} 
+		if (notificationreceiverid!=receiverid) {
+			return DataResult.error("账户信息不匹配");
+		}
+		Notification record = new Notification();
+		record.setNotificationid(notificationid);
+		record.setNotificationremove(true);
+		boolean result = notificationMapper.updateByPrimaryKeySelective(record) > 0;
+		if (result) {
+			return DataResult.success("删除成功");
+		}else {
+			return DataResult.error("删除失败");	
+		}
+		
 	}
 
 	// 将所有消息删除

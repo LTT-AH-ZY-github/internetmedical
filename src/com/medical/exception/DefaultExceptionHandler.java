@@ -4,15 +4,11 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.medical.exception.custom.MyException;
 import com.medical.utils.result.DataResult;
 
 public class DefaultExceptionHandler implements HandlerExceptionResolver {  

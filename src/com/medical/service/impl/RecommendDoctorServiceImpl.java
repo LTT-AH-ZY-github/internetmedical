@@ -14,17 +14,21 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.medical.mapper.DoctorinfoMapperCustom;
+import com.medical.mapper.HospitaldeptMapper;
 import com.medical.mapper.PreorderMapper;
 import com.medical.mapper.PreorderMapperCustom;
 import com.medical.po.Doctorinfo;
+import com.medical.po.Hospitaldept;
 import com.medical.po.Preorder;
 import com.medical.service.iface.RecommendDoctorService;
 import com.medical.utils.KeyWords;
+
 
 /**
  * @ClassName:     RecommendDoctorServiceImpl.java
@@ -40,6 +44,8 @@ public class RecommendDoctorServiceImpl implements RecommendDoctorService {
 	private PreorderMapper preorderMapper;
 	@Autowired
 	private PreorderMapperCustom preorderMapperCustom;
+	@Autowired
+	private HospitaldeptMapper hospitaldeptMapper;
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -83,7 +89,37 @@ public class RecommendDoctorServiceImpl implements RecommendDoctorService {
 	@Transactional(rollbackFor = Exception.class)
 	public List<Doctorinfo> getByKeyWord(String keyWord) throws Exception {
 		String primaryDept = "内科";
-		String secondDept = "神经内科";
+		String secondDept = null;
+		Map<Integer, List<String>> map = KeyWords.initWords();
+		Iterator<Entry<Integer, List<String>>> it = map.entrySet().iterator();
+		int hospdeptid = 0;
+	    outer:  while (it.hasNext()) {
+		   Entry<Integer, List<String>> entry = it.next();
+		   System.out.println("key= " + entry.getKey() + " and value= " + entry.getValue());
+		   List<String> list = entry.getValue();
+		   for (String string : list) {
+			 //这里查找str中是否存在"cd"字符串，如果存在则会返回大于等于0的数，如果不存在，则返回-1
+			  if(keyWord.indexOf(string)>=0){
+			      System.out.println("找到了");
+			      hospdeptid= entry.getKey();
+			      break outer;
+			   }
+		   }
+		   
+		}
+		Hospitaldept hospitaldept = hospitaldeptMapper.selectByPrimaryKey(hospdeptid);
+		if (hospitaldept!=null) {
+			int fatherid = hospitaldept.getHospdeptfatherid();
+			if (fatherid==0) {
+				primaryDept= hospitaldept.getHospdeptname();
+			}else {
+				Hospitaldept fatherdept = hospitaldeptMapper.selectByPrimaryKey(fatherid);	
+				if (fatherdept!=null) {
+					primaryDept= fatherdept.getHospdeptname();
+				}
+				 secondDept = hospitaldept.getHospdeptname();
+			}
+		}
 		return getByDept(primaryDept, secondDept);
 	}
 	

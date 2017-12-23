@@ -142,7 +142,7 @@ public class DoctorConsultationServiceImpl implements DoctorConsultationService 
 		boolean result = hosporderMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
-			jsonCustormCont.put("order_id", hosporderid);
+			jsonCustormCont.put("hosp_order_id", hosporderid);
 			jsonCustormCont.put("type", "6");
 			senderNotificationService.createMsgDoctorToHospital(hosporder.getDoctorid(), hosporder.getHospid(), "消息通知", "确认了会诊",
 					jsonCustormCont);
@@ -196,7 +196,7 @@ public class DoctorConsultationServiceImpl implements DoctorConsultationService 
 		boolean result = hosporderMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
 			JSONObject jsonCustormCont = new JSONObject();
-			jsonCustormCont.put("order_id", hosporderid);
+			jsonCustormCont.put("hosp_order_id", hosporderid);
 			jsonCustormCont.put("type", "6");
 			senderNotificationService.createMsgDoctorToHospital(hosporder.getDoctorid(), hosporder.getHospid(), "消息通知", "取消了会诊",
 					jsonCustormCont);

@@ -1,12 +1,7 @@
 package com.medical.utils;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-
-
 
 import com.alibaba.fastjson.JSON;
-import com.medical.exception.custom.TokenException;
 import com.medical.po.custom.TokenModel;
 
 
@@ -38,7 +33,7 @@ public class TokeManager {
      */
     public static boolean isTokenEnable(String token) throws Exception{
         if (Global.globalToken.get(token) == null){
-            throw new TokenException("token不存在");
+        	return false;
         }
         long expireTime =(Long) Global.globalToken.get(token); 
         if (expireTime > System.currentTimeMillis()){

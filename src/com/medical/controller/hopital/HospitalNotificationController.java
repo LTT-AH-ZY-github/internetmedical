@@ -97,13 +97,7 @@ public class HospitalNotificationController {
 		if (notificationid == null) {
 			return DataResult.error("通知id为空");
 		}
-		boolean result = commonService.updateNotificationToRead(notificationid, hosploginid);
-		if (result) {
-			return DataResult.success("已读成功");
-		} else {
-			return DataResult.error("已读失败");
-		}
-
+		return commonService.updateNotificationToRead(notificationid, hosploginid);
 	}
 
 	@RequestMapping(value = "/deletereceivenotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -118,14 +112,7 @@ public class HospitalNotificationController {
 		if (notificationid == null) {
 			return DataResult.error("通知id为空");
 		}
-
-		boolean result = commonService.deleteNotification(notificationid, hosploginid);
-		if (result) {
-			return DataResult.success("删除成功");
-		} else {
-			return DataResult.error("删除失败");
-		}
-
+       return commonService.deleteNotification(notificationid, hosploginid);
 	}
 
 }

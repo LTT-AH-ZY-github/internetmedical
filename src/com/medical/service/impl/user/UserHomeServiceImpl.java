@@ -1,5 +1,8 @@
 package com.medical.service.impl.user;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import com.medical.po.DoctorSearch;
 import com.medical.po.Preorder;
 import com.medical.po.Usersick;
 import com.medical.service.iface.user.UserHomeService;
+import com.medical.utils.DateUtil;
 import com.medical.utils.GeographyScope;
 import com.medical.utils.result.DataResult;
 import com.medical.utils.result.DataResult2;
@@ -143,6 +147,31 @@ public class UserHomeServiceImpl implements UserHomeService {
 	@Override
 	public String listCalendar(Integer docloginid) throws Exception {
 		List<Map<String, Object>> list = doctorcalendarMapperCustom.selectAllInfoByDocloginidInUser(docloginid);
+		if (list!=null && list.size()>0) {
+			//设置日期格式
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			String day = df.format(new Date());
+			String time = DateUtil.getDateSx();
+			for (Map<String, Object> map : list) {
+				String day2= df.format((Date) map.get("doccalendarday"));
+				String time2= (String) map.get("doccalendartime");
+				if (day.equals(day2)) {
+					if ("下午".equals(time)) {
+						if ("上午".equals(time2)) {
+							list.remove(map);
+						}
+					}
+					if ("晚上".equals(time)) {
+						if ("上午".equals(time2)) {
+							list.remove(map);
+						}
+						if ("下午".equals(time2)) {
+							list.remove(map);
+						}
+					}
+				}
+			}
+		}
 		return DataResult2.success("获取成功", list);
 	}
 

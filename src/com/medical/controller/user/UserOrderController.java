@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -192,7 +193,7 @@ public class UserOrderController {
 	 * @throws Exception
 	 * @return: String
 	 */
-	@RequestMapping(value = "/paydoctorfinishbyalipay", produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/paydoctorfinishbyalipay", method=RequestMethod.POST,produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "支付宝支付医生费用回调", httpMethod = "POST", notes = "支付宝支付医生费用回调")
 	public String payDoctorFinishByAliPay(HttpServletRequest request) throws Exception {
 		Map requestParams = request.getParameterMap();

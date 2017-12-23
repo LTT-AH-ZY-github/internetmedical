@@ -2,6 +2,8 @@ package com.medical.po;
 
 import java.util.Date;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 public class Usersick {
     private Integer usersickid;
     

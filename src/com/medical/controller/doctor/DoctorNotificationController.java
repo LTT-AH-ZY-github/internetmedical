@@ -86,26 +86,15 @@ public class DoctorNotificationController {
 			@ApiParam(name = "notificationid", required = true, value = "通知id") @RequestParam Integer notificationid,
 			@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid
 			)throws Exception{
-		if (docloginid != null) {
-			boolean result= commonService.updateNotificationToRead(notificationid, docloginid);
-			if (result) {
-				return DataResult.success("已读成功");
-			}else {
-				return DataResult.success("已读失败");
-			}
-		}else {
-			List<String> errList = new ArrayList<String>();
-			if (notificationid == null) {
-				errList.add("通知id为空");
-			}
-			if (docloginid == null) {
-				errList.add("医生登录id为空");
-			}
-			
-			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
+		if (docloginid == null) {
+			return DataResult.error("医生登录id为空");
 		}
-		
+		if (notificationid == null) {
+			return DataResult.error("通知id为空");
+		}
+		return commonService.updateNotificationToRead(notificationid, docloginid);
 	}
+	
 	@RequestMapping(value="/updateallnotificationtoread", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value="将该用户的所有未读通知置为已读",httpMethod="POST",notes="将该用户的所有未读通知置为已读")
 	public @ResponseBody String updateAllNotificationToRead(
@@ -122,26 +111,15 @@ public class DoctorNotificationController {
 			@ApiParam(name = "notificationid", required = true, value = "通知id") @RequestParam Integer notificationid,
 			@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid
 			)throws Exception{
-		if (docloginid != null) {
-			boolean result= commonService.deleteNotification(notificationid, docloginid);
-			if (result) {
-				return DataResult.success("删除成功");
-			}else {
-				return DataResult.error("删除失败");
-			}
-		}else {
-			List<String> errList = new ArrayList<String>();
-			if (notificationid == null) {
-				errList.add("通知id为空");
-			}
-			if (docloginid == null) {
-				errList.add("医生登录id为空");
-			}
-			
-			return DataResult.error(errList.toString().replace("[", "").replace("]", ""));
+		if (docloginid == null) {
+			return DataResult.error("医生登录id为空");
 		}
-		
+		if (notificationid == null) {
+			return DataResult.error("通知id为空");
+		}
+		return commonService.deleteNotification(notificationid, docloginid);
 	}
+	
 	@RequestMapping(value="/deleteallreceivenotification", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value="删除接收的所有通知",httpMethod="POST",notes="删除接收的所有通知")
 	public @ResponseBody String deleteAllNotification(
