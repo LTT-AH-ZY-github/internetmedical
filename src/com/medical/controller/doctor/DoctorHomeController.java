@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.medical.service.iface.doctor.DoctorHomeService;
 import com.medical.utils.CheckUtils;
+import com.medical.utils.StringTools;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -43,7 +44,7 @@ public class DoctorHomeController {
 			return DataResult.error("登录id为空");
 		}
 		if (!CheckUtils.isNonzeroPositiveIntegerLegal(page)) {
-			return DataResult.error("当前页为大于0的整数");
+			return DataResult.error("当前页有误");
 		}
 		if (StringUtils.isBlank(lat)) {
 			return DataResult.error("经度为空");
@@ -79,6 +80,9 @@ public class DoctorHomeController {
 		if (usersickid == null) {
 			return DataResult.error("病情id为空");
 		}
+		if (docloginid == null) {
+			return DataResult.error("医生登录id为空");
+		}
 		return doctorHomeService.getSickDetail(docloginid, usersickid);
 	}
 
@@ -113,6 +117,9 @@ public class DoctorHomeController {
 		if (StringUtils.isBlank(hospname)) {
 			return DataResult.error("医院名为空");
 		}
+		if (StringTools.strLength(hospname)>20) {
+			return DataResult.error("医院名长度过长");
+		}
 		return doctorHomeService.listHospital(hospname);
 
 	}
@@ -136,6 +143,9 @@ public class DoctorHomeController {
 	public String getDoctor(@ApiParam(name = "docname", required = true, value = "医生姓名") @RequestParam String docname) throws Exception {
 		if (StringUtils.isBlank(docname)) {
 			return DataResult.error("医生姓名为空");
+		}
+		if (StringTools.strLength(docname)>20) {
+			return DataResult.error("医生姓名长度过长");
 		}
 		return  doctorHomeService.getDoctorByName(docname);
 		

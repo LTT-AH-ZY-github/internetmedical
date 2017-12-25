@@ -2,6 +2,8 @@ package com.medical.service.iface;
 
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.github.pagehelper.PageInfo;
 
 
@@ -31,7 +33,7 @@ public interface CommonService {
      * @param 
      * @return 
      */
-	PageInfo<Map<String, Object>> listReceiveNotification(Integer notificationreceiver, Integer notificationType,
+	String listReceiveNotification(Integer notificationreceiver, Integer notificationType,
 			 Integer page, Integer type) throws Exception;
 	/**
 	 *医院 根据发送者者和信息类型查询消息
@@ -45,7 +47,7 @@ public interface CommonService {
      * @param 
      * @return 
      */
-	PageInfo<Map<String, Object>> listSenderNotification(Integer notificationsender, Integer notificationType,
+	String listSenderNotification(Integer notificationsender, Integer notificationType,
 			 Integer page, Integer type) throws Exception;
 	
 	
@@ -128,5 +130,16 @@ public interface CommonService {
 	 * @return: String
 	 */
 	String getAppVersion(Integer apptype, Integer systemtype) throws Exception;
+
+	/**
+	 * @Title: uploadAndroidApp
+	 * @Description: TODO
+	 * @param type
+	 * @param app
+	 * @param version
+	 * @return
+	 * @return: String
+	 */
+	String uploadAndroidApp(Integer type, MultipartFile app, String version)throws Exception;
 
 }

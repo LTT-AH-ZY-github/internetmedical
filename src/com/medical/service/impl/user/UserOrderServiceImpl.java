@@ -295,8 +295,10 @@ public class UserOrderServiceImpl implements UserOrderService {
 			//订单信息
 			Userorder userorder = new Userorder();
 			userorder.setUserorderid(userorderid);
-			//订单结束时间
+			//与医生订单结束时间
 			userorder.setUserorderetime(new Date());
+			//整个订单结束时间
+			userorder.setUserorderfinishtime(new Date());
 			// 16为病人取消订单
 			userorder.setUserorderstateid(16);
 			//病情信息
@@ -476,7 +478,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 			}
             // 交易支付成功
 			if ("TRADE_CLOSED".equals(params.get("trade_status"))) {
-				String payresult  = payService.updateAlipayRecordToCancle(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id, seller_email, params.toString());
+				String payresult  = payService.updateAlipayRecordToCancle(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id, seller_email, params.toString(),"交易失败");
 				JSONObject jsonObject = JSONObject.fromObject(payresult);
 				if ("100".equals(jsonObject.get("code"))) {
 					return DataResult.success("支付结束"); 
@@ -644,7 +646,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 		if ("TRADE_CLOSED".equals(params.get("trade_status"))) {
 			//解除订单锁
 			commonTradeService.queryUserOrderForFinish(pay.getPayorderid());
-			String payresult  = payService.updateAlipayRecordToCancle(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id, seller_email, params.toString());
+			String payresult  = payService.updateAlipayRecordToCancle(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id, seller_email, params.toString(),"交易失败");
 			JSONObject jsonObject = JSONObject.fromObject(payresult);
 			if ("100".equals(jsonObject.get("code"))) {
 				return DataResult.success("支付结束"); 
@@ -746,8 +748,9 @@ public class UserOrderServiceImpl implements UserOrderService {
 			}
 			Userorder userorder = new Userorder();
 			userorder.setUserorderid(userorderid);
-			//订单结束时间
-			userorder.setUserorderetime(new Date());
+			userorder.setUserorderleavehosptime(new Date());
+			//整个订单结束时间
+			userorder.setUserorderfinishtime(new Date());
 			//9为订单结束
 			userorder.setUserorderstateid(9);
 			//2为需要住院，病人取消

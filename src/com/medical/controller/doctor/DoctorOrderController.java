@@ -1,5 +1,6 @@
 package com.medical.controller.doctor;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class DoctorOrderController {
 	public String grabOrder(
 			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(value = "docloginid") Integer docloginid,
 			@ApiParam(name = "usersickid", required = true, value = "病情id") @RequestParam(value = "usersickid") Integer usersickid,
-			@ApiParam(name = "preorderprice", value = "预估价格") @RequestParam(required = false) Double preorderprice)
+			@ApiParam(name = "preorderprice", value = "预估价格") @RequestParam(required = false) BigDecimal preorderprice)
 			throws Exception {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
@@ -186,20 +187,36 @@ public class DoctorOrderController {
 		Integer userordertpricetype = userorder.getUserordertpricetype();
 		Integer userorderapricetype = userorder.getUserorderapricetype();
 		Integer userorderepricetype = userorder.getUserorderepricetype();
+		BigDecimal userorderdprice = userorder.getUserorderdprice();
+		BigDecimal userordertprice = userorder.getUserordertprice();
+		BigDecimal userorderaprice = userorder.getUserorderaprice();
+		BigDecimal userordereprice = userorder.getUserordereprice();
 		if (docloginid==null) {
 			return DataResult.error("医生登录id为空");
+		}
+		if (userorderdprice == null) {
+			return DataResult.error("出诊价格为空");
 		}
 		if (userorderid == null) {
 			return DataResult.error("订单id为空");
 		}
-		if (userordertpricetype == null) {
-			return DataResult.error("交通类型为空");
+		if (userordertpricetype == null  || (userordertpricetype!=1 && userordertpricetype!=2 && userordertpricetype!=3 )) {
+			return DataResult.error("交通类型有误");
 		}
-		if (userorderapricetype == null) {
-			return DataResult.error("住宿类型为空");
+		if (userordertpricetype!=1 && userordertprice==null) {
+			return DataResult.error("交通价格不可为空");
 		}
-		if (userorderepricetype == null) {
-			return DataResult.error("餐饮类型为空");
+		if (userorderapricetype == null || (userorderapricetype!=1 && userorderapricetype!=2 && userorderapricetype!=3 )) {
+			return DataResult.error("住宿类型有误");
+		}
+		if (userorderapricetype!=1 && userorderaprice==null) {
+			return DataResult.error("住宿价格不可为空");
+		}
+		if (userorderepricetype == null || (userorderepricetype!=1 && userorderepricetype!=2 && userorderepricetype!=3 )) {
+			return DataResult.error("餐饮类型有误");
+		}
+		if (userorderepricetype!=1 && userordereprice==null) {
+			return DataResult.error("餐饮价格不可为空");
 		}
 		userorder.setUserorderdocloginid(docloginid);
 		return doctorOrderService.updateOrderConfirm(userorder);

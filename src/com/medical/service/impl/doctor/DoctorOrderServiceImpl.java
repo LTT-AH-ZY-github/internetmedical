@@ -139,7 +139,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 	* @see com.medical.service.iface.doctor.DoctorOrderService#creatPreOrder(java.lang.Integer, java.lang.Integer, java.lang.Double)  
 	*/  
 	@Override
-	public String creatPreOrder(Integer usersickid, Integer docloginid, Double preorderprice) throws Exception {
+	public String creatPreOrder(Integer usersickid, Integer docloginid, BigDecimal preorderprice) throws Exception {
 		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
 		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
 		if (doctorlogininfo==null ||doctorinfo==null) {
@@ -161,7 +161,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		preorder.setPreorderdocloginid(docloginid);
 		preorder.setPreorderstate(1);
 		if (preorderprice != null) {
-			preorder.setPreorderprice(new BigDecimal(preorderprice));
+			preorder.setPreorderprice(preorderprice);
 		}
 		preorder.setUsersickid(usersickid);
 		// 2医生抢单
@@ -364,6 +364,8 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		// 订单信息
 		Userorder record = new Userorder();
 		record.setUserorderid(userorderid);
+		record.setUserorderetime(new Date());
+		record.setUserorderfinishtime(new Date());
 		if (redocloginid == null) {
 			// 13为医生未接单
 			record.setUserorderstateid(13);
@@ -392,9 +394,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 				return DataResult.error("插入推荐医生失败");
 			}
 		}
-
-		record.setUserorderetime(new Date());
-		Usersick usersick = usersickMapper.selectByPrimaryKey(usersickid);
+        Usersick usersick = usersickMapper.selectByPrimaryKey(usersickid);
 		if (usersick == null) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return DataResult.error("病情不存在，取消失败");
@@ -578,6 +578,8 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		// 15为医生取消订单
 		record.setUserorderstateid(15);
 		record.setUserorderetime(new Date());
+		//整个订单结束时间
+		userorder.setUserorderfinishtime(new Date());
 		Usersick usersick = usersickMapper.selectByPrimaryKey(usersickid);
 		if (usersick == null) {
 			return DataResult.error("病情不存在");
@@ -654,6 +656,8 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			userorder.setUserorderstateid(5);
 			userorder.setUserorderhstate(true);
 			userorder.setUserorderhospid(userorderhospid);
+			//医生之间订单结束时间
+			userorder.setUserorderetime(new Date());
 			userorder.setUserorderchosehosptime(new Date());
 			// 住院部门默认为医生所在部门
 			userorder.setUserorderhospprimarydept(doctorinfo.getDocprimarydept());
@@ -674,6 +678,8 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			Userorder userorder = new Userorder();
 			userorder.setUserorderid(userorderid);
 			userorder.setUserorderetime(new Date());
+			//整个订单结束时间
+			userorder.setUserorderfinishtime(new Date());
 			userorder.setUserorderstateid(9);
 			userorder.setUserorderactualhospitalizationid(1);
 			int result = userorderMapper.updateByPrimaryKeySelective(userorder);

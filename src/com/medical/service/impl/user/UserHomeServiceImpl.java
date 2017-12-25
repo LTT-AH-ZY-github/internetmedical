@@ -1,6 +1,7 @@
 package com.medical.service.impl.user;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,7 @@ import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.PreorderMapperCustom;
 import com.medical.mapper.UsersickMapperCustom;
 import com.medical.po.DoctorSearch;
+import com.medical.po.Doctorinfo;
 import com.medical.po.Preorder;
 import com.medical.po.Usersick;
 import com.medical.service.iface.user.UserHomeService;
@@ -146,32 +148,48 @@ public class UserHomeServiceImpl implements UserHomeService {
 	 */
 	@Override
 	public String listCalendar(Integer docloginid) throws Exception {
+		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
+		if (doctorinfo==null) {
+			return DataResult2.error("该医生不存在");
+		}
 		List<Map<String, Object>> list = doctorcalendarMapperCustom.selectAllInfoByDocloginidInUser(docloginid);
+		List<Map<String, Object>> list2 = new ArrayList<>();
 		if (list!=null && list.size()>0) {
 			//设置日期格式
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			String day = df.format(new Date());
 			String time = DateUtil.getDateSx();
+			System.out.println("大小"+list.size());
 			for (Map<String, Object> map : list) {
 				String day2= df.format((Date) map.get("doccalendarday"));
 				String time2= (String) map.get("doccalendartime");
 				if (day.equals(day2)) {
 					if ("下午".equals(time)) {
 						if ("上午".equals(time2)) {
-							list.remove(map);
+							list2.add(map);
 						}
 					}
 					if ("晚上".equals(time)) {
 						if ("上午".equals(time2)) {
-							list.remove(map);
+							list2.add(map);
 						}
 						if ("下午".equals(time2)) {
-							list.remove(map);
+							list2.add(map);
 						}
 					}
 				}
 			}
+			for (Map<String, Object> map : list2) {
+				list.remove(map);
+			}
 		}
+		/*// 1 使用Iterator提供的remove方法，用于删除当前元素  
+		 for (Iterator<Map<String, Object>> it = list.iterator(); it.hasNext();) {  
+		     Map<String, Object> value = it.next();  
+		      if (value.equals( "3")) {  
+		          it.remove();  // ok  
+		     }  
+		} */
 		return DataResult2.success("获取成功", list);
 	}
 

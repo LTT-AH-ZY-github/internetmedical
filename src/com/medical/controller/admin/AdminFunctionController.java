@@ -4,6 +4,7 @@
 package com.medical.controller.admin;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.taglibs.standard.lang.jstl.NullLiteral;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.service.iface.admin.AdminFunctionService;
 import com.medical.utils.CheckUtils;
+import com.medical.utils.StringTools;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -41,10 +43,7 @@ public class AdminFunctionController {
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
 		}
-		if (type==null ) {
-			return DataResult.error("type值为空");
-		}
-		if (type!=null && (type<0||type>4)) {
+		if (type==null || (type<0||type>4)) {
 			return DataResult.error("type值超出范围");
 		}
 		if (type==0) {
@@ -105,10 +104,7 @@ public class AdminFunctionController {
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
 		}
-		if (type==null ) {
-			return DataResult.error("type值为空");
-		}
-		if (type!=null && (type<0||type>4)) {
+		if (type==null || (type<0||type>4)) {
 			return DataResult.error("type值超出范围");
 		}
 		if (type==0) {
@@ -144,7 +140,7 @@ public class AdminFunctionController {
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
 			@ApiParam(name = "type", value = "账户状态1代表通过审核，2代表为通过审核") @RequestParam Boolean type,
-			@ApiParam(name = "idea", value = "审核意见") @RequestParam String idea
+			@ApiParam(name = "idea", value = "审核意见") @RequestParam(required=false) String idea
 			)throws Exception{
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
@@ -154,6 +150,12 @@ public class AdminFunctionController {
 		}
 		if (type==null) {
 			return DataResult.error("审核状态为空");
+		}
+		if (idea!=null && idea.trim().length()==0) {
+			return DataResult.error("意见不可为空格");
+		}
+		if (StringUtils.isNotBlank(idea)&& StringTools.strLength(idea)>200) {
+			return DataResult.error("意见只可输入200个字符");
 		}
 		return adminFunctionService.updateDoctorType(adminloginid,docloginid,type,idea);
 	}
@@ -169,10 +171,7 @@ public class AdminFunctionController {
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
 		}
-		if (type==null ) {
-			return DataResult.error("type值为空");
-		}
-		if (type!=null && (type<0||type>4)) {
+		if (type==null || (type<0||type>4)) {
 			return DataResult.error("type值超出范围");
 		}
 		if (type==0) {
@@ -217,6 +216,12 @@ public class AdminFunctionController {
 		}
 		if (type==null) {
 			return DataResult.error("审核状态为空");
+		}
+		if (idea!=null && idea.trim().length()==0) {
+			return DataResult.error("意见不可为空格");
+		}
+		if (StringUtils.isNotBlank(idea)&& StringTools.strLength(idea)>200) {
+			return DataResult.error("意见只可输入200个字符");
 		}
 		return adminFunctionService.updateHospitalType(adminloginid,hosploginid,type,idea);
 	}

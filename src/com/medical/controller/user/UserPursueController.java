@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.service.iface.user.UserPurseService;
+import com.medical.utils.CheckUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -86,6 +87,12 @@ public class UserPursueController {
 		if (StringUtils.isBlank(alipayaccount) && StringUtils.isBlank(alipayname)) {
 			return DataResult.error("支付宝账号和姓名不可同时为空");
 		}
+		if (alipayaccount!=null && alipayaccount.length()>30) {
+			return DataResult.error("支付宝账户超出长度限制");
+		}
+		if (alipayname!=null && !CheckUtils.isChineseNameLegal(alipayname)) {
+			return DataResult.error("姓名有误");
+		}
 		return userPursueService.updateAliPayAccount(userloginid, alipayaccount,alipayname);
 	}
 	@RequestMapping(value = "/listtraderecord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -96,6 +103,9 @@ public class UserPursueController {
 	) throws Exception{
 		if (userloginid == null) {
 			return DataResult.error("用户登录id为空");
+		}
+		if (!CheckUtils.isPageLegal(page)) {
+			return DataResult.error("当前页有误");
 		}
 		return userPursueService.listTradeRecord(userloginid, page);
 		// TODO Auto-generated method stub

@@ -45,7 +45,7 @@ public interface PayService {
 	 * @param payid 支付id 
 	 * @param trade_no 支付宝单号
 	 * @param buyer_logon_id 付款者支付宝账号 
-	 * @param seller_email 付款者支付宝账号 
+	 * @param seller_email 收款者支付宝账号 
 	 * @param info 支付信息
 	 * @param receiptamount 实收金额
 	 * @param stateid 状态  3 为交易支付成功 4 交易结束，不可退款
@@ -70,6 +70,6 @@ public interface PayService {
 	 * @return: String
 	 */
 	String updateAlipayRecordToCancle(String out_trade_no, Integer payid, String trade_no, String buyer_logon_id,
-			String seller_email, String info) throws Exception;
+			String seller_email, String info,String payremark) throws Exception;
 
 }

@@ -41,7 +41,8 @@ public class UserHomeController {
 	
 	@RequestMapping(value = "/listdoctors", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取医生列表模式", httpMethod = "POST", consumes = "multipart/form-data", notes = "获取医生列表模式")
-	public @ResponseBody String findDoctors(@ApiParam(name = "page", value = "当前页") @RequestParam Integer page,
+	public @ResponseBody String findDoctors(
+			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page,
 			@ApiParam(name = "userloginlon", value = "经度") @RequestParam(value = "userloginlon") String userloginlon,
 			@ApiParam(name = "userloginlat", value = "纬度") @RequestParam(value = "userloginlat") String userloginlat,
 			@ApiParam(name = "dochospprovince", value = "省") @RequestParam(required = false) String dochospprovince,
@@ -51,17 +52,17 @@ public class UserHomeController {
 			@ApiParam(name = "docseconddept", value = "二级部门") @RequestParam(required = false) String docseconddept,
 			@ApiParam(name = "type", value = "为空时获取推荐医生，为1时获取按科室获取，2时获取按位置获取") @RequestParam(required = false) Integer type)
 			throws Exception {
-		if (page == null) {
-			return DataResult.error("当前页为空");
-
+		
+		if (!CheckUtils.isPageLegal(page)) {
+			return DataResult.error("当前页有误");
 		}
 		if (!CheckUtils.isPageLegal(page)) {
 			return DataResult.error("当前页应为正整数");
 		}
-		if (userloginlat == null) {
+		if (StringUtils.isBlank(userloginlat)) {
 			return DataResult.error("纬度为空");
 		}
-		if (userloginlon == null) {
+		if (StringUtils.isBlank(userloginlon)) {
 			return DataResult.error("经度为空");
 		}
 		DoctorSearch doctorSearch = new DoctorSearch();
@@ -96,9 +97,9 @@ public class UserHomeController {
 
 	@RequestMapping(value = "/doctorinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取医生详细信息", httpMethod = "POST", notes = "获取医生详细信息")
-	public String findDoctor(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
-			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid)
-			throws Exception {
+	public String findDoctor(
+			@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
+			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid) throws Exception {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
         }
@@ -129,7 +130,7 @@ public class UserHomeController {
 			return DataResult.error("医生登录id为空");
 		}
 		if (!CheckUtils.isPageLegal(page)) {
-			return DataResult.error("当前页应为正整数");
+			return DataResult.error("当前页有误");
 		}
 		return userHomeService.getEvaluation(docloginid, page);
 	}

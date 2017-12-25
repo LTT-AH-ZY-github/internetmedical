@@ -1,5 +1,7 @@
 package com.medical.service.iface.doctor;
 
+import java.math.BigDecimal;
+
 import com.medical.po.Userorder;
 
 /**
@@ -21,7 +23,7 @@ public interface DoctorOrderService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	String creatPreOrder(Integer usersickid, Integer docloginid, Double preorderprice) throws Exception;
+	String creatPreOrder(Integer usersickid, Integer docloginid, BigDecimal preorderprice) throws Exception;
 	
 	/**
 	 * @Title: listGrabOrders

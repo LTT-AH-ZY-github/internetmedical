@@ -160,7 +160,7 @@
   		   			
   		   FROM doctorlogininfo as a 
   		  	left join doctorinfo as b on a.docLoginId=b.docLoginId 
-  		where  a.docLoginType=3 and a.docAlipayAccount!='' and a.docAlipayName!=''
+  		where  a.docLoginType=3 and b.docAlipayAccount!='' and b.docAlipayName!=''
   			<if test="doctorTitle!=null">
   				and b.docTitle=#{doctorTitle}
   			</if>
@@ -205,7 +205,7 @@
   	<select id="selectByName" parameterType="String" resultType="map">
   		SELECT docloginid,docname,docmale,docage,doctitle,dochosp,docprimarydept,docseconddept
   		FROM doctorinfo 
-  		where docName=#{0} and a.docAlipayAccount!='' and a.docAlipayName!=''
+  		where docName=#{0} and docAlipayAccount!='' and docAlipayName!=''
   	</select>
   
   	<update id="updateInfoByPrimaryKey" parameterType="com.medical.po.Doctorinfo" >

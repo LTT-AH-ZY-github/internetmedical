@@ -921,7 +921,7 @@ public class DoctorInfoServiceImpl implements DoctorInfoService {
 		Map<String, Object> map = new HashMap<>(16);
 		map.put("type", userlogintype);
 		map.put("typename", accounttype.getAccounttypename());
-		if (userlogintype==3) {
+		if (userlogintype==3 || userlogintype== 4) {
 			List<Adminexamine> list = adminexamineMapperCustom.selectByExamineTargetIdAndTypeOrderByTime(docloginid, 2);
 			if (list!=null && list.size()>0) {
 				map.put("msg", list.get(0).getExamineideas());

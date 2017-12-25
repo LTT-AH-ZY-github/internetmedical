@@ -39,10 +39,10 @@ public class DoctorConsultationController {
 			return DataResult.error("医生登录id为空");
 		}
 		if (!CheckUtils.isNonzeroPositiveIntegerLegal(page)) {
-			return DataResult.error("当前页为大于0的整数");
+			return DataResult.error("当前页有误");
 		}
 		if (type != null && (type < 0 || type > 5)) {
-			return DataResult.error("type值超出范围");
+			return DataResult.error("type有误");
 		}
 		return doctorConsultationService.listConsultation(docloginid, type, page);
 

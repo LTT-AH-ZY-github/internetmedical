@@ -1,5 +1,6 @@
 package com.medical.service.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.socket.TextMessage;
 import com.alibaba.druid.VERSION;
 import com.github.pagehelper.PageHelper;
@@ -37,6 +39,7 @@ import com.medical.po.Hospitaldept;
 import com.medical.po.Notification;
 import com.medical.po.Userlogininfo;
 import com.medical.service.iface.CommonService;
+import com.medical.utils.Global;
 import com.medical.utils.result.DataResult;
 import com.netease.utils.MsgCode;
 import com.push.baidu.PushToDoctor;
@@ -73,7 +76,8 @@ public class CommonServiceImpl implements CommonService {
 	private FeedbackMapper feedbackMapper;
 	@Autowired
 	private AppversionMapperCustom appversionMapperCustom;
-	
+	@Autowired
+	private AppversionMapper appversionMapper;
 
 	Logger logger = Logger.getLogger(CommonService.class);
 
@@ -194,12 +198,13 @@ public class CommonServiceImpl implements CommonService {
 	}
 	// 病人医生获取需要接收的通知
 	@Override
-	public PageInfo<Map<String, Object>> listReceiveNotification(Integer notificationreceiverid,
+	public String listReceiveNotification(Integer notificationreceiverid,
 			Integer notificationType, Integer page, Integer type) throws Exception {
 		PageHelper.startPage(page, 5);
 		List<Map<String, Object>> list = notificationMapperCustom.selectByReceiverAndType(notificationreceiverid,
 				notificationType, type);
-		return new PageInfo<Map<String, Object>>(list);
+		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
+		return DataResult.success("获取成功", pageInfo.getList());
 	}
 
 	// 医院获取需要发送的通知
@@ -228,12 +233,13 @@ public class CommonServiceImpl implements CommonService {
 
 	// 用户医生获取需要发送的通知
 	@Override
-	public PageInfo<Map<String, Object>> listSenderNotification(Integer notificationsenderid, Integer notificationType,
+	public String listSenderNotification(Integer notificationsenderid, Integer notificationType,
 			Integer page, Integer type) throws Exception {
 		PageHelper.startPage(page, 5);
 		List<Map<String, Object>> list = notificationMapperCustom.selectBySenderAndType(notificationsenderid,
 				notificationType, type);
-		return new PageInfo<Map<String, Object>>(list);
+		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
+		return DataResult.success("获取成功", pageInfo.getList());
 	}
 
 	// 将消息置为已读
@@ -518,5 +524,46 @@ public class CommonServiceImpl implements CommonService {
 		} else {
 			return DataResult.error("获取失败");
 		}
+	}
+
+	/* (非 Javadoc)  
+	* <p>Title: uploadAndroidApp</p>  
+	* <p>Description: </p>  
+	* @param type
+	* @param app
+	* @param version
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.CommonService#uploadAndroidApp(java.lang.Integer, org.springframework.web.multipart.MultipartFile, java.lang.String)  
+	*/  
+	@Override
+	public String uploadAndroidApp(Integer type, MultipartFile app, String version) throws Exception {
+		//type为1是病人端
+		String name = null;
+		if (type==1) {
+			name="suyunuser";
+		}else {
+			name="suyundoctor";
+		}
+		// 获取后缀
+		String oriName = app.getOriginalFilename();
+		String ext = oriName.substring(oriName.lastIndexOf("."));
+		String file = name + ext;
+		String reallyPath = "C:\\app\\" + file;
+		app.transferTo(new File(reallyPath));
+		Appversion appversion = new Appversion();
+		appversion.setApppublishtime(new Date());
+		appversion.setAppversion(version);
+		appversion.setApptype(type);
+		appversion.setAppurl("http://118.89.172.204:8080/download/"+file);
+		//1为安卓
+		appversion.setSystemtype(1);
+		boolean result = appversionMapper.insertSelective(appversion)>0;
+		if (result) {
+			return DataResult.success("上传成功");	
+		}else {
+			return DataResult.success("上传失败");
+		}
+		
 	}
 }

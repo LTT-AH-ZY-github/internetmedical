@@ -18,6 +18,7 @@ import com.medical.po.Doctorinfo;
 import com.medical.service.iface.CommonService;
 import com.medical.service.iface.doctor.DoctorInfoService;
 import com.medical.utils.CheckUtils;
+import com.medical.utils.StringTools;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
@@ -93,6 +94,12 @@ public class DoctorInfoController {
 		if (StringUtils.isBlank(docexpert) && StringUtils.isBlank(docabs)) {
 			return DataResult.error("所填信息为空");
 		}
+		if (StringUtils.isNotBlank(docexpert) && StringTools.strLength(docexpert)>200) {
+			return DataResult.error("擅长输入过长");
+		}
+		if (StringUtils.isNotBlank(docabs) && StringTools.strLength(docabs)>200) {
+			return DataResult.error("个人简介输入过长");
+		}
 		return doctorInfoService.updateAbsAndExpert(docloginid, docexpert, docabs);
 	}
 
@@ -145,9 +152,28 @@ public class DoctorInfoController {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
+		String docname = doctorinfo.getDocname();
+		if (docname!=null && !CheckUtils.isChineseNameLegal(docname)) {
+			return DataResult.error("姓名输入有误");
+		}
+		String doccardnum = doctorinfo.getDoccardnum();
+		if (doccardnum!=null && doccardnum.length()!=18) {
+			return DataResult.error("身份证输入不合法");
+		}
 		String docmale = doctorinfo.getDocmale();
-		if (!"男".equals(docmale) && !"女".equals(docmale)) {
+		if (docmale!=null && !CheckUtils.isSexLegal(docmale)) {
 			return DataResult.error("性别输入不合法");
+		}
+		Integer docage = doctorinfo.getDocage();
+		if (docage!=null && !CheckUtils.isAgeLegal(docage)) {
+			return DataResult.error("年龄输入不合法");
+		}
+		String dochosp = doctorinfo.getDochosp();
+		if (dochosp!=null && dochosp.trim().length()==0) {
+			return DataResult.error("医院名为空");
+		}
+		if (dochosp!=null && StringTools.strLength(dochosp)>50) {
+			return DataResult.error("医院名超出范围");
 		}
 		return doctorInfoService.updateNormalInfo(doctorinfo);
 
@@ -167,10 +193,10 @@ public class DoctorInfoController {
 			return DataResult.error("医生登录id为空");
 		}
 		if (type == null || (type < 1 || type > 5)) {
-			return DataResult.error("type值超出范围");
+			return DataResult.error("type值不合法");
 		}
 		return doctorInfoService.updateSomePicture(docloginid, type, oldpicture, picture);
-	}
+	} 
 
 	@RequestMapping(value = "/cancelreview", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "撤销审核", httpMethod = "POST", notes = "撤销审核")
@@ -225,7 +251,7 @@ public class DoctorInfoController {
 			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid)
 			throws Exception {
 		if (docloginid == null) {
-			return DataResult.error("医生id为空");
+			return DataResult.error("医生登录id为空");
 		}
 		return doctorInfoService.listAllAddress(docloginid);
 
@@ -297,7 +323,7 @@ public class DoctorInfoController {
 			@ApiParam(name = "docaddressid", required = true, value = "地址id") @RequestParam(required = true) Integer docaddressid)
 			throws Exception {
 		if (docloginid == null) {
-			return DataResult.error("医生id为空");
+			return DataResult.error("医生登录id为空");
 		}
 		if (docaddressid == null) {
 			return DataResult.error("医生地址id为空");
@@ -313,7 +339,7 @@ public class DoctorInfoController {
 			@ApiParam(name = "page", required = true, value = "当前页") @RequestParam(required = true) Integer page)
 			throws Exception {
 		if (docloginid == null) {
-			return DataResult.error("医生id为空");
+			return DataResult.error("医生登录id为空");
 		}
 		if (!CheckUtils.isPageLegal(page)) {
 			return DataResult.error("当前页有误");
@@ -329,7 +355,7 @@ public class DoctorInfoController {
 			@ApiParam(name = "year", value = "年") @RequestParam(required = true) String year,
 			@ApiParam(name = "month", value = "月") @RequestParam(required = true) String month) throws Exception {
 		if (docloginid == null) {
-			return DataResult.error("医生id为空");
+			return DataResult.error("医生登录id为空");
 		}
 		if (StringUtils.isBlank(year)) {
 			return DataResult.error("年为空");
@@ -353,6 +379,10 @@ public class DoctorInfoController {
 		if (bindingResult.hasErrors()) {
 			return DataResult.error(bindingResult.getAllErrors().get(0).getDefaultMessage());
 		}
+		String doccalendaraffair = doctorcalendar.getDoccalendaraffair();
+		if (doccalendaraffair!=null && StringTools.strLength(doccalendaraffair)>200) {
+			DataResult.error("事件超出长度限制");
+		}
 		return doctorInfoService.addCalendar(doctorcalendar);
 	}
 
@@ -369,6 +399,10 @@ public class DoctorInfoController {
 			BindingResult bindingResult) throws Exception {
 		if (bindingResult.hasErrors()) {
 			return DataResult.error(bindingResult.getAllErrors().get(0).getDefaultMessage());
+		}
+		String doccalendaraffair = doctorcalendar.getDoccalendaraffair();
+		if (doccalendaraffair!=null && StringTools.strLength(doccalendaraffair)>200) {
+			DataResult.error("事件超出长度限制");
 		}
 		return doctorInfoService.updateCalendar(doctorcalendar);
 	}
@@ -401,6 +435,18 @@ public class DoctorInfoController {
 			@ApiParam(name = "primarydept", value = "一级部门") @RequestParam(required = false) String primarydept,
 			@ApiParam(name = "seconddept", value = "二级部门") @RequestParam(required = false) String seconddept)
 			throws Exception {
+		if (primarydept!=null && primarydept.trim().length()==0) {
+			DataResult.error("一级部门不可为空格");
+		}
+		if (primarydept!=null && StringTools.strLength(primarydept)>20) {
+			DataResult.error("一级部门超出长度限制");
+		}
+		if (seconddept!=null && seconddept.trim().length()==0) {
+			DataResult.error("二级部门不可为空格");
+		}
+		if (seconddept!=null && StringTools.strLength(seconddept)>20) {
+			DataResult.error("二级部门超出长度限制");
+		}
 		return commonService.addDept(docloginid, primarydept, seconddept);
 	}
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.medical.service.iface.CommonService;
 import com.medical.utils.result.DataResult;
@@ -50,5 +51,14 @@ public class CommonController {
 	@ApiOperation(value = "获取安卓app版本", httpMethod = "POST", notes = "获取安卓app版本")
 	public String getappversion(@ApiParam(name = "type", required = true, value = "1为病人端，2为医生端") @RequestParam Integer type) throws Exception {
 		return commonService.getAppVersion(type,1);
+	}
+	
+	@RequestMapping(value = "/uploadandroidapp", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "提交安卓app", httpMethod = "POST", notes = "提交安卓app")
+	public String uploadandroidapp(
+			@ApiParam(name = "type", required = true, value = "1为病人端，2为医生端") @RequestParam Integer type,
+			@ApiParam(name = "app", required = true, value = "app") @RequestParam MultipartFile app,
+			@ApiParam(name = "version", required = true, value = "版本号") @RequestParam String version) throws Exception {
+		return commonService.uploadAndroidApp(type,app,version);
 	}
 }

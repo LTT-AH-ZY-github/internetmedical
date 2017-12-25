@@ -36,12 +36,7 @@ public class DoctorPurseController {
 		}
 		return doctorPurseService.getAliPayAccount(docloginid);
 	}
-	/**
-	 * @return 
-	 * @Title: pub
-	 * @Description: TODO
-	 * @return: void
-	 */
+	
 	@RequestMapping(value = "/updatealipayaccount", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "修改支付宝账号", httpMethod = "POST", notes = "修改支付宝账号", produces = "application/json")
 	public String updatealipayaccount(
@@ -54,6 +49,12 @@ public class DoctorPurseController {
 		}
 		if (StringUtils.isBlank(alipayaccount) && StringUtils.isBlank(alipayname)) {
 			return DataResult.error("支付宝账号和姓名不可同时为空");
+		}
+		if (alipayaccount!=null && alipayaccount.length()>30) {
+			return DataResult.error("支付宝账户超出长度限制");
+		}
+		if (alipayname!=null && !CheckUtils.isChineseNameLegal(alipayname)) {
+			return DataResult.error("姓名有误");
 		}
 		return doctorPurseService.updateAliPayAccount(docloginid, alipayaccount,alipayname);
 	}
@@ -115,8 +116,6 @@ public class DoctorPurseController {
 			return DataResult.error("订单id为空");
 		}
 		return doctorPurseService.listTradeRecordByOrder(docloginid, userorderid);
-		// TODO Auto-generated method stub
-
 	}
 	
 	@RequestMapping(value = "/listtraderecordbyconsultation", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")

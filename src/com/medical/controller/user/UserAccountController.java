@@ -63,7 +63,7 @@ public class UserAccountController {
 			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam String userloginphone)
 			throws Exception {
 		if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
-			return Result.error("手机号码输入有误");
+			return Result.error("手机号码有误");
 		}
 		return commonService.getMsgCode(userloginphone);
 	}
@@ -85,7 +85,7 @@ public class UserAccountController {
 			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam(value = "userloginpwd") String userloginpwd,
 			@ApiParam(name = "code", required = true, value = "短信验证码") @RequestParam String code) throws Exception {
 		if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
-			return Result.error("手机号码输入有误");
+			return Result.error("手机号码有误");
 		}
 		if (StringUtils.isBlank(userloginpwd)) {
 			return DataResult.error("密码为空");
@@ -141,13 +141,13 @@ public class UserAccountController {
 			@ApiParam(name = "userlogintoken", value = "token") @RequestParam(required = false) String userlogintoken)
 			throws Exception {
 		if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
-			return Result.error("手机号码输入有误");
+			return Result.error("手机号码有误");
 		}
 		if (StringUtils.isBlank(userloginpwd)) {
 			return DataResult.error("密码为空");
 		}
-		if (userlogindev == null) {
-			userlogindev = 1;
+		if (userlogindev!=1 && userlogindev!=2) {
+			return DataResult.error("登录设备有误");
 		}
 		if (StringUtils.isBlank(userlogintoken)) {
 			return userAccountService.updateUserToNormalLogin(userloginphone, userloginpwd, userlogindev);
@@ -192,7 +192,7 @@ public class UserAccountController {
 			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam(value = "userloginpwd") String userloginpwd,
 			@ApiParam(name = "code", required = true, value = "短信验证码") @RequestParam String code) throws Exception {
 		if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
-			return Result.error("手机号码输入有误");
+			return Result.error("手机号码有误");
 		}
 		if (StringUtils.isBlank(userloginpwd)) {
 			return DataResult.error("密码为空");

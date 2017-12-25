@@ -38,10 +38,10 @@ public class DoctorAccountController {
 	// 判断手机号码是否注册
 	@RequestMapping(value = "/phonetest", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "判断手机号码是否注册", httpMethod = "POST", notes = "判断手机号码是否注册")
-	public String phoneTest(@ApiParam(name = "docloginphone", value = "手机号码") @RequestParam String docloginphone)
-			throws Exception {
+	public String phoneTest(
+			@ApiParam(name = "docloginphone", value = "手机号码") @RequestParam String docloginphone) throws Exception {
 		if (!CheckUtils.isChinaPhoneLegal(docloginphone)) {
-				return Result.error("手机号码格式错误");
+				return Result.error("手机号码输入有误");
 		}
 		return doctorAccountService.findAccountExit(docloginphone);
 	
@@ -50,10 +50,10 @@ public class DoctorAccountController {
 	// 发送短信验证码
 	@RequestMapping(value = "/getmsgcode", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "发送短信验证码", httpMethod = "POST", notes = "发送短信验证码")
-	public String getMsgCode(@ApiParam(name = "docloginphone", value = "手机号码") @RequestParam String docloginphone)
-			throws Exception {
+	public String getMsgCode(
+			@ApiParam(name = "docloginphone", value = "手机号码") @RequestParam String docloginphone) throws Exception {
 		if (!CheckUtils.isChinaPhoneLegal(docloginphone)) {
-			return Result.error("手机号码格式错误");
+			return Result.error("手机号码输入有误");
 		}
 		return commonService.getMsgCode(docloginphone);
 	}
@@ -61,11 +61,12 @@ public class DoctorAccountController {
 	// 注册
 	@RequestMapping(value = "/docregister", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "医生注册", httpMethod = "POST", notes = "医生注册")
-	public String doctorRegister(@ApiParam(name = "docloginphone", value = "手机号码") @RequestParam String docloginphone,
+	public String doctorRegister(
+			@ApiParam(name = "docloginphone", value = "手机号码") @RequestParam String docloginphone,
 			@ApiParam(name = "docloginpwd", value = "密码") @RequestParam String docloginpwd,
 			@ApiParam(name = "code", value = "短信验证码") @RequestParam String code) throws Exception {
 		if (!CheckUtils.isChinaPhoneLegal(docloginphone)) {
-			return Result.error("手机号码格式错误");
+			return Result.error("手机号码输入有误");
 		}
 		if (StringUtils.isBlank(docloginpwd)) {
 			return DataResult.error("密码为空");
@@ -105,14 +106,14 @@ public class DoctorAccountController {
 		String docloginpwd = doctorlogininfo.getDocloginpwd();
 		String doclogintoken = doctorlogininfo.getDoclogintoken();
 		if (!CheckUtils.isChinaPhoneLegal(docloginphone)) {
-			return Result.error("手机号码格式错误");
+			return Result.error("手机号码输入有误");
 		}
 		if (StringUtils.isBlank(docloginpwd)) {
 			return DataResult.error("密码为空");
 		}
 		Integer dev = doctorlogininfo.getDoclogindev();
-		if (dev == null) {
-			dev = 1;
+		if (dev == null || (dev!=1 && dev!=2)) {
+			return DataResult.error("登录设备有误");
 		}
 		if (StringUtils.isNotBlank(doclogintoken)) {
 			// 自动登录
@@ -144,7 +145,7 @@ public class DoctorAccountController {
 			@ApiParam(name = "docloginpwd", value = "密码") @RequestParam String docloginpwd,
 			@ApiParam(name = "code", required = true, value = "短信验证码") @RequestParam String code) throws Exception {
 		if (!CheckUtils.isChinaPhoneLegal(docloginphone)) {
-			return Result.error("手机号码格式错误");
+			return Result.error("手机号码输入有误");
 		}
 		if (StringUtils.isBlank(docloginpwd)) {
 			return DataResult.error("密码为空");

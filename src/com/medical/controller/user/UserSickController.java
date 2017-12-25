@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.medical.po.UsersickCustom;
 import com.medical.service.iface.user.UserSickService;
+import com.medical.utils.StringTools;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
@@ -65,6 +66,9 @@ public class UserSickController {
 		Integer familyid  = usersickCustom.getFamilyid();
 		if (StringUtils.isBlank(usersickdesc)) {
 			return DataResult.error("病情描述为空");
+		}
+		if (StringTools.strLength(usersickdesc)>200) {
+			return DataResult.error("病情描述过多");
 		}
 		if (userloginid==null) {
 			return DataResult.error("用户登录id为空");
@@ -171,10 +175,18 @@ public class UserSickController {
 	public String editSick(
 			@ApiParam(name = "pictureFile", required = false, value = "图片") @RequestParam(required = false) MultipartFile[] pictureFile,
 			@ApiIgnore UsersickCustom usersickCustom) throws Exception {
-		// 获取校验错误信息
+		
+		Integer userloginid = usersickCustom.getUserloginid();
+		if (userloginid == null) {
+			return DataResult.error("医生登录id为空");
+		}
 		Integer usersickid = usersickCustom.getUsersickid();
 		if (usersickid == null) {
 			return DataResult.error("病情id为空");
+		}
+		String usersickdesc = usersickCustom.getUsersickdesc();
+		if (usersickdesc!=null && StringTools.strLength(usersickdesc)>200) {
+			return DataResult.error("病情描述过多");
 		}
 		return userSickService.editSick(pictureFile, usersickCustom);
 	}
@@ -193,6 +205,9 @@ public class UserSickController {
 	public String publishSick(
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam(required = false) Integer userloginid,
 			@ApiParam(name = "usersickid", value = "病情id") @RequestParam Integer usersickid) throws Exception {
+		if (userloginid == null) {
+			return DataResult.error("医生登录id为空");
+		}
 		if (usersickid == null) {
 			return DataResult.error("病情id为空");
 		}
@@ -214,6 +229,9 @@ public class UserSickController {
 	public String cancelSick(
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam(required = false) Integer userloginid,
 			@ApiParam(name = "usersickid", value = "病情id") @RequestParam Integer usersickid) throws Exception {
+		if (userloginid == null) {
+			return DataResult.error("医生登录id为空");
+		}
 		if (usersickid == null) {
 			return DataResult.error("病情id为空");
 		}

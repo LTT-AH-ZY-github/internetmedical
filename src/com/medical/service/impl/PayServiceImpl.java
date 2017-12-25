@@ -64,7 +64,7 @@ public class PayServiceImpl implements PayService {
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public String updateAlipayRecordToCancle(String out_trade_no,Integer payid,String trade_no,String buyer_logon_id,String seller_email,String info) throws Exception{
+	public String updateAlipayRecordToCancle(String out_trade_no,Integer payid,String trade_no,String buyer_logon_id,String seller_email,String info,String payremark) throws Exception{
 		Pay pay = payMapperCustom.selectByPayTradeNo(out_trade_no);
 		if (pay == null) {
 			return DataResult.error("交易不存在");
@@ -76,6 +76,7 @@ public class PayServiceImpl implements PayService {
 		payrecord.setPayreceiveraccount(seller_email);
 	    payrecord.setPayinfo(info);
 	    //2为未付款交易超时关闭，或支付完成后全额退款
+	    payrecord.setPayremark(payremark);
 		payrecord.setPaystateid(2);
 		payrecord.setPayendtime(new Date());
 		boolean result = payMapper.updateByPrimaryKeySelective(payrecord)>0;
@@ -100,7 +101,7 @@ public class PayServiceImpl implements PayService {
 		payrecord.setPayreceiveraccount(seller_email);
 	    payrecord.setPayinfo(info);
 	    payrecord.setPayreceiptamount(receiptamount); 
-	    
+	    payrecord.setPayremark("交易成功");
 		payrecord.setPaystateid(stateid);
 		payrecord.setPayendtime(new Date());
 		boolean result = payMapper.updateByPrimaryKeySelective(payrecord)>0;

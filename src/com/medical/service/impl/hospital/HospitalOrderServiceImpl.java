@@ -245,8 +245,9 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 				Userorder userorder = new Userorder();
 				userorder.setUserorderid(userorderid);
 				userorder.setUserorderstateid(9);
-				//订单结束时间
-				userorder.setUserorderetime(new Date());
+				userorder.setUserorderleavehosptime(new Date());
+				//整个订单结束时间
+				userorder.setUserorderfinishtime(new Date());
 				// 3为需要住院，医院拒绝
 				userorder.setUserorderactualhospitalizationid(3);
 				boolean result = userorderMapper.updateByPrimaryKeySelective(userorder) > 0;
@@ -334,8 +335,8 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 			if (price.compareTo(userorderhprice)==0) {
 				// 9订单结束
 				userorder.setUserorderstateid(9);
-				//订单结束时间
-				userorder.setUserorderetime(new Date());
+				//整个订单结束时间
+				userorder.setUserorderfinishtime(new Date());
 				Usersick usersick = new Usersick();
 				usersick.setUsersickid(order.getUsersickid());
 				usersick.setUsersickstateid(4);

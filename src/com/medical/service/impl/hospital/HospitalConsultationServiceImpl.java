@@ -409,7 +409,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		// 交易支付成功
 		if ("TRADE_CLOSED".equals(params.get("trade_status"))) {
 			
-			String payresult  = payService.updateAlipayRecordToCancle(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id, seller_email, params.toString());
+			String payresult  = payService.updateAlipayRecordToCancle(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id, seller_email, params.toString(),"交易失败");
 			JSONObject jsonObject = JSONObject.fromObject(payresult);
 			if ("100".equals(jsonObject.get("code"))) {
 				return DataResult.success("支付结束"); 

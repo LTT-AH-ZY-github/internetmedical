@@ -1,18 +1,13 @@
 package com.medical.controller.user;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.github.pagehelper.PageInfo;
 import com.medical.service.iface.CommonService;
+import com.medical.utils.CheckUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -48,22 +43,17 @@ public class UserNotificationController {
 			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page,
 			@ApiParam(name = "type", value = "当type为空时获取全部通知，为1时获取已读通知，2为时获取未读通知") @RequestParam(required = false) Integer type)
 			throws Exception {
-		if (userloginid != null && page != null) {
-			if (type != null && (!(type == 1 || type == 2))) {
-				return DataResult.error("type值超出范围");
-			}
-			if (page < 0) {
-				return DataResult.error("page值超出范围");
-			}
-			PageInfo<Map<String, Object>> pageInfo = commonService.listReceiveNotification(userloginid, 3, page, type);
-			if (pageInfo != null && pageInfo.getTotal() > 0) {
-				return DataResult.success("获取数据成功", pageInfo.getList());
-			} else {
-				return DataResult.success("获取数据为空", null);
-			}
-		} else {
-			return DataResult.error("信息不完整");
+		if (userloginid==null) {
+			return DataResult.error("医生登录id为空");
 		}
+		if (!CheckUtils.isPageLegal(page)) {
+			return DataResult.error("当前页有误");
+		}
+		if (type!=null && type!=1 && type!=2) {
+			return DataResult.error("type有误");
+		}
+		return commonService.listReceiveNotification(userloginid, 3, page, type);
+		
 
 	}
 
@@ -84,22 +74,16 @@ public class UserNotificationController {
 			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page,
 			@ApiParam(name = "type", value = "当type为空时获取全部通知，为1时获取已读通知，2为时获取未读通知") @RequestParam(required = false) Integer type)
 			throws Exception {
-		if (userloginid != null) {
-			if (type != null && (!(type == 1 || type == 2))) {
-				return DataResult.error("type值超出范围");
-			}
-			if (page < 0) {
-				return DataResult.error("page值超出范围");
-			}
-			PageInfo<Map<String, Object>> pageInfo = commonService.listSenderNotification(userloginid, 3, page, type);
-			if (pageInfo != null && pageInfo.getTotal() > 0) {
-				return DataResult.success("获取数据成功", pageInfo.getList());
-			} else {
-				return DataResult.success("获取数据为空", null);
-			}
-		} else {
-			return DataResult.error("信息不完整");
+		if (userloginid==null) {
+			return DataResult.error("医生登录id为空");
 		}
+		if (!CheckUtils.isPageLegal(page)) {
+			return DataResult.error("当前页有误");
+		}
+		if (type!=null && type!=1 && type!=2) {
+			return DataResult.error("type有误");
+		}
+		return commonService.listSenderNotification(userloginid, 3, page, type);
 
 	}
 

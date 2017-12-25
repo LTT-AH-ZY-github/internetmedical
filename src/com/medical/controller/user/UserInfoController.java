@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.medical.po.Familyinfo;
 import com.medical.service.iface.user.UserInfoService;
 import com.medical.utils.CheckUtils;
+import com.medical.utils.StringTools;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -109,6 +110,9 @@ public class UserInfoController {
 		if (StringUtils.isBlank(userloginname) && (pictureFile == null || pictureFile.isEmpty())) {
 			return DataResult.error("头像和昵称不可同时为空");
 		}
+		if (StringUtils.isNotEmpty(userloginname) && StringTools.strLength(userloginname)>10) {
+			return DataResult.error("昵称过长");
+		}
 		return userInfoService.updateUserPixAndUserName(pictureFile, userloginid, userloginname);
 	}
 
@@ -168,14 +172,20 @@ public class UserInfoController {
 		if (username!=null && !CheckUtils.isChineseNameLegal(username)) {
 			return DataResult.error("姓名输入不合法");
 		}
-		if (usermale!=null && !CheckUtils.isSexLegal(usermale)) {
-			return DataResult.error("性别输入不合法");
-		}
 		if (usercardnum!=null && usercardnum.length()!=18) {
 			return DataResult.error("身份证输入不合法");
 		}
+		if (usermale!=null && !CheckUtils.isSexLegal(usermale)) {
+			return DataResult.error("性别输入不合法");
+		}
 		if (userage!=null && !CheckUtils.isAgeLegal(userage)) {
 			return DataResult.error("年龄证输入不合法");
+		}
+		if (useradrother!=null && useradrother.trim().length()==0) {
+			return DataResult.error("详细地址不可只为空格");
+		}
+		if (useradrarea!=null && StringTools.strLength(useradrarea)>60) {
+			return DataResult.error("详细地址过长");
 		}
 		return userInfoService.updateUserInfo(userloginid, username, usermale, usercardnum, useradrprovince,
 				useradrcity, userage, useradrarea, useradrother, pictureFile);
