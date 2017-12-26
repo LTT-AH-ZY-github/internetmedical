@@ -291,10 +291,10 @@
 	  		left join hospinfo as n on k.hospLoginId = n.hospLoginId
 	 where a.userLoginId=#{0} 
 	 <if test="param2==1">
-	 	and a.userOrderStateId=2
+	 	and (a.userOrderStateId=2  and a.userOrderStateId=6) 
 	 </if>
 	 <if test="param2==2">
-	 	and a.userOrderStateId<![CDATA[ > ]]>2  and a.userOrderStateId<![CDATA[ < ]]>9
+	 	and (a.userOrderStateId<![CDATA[ > ]]>2  and a.userOrderStateId<![CDATA[ < ]]>9 and  a.userOrderStateId!=6)
 	 </if>
 	 <if test="param2==3">
 	 	and a.userOrderStateId = 9 
@@ -533,6 +533,7 @@
 		  <if test="param2==5">
 		  	and a.userOrderStateId=9
 		  </if>
+		  order by a.userorderchosehosptime asc
 	</select>
 	<select id="listOrderToFundInAdmin" parameterType="int" resultType="map">
 		  select  a.userorderid,a.userorderchosehosptime,a.userorderhospconfirmtime,a.userorderleavehosptime,

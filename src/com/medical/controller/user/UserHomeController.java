@@ -1,5 +1,7 @@
 package com.medical.controller.user;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,7 @@ import com.medical.po.DoctorSearch;
 import com.medical.service.iface.CommonService;
 import com.medical.service.iface.user.UserHomeService;
 import com.medical.utils.CheckUtils;
+import com.medical.utils.IpUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -125,7 +128,8 @@ public class UserHomeController {
 	@RequestMapping(value = "/getevaluation", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取医生评价", httpMethod = "POST", notes = "获取医生评价")
 	public String getEvaluation(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
-			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page) throws Exception {
+			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page,
+			HttpServletRequest request) throws Exception {
 		if (docloginid==null) {
 			return DataResult.error("医生登录id为空");
 		}

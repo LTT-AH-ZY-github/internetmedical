@@ -229,7 +229,7 @@ public class UserSickServiceImpl implements UserSickService {
 			return DataResult.error("账号信息不匹配");
 		}
 		int userSickStateId = sick.getUsersickstateid();
-		if (userSickStateId == 1) {
+		if (userSickStateId == 1 || userSickStateId == 4) {
 			String oldpath = usersickCustom.getUsersickpic();
 			/*String savepath = sick.getUsersickpic();
 			if (StringUtils.isBlank(savepath)) {

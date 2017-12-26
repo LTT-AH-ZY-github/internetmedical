@@ -36,11 +36,11 @@ public class PayServiceImpl implements PayService {
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public String updateAlipayRecordToCreat(Integer senderid,String sendername,BigDecimal totalAmount,Integer receiveid,String receivename,Integer orderid,Integer ordertype,Integer type,String outtradeno ) throws Exception{
+	public String updatePayRecordToCreat(Integer senderid,String sendername,BigDecimal totalAmount,Integer receiveid,String receivename,Integer orderid,Integer ordertype,Integer type,String outtradeno,Integer paymodeid) throws Exception{
 		Pay pay = new Pay();
 		pay.setPaycreattime(new Date());
-		// 1为支付宝支付
-		pay.setPaymodeid(1);
+		// 1为支付宝支付2 微信支付
+		pay.setPaymodeid(paymodeid);
 		pay.setPayordertypeid(ordertype);
 		pay.setPaysenderid(senderid);
 		//付款者姓名
@@ -64,14 +64,19 @@ public class PayServiceImpl implements PayService {
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public String updateAlipayRecordToCancle(String out_trade_no,Integer payid,String trade_no,String buyer_logon_id,String seller_email,String info,String payremark) throws Exception{
+	public String updatePayRecordToCancle(String out_trade_no,Integer payid,String trade_no,String buyer_logon_id,
+			String seller_email,String info,String payremark,Integer paymodeid) throws Exception{
 		Pay pay = payMapperCustom.selectByPayTradeNo(out_trade_no);
 		if (pay == null) {
 			return DataResult.error("交易不存在");
 		}
 		Pay payrecord = new Pay();
 		payrecord.setPayid(payid);
-		payrecord.setPayalipaytradeno(trade_no);
+		if (paymodeid==1) {
+			payrecord.setPayalipaytradeno(trade_no);
+		}else {
+			payrecord.setPaywxtradeno(trade_no);
+		}
 		payrecord.setPaysenderaccount(buyer_logon_id);
 		payrecord.setPayreceiveraccount(seller_email);
 	    payrecord.setPayinfo(info);
@@ -89,14 +94,19 @@ public class PayServiceImpl implements PayService {
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public String updateAlipayRecordToFinish(String out_trade_no,Integer payid,String trade_no,String buyer_logon_id,String seller_email,String info,BigDecimal receiptamount,Integer stateid) throws Exception{
+	public String updatePayRecordToFinish(String out_trade_no,Integer payid,String trade_no,String buyer_logon_id,
+			String seller_email,String info,BigDecimal receiptamount,Integer stateid,Integer paymodeid) throws Exception{
 		Pay pay = payMapperCustom.selectByPayTradeNo(out_trade_no);
 		if (pay == null) {
 			return DataResult.error("交易不存在");
 		}
 		Pay payrecord = new Pay();
 		payrecord.setPayid(payid);
-		payrecord.setPayalipaytradeno(trade_no);
+		if (paymodeid==1) {
+			payrecord.setPayalipaytradeno(trade_no);
+		}else {
+			payrecord.setPaywxtradeno(trade_no);
+		}
 		payrecord.setPaysenderaccount(buyer_logon_id);
 		payrecord.setPayreceiveraccount(seller_email);
 	    payrecord.setPayinfo(info);

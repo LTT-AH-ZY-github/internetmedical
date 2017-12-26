@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.service.iface.user.UserOrderService;
+import com.medical.utils.IpUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -168,14 +169,16 @@ public class UserOrderController {
 	@ApiOperation(value = "确认订单", httpMethod = "POST", notes = "确认订单")
 	public String confirmOrder(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
-			@ApiParam(name = "type", value = "支付方式为1时为支付宝支付2为微信支付") @RequestParam Integer type) throws Exception {
+			@ApiParam(name = "type", value = "支付方式为1时为支付宝支付2为微信支付") @RequestParam Integer type,
+			HttpServletRequest request) throws Exception {
 		if (userloginid == null) {
 			return DataResult.error("用户登录id为空");
 		}
 		if (userorderid == null) {
 			return DataResult.error("订单id为空");
 		}
-		return userOrderService.updateOrderStateToConfirm(userloginid, userorderid, type);
+		String ip = IpUtils.getIpAddr(request);
+		return userOrderService.updateOrderStateToConfirm(userloginid, userorderid, type,ip);
 		
 	}
 
@@ -207,7 +210,19 @@ public class UserOrderController {
 			return "false";
 		}
 	}
-
+	@RequestMapping(value = "/paydoctorfinishbywxpay", method=RequestMethod.POST,produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "支付宝支付医生费用回调", httpMethod = "POST", notes = "支付宝支付医生费用回调")
+	public String payDoctorFinishByWXPay(HttpServletRequest request) throws Exception {
+		System.out.println("hhtp" + request);
+		String result = userOrderService.updateOrderStatePayDoctorFinishByWXPay(request);
+		net.sf.json.JSONObject json = net.sf.json.JSONObject.fromObject(result);
+		System.out.println("结果"+json.toString());
+		if ("100".equals(json.get("code").toString())) {
+			return "success";
+		} else {
+			return "false";
+		}
+	}
 	/**
 	 * @Title: payhospital
 	 * @Description: 支付医院押金

@@ -172,10 +172,10 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		if (accountAmount.compareTo(BigDecimal.ZERO) == 0) {
 			return DataResult.error("医生账户余额为零不可提现");
 		}
-		/*boolean tradestate = commonTradeService.queryDoctorFundForUpdate(docloginid);
+		boolean tradestate = commonTradeService.queryDoctorFundForUpdate(docloginid);
 		if (tradestate) {
 			return DataResult.error("退款中,请稍后重试");
-		}*/
+		}
 		String prefix = "df";
 		String out_biz_no = MakeOrderNum.getTradeNo(prefix);
 		String amount = accountAmount+"";
@@ -186,7 +186,7 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		updateFundToDoctorFinish(response,payee_account, docloginid, doctorinfo.getDocid(), doctorinfo.getDocname(), adminloginid, doctorinfo.getDocpursebalance());
 		if (response.isSuccess()) {
 			//解除订单锁定
-			//commonTradeService.queryDoctorFundForFinish(adminloginid);
+			commonTradeService.queryDoctorFundForFinish(adminloginid);
 			return DataResult.success("退款成功");
 		}else {
 			return DataResult.error(response.getSubMsg());
@@ -196,9 +196,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 	
 	@Transactional(rollbackFor = Exception.class)
 	public boolean updateFundToDoctorFinish(AlipayFundTransToaccountTransferResponse response,String payee_account,Integer docloginid,Integer docid,String docname,Integer adminloginid,BigDecimal amount) throws Exception {
-		System.out.println("调用了");
-		payService.updateAlipayRecordToCreat(adminloginid, "管理员", amount, docloginid, 
-				docname, 0, 3, 5, response.getOutBizNo());
+	    payService.updatePayRecordToCreat(adminloginid, "管理员", amount, docloginid, 
+				docname, 0, 3, 5, response.getOutBizNo(),1);
 //		Pay payrecord = new  Pay();
 //		payrecord.setPayalipaytradeno(response.getOrderId());
 //		//3为退款订单
@@ -232,8 +231,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 //			payrecord.setPaystateid(3);
 //			int payResult = payMapperCustom.insertSelectiveReturnId(payrecord);
 			
-			String payresult  = payService.updateAlipayRecordToFinish(response.getOutBizNo(), pay.getPayid(), response.getOrderId(), null, payee_account,
-					response.getParams().toString(), amount, 3);
+			String payresult  = payService.updatePayRecordToFinish(response.getOutBizNo(), pay.getPayid(), response.getOrderId(), 
+					null, payee_account,response.getParams().toString(), amount, 3,1);
 			JSONObject jsonObject = JSONObject.fromObject(payresult);
 			String purseresult  = doctorPurseService.updateBalance(docloginid, 2, amount, "账户余额提现", pay.getPayid());
 			JSONObject purseObject = JSONObject.fromObject(purseresult);
@@ -281,8 +280,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 //			}
 		}else {
 			
-			String payresult  =payService.updateAlipayRecordToCancle(response.getOutBizNo(), pay.getPayid(), response.getOrderId(), null,  payee_account,
-					response.getParams().toString(),response.getSubMsg());
+			String payresult  =payService.updatePayRecordToCancle(response.getOutBizNo(), pay.getPayid(), response.getOrderId(), null, 
+					payee_account,response.getParams().toString(),response.getSubMsg(),1);
 			JSONObject jsonObject = JSONObject.fromObject(payresult);
 			if ("200".equals(jsonObject.get("code"))) {
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -346,8 +345,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 	}
 	@Transactional(rollbackFor = Exception.class)
 	public boolean updateFundToHospitalFinish(AlipayFundTransToaccountTransferResponse response,String payee_account,Integer hosploginid,Integer hospid,String hospname,Integer adminloginid,BigDecimal amount) throws Exception {
-		payService.updateAlipayRecordToCreat(adminloginid, "管理员", amount, hosploginid, 
-				hospname, 0, 3, 5, response.getOutBizNo());
+		payService.updatePayRecordToCreat(adminloginid, "管理员", amount, hosploginid, 
+				hospname, 0, 3, 5, response.getOutBizNo(),1);
 		//		Pay payrecord = new  Pay();
 //		payrecord.setPayalipaytradeno(response.getOrderId());
 //		payrecord.setPaysenderid(hosploginid);
@@ -376,8 +375,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 //			payrecord.setPayendtime(new Date());
 //			payrecord.setPaystateid(3);
 //			int payResult = payMapperCustom.insertSelectiveReturnId(payrecord);
-			String payresult  = payService.updateAlipayRecordToFinish(response.getOutBizNo(), pay.getPayid(), response.getOrderId(), null, payee_account,
-					response.getParams().toString(), amount, 3);
+			String payresult  = payService.updatePayRecordToFinish(response.getOutBizNo(), pay.getPayid(), response.getOrderId(), null, payee_account,
+					response.getParams().toString(), amount, 3,1);
 			JSONObject jsonObject = JSONObject.fromObject(payresult);
 			String purseresult  = hospiatlPurseService.updateBalance(hosploginid, 2, amount, "账户余额提现", pay.getPayid());
 			JSONObject purseObject = JSONObject.fromObject(purseresult);
@@ -425,8 +424,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 //				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 //				return false;
 //			}
-			String payresult  =payService.updateAlipayRecordToCancle(response.getOutBizNo(), pay.getPayid(), response.getOrderId(), null,  payee_account,
-					response.getParams().toString(),response.getSubMsg());
+			String payresult  =payService.updatePayRecordToCancle(response.getOutBizNo(), pay.getPayid(), response.getOrderId(), null,  payee_account,
+					response.getParams().toString(),response.getSubMsg(),1);
 			JSONObject jsonObject = JSONObject.fromObject(payresult);
 			if ("200".equals(jsonObject.get("code"))) {
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -544,8 +543,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 	}
 	@Transactional(rollbackFor = Exception.class)
 	public boolean updateFundToUserFinish(AlipayFundTransToaccountTransferResponse response,String payee_account,Integer adminloginid,Integer usersickid,Integer userorderid,Integer userloginid,Integer userid,String username,String famiyname,Integer hosploginid,Integer hospid,String hospname,BigDecimal amount) throws Exception {
-		payService.updateAlipayRecordToCreat(hosploginid, hospname, amount, userloginid,
-				famiyname, userorderid, 1, 4, response.getOutBizNo());
+		payService.updatePayRecordToCreat(hosploginid, hospname, amount, userloginid,
+				famiyname, userorderid, 1, 4, response.getOutBizNo(),1);
 		//		Pay payrecord = new  Pay();
 //		payrecord.setPayalipaytradeno(response.getOrderId());
 //		payrecord.setPayreceiverid(userloginid);
@@ -569,8 +568,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 			return false;
 		}
 		if (response.isSuccess()) {
-			String payresult  = payService.updateAlipayRecordToFinish(response.getOutBizNo(), pay.getPayid(), response.getOrderId(), null, payee_account,
-					response.getParams().toString(), amount, 3);
+			String payresult  = payService.updatePayRecordToFinish(response.getOutBizNo(), pay.getPayid(), response.getOrderId(), null, payee_account,
+					response.getParams().toString(), amount, 3,1);
 			JSONObject jsonObject = JSONObject.fromObject(payresult);
 			String purseresult  = hospiatlPurseService.updateBalance(hosploginid, 2, amount, famiyname+"病人退款", pay.getPayid());
 			JSONObject purseObject = JSONObject.fromObject(purseresult);
@@ -631,8 +630,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 				return false;
 			}
 		}else {
-			String payresult  =payService.updateAlipayRecordToCancle(response.getOutBizNo(), pay.getPayid(), response.getOrderId(), null,  payee_account,
-					response.getParams().toString(),response.getSubMsg());
+			String payresult  =payService.updatePayRecordToCancle(response.getOutBizNo(), pay.getPayid(), response.getOrderId(), null,  payee_account,
+					response.getParams().toString(),response.getSubMsg(),1);
 			JSONObject jsonObject = JSONObject.fromObject(payresult);
 			if ("200".equals(jsonObject.get("code"))) {
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

@@ -373,8 +373,8 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		String result = GetSign.webGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
 		String hospname = hospinfoMapperCustom.selectByHospLoginId(hosploginid).getHospname();
 		//支付记录
-		String payresult  = payService.updateAlipayRecordToCreat(hosploginid, hospname, hosporder.getOrdertotaldoctorprice(), hosporder.getDoctorid(), doctorinfo.getDocname(), 
-				hosporderid, 2, 3, outTradeNo);
+		String payresult  = payService.updatePayRecordToCreat(hosploginid, hospname, hosporder.getOrdertotaldoctorprice(), hosporder.getDoctorid(), doctorinfo.getDocname(), 
+				hosporderid, 2, 3, outTradeNo,1);
 		JSONObject jsonObject = JSONObject.fromObject(payresult);
 		if ("100".equals(jsonObject.get("code").toString())) {
 			return DataResult.success("获取成功", result); 
@@ -409,7 +409,8 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		// 交易支付成功
 		if ("TRADE_CLOSED".equals(params.get("trade_status"))) {
 			
-			String payresult  = payService.updateAlipayRecordToCancle(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id, seller_email, params.toString(),"交易失败");
+			String payresult  = payService.updatePayRecordToCancle(out_trade_no, pay.getPayid(), trade_no, 
+					buyer_logon_id, seller_email, params.toString(),"交易失败",1);
 			JSONObject jsonObject = JSONObject.fromObject(payresult);
 			if ("100".equals(jsonObject.get("code"))) {
 				return DataResult.success("支付结束"); 
@@ -438,8 +439,8 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		}
 
 		// 更新交易记录
-		String payresult  = payService.updateAlipayRecordToFinish(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id,
-				seller_email,  params.toString(), new BigDecimal(amount), stateid);
+		String payresult  = payService.updatePayRecordToFinish(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id,
+				seller_email,  params.toString(), new BigDecimal(amount), stateid,1);
         // 会诊订单
 		Hosporder HosporderRecord = new Hosporder();
 		HosporderRecord.setHosporderid(hosporder.getHosporderid());

@@ -2,6 +2,8 @@ package com.medical.service.iface.user;
 
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.medical.po.Userorder;
 
 
@@ -47,8 +49,9 @@ public interface UserOrderService {
 	/**
 	 * 确认订单
 	 * @param type 
+	 * @param ip 
 	 * */
-	String updateOrderStateToConfirm(Integer userloginid, Integer userorderid, Integer type) throws Exception;
+	String updateOrderStateToConfirm(Integer userloginid, Integer userorderid, Integer type, String ip) throws Exception;
 	/**
 	 * 支付医生费用
 	 * */
@@ -89,6 +92,29 @@ public interface UserOrderService {
 	 * @throws Exception 
 	 */
 	String updateOrderStatePayHospital(Integer userloginid, Integer userorderid, Integer type) throws Exception;
+
+	
+
+	/**
+	 * @Title: updateOrderStatePayDoctorByWXPay
+	 * @Description: TODO
+	 * @param userorder
+	 * @param ip
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String updateOrderStatePayDoctorByWXPay(Userorder userorder, String ip) throws Exception;
+
+	/**
+	 * @Title: updateOrderStatePayDoctorFinishByWXPay
+	 * @Description: TODO
+	 * @param requestParams
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String updateOrderStatePayDoctorFinishByWXPay(HttpServletRequest request) throws Exception;
 	
 	
 	

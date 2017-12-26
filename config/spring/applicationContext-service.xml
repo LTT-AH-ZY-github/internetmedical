@@ -17,6 +17,7 @@
     <bean id="deleteFileService" class="com.medical.service.impl.DeleteFileServiceImpl"/>
     <bean id="payService" class="com.medical.service.impl.PayServiceImpl"/>
     <bean id="recommendDoctorService" class="com.medical.service.impl.RecommendDoctorServiceImpl"/>
+     <bean id="goodsTradeService" class="com.medical.service.impl.GoodsTradeServiceImpl"/>
     <!--用户接口  -->
     <bean id="userAccountService" class="com.medical.service.impl.user.UserAccountServiceImpl"/>
     <bean id="userInfoService" class="com.medical.service.impl.user.UserInfoServiceImpl"/>
