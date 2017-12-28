@@ -3,12 +3,9 @@ package com.medical.service.impl.hospital;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.medical.mapper.AccounttypeMapper;
-import com.medical.mapper.AdminexamineMapper;
 import com.medical.mapper.AdminexamineMapperCustom;
 import com.medical.mapper.HospinfoMapper;
 import com.medical.mapper.HospinfoMapperCustom;
@@ -17,8 +14,6 @@ import com.medical.po.Accounttype;
 import com.medical.po.Adminexamine;
 import com.medical.po.Hospinfo;
 import com.medical.po.Hosplogininfo;
-import com.medical.po.Hosporder;
-import com.medical.service.iface.CommonService;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.hospital.HospitalInfoService;
 import com.medical.utils.PictureTool;
@@ -35,8 +30,6 @@ public class HospitalInfoServiceImpl implements HospitalInfoService {
 	private HospinfoMapperCustom hospinfoMapperCustom;
 	@Autowired
 	private AccounttypeMapper accounttypeMapper;
-	@Autowired
-	private CommonService commonService;
 	@Autowired 
 	private SenderNotificationService senderNotificationService;
 	@Autowired 

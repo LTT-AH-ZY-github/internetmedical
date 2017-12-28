@@ -4,10 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,23 +14,14 @@ import com.github.pagehelper.PageInfo;
 import com.medical.mapper.DoctoraddressMapper;
 import com.medical.mapper.DoctorcalendarMapperCustom;
 import com.medical.mapper.DoctorcommentMapper;
-import com.medical.mapper.DoctorinfoMapper;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
-import com.medical.mapper.DoctorpurseMapper;
-import com.medical.mapper.DoctorpurseMapperCustom;
 import com.medical.mapper.FamilyinfoMapper;
-import com.medical.mapper.HospinfoMapper;
 import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.HospitalcommentMapper;
-import com.medical.mapper.HosppurseMapper;
-import com.medical.mapper.HosppurseMapperCustom;
 import com.medical.mapper.HosptitaldepositMapper;
-import com.medical.mapper.PayMapper;
 import com.medical.mapper.PayMapperCustom;
 import com.medical.mapper.PreorderMapperCustom;
-import com.medical.mapper.UserinfoMapper;
-import com.medical.mapper.UserinfoMapperCustom;
 import com.medical.mapper.UserlogininfoMapper;
 import com.medical.mapper.UserorderMapper;
 import com.medical.mapper.UserorderMapperCustom;
@@ -44,10 +32,8 @@ import com.medical.po.Doctorcalendar;
 import com.medical.po.Doctorcomment;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
-import com.medical.po.Doctorpurse;
 import com.medical.po.Hospinfo;
 import com.medical.po.Hospitalcomment;
-import com.medical.po.Hosppurse;
 import com.medical.po.Hosptitaldeposit;
 import com.medical.po.Pay;
 import com.medical.po.Preorder;
@@ -55,7 +41,6 @@ import com.medical.po.Userlogininfo;
 import com.medical.po.Userorder;
 import com.medical.po.Usersick;
 import com.medical.po.custom.CalendarParmas;
-import com.medical.service.iface.CommonService;
 import com.medical.service.iface.CommonTradeService;
 import com.medical.service.iface.PayService;
 import com.medical.service.iface.SenderNotificationService;
@@ -70,9 +55,6 @@ import com.pay.alipay.GetSign;
 import com.pay.alipay.MakeOrderNum;
 import com.pay.wxpay.ConfigUtil;
 import com.pay.wxpay.MyWXPay;
-import com.pay.wxpay.WXPayExample;
-import com.wordnik.swagger.annotations.Authorization;
-
 import net.sf.json.JSONObject;
 
 /**
@@ -99,35 +81,15 @@ public class UserOrderServiceImpl implements UserOrderService {
 	@Autowired
 	private HospitalcommentMapper hospitalcommentMapper;
 	@Autowired
-	private CommonService commonService;
-	@Autowired
-	private PayMapper payMapper;
-	@Autowired
 	private PayMapperCustom payMapperCustom;
-	@Autowired
-	private DoctorpurseMapper doctorpurseMapper;
-	@Autowired
-	private DoctorpurseMapperCustom doctorpurseMapperCustom;
 	@Autowired
 	private DoctorinfoMapperCustom doctorinfoMapperCustom;
 	@Autowired
-	private DoctorinfoMapper doctorinfoMapper;
-	@Autowired
 	private HospinfoMapperCustom hospinfoMapperCustom;
-	@Autowired
-	private HospinfoMapper hospinfoMapper;
-	@Autowired
-	private HosppurseMapperCustom hosppurseMapperCustom;
-	@Autowired
-	private HosppurseMapper hosppurseMapper;
-	@Autowired
-	private UserinfoMapper userinfoMapper;
 	@Autowired
 	private UserlogininfoMapper userloginiinfoMapper;
 	@Autowired
 	private DoctorlogininfoMapper doctorloginiinfoMapper;
-	@Autowired
-	private UserinfoMapperCustom userinfoMapperCustom;
 	@Autowired
 	private DoctorcalendarMapperCustom doctorcalendarMapperCustom;
 	@Autowired
@@ -462,7 +424,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 		if ("100".equals(jsonObject.get("code").toString())) {
 			String result= MyWXPay.wxPrePay(boby, subject, totalAmount, notifyUrl, outTradeNo, ip,"APP");
 			JSONObject jsonObject2 = JSONObject.fromObject(result);
-			if ("200".equals(jsonObject2.get("code"))) {
+			if ("200".equals(jsonObject2.get("code").toString())) {
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			}
 			return result;
@@ -497,7 +459,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 			String payresult = payService.updatePayRecordToCancle(out_trade_no, pay.getPayid(), trade_no,
 					buyer_logon_id, seller_email, params.toString(), err_code_des, 2);
 			JSONObject jsonObject = JSONObject.fromObject(payresult);
-			if ("100".equals(jsonObject.get("code"))) {
+			if ("100".equals(jsonObject.get("code").toString())) {
 				return DataResult.success("支付结束");
 			} else {
 				return payresult;
@@ -562,7 +524,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 		String notifyUrl = AlipayConfig.DOCTOR_NOTIFY_URL;
 		String payresult  = payService.updatePayRecordToCreat(userorder.getUserloginid(), userorder.getFamilyname(), userorder.getUserorderprice(), userorder.getUserorderdocloginid(), doctorinfo.getDocname(), userorder.getUserorderid(), 1, 1, outTradeNo,1);
 		JSONObject jsonObject = JSONObject.fromObject(payresult);
-		if ("100".equals(jsonObject.get("code"))) {
+		if ("100".equals(jsonObject.get("code").toString())) {
 			String result = GetSign.appGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
 			return DataResult.success("获取成功", result); 
 		}else {
@@ -593,7 +555,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 				String payresult  = payService.updatePayRecordToCancle(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id,
 						seller_email, params.toString(),"交易失败",1);
 				JSONObject jsonObject = JSONObject.fromObject(payresult);
-				if ("100".equals(jsonObject.get("code"))) {
+				if ("100".equals(jsonObject.get("code").toString())) {
 					return DataResult.success("支付结束"); 
 				}else {
 					return payresult;
@@ -727,7 +689,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 		if ("100".equals(jsonObject.get("code").toString())) {
 			String result= MyWXPay.wxPrePay(boby, subject, totalAmount, notifyUrl, outTradeNo, ip,"APP");
 			JSONObject jsonObject2 = JSONObject.fromObject(result);
-			if ("200".equals(jsonObject2.get("code"))) {
+			if ("200".equals(jsonObject2.get("code").toString())) {
 				//出错回滚
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			}
@@ -767,7 +729,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 			String payresult = payService.updatePayRecordToCancle(out_trade_no, pay.getPayid(), trade_no,
 					buyer_logon_id, seller_email, params.toString(), err_code_des, 2);
 			JSONObject jsonObject = JSONObject.fromObject(payresult);
-			if ("100".equals(jsonObject.get("code"))) {
+			if ("100".equals(jsonObject.get("code").toString())) {
 				return DataResult.success("支付结束");
 			} else {
 				return payresult;
@@ -836,7 +798,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 	public String updateOrderStatePayHospitalByAlipay(Userorder userorder) throws Exception {
 		Integer hosploginid = userorder.getUserorderhospid();
 		Integer userorderid = userorder.getUserorderid();
-		Integer userloginid = userorder.getUserloginid();
+		userorder.getUserloginid();
 		Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(hosploginid);
 		String boby = "速递医运病人费用缴纳";
 		String subject = "缴纳" + hospinfo.getHospname() + "押金";
@@ -885,7 +847,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 			String payresult  = payService.updatePayRecordToCancle(out_trade_no, pay.getPayid(), trade_no, buyer_logon_id,
 					seller_email, params.toString(),"交易失败",1);
 			JSONObject jsonObject = JSONObject.fromObject(payresult);
-			if ("100".equals(jsonObject.get("code"))) {
+			if ("100".equals(jsonObject.get("code").toString())) {
 				return DataResult.success("支付结束"); 
 			}else {
 				return payresult;

@@ -1,50 +1,34 @@
 package com.medical.service.impl.admin;
 
 import java.math.BigDecimal;
-import java.net.SocketTimeoutException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.response.AlipayFundTransToaccountTransferResponse;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.mapper.AdminlogininfoMapper;
-import com.medical.mapper.DoctorinfoMapper;
 import com.medical.mapper.DoctorinfoMapperCustom;
-import com.medical.mapper.DoctorpurseMapper;
-import com.medical.mapper.DoctorpurseMapperCustom;
-import com.medical.mapper.HospinfoMapper;
 import com.medical.mapper.HospinfoMapperCustom;
-import com.medical.mapper.HosplogininfoMapperCustom;
-import com.medical.mapper.HosppurseMapper;
-import com.medical.mapper.HosppurseMapperCustom;
-import com.medical.mapper.PayMapper;
 import com.medical.mapper.PayMapperCustom;
-import com.medical.mapper.UserinfoMapper;
 import com.medical.mapper.UserinfoMapperCustom;
 import com.medical.mapper.UserorderMapper;
 import com.medical.mapper.UserorderMapperCustom;
 import com.medical.mapper.UsersickMapper;
 import com.medical.po.Adminlogininfo;
 import com.medical.po.Doctorinfo;
-import com.medical.po.Doctorpurse;
 import com.medical.po.Hospinfo;
-import com.medical.po.Hosppurse;
 import com.medical.po.Pay;
 import com.medical.po.Userinfo;
 import com.medical.po.Userorder;
 import com.medical.po.Usersick;
-
-import com.medical.service.iface.CommonService;
 import com.medical.service.iface.CommonTradeService;
 import com.medical.service.iface.PayService;
 import com.medical.service.iface.SenderNotificationService;
@@ -54,9 +38,6 @@ import com.medical.service.iface.hospital.HospitalPurseService;
 import com.medical.utils.result.DataResult;
 import com.pay.alipay.AlipayFund;
 import com.pay.alipay.MakeOrderNum;
-import com.sun.jndi.url.corbaname.corbanameURLContextFactory;
-
-import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 
 /**
@@ -68,27 +49,14 @@ import net.sf.json.JSONObject;
  */
 @Service
 public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
-	
-	@Autowired
-	private DoctorinfoMapper doctorinfoMapper;
 	@Autowired
 	private DoctorinfoMapperCustom doctorinfoMapperCustom;
 	@Autowired
 	private HospinfoMapperCustom hospinfoMapperCustom;
 	@Autowired
-	private HospinfoMapper hospinfoMapper;
-	@Autowired
 	private AdminlogininfoMapper adminlogininfoMapper;
-	@Autowired 
-	private DoctorpurseMapperCustom doctorpurseMapperCustom;
-	@Autowired 
-	private DoctorpurseMapper doctorpurseMapper;
 	@Autowired
 	private PayMapperCustom payMapperCustom;
-	@Autowired
-	private HosppurseMapper hosppurseMapper;
-	@Autowired
-	private HosppurseMapperCustom hosppurseMapperCustom;
 	@Autowired
 	private UserorderMapper userorderMapper;
 	@Autowired
@@ -200,9 +168,9 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		}
 		
 		updateFundToDoctorFinish(response,out_biz_no,payee_account, docloginid, doctorinfo.getDocid(), doctorinfo.getDocname(), adminloginid, doctorinfo.getDocpursebalance());
+		//解除订单锁定
+		commonTradeService.queryDoctorFundForFinish(adminloginid);
 		if (response.isSuccess()) {
-			//解除订单锁定
-			commonTradeService.queryDoctorFundForFinish(adminloginid);
 			return DataResult.success("退款成功");
 		}else {
 			return DataResult.error(response.getSubMsg());
@@ -292,8 +260,9 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 			return DataResult.success("异常错误");
 		}
 		updateFundToHospitalFinish(response, out_biz_no,payee_account,hosploginid, hospinfo.getHospid(), hospinfo.getHospname(), adminloginid, hospinfo.getHosppursebalance());
+		commonTradeService.queryHospitalFundForFinish(hosploginid);
 		if (response.isSuccess()) {
-			commonTradeService.queryHospitalFundForFinish(hosploginid);
+			
 			return DataResult.success("退款成功");
 		}else {
 			return DataResult.error(response.getSubMsg());
@@ -452,10 +421,6 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		if (hospinfo==null) {
 			return DataResult.error("医院不存在");
 		}
-		boolean tradestate = commonTradeService.queryUserFundForUpdate(userorderid);
-		if (tradestate) {
-			return DataResult.error("退款中,请稍后重试");
-		}
 		BigDecimal totaldeposit = userorder.getUserordertotaldeposit();
 		BigDecimal actualprice = userorder.getUserorderhprice();
 		if (totaldeposit.compareTo(actualprice)<=0) {
@@ -470,6 +435,10 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userorder.getUserloginid());
 		if (userinfo==null) {
 			return DataResult.error("病人不存在");
+		}
+		boolean tradestate = commonTradeService.queryUserFundForUpdate(userorderid);
+		if (tradestate) {
+			return DataResult.error("退款中,请稍后重试");
 		}
 		String prefix = "uf";
 		String out_biz_no = MakeOrderNum.getTradeNo(prefix);
@@ -501,8 +470,9 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 			return DataResult.success("异常错误");
 		}
 		boolean result = updateFundToUserFinish(response,out_biz_no,payee_account, adminloginid, userorder.getUsersickid(),userorderid, userorder.getUserloginid(), userinfo.getUserid(), userinfo.getUsername(), userorder.getFamilyname(), userorder.getUserorderhospid(), hospinfo.getHospid(),hospinfo.getHospname(), surplus);
+		commonTradeService.queryUserFundForFinish(userorderid);
 		if (response.isSuccess()) {
-			commonTradeService.queryUserFundForFinish(userorderid);
+			
 			return DataResult.success("退款成功");
 		}else {
 			return DataResult.error(response.getSubMsg());

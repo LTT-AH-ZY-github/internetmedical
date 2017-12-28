@@ -10,15 +10,13 @@ package com.medical.service.impl;
 
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.HospitaldeptMapper;
 import com.medical.mapper.PreorderMapper;
@@ -37,6 +35,7 @@ import com.medical.utils.KeyWords;
  * @version         V1.0  
  * @Date           2017年12月21日 下午6:33:46 
  */
+@Service
 public class RecommendDoctorServiceImpl implements RecommendDoctorService {
 	@Autowired
 	private DoctorinfoMapperCustom doctorinfoMapperCustom;

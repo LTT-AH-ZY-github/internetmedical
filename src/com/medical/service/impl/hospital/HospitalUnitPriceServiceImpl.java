@@ -12,9 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.mapper.HospitalunitpriceMapper;
@@ -24,7 +22,6 @@ import com.medical.po.Hospitalunitprice;
 import com.medical.po.Hosplogininfo;
 import com.medical.service.iface.hospital.HospitalUnitPriceService;
 import com.medical.utils.result.DataResult;
-import com.medical.utils.result.DataResult2;
 
 /**
  * @ClassName:     HospitalUnitPriceServiceImpl.java

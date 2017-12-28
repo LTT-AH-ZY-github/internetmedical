@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.medical.service.impl.hospital;
 
 import java.math.BigDecimal;
@@ -8,11 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.mapper.HospinfoMapper;
@@ -20,8 +15,6 @@ import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.HosppurseMapper;
 import com.medical.mapper.HosppurseMapperCustom;
 import com.medical.mapper.PayMapperCustom;
-import com.medical.po.Doctorinfo;
-import com.medical.po.Doctorpurse;
 import com.medical.po.Hospinfo;
 import com.medical.po.Hosppurse;
 import com.medical.service.iface.hospital.HospitalPurseService;

@@ -70,10 +70,6 @@ public class DoctorInfoServiceImpl implements DoctorInfoService {
 	private DoctorcalendarMapper doctorcalendarMapper;
 	@Autowired
 	private DoctorcalendarMapperCustom doctorcalendarMapperCustom;
-	@Autowired
-	private HospitaldeptMapperCustom hospitaldeptMapperCustom;
-	@Autowired
-	private CommonService commonService;
 	@Autowired 
 	private SenderNotificationService senderNotificationService;
 	@Autowired 

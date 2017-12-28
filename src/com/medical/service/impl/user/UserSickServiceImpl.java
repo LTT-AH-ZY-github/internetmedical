@@ -2,10 +2,8 @@ package com.medical.service.impl.user;
 
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +16,6 @@ import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.FamilyinfoMapper;
 import com.medical.mapper.PreorderMapper;
 import com.medical.mapper.PreorderMapperCustom;
-import com.medical.mapper.UserinfoMapper;
 import com.medical.mapper.UserinfoMapperCustom;
 import com.medical.mapper.UserlogininfoMapper;
 import com.medical.mapper.UsersickMapper;
@@ -31,12 +28,10 @@ import com.medical.po.Userinfo;
 import com.medical.po.Userlogininfo;
 import com.medical.po.Usersick;
 import com.medical.po.UsersickCustom;
-import com.medical.service.iface.CommonService;
 import com.medical.service.iface.DeleteFileService;
 import com.medical.service.iface.RecommendDoctorService;
 import com.medical.service.iface.user.UserSickService;
 import com.medical.utils.PictureTool;
-import com.medical.utils.StringTools;
 import com.medical.utils.result.DataResult;
 
 

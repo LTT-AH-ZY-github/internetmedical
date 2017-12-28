@@ -9,49 +9,29 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.socket.TextMessage;
-import com.alibaba.druid.VERSION;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.mapper.AppversionMapper;
 import com.medical.mapper.AppversionMapperCustom;
-import com.medical.mapper.DoctorinfoMapperCustom;
-import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.DoctorlogininfoMapperCustom;
 import com.medical.mapper.FeedbackMapper;
-import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.HospitaldeptMapper;
 import com.medical.mapper.HospitaldeptMapperCustom;
 import com.medical.mapper.NotificationMapper;
 import com.medical.mapper.NotificationMapperCustom;
 
-import com.medical.mapper.UserinfoMapperCustom;
-import com.medical.mapper.UserlogininfoMapper;
 import com.medical.mapper.UserlogininfoMapperCustom;
 import com.medical.po.Appversion;
-import com.medical.po.Doctorinfo;
-import com.medical.po.Doctorlogininfo;
 import com.medical.po.Feedback;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Notification;
-import com.medical.po.Userlogininfo;
 import com.medical.service.iface.CommonService;
-import com.medical.utils.Global;
 import com.medical.utils.result.DataResult;
 import com.netease.utils.MsgCode;
-import com.push.baidu.PushToDoctor;
-import com.push.baidu.PushToUser;
-import com.push.websocket.WebSocketHandler;
-
-import net.sf.json.JSONObject;
-import sun.net.www.content.text.plain;
 
 public class CommonServiceImpl implements CommonService {
-	@Autowired
-	private DoctorinfoMapperCustom doctorinfoMapperCustom;
 	@Autowired
 	private UserlogininfoMapperCustom userlogininfoMapperCustom;
 	@Autowired
@@ -60,14 +40,6 @@ public class CommonServiceImpl implements CommonService {
 	private NotificationMapper notificationMapper;
 	@Autowired
 	private NotificationMapperCustom notificationMapperCustom;
-	@Autowired
-	private UserinfoMapperCustom userinfoMapperCustom;
-	@Autowired
-	private DoctorlogininfoMapper doctorlogininfoMapper;
-	@Autowired
-	private UserlogininfoMapper userlogininfoMapper;
-	@Autowired
-	private HospinfoMapperCustom hospinfoMapperCustom;
 	@Autowired
 	private HospitaldeptMapperCustom hospitaldeptMapperCustom;
 	@Autowired

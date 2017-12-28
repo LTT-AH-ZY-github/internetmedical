@@ -32,7 +32,6 @@ import com.medical.po.Hospitaldept;
 import com.medical.po.Hosplogininfo;
 import com.medical.po.Userinfo;
 import com.medical.po.Userlogininfo;
-import com.medical.service.iface.CommonTradeService;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.admin.AdminFunctionService;
 import com.medical.utils.result.DataResult;

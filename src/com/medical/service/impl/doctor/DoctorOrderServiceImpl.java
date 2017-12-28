@@ -2,63 +2,31 @@ package com.medical.service.impl.doctor;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.validation.constraints.Null;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-
-import com.baidu.yun.push.exception.PushClientException;
-import com.baidu.yun.push.exception.PushServerException;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.medical.mapper.DoctoraddressMapper;
-import com.medical.mapper.DoctoraddressMapperCustom;
-import com.medical.mapper.DoctorcalendarMapper;
-import com.medical.mapper.DoctorcalendarMapperCustom;
-import com.medical.mapper.DoctorinfoMapper;
 import com.medical.mapper.DoctorinfoMapperCustom;
-import com.medical.mapper.DoctorlogMapper;
 import com.medical.mapper.DoctorlogininfoMapper;
-import com.medical.mapper.DoctorlogininfoMapperCustom;
-import com.medical.mapper.DoctorskdMapper;
-import com.medical.mapper.DoctorskdMapperCustom;
 import com.medical.mapper.HospinfoMapperCustom;
-import com.medical.mapper.HospitaldeptMapperCustom;
-import com.medical.mapper.HosporderMapper;
-import com.medical.mapper.HosporderMapperCustom;
 import com.medical.mapper.PreorderMapper;
 import com.medical.mapper.PreorderMapperCustom;
-import com.medical.mapper.UserlogininfoMapper;
-import com.medical.mapper.UserlogininfoMapperCustom;
 import com.medical.mapper.UserorderMapper;
 import com.medical.mapper.UserorderMapperCustom;
 import com.medical.mapper.UsersickMapper;
-import com.medical.mapper.UsersickMapperCustom;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
 import com.medical.po.Hospinfo;
-import com.medical.po.Hosporder;
 import com.medical.po.Preorder;
-import com.medical.po.Userlogininfo;
 import com.medical.po.Userorder;
 import com.medical.po.Usersick;
-import com.medical.service.iface.CommonService;
 import com.medical.service.iface.CommonTradeService;
 import com.medical.service.iface.SenderNotificationService;
-import com.medical.service.iface.doctor.DoctorAccountService;
 import com.medical.service.iface.doctor.DoctorOrderService;
-import com.medical.service.iface.hospital.HospitalOrderService;
 import com.medical.utils.result.DataResult;
-import com.medical.utils.result.DataResult2;
-import com.sun.org.apache.regexp.internal.recompile;
-
 import net.sf.json.JSONObject;
 
 /**
@@ -74,54 +42,17 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 	@Autowired
 	private DoctorlogininfoMapper doctorlogininfoMapper;
 	@Autowired
-	private DoctorlogininfoMapperCustom doctorlogininfoMapperCustom;
-	@Autowired
-	private DoctorinfoMapper doctorinfoMapper;
-	@Autowired
-	private DoctorlogMapper doctorlogMapper;
-	@Autowired
-	private DoctorskdMapper doctorskdMapper;
-	@Autowired
-	private DoctorskdMapperCustom doctorskdMapperCustom;
-	@Autowired
 	private PreorderMapper preorderMapper;
 	@Autowired
 	private UserorderMapper userorderMapper;
 	@Autowired
-	private UserlogininfoMapper userlogininfoMapper;
-
-	@Autowired
-	private UserlogininfoMapperCustom userlogininfoMapperCustom;
-
-	@Autowired
 	private UsersickMapper usersickMapper;
-	@Autowired
-	private UsersickMapperCustom usersickMapperCustom;
 	@Autowired
 	private PreorderMapperCustom preorderMapperCustom;
 	@Autowired
 	private UserorderMapperCustom userorderMapperCustom;
-
-	@Autowired
-	private HospitaldeptMapperCustom hospitaldeptMapperCustom;
 	@Autowired
 	private HospinfoMapperCustom hospinfoMapperCustom;
-	@Autowired
-	private CommonService commonService;
-	@Autowired
-	private DoctoraddressMapper doctoraddressMapper;
-	@Autowired
-	private DoctoraddressMapperCustom doctoraddressMapperCustom;
-	@Autowired
-	private DoctorcalendarMapper doctorcalendarMapper;
-	@Autowired
-	private DoctorcalendarMapperCustom doctorcalendarMapperCustom;
-	@Autowired
-	private DoctorAccountService doctorAccountService;
-	@Autowired
-	private HosporderMapper hosporderMapper;
-	@Autowired
-	private HosporderMapperCustom hosporderMapperCustom;
 	@Autowired 
 	private SenderNotificationService senderNotificationService;
 	@Autowired
@@ -186,13 +117,9 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			jsonCustormCont.put("doc_id", docloginid);
 			jsonCustormCont.put("sick_id", usersickid);
 			jsonCustormCont.put("type", "1");
-			boolean push = senderNotificationService.createMsgDoctorToUser(docloginid, usersick.getUserloginid(), "等待确认", "申请了您的病情",
+			senderNotificationService.createMsgDoctorToUser(docloginid, usersick.getUserloginid(), "等待确认", "申请了您的病情",
 					jsonCustormCont);
-			if (push) {
-				return DataResult.success("申请成功，且消息发送成功");
-			} else {
-				return DataResult.success("申请成功，但消息发送失败");
-			}
+			return DataResult.success("申请成功");
 		} else {
 			return DataResult.error("申请失败");
 		}
@@ -241,7 +168,6 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		}
 		Integer docLoginId = preorder.getPreorderdocloginid();
 		Integer userloginid = preorder.getPreorderuserloginid();
-		Integer userSickId = preorder.getUsersickid();
 		if (docloginid != docLoginId) {
 			return DataResult.error("账号信息不匹配");
 		}
@@ -422,7 +348,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			jsonCustormCont.put("sick_id", usersickid);
 			jsonCustormCont.put("order_id", userorderid);
 			jsonCustormCont.put("type", "3");
-			boolean push = senderNotificationService.createMsgDoctorToUser(docloginid, userorder.getUserloginid(), "通知消息", msg,
+			senderNotificationService.createMsgDoctorToUser(docloginid, userorder.getUserloginid(), "通知消息", msg,
 					jsonCustormCont);
 
 			return DataResult.success("取消成功");
@@ -527,13 +453,9 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			jsonCustormCont.put("order_id", userorderid);
 			jsonCustormCont.put("type", "3");
 			jsonCustormCont.put("redoc_id", 0);
-			boolean push = senderNotificationService.createMsgDoctorToUser(order.getUserorderdocloginid(), order.getUserloginid(),
+			senderNotificationService.createMsgDoctorToUser(order.getUserorderdocloginid(), order.getUserloginid(),
 					"等待确认", "接受了您的订单", jsonCustormCont);
-			if (push) {
-				return DataResult.success("确认成功,且消息发送成功");
-			} else {
-				return DataResult.success("确认成功,但消息发送失败");
-			}
+			return DataResult.success("确认成功");
 		} else {
 			return DataResult.error("确认失败");
 		}

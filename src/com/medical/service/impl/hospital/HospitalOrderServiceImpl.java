@@ -8,67 +8,36 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import com.alipay.api.domain.Data;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.medical.mapper.DoctorinfoMapperCustom;
-import com.medical.mapper.DoctorlogininfoMapper;
-import com.medical.mapper.DoctortitleMapper;
-import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.HospitalberthMapper;
 import com.medical.mapper.HospitalberthMapperCustom;
-import com.medical.mapper.HospitaldeptMapper;
 import com.medical.mapper.HospitaldeptMapperCustom;
 import com.medical.mapper.HosplogininfoMapper;
-import com.medical.mapper.HosporderMapper;
-import com.medical.mapper.PayMapperCustom;
 import com.medical.mapper.UserorderMapper;
 import com.medical.mapper.UserorderMapperCustom;
 import com.medical.mapper.UsersickMapper;
-import com.medical.po.Doctorlogininfo;
-import com.medical.po.HospSearchDocTerm;
-import com.medical.po.Hospinfo;
 import com.medical.po.Hospitalberth;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Hosplogininfo;
-import com.medical.po.Hosporder;
-import com.medical.po.Pay;
 import com.medical.po.Userorder;
 import com.medical.po.Usersick;
-import com.medical.service.iface.CommonService;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.hospital.HospitalOrderService;
 import com.medical.utils.result.DataResult;
-import com.pay.alipay.AliPayNotify;
-import com.push.baidu.PushToUser;
-
 import net.sf.json.JSONObject;
 
 public class HospitalOrderServiceImpl implements HospitalOrderService {
 	@Autowired
 	private HospitaldeptMapperCustom hospitaldeptMapperCustom;
 	@Autowired
-	private DoctortitleMapper doctortitleMapper;
-	@Autowired
-	private DoctorinfoMapperCustom doctorinfoMapperCustom;
-	@Autowired
-	private HosporderMapper hosporderMapper;
-	@Autowired
 	private HosplogininfoMapper hosplogininfoMapper;
-	@Autowired
-	private DoctorlogininfoMapper doctorlogininfoMapper;
-	@Autowired
-	private HospinfoMapperCustom hospinfoMapperCustom;
 	@Autowired
 	private UserorderMapperCustom userorderMapperCustom;
 	@Autowired
 	private UserorderMapper userorderMapper;
 	@Autowired
-	private CommonService commonService;
-	@Autowired
 	private UsersickMapper usersickMapper;
-	@Autowired
-	private PayMapperCustom payMapperCustom;
 	@Autowired
 	private HospitalberthMapperCustom hospitalberthMapperCustom;
 	@Autowired
@@ -180,7 +149,7 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 		if (list==null || list.size()==0) {
 			return DataResult.error("床位为空");
 		}
-		Map<String, Object> map = new HashMap<>();
+		new HashMap<>();
 		boolean result = hospitalberthMapper.deleteByPrimaryKey(list.get(0).getHospberthid())>0;
 		if (result) {
 			return DataResult.success("删除成功");
@@ -218,13 +187,9 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 			JSONObject jsonCustormCont = new JSONObject();
 			jsonCustormCont.put("order_id", userorderid);
 			jsonCustormCont.put("type", "5");
-			boolean push = senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知",
+			senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知",
 				"确认了您的订单", jsonCustormCont);
-			if (push) {
-					return DataResult.success("确认成功,且消息发送成功");
-			} else {
-					return DataResult.success("确认成功,但消息发送失败");
-			}
+			return DataResult.success("确认成功");
          } else {
 		      return DataResult.error("确认失败");
 		}
@@ -300,13 +265,9 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 			JSONObject jsonCustormCont = new JSONObject();
 			jsonCustormCont.put("order_id", userorderid);
 			jsonCustormCont.put("type", "5");
-			boolean push = senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知", "要求增加押金",
+			senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(), "消息通知", "要求增加押金",
 					jsonCustormCont);
-			if (push) {
-				return DataResult.success("操作成功,且消息发送成功");
-			} else {
-				return DataResult.success("操作成功,但消息发送失败");
-			}
+			return DataResult.success("操作成功");
 		} else {
 			return DataResult.success("操作失败");
 		}
@@ -361,12 +322,8 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 				JSONObject jsonCustormCont = new JSONObject();
 				jsonCustormCont.put("order_id", userorderid);
 				jsonCustormCont.put("type", "5");
-				boolean push = senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(),"消息通知", msg, jsonCustormCont);
-				if (push) {
-					return DataResult.success("操作成功,且消息发送成功");
-				} else {
-					return DataResult.success("操作成功,但消息发送失败");
-				}
+				senderNotificationService.createMsgHospitalToUser(hosploginid, order.getUserloginid(),"消息通知", msg, jsonCustormCont);
+				return DataResult.success("操作成功");
 				
 			} else {
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

@@ -13,18 +13,12 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.TextMessage;
-
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
-import com.medical.mapper.DoctorlogininfoMapperCustom;
 import com.medical.mapper.HospinfoMapperCustom;
-import com.medical.mapper.HospitaldeptMapper;
-import com.medical.mapper.HospitaldeptMapperCustom;
 import com.medical.mapper.NotificationMapper;
-import com.medical.mapper.NotificationMapperCustom;
 import com.medical.mapper.UserinfoMapperCustom;
 import com.medical.mapper.UserlogininfoMapper;
-import com.medical.mapper.UserlogininfoMapperCustom;
 import com.medical.po.Doctorlogininfo;
 import com.medical.po.Notification;
 import com.medical.po.Userlogininfo;

@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.servlet.view.document.AbstractPdfStamperView;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.mapper.PayMapperCustom;
@@ -15,7 +13,6 @@ import com.medical.mapper.UserpurseMapperCustom;
 import com.medical.po.Userinfo;
 import com.medical.service.iface.user.UserPurseService;
 import com.medical.utils.result.DataResult;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 /**
  * @ClassName: UserPursueServiceImpl.java

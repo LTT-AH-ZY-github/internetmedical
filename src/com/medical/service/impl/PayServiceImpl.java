@@ -10,16 +10,13 @@ package com.medical.service.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.medical.mapper.PayMapper;
 import com.medical.mapper.PayMapperCustom;
 import com.medical.po.Pay;
 import com.medical.service.iface.PayService;
 import com.medical.utils.result.DataResult;
-import com.pay.alipay.MakeOrderNum;
 
 /**
  * @ClassName:     PayServiceImpl.java

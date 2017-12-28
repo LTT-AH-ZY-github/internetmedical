@@ -1,30 +1,16 @@
-/**  
-* @Title: HospitalPackageServiceImpl.java  
-* @Package com.medical.service.impl.hospital  
-* @Description: TODO(用一句话描述该文件做什么)  
-* @author xyh  
-* @date 2017年12月11日  
-* @version V1.0  
-*/  
 package com.medical.service.impl.hospital;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.medical.mapper.HospitalberthMapper;
-import com.medical.mapper.HospitalberthMapperCustom;
-import com.medical.mapper.HospitaldeptMapper;
 import com.medical.mapper.HospitalpackageMapper;
 import com.medical.mapper.HospitalpackageMapperCustom;
 import com.medical.mapper.HosplogininfoMapper;
 import com.medical.po.Hospitalpackage;
-import com.medical.po.Hospitalunitprice;
 import com.medical.po.Hosplogininfo;
 import com.medical.service.iface.hospital.HospitalPackageService;
 import com.medical.utils.result.DataResult;
@@ -39,8 +25,6 @@ import com.medical.utils.result.DataResult;
 public class HospitalPackageServiceImpl implements HospitalPackageService {
 	@Autowired
 	private HosplogininfoMapper hosplogininfoMapper;
-	@Autowired
-	private HospitaldeptMapper hospitaldeptMapper;
 	@Autowired
 	private HospitalpackageMapper  hospitalpackageMapper;
 	@Autowired

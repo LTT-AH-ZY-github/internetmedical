@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.medical.service.impl.hospital;
 
 import java.math.BigDecimal;
@@ -8,17 +5,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.Null;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-
-import com.alibaba.druid.support.http.util.IPAddress;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.mapper.CityMapper;
@@ -41,6 +32,7 @@ import com.medical.po.City;
 import com.medical.po.Doctorcalendar;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
+import com.medical.po.Hospinfo;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Hosplogininfo;
 import com.medical.po.Hosporder;
@@ -61,9 +53,6 @@ import com.pay.alipay.GetSign;
 import com.pay.alipay.MakeOrderNum;
 import com.pay.wxpay.ConfigUtil;
 import com.pay.wxpay.MyWXPay;
-import com.pay.wxpay.WXPayExample;
-import com.qiniu.util.Json;
-
 import net.sf.json.JSONObject;
 
 
@@ -83,23 +72,11 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 	@Autowired
 	private DoctorlogininfoMapper doctorlogininfoMapper;
 	@Autowired
-	private CommonService commonService;
-	@Autowired
-	private PayMapper payMapper;
-	@Autowired
 	private DoctorinfoMapperCustom doctorinfoMapperCustom;
 	@Autowired
 	private PayMapperCustom payMapperCustom;
 	@Autowired
-	private DoctorpurseMapperCustom doctorpurseMapperCustom;
-	@Autowired
-	private DoctorpurseMapper doctorpurseMapper;
-	@Autowired
 	private HospinfoMapperCustom hospinfoMapperCustom;
-	@Autowired
-	private HospinfoMapper hospinfoMapper;
-	@Autowired
-	private DoctorinfoMapper doctorinfoMapper;
 	@Autowired
 	private DoctorcalendarMapperCustom doctorcalendarMapperCustom;
 	@Autowired
@@ -198,6 +175,23 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 			BigDecimal orderhospprice, Integer orderhosptpricetype, BigDecimal orderhosptprice,
 			Integer orderhospapricetype, BigDecimal orderhospaprice, Integer orderhospepricetype,
 			BigDecimal orderhospeprice) throws Exception {
+		Hosplogininfo hosplogininfo = hosplogininfoMapper.selectByPrimaryKey(hosploginid);
+		Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(hosploginid);
+		if (hosplogininfo==null) {
+			return DataResult.error("该医院账户不存在");
+		}
+		int type = hosplogininfo.getHosplogintype();
+		if (type!=3) {
+			return DataResult.error("账户未审核");
+		}
+		String hospalipayaccount = hospinfo.getHospalipayaccount();
+		String hospalipayname = hospinfo.getHospalipayname();
+		if (StringUtils.isBlank(hospalipayaccount)) { 
+			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
+		}
+		if (StringUtils.isBlank(hospalipayname)) {
+			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
+		}
 		Doctorlogininfo doc = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
 		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
 		if (doc == null  ||doctorinfo==null) {
@@ -387,7 +381,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		if ("100".equals(jsonObject.get("code").toString())) {
 			String result = MyWXPay.wxPrePay(boby, subject, totalAmount, notifyUrl, outTradeNo, ip,"NATIVE");
 			JSONObject jsonObject2 = JSONObject.fromObject(result);
-			if ("200".equals(jsonObject2.get("code"))) {
+			if ("200".equals(jsonObject2.get("code").toString())) {
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			}
 			return result;
@@ -426,7 +420,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 			String payresult = payService.updatePayRecordToCancle(out_trade_no, pay.getPayid(), trade_no,
 					buyer_logon_id, seller_email, params.toString(), err_code_des, 2);
 			JSONObject jsonObject = JSONObject.fromObject(payresult);
-			if ("100".equals(jsonObject.get("code"))) {
+			if ("100".equals(jsonObject.get("code").toString())) {
 				return DataResult.success("支付结束");
 			} else {
 				return payresult;
@@ -522,7 +516,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 			String payresult  = payService.updatePayRecordToCancle(out_trade_no, pay.getPayid(), trade_no, 
 					buyer_logon_id, seller_email, params.toString(),"交易失败",1);
 			JSONObject jsonObject = JSONObject.fromObject(payresult);
-			if ("100".equals(jsonObject.get("code"))) {
+			if ("100".equals(jsonObject.get("code").toString())) {
 				return DataResult.success("支付结束"); 
 			}else {
 				return payresult;

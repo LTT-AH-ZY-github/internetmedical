@@ -1,11 +1,9 @@
 package com.medical.service.impl.doctor;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.mapper.DoctorinfoMapperCustom;
@@ -32,8 +30,6 @@ public class DoctorHomeServiceImpl implements DoctorHomeService {
 	@Autowired
 	private DoctorlogininfoMapper doctorlogininfoMapper;
 	@Autowired
-	private PreorderMapper preorderMapper;
-	@Autowired
 	private UsersickMapper usersickMapper;
 	@Autowired
 	private UsersickMapperCustom usersickMapperCustom;
@@ -42,9 +38,8 @@ public class DoctorHomeServiceImpl implements DoctorHomeService {
 	@Autowired
 	private HospinfoMapperCustom hospinfoMapperCustom;
 	@Autowired
-	private CommonService commonService;
-	@Autowired
 	private RecommendDoctorService recommendDoctorService;
+	
 	// 推荐病情
 	@Override
 	public String listSickByRecommend(Integer pageNo, Integer pageSize, Integer docloginid, String lat, String lon) throws Exception{
@@ -192,7 +187,8 @@ public class DoctorHomeServiceImpl implements DoctorHomeService {
 			return DataResult.error("更改失败");
 		}
 	}
-
+	
+	//根据医生姓名查找医生
 	@Override
 	public String getDoctorByName(String docname) throws Exception{
 		List<Map<String, Object>> list = doctorinfoMapperCustom.selectByName(docname);

@@ -2,18 +2,14 @@ package com.medical.service.impl.hospital;
 
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.medical.mapper.CityMapperCustom;
 import com.medical.mapper.DoctortitleMapperCustom;
 import com.medical.mapper.HospitaldeptMapperCustom;
-import com.medical.mapper.HosplevelMapper;
 import com.medical.mapper.HosplevelMapperCustom;
 import com.medical.po.City;
 import com.medical.po.Doctortitle;
 import com.medical.po.Hospitaldept;
-import com.medical.po.Hospitalunitprice;
 import com.medical.po.Hosplevel;
 import com.medical.service.iface.hospital.HospitalHomeService;
 import com.medical.utils.result.DataResult;

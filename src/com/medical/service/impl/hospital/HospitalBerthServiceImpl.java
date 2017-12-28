@@ -1,21 +1,10 @@
-/**  
-* @Title: HospitalBerthServiceImpl.java  
-* @Package com.medical.service.impl.hospital  
-* @Description: TODO(用一句话描述该文件做什么)  
-* @author xyh  
-* @date 2017年12月11日  
-* @version V1.0  
-*/  
 package com.medical.service.impl.hospital;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.alibaba.druid.util.MapComparator;
 import com.medical.mapper.HospitalberthMapper;
 import com.medical.mapper.HospitalberthMapperCustom;
 import com.medical.mapper.HospitaldeptMapper;

@@ -1,25 +1,9 @@
-/**  
-
-
-* @Title: CommonTradeServiceImpl.java  
-* @Package com.medical.service.impl  
-* @Description: TODO(用一句话描述该文件做什么)  
-* @author xyh  
-* @date 2017年12月15日  
-* @version V1.0  
-*/  
 package com.medical.service.impl;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import org.omg.CORBA.PUBLIC_MEMBER;
-
 import com.medical.service.iface.CommonTradeService;
 
 /**

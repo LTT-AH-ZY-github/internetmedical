@@ -4,12 +4,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.medical.mapper.DoctorinfoMapper;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.HosporderMapper;

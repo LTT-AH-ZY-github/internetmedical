@@ -28,7 +28,7 @@ public class TimeUtil {
 		int hour = cal.get(Calendar.HOUR_OF_DAY);
 		if (hour < 12) {
 			return "上午";
-		} else if (hour < 23) {
+		} else if (hour < 18) {
 			return "下午";
 		} else {
 			return "晚上";

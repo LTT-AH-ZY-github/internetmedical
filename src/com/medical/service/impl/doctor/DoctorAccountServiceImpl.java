@@ -3,7 +3,6 @@ package com.medical.service.impl.doctor;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +55,7 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 	 * com.medical.service.iface.doctor.DoctorAccountService#findAccountExit(java.
 	 * lang.String)
 	 */
+	
 	@Override
 	public String findAccountExit(String phone) throws Exception {
 		// 查询医生登录表

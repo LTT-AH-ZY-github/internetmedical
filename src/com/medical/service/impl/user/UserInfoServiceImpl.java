@@ -7,9 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.medical.mapper.AccounttypeMapper;
-import com.medical.mapper.AdminexamineMapper;
 import com.medical.mapper.AdminexamineMapperCustom;
 import com.medical.mapper.FamilyinfoMapper;
 import com.medical.mapper.FamilyinfoMapperCustom;
@@ -23,7 +21,6 @@ import com.medical.po.Familyinfo;
 import com.medical.po.Userinfo;
 import com.medical.po.Userlogininfo;
 import com.medical.po.UserlogininfoCustom;
-import com.medical.service.iface.CommonService;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.user.UserInfoService;
 import com.medical.utils.PictureTool;
@@ -51,14 +48,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 	private FamilyinfoMapperCustom familyinfoMapperCustom;
 	@Autowired
 	private UsersickMapperCustom usersickMapperCustom;
-	@Autowired
-	private CommonService commonService;
 	@Autowired 
 	private SenderNotificationService senderNotificationService;
 	@Autowired
 	private AccounttypeMapper accounttypeMapper;
-	@Autowired
-	private AdminexamineMapper adminexamineMapper;
 	@Autowired
 	private AdminexamineMapperCustom adminexamineMapperCustom;
 
