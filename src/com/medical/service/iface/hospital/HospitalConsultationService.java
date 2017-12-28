@@ -1,14 +1,8 @@
-/**
- * 
- */
 package com.medical.service.iface.hospital;
 
 import java.math.BigDecimal;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
-import com.medical.po.HospSearchDocTerm;
 
 /**
  * @ClassName:     HospitalConsultationService.java
