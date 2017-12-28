@@ -663,7 +663,7 @@ public class DoctorInfoServiceImpl implements DoctorInfoService {
 			return DataResult.error("该时间段已添加日程");
 		}
 		int  timeResult =TimeUtil.compareDate(day,new Date());
-		if (timeResult==1) {
+		if (timeResult==-1) {
 			return DataResult.error("不可设置历史日程");
 		}
 		boolean check = false;
