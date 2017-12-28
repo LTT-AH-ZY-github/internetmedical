@@ -8,7 +8,11 @@
    	from doctorcalendar
     where docLoginId = #{0,jdbcType=INTEGER}
   </select>
-  
+  <select id="selectByDocCalendarAdressId" resultType="com.medical.po.Doctorcalendar" parameterType="java.lang.Integer" >
+    select *
+   	from doctorcalendar
+    where docCalendarAdressId = #{0,jdbcType=INTEGER}
+  </select>
   <!--查询医生指定日期前最新的日程  -->
   <select id="selectByDocloginidAndDayInDoc" resultType="com.medical.po.Doctorcalendar" parameterType="com.medical.po.custom.CalendarParmas" >
     select *

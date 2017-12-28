@@ -12,9 +12,8 @@
 	<!--管理员获取医院列表信息  -->
     <select id="selectByHospTypeInAdmin" resultType="map" parameterType="java.lang.Integer" >
 	    select a.hosploginid,c.hosphuanxinaccount,c.hosploginpix,c.hosplogintype,d.accounttypename as hosplogintypename,
-	   		c.hosploginphone,a.hospname,b.hosplevelname
+	   		c.hosploginphone,a.hospname,a.hospGrade as hosplevelname
 	 	from hospinfo as a 
-	 			left join hospLevel  as b on a.hospGrade = b.hospLevelId
 	 			left join hosplogininfo as c on a.hosploginid = c.hosploginid
 	 			left join accounttype as d on c.hospLoginType= d.accounttypeid
 	 	<if test="param1 != null">
@@ -24,11 +23,10 @@
    <!--管理员获取医院详细信息  -->
    <select id="selectInfoByHospLoginIdInAdmin" resultType="map" parameterType="java.lang.Integer" >
     select a.hosploginid,c.hosphuanxinaccount,c.hosploginpix,c.hosplogintype,d.accounttypename as hosplogintypename,c.hosploginphone,
-    		a.hospphone,a.hospname,b.hosplevelname,a.hospregidcard,a.hospadrprovince,a.hospadrcity,a.hospadrarea,a.hospadrother,
+    		a.hospphone,a.hospname,a.hospGrade as hosplevelname,a.hospregidcard,a.hospadrprovince,a.hospadrcity,a.hospadrarea,a.hospadrother,
     		a.hospabs,a.hospfeature,a.hospregdocquacer,a.hosporgcodecer,a.hosppraclicense,a.hosplegalcer,c.hosplogintime
     		
  	from hospinfo as a 
- 			left join hospLevel  as b on a.hospGrade = b.hospLevelId
  			left join hosplogininfo as c on a.hosploginid = c.hosploginid
  			left join accounttype as d on c.hospLoginType= d.accounttypeid
     where a.HospLoginId = #{0}
@@ -41,17 +39,17 @@
   <!--医生端获取医院信息  -->
   <select id="selectAllInfoByHospLoginIdInDoctor" resultType="map" parameterType="java.lang.Integer" >
     select a.hospname,a.hospabs,a.hospfeature,a.hospadrprovince,a.hospadrcity,a.hospadrarea,a.hospadrother,a.hospadrlon,a.hospadrlat,
-    	b.hosplevelname,c.hosploginpix,c.hosphuanxinaccount
+    	a.hospGrade as hosplevelname,c.hosploginpix,c.hosphuanxinaccount
  	from hospinfo as a 
- 	left join hosplevel as b on a.hospGrade= b.hospLevelId
+ 	
  	 left join hosplogininfo as c on a.hospLoginId = c.hospLoginId
  	where a.hospLoginId=#{0}
   </select>
   
    <select id="selectByHospName" resultType="map" parameterType="String" >
-    select a.hosploginid,a.hospname,b.hosplevelname
+    select a.hosploginid,a.hospname,a.hospGrade as hosplevelname
  	from hospinfo as a 
- 			left join hospLevel  as b on a.hospGrade = b.hospLevelId
+ 			
     where a.hospName like #{0} and a.hospAlipayAccount!='' and a.hospAlipayName!=''
   </select>
 </mapper>

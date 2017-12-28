@@ -8,7 +8,8 @@ import com.medical.po.custom.CalendarParmas;
 
 
 public interface DoctorcalendarMapperCustom {
-    
+	
+	List<Doctorcalendar> selectByDocCalendarAdressId(Integer doccalendaradressid);
 	/**
 	 * @Title: selectByDocloginid
 	 * @Description: 根据医生登录id获取医生日程

@@ -27,9 +27,9 @@ public class Global {
 	public static final String uploadLocalPath="C:\\upload\\";
 	
 	//部署路径
-	public static final String HTTP_URL="http://118.89.172.204:8080/";
-	//public static final String HTTP_URL="http://1842719ny8.iok.la:14086/";
-	
+	//public static final String HTTP_URL="http://118.89.172.204:6221/";
+	public static final String HTTP_URL="http://1842719ny8.iok.la:14086/";
+	public static final String DOC_HTTP_URL="http://118.89.172.204:80/";
 	//token 
 	public static Map<String , Object> globalToken =new HashMap<String, Object>();
 }

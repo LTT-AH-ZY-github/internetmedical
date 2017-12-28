@@ -30,7 +30,7 @@ public class TimerController {
     @Scheduled(cron = "0 0 12 * * ?")   
     public void executeAtNoon() throws Exception{  
     	
-    	doctorInfoService.setLocation("上午");
+    	doctorInfoService.updateLocation("上午");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd H:m:s");
         System.out.println("timer : "+format.format(new Date()));   
     }  
@@ -41,7 +41,7 @@ public class TimerController {
     @Scheduled(cron = "0 0 0 * * ?")   
     public void executeAtNight() throws Exception{
     	TokenManager.updateToken();
-    	doctorInfoService.setLocation("下午");
+    	doctorInfoService.updateLocation("下午");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd H:m:s");
         System.out.println("timer : "+format.format(new Date()));   
     }  

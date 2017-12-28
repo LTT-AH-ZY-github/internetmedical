@@ -32,7 +32,12 @@ public class DataResult extends Result {
     public static String error(String msg, Object data) {
         return new DataResult(ResultCommon.CODE_ERROR, msg, data).toJson();
     }
-
+    
+    public static String xml(String return_code, String return_msg) {
+    	 return "<xml><return_code><![CDATA[" + return_code + "]]>" +   
+                 "</return_code><return_msg><![CDATA[" + return_msg + "]]></return_msg></xml>";  
+    }
+    
     /**
      * 没有全面测试
      */

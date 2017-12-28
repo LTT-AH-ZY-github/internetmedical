@@ -6,6 +6,8 @@ package com.medical.service.iface.hospital;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.medical.po.HospSearchDocTerm;
 
 /**
@@ -57,11 +59,12 @@ public interface HospitalConsultationService {
 	 * @param hosploginid
 	 * @param hosporderid
 	 * @param type
+	 * @param ip 
 	 * @return
 	 * @throws Exception
 	 * @return: String
 	 */
-	String updateStatePayDoctor(Integer hosploginid, Integer hosporderid, Integer type) throws Exception;
+	String updateStatePayDoctor(Integer hosploginid, Integer hosporderid, Integer type, String ip) throws Exception;
 
 	
 
@@ -139,6 +142,16 @@ public interface HospitalConsultationService {
 	 */
 	String listDoctor(Integer page, Integer pageSize, Integer province_code, Integer area_code, Integer city_code,
 			String details, String doctortitle, String hosplevel, Integer one_level_dept, Integer two_level_dept) throws Exception;
+
+	/**
+	 * @Title: updateStatePayDoctorFinishByWXPay
+	 * @Description: TODO
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String updateStatePayDoctorFinishByWXPay(HttpServletRequest request) throws Exception;
 
 	
 

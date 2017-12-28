@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.medical.po.HospSearchDocTerm;
 import com.medical.service.iface.hospital.HospitalConsultationService;
 import com.medical.utils.CheckUtils;
+import com.medical.utils.IpUtils;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -182,7 +183,8 @@ public class HospitalConsultationController {
 	public String paydoctor(
 			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid,
 			@ApiParam(name = "hosporderid", required = true, value = "会诊订单id") @RequestParam Integer hosporderid,
-			@ApiParam(name = "type", required = true, value = "支付方式1为支付宝2为微信支付") @RequestParam(defaultValue="1") Integer type)
+			@ApiParam(name = "type", required = true, value = "支付方式1为支付宝2为微信支付") @RequestParam(defaultValue="1") Integer type,
+			HttpServletRequest request)
 			throws Exception {
 
 		if (hosporderid == null) {
@@ -191,13 +193,14 @@ public class HospitalConsultationController {
 		if (hosploginid == null) {
 			return DataResult.error("医院id为空");
 		}
-		return hospitalConsultationService.updateStatePayDoctor(hosploginid, hosporderid,type);
+		String ip = IpUtils.getIpAddr(request);
+		return hospitalConsultationService.updateStatePayDoctor(hosploginid, hosporderid,type,ip);
 
 	}
 
-	// 支付会诊费用
+	
 	@RequestMapping(value = "/paydoctorfinishbyalipay", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "取消会诊", httpMethod = "POST", notes = "取消会诊")
+	@ApiOperation(value = "支付宝回调", httpMethod = "POST", notes = "支付宝回调")
 	public String paydoctorfinishbyalipay(HttpServletRequest request)
 
 			throws Exception {
@@ -212,7 +215,18 @@ public class HospitalConsultationController {
 		}
 
 	}
-
+	
+	@RequestMapping(value = "/paydoctorfinishbywxpay", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "微信回调", httpMethod = "POST", notes = "微信回调")
+	public String payDoctorFinishByWXPay(HttpServletRequest request) throws Exception {
+		String result = hospitalConsultationService.updateStatePayDoctorFinishByWXPay(request);
+		net.sf.json.JSONObject json = net.sf.json.JSONObject.fromObject(result);
+		if ("100".equals(json.get("code"))) {
+			return DataResult.xml("SUCCESS", null);
+		} else {
+			return DataResult.xml("FAIL", json.get("msg").toString());
+		}
+	}
 	// 会诊完成
 	@RequestMapping(value = "/finishpreorderrequest", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "会诊完成", httpMethod = "POST", notes = "会诊完成")

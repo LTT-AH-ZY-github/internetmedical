@@ -109,7 +109,6 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 		// 未审核用户
 		doctorlogininfo.setDoclogintype(1);
 		doctorlogininfo.setDocloginpix("http://oytv6cmyw.bkt.clouddn.com/20171103064014944735.jpg");
-		
 		// 插入登录信息表
 		int result = doctorlogininfoMapperCustom.insertSelectiveReturnId(doctorlogininfo);
 		Doctorinfo doctorinfo = new Doctorinfo();

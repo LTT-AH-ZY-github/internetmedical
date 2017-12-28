@@ -224,14 +224,14 @@ public interface DoctorInfoService {
 	String updateInfoToCancelReview(Integer docloginid)throws Exception;
 
 	/**
-	 * @Title: setLocation
+	 * @Title: updateLocation
 	 * @Description: 更新医生位置
 	 * @param time
 	 * @return
 	 * @throws Exception
 	 * @return: String
 	 */
-	String setLocation(String time) throws Exception;
+	String updateLocation(String time) throws Exception;
 
 	/**
 	 * @Title: getReviewInfo

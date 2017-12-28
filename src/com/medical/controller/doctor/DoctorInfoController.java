@@ -148,11 +148,13 @@ public class DoctorInfoController {
 			@ApiImplicitParam(name = "docseconddept", required = false, value = "二级部门", dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "doctitle", required = false, value = "医生职称", dataType = "String", paramType = "query") })
 	public String updateFirstInfo(@ApiIgnore Doctorinfo doctorinfo) throws Exception {
+		
 		Integer docloginid = doctorinfo.getDocloginid();
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
 		String docname = doctorinfo.getDocname();
+		System.out.println("姓名"+docname);
 		if (docname!=null && !CheckUtils.isChineseNameLegal(docname)) {
 			return DataResult.error("姓名输入有误");
 		}
@@ -161,10 +163,12 @@ public class DoctorInfoController {
 			return DataResult.error("身份证输入不合法");
 		}
 		String docmale = doctorinfo.getDocmale();
+		System.out.println("性别"+docmale);
 		if (docmale!=null && !CheckUtils.isSexLegal(docmale)) {
 			return DataResult.error("性别输入不合法");
 		}
 		Integer docage = doctorinfo.getDocage();
+		System.out.println("年龄"+docage);
 		if (docage!=null && !CheckUtils.isAgeLegal(docage)) {
 			return DataResult.error("年龄输入不合法");
 		}

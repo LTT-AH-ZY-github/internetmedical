@@ -115,6 +115,27 @@ public interface UserOrderService {
 	 * @return: String
 	 */
 	String updateOrderStatePayDoctorFinishByWXPay(HttpServletRequest request) throws Exception;
+
+	/**
+	 * @Title: updateOrderStatePayHospitalByWXpay
+	 * @Description: TODO
+	 * @param userorder
+	 * @param ip
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String updateOrderStatePayHospitalByWXPay(Userorder userorder, String ip) throws Exception;
+
+	/**
+	 * @Title: updateOrderStatePayHospitalFinishByWXPay
+	 * @Description: TODO
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String updateOrderStatePayHospitalFinishByWXPay(HttpServletRequest request) throws Exception;
 	
 	
 	

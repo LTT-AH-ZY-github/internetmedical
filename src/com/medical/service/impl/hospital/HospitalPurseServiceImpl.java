@@ -82,13 +82,12 @@ public class HospitalPurseServiceImpl implements HospitalPurseService{
 		}
 		//type为2时为减少
 		if (type==2) {
-			total = total.subtract(amount.abs());
-			balance = balance.subtract(amount.abs());
 			//获取账户余额
-			if (amount.compareTo(balance)<0) {
+			if (amount.compareTo(balance)>0) {
 				return DataResult.error("余额不足");
 			}
-			
+			total = total.subtract(amount.abs());
+			balance = balance.subtract(amount.abs());
 			//2为转出
 			hosppurserecord.setHosppursetypeid(2);
 		}else {

@@ -19,8 +19,8 @@ import com.medical.po.Doctorinfo;
 import com.medical.po.Preorder;
 import com.medical.po.Usersick;
 import com.medical.service.iface.user.UserHomeService;
-import com.medical.utils.DateUtil;
 import com.medical.utils.GeographyScope;
+import com.medical.utils.TimeUtil;
 import com.medical.utils.result.DataResult;
 import com.medical.utils.result.DataResult2;
 
@@ -158,7 +158,7 @@ public class UserHomeServiceImpl implements UserHomeService {
 			//设置日期格式
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 			String day = df.format(new Date());
-			String time = DateUtil.getDateSx();
+			String time = TimeUtil.getDateSx();
 			System.out.println("大小"+list.size());
 			for (Map<String, Object> map : list) {
 				String day2= df.format((Date) map.get("doccalendarday"));
