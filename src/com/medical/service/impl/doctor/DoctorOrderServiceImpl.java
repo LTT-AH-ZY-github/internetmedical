@@ -82,12 +82,12 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		}
 		String alipayaccount = doctorinfo.getDocalipayaccount();
 		String alipayname = doctorinfo.getDocalipayname();
-		if (StringUtils.isBlank(alipayaccount)) {
-			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
-		}
-		if (StringUtils.isBlank(alipayname)) {
-			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
-		}
+//		if (StringUtils.isBlank(alipayaccount)) {
+//			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
+//		}
+//		if (StringUtils.isBlank(alipayname)) {
+//			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
+//		}
 		Preorder preorder = new Preorder();
 		preorder.setPreorderdocloginid(docloginid);
 		preorder.setPreorderstate(1);
@@ -296,6 +296,9 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			// 13为医生未接单
 			record.setUserorderstateid(13);
 		} else {
+			if (docloginid==redocloginid) {
+				return DataResult.error("推荐医生不可为自己");
+			}
 			// 11为医生未接单，推荐其他医生
 			record.setUserorderstateid(14);
 			// 病情相关医生信息
@@ -317,7 +320,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			}
 			int preResult = preorderMapper.insertSelective(preorder);
 			if (preResult == 0) {
-				return DataResult.error("插入推荐医生失败");
+				return DataResult.error("推荐医生失败");
 			}
 		}
         Usersick usersick = usersickMapper.selectByPrimaryKey(usersickid);
@@ -382,12 +385,12 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		}
 		String alipayaccount = doctorinfo.getDocalipayaccount();
 		String alipayname = doctorinfo.getDocalipayname();
-		if (StringUtils.isBlank(alipayaccount)) {
-			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
-		}
-		if (StringUtils.isBlank(alipayname)) {
-			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
-		}
+//		if (StringUtils.isBlank(alipayaccount)) {
+//			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
+//		}
+//		if (StringUtils.isBlank(alipayname)) {
+//			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
+//		}
 		Integer userorderid = userorder.getUserorderid();
 		Userorder order = userorderMapper.selectByPrimaryKey(userorderid);
 		// 订单存在
@@ -566,12 +569,12 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 			}
 			String alipayaccount = hospinfo.getHospalipayaccount();
 			String alipayname = hospinfo.getHospalipayname();
-			if (StringUtils.isBlank(alipayaccount)) {
-				return DataResult.error("该医院绑定的支付宝账号为空,不可进行该操作");
-			}
-			if (StringUtils.isBlank(alipayname)) {
-				return DataResult.error("该医院绑定的支付宝账号姓名为空,不可进行该操作");
-			}
+//			if (StringUtils.isBlank(alipayaccount)) {
+//				return DataResult.error("该医院绑定的支付宝账号为空,不可进行该操作");
+//			}
+//			if (StringUtils.isBlank(alipayname)) {
+//				return DataResult.error("该医院绑定的支付宝账号姓名为空,不可进行该操作");
+//			}
 			Userorder userorder = new Userorder();
 			userorder.setUserorderid(userorderid);
 			// 5需要住院，等待医院确认

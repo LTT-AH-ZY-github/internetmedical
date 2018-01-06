@@ -226,21 +226,9 @@ public class UserSickServiceImpl implements UserSickService {
 		int userSickStateId = sick.getUsersickstateid();
 		if (userSickStateId == 1 || userSickStateId == 4) {
 			String oldpath = usersickCustom.getUsersickpic();
-			/*String savepath = sick.getUsersickpic();
-			if (StringUtils.isBlank(savepath)) {
-				savepath="";
-			}
-			
-			if (StringUtils.isBlank(oldpath)) {
-				oldpath="";
-			}
-			String[] saves = savepath.split(",");
-			String[] olds = oldpath.split(",");
-			StringTools.getParamOneDifferent(saves, olds);*/
-			
 			String path = PictureTool.SavePictures(pictureFile);
-			if (oldpath != null) {
-				if (path != null) {
+			if (StringUtils.isNotBlank(oldpath)) {
+				if (StringUtils.isNotBlank(path)) {
 					oldpath = oldpath + "," + path;
 				}
 			} else {

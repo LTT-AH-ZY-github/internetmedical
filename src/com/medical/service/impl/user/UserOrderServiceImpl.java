@@ -51,7 +51,7 @@ import com.medical.utils.StringReplaceUtil;
 import com.medical.utils.result.DataResult;
 import com.pay.alipay.AliPayNotify;
 import com.pay.alipay.AlipayConfig;
-import com.pay.alipay.GetSign;
+import com.pay.alipay.MyAliPay;
 import com.pay.alipay.MakeOrderNum;
 import com.pay.wxpay.ConfigUtil;
 import com.pay.wxpay.MyWXPay;
@@ -133,12 +133,12 @@ public class UserOrderServiceImpl implements UserOrderService {
 		}
 		String alipayaccount = doctorinfo.getDocalipayaccount();
 		String alipayname = doctorinfo.getDocalipayname();
-		if (StringUtils.isBlank(alipayaccount)) {
-			return DataResult.error("该医生绑定的支付宝账号为空,不可进行该操作");
-		}
-		if (StringUtils.isBlank(alipayname)) {
-			return DataResult.error("该医生绑定的支付宝账号姓名为空,不可进行该操作");
-		}
+//		if (StringUtils.isBlank(alipayaccount)) {
+//			return DataResult.error("该医生绑定的支付宝账号为空,不可进行该操作");
+//		}
+//		if (StringUtils.isBlank(alipayname)) {
+//			return DataResult.error("该医生绑定的支付宝账号姓名为空,不可进行该操作");
+//		}
 		// 查询处于发布状态的病情
 		List<Usersick> lists = usersickMapperCustom.selectByUserLoginIdAndState(userloginid, 2);
 		if (lists.size() == 1) {
@@ -525,7 +525,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 		String payresult  = payService.updatePayRecordToCreat(userorder.getUserloginid(), userorder.getFamilyname(), userorder.getUserorderprice(), userorder.getUserorderdocloginid(), doctorinfo.getDocname(), userorder.getUserorderid(), 1, 1, outTradeNo,1);
 		JSONObject jsonObject = JSONObject.fromObject(payresult);
 		if ("100".equals(jsonObject.get("code").toString())) {
-			String result = GetSign.appGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
+			String result = MyAliPay.appGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
 			return DataResult.success("获取成功", result); 
 		}else {
 			return payresult;
@@ -808,7 +808,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 		String outTradeNo = MakeOrderNum.getTradeNo(prefix);
 		// 回调地址
 		String notifyUrl = AlipayConfig.HSOP_NOTIFY_URL;
-		String result = GetSign.appGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
+		String result = MyAliPay.appGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
 		String payresult  = payService.updatePayRecordToCreat(userorder.getUserloginid(), userorder.getFamilyname(),new BigDecimal(totalAmount),
 				hosploginid, hospinfo.getHospname(), userorder.getUserorderid(), 1, 2, outTradeNo,1);
 		JSONObject jsonObject = JSONObject.fromObject(payresult);

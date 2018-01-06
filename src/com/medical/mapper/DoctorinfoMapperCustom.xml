@@ -66,7 +66,7 @@
   		   		left join doctorlogininfo as e on a.docLoginId = e.docLoginId 
   		   <where>
   		   		<!-- 已审核且支付宝账号不为空 -->
-  		   		and e.docLoginType=3 and a.docAlipayAccount!='' and a.docAlipayName!=''
+  		   		and e.docLoginType=3
   		   		<if test="type==2">
   		   			<if test="province!=null">
 	  		   	 	  and a.docaddressprovince=#{province}
@@ -95,7 +95,7 @@
   		   SELECT a.docloginid,b.docloginpix,a.docAddressLat as dochosplat, a.docAddressLon as dochosplon,a.docprimarydept,docseconddept,docname,b.dochuanxinaccount
   		  	FROM doctorinfo as a
   		   	  left join doctorlogininfo as b on a.docLoginId = b.docLoginId
-  		   where   b.docLoginType=3  and (a.docAddressLat BETWEEN #{0} AND #{1}) AND (a.docAddressLon BETWEEN #{2} AND #{3}) and a.docAlipayAccount!='' and a.docAlipayName!=''
+  		   where   b.docLoginType=3  and (a.docAddressLat BETWEEN #{0} AND #{1}) AND (a.docAddressLon BETWEEN #{2} AND #{3}) 
   	</select>
   	<!-- 根据登录id查询医生个人信息 -->
   	<select id="selectByDocLoginId" parameterType="java.lang.Integer" resultType="com.medical.po.Doctorinfo">
@@ -160,7 +160,7 @@
   		   			
   		   FROM doctorlogininfo as a 
   		  	left join doctorinfo as b on a.docLoginId=b.docLoginId 
-  		where  a.docLoginType=3 and b.docAlipayAccount!='' and b.docAlipayName!=''
+  		where  a.docLoginType=3 
   			<if test="doctorTitle!=null">
   				and b.docTitle=#{doctorTitle}
   			</if>
@@ -192,7 +192,7 @@
   			FROM doctorinfo as a
   				left join doctorlogininfo as b on a.docLoginId = b.docLoginId
   		where
-  			b.docLoginType=3 and a.docAlipayAccount!='' and a.docAlipayName!=''
+  			b.docLoginType=3 
   		<if test="param1!=null">
   			and a.docPrimaryDept=#{0} 
   		</if>
@@ -205,7 +205,7 @@
   	<select id="selectByName" parameterType="String" resultType="map">
   		SELECT docloginid,docname,docmale,docage,doctitle,dochosp,docprimarydept,docseconddept
   		FROM doctorinfo 
-  		where docName=#{0} and docAlipayAccount!='' and docAlipayName!=''
+  		where docName=#{0} 
   	</select>
   
   	<update id="updateInfoByPrimaryKey" parameterType="com.medical.po.Doctorinfo" >

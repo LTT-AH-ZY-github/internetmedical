@@ -35,6 +35,7 @@ public class StringTools {
 		String[] str2 = s2.split(",");
 
 		System.out.println(getParamOneDifferent(str1, str2));
+		System.out.println(strLength("体裁,分文章体裁和文学体裁文章体裁记叙文说明文议论散文文学体裁分文章体裁和文学体裁文章体裁记叙文说明文议论散文文学体裁分文章体裁和文学体裁文章体裁记叙文说明文议论散文文学体裁分文章体裁和文学体裁文章体裁记叙文说明文议论散文文学体裁分文章体裁和文学体裁文章体裁记叙文说明文议论散文文学体裁分文章体裁和文学体裁文章体裁记叙文说明文议论散文文学"));
 	}
 
 	public static String getParamOneDifferent(String[] paramOne, String[] paramTwo) {

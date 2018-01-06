@@ -3,6 +3,7 @@
  */
 package com.medical.controller.admin;
 
+import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.taglibs.standard.lang.jstl.NullLiteral;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -280,5 +281,38 @@ public class AdminFunctionController {
 		}
 		return adminFunctionService.checkDept(adminloginid,hospdeptid,hospdeptfatherid);
 	}
-
+	
+	@RequestMapping(value="/listfeedback", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value="获取反馈意见",httpMethod="POST",notes="获取反馈意见")
+	public String listFeedBack(
+			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
+			@ApiParam(name = "type", value = "1为病人安卓端,2为医生安卓端,3为病人IOS端,4为医生IOS端,5为医院web端") @RequestParam Integer type,
+			@ApiParam(name = "check", value = "是否查看,true已查看，false为未查看") @RequestParam(required=false) Boolean check,
+			@ApiParam(name = "limit", required = true, value = "每页多少数据") @RequestParam(value = "limit") Integer limit,
+			@ApiParam(name = "offset", required = true, value = "从第几条开始") @RequestParam(value = "offset") Integer offset
+			
+			)throws Exception{
+		if (adminloginid==null) {
+			return DataResult.error("管理员id为空");
+		}
+		if (type==null || type<1 || type>5) {
+			return DataResult.error("type有误");
+		}
+		return adminFunctionService.listFeedBack(adminloginid,check, type, limit, offset);
+	}
+	
+	@RequestMapping(value="/readfeedback", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value="反馈意见已读",httpMethod="POST",notes="反馈意见已读")
+	public String readFeedBack(
+			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
+			@ApiParam(name = "feedbackid", value = "反馈意见id") @RequestParam Integer feedbackid
+			)throws Exception{
+		if (adminloginid==null) {
+			return DataResult.error("管理员id为空");
+		}
+		if (feedbackid==null) {
+			return DataResult.error("意见id为空");
+		}
+		return adminFunctionService.updateFeedBackToCheck(adminloginid, feedbackid);
+	}
 }

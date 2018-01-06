@@ -111,6 +111,7 @@ public interface CommonService {
 	String getUnreadNotificationNum(Integer hosploginid);
 
 	/**
+	 * @param system 
 	 * @Title: addFeedBack
 	 * @Description: TODO
 	 * @param feedbackidea
@@ -118,7 +119,7 @@ public interface CommonService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	String addFeedBack(String feedbackidea) throws Exception;
+	String addFeedBack(Integer system, String feedbackidea) throws Exception;
 
 	/**
 	 * @Title: getAppVersion
@@ -137,9 +138,10 @@ public interface CommonService {
 	 * @param type
 	 * @param app
 	 * @param version
+	 * @param description 
 	 * @return
 	 * @return: String
 	 */
-	String uploadAndroidApp(Integer type, MultipartFile app, String version)throws Exception;
+	String uploadAndroidApp(Integer type, MultipartFile app, String version, String description)throws Exception;
 
 }

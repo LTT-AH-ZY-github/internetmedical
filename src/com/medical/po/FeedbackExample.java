@@ -354,6 +354,126 @@ public class FeedbackExample {
             addCriterion("feedBackIsCheck not between", value1, value2, "feedbackischeck");
             return (Criteria) this;
         }
+
+        public Criteria andFeedbacktypeIsNull() {
+            addCriterion("feedBackType is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbacktypeIsNotNull() {
+            addCriterion("feedBackType is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbacktypeEqualTo(Integer value) {
+            addCriterion("feedBackType =", value, "feedbacktype");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbacktypeNotEqualTo(Integer value) {
+            addCriterion("feedBackType <>", value, "feedbacktype");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbacktypeGreaterThan(Integer value) {
+            addCriterion("feedBackType >", value, "feedbacktype");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbacktypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("feedBackType >=", value, "feedbacktype");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbacktypeLessThan(Integer value) {
+            addCriterion("feedBackType <", value, "feedbacktype");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbacktypeLessThanOrEqualTo(Integer value) {
+            addCriterion("feedBackType <=", value, "feedbacktype");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbacktypeIn(List<Integer> values) {
+            addCriterion("feedBackType in", values, "feedbacktype");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbacktypeNotIn(List<Integer> values) {
+            addCriterion("feedBackType not in", values, "feedbacktype");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbacktypeBetween(Integer value1, Integer value2) {
+            addCriterion("feedBackType between", value1, value2, "feedbacktype");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbacktypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("feedBackType not between", value1, value2, "feedbacktype");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackchecktimeIsNull() {
+            addCriterion("feedBackCheckTime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackchecktimeIsNotNull() {
+            addCriterion("feedBackCheckTime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackchecktimeEqualTo(Date value) {
+            addCriterion("feedBackCheckTime =", value, "feedbackchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackchecktimeNotEqualTo(Date value) {
+            addCriterion("feedBackCheckTime <>", value, "feedbackchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackchecktimeGreaterThan(Date value) {
+            addCriterion("feedBackCheckTime >", value, "feedbackchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackchecktimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("feedBackCheckTime >=", value, "feedbackchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackchecktimeLessThan(Date value) {
+            addCriterion("feedBackCheckTime <", value, "feedbackchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackchecktimeLessThanOrEqualTo(Date value) {
+            addCriterion("feedBackCheckTime <=", value, "feedbackchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackchecktimeIn(List<Date> values) {
+            addCriterion("feedBackCheckTime in", values, "feedbackchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackchecktimeNotIn(List<Date> values) {
+            addCriterion("feedBackCheckTime not in", values, "feedbackchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackchecktimeBetween(Date value1, Date value2) {
+            addCriterion("feedBackCheckTime between", value1, value2, "feedbackchecktime");
+            return (Criteria) this;
+        }
+
+        public Criteria andFeedbackchecktimeNotBetween(Date value1, Date value2) {
+            addCriterion("feedBackCheckTime not between", value1, value2, "feedbackchecktime");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

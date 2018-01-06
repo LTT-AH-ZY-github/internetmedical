@@ -82,12 +82,12 @@ public class DoctorConsultationServiceImpl implements DoctorConsultationService 
 		}
 		String alipayaccount = doctorinfo.getDocalipayaccount();
 		String alipayname = doctorinfo.getDocalipayname();
-		if (StringUtils.isBlank(alipayaccount)) {
-			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
-		}
-		if (StringUtils.isBlank(alipayname)) {
-			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
-		}
+//		if (StringUtils.isBlank(alipayaccount)) {
+//			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
+//		}
+//		if (StringUtils.isBlank(alipayname)) {
+//			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
+//		}
 		Hosporder hosporder = hosporderMapper.selectByPrimaryKey(hosporderid);
 		if (hosporder == null) {
 			return DataResult.error("订单不存在");

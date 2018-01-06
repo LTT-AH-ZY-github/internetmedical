@@ -15,6 +15,8 @@ public class Appversion {
 
     private Integer systemtype;
 
+    private String description;
+
     public Integer getId() {
         return id;
     }
@@ -61,5 +63,13 @@ public class Appversion {
 
     public void setSystemtype(Integer systemtype) {
         this.systemtype = systemtype;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
     }
 }

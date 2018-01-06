@@ -16,6 +16,8 @@ import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.FamilyinfoMapper;
 import com.medical.mapper.FamilyinfoMapperCustom;
+import com.medical.mapper.FeedbackMapper;
+import com.medical.mapper.FeedbackMapperCustom;
 import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.HospitaldeptMapper;
 import com.medical.mapper.HospitaldeptMapperCustom;
@@ -28,6 +30,7 @@ import com.medical.po.Doctoraddress;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
 import com.medical.po.Familyinfo;
+import com.medical.po.Feedback;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Hosplogininfo;
 import com.medical.po.Userinfo;
@@ -78,7 +81,10 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	private DoctoraddressMapperCustom doctoraddressMapperCustom;
 	@Autowired
 	private AdminexamineMapper adminexamineMapper;
-	
+	@Autowired
+	private FeedbackMapperCustom feedbackMapperCustom;
+	@Autowired
+	private FeedbackMapper feedbackMapper;
 	
 	//管理员根据用户账号类型查询用户 
 	@Override
@@ -481,7 +487,61 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		return DataResult.success("获取成功", list);
 	}
 
-	
+	/* (非 Javadoc)  
+	* <p>Title: listFeedBack</p>  
+	* <p>Description: </p>  
+	* @param adminloginid
+	* @param type
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.admin.AdminFunctionService#listFeedBack(java.lang.Integer, java.lang.Integer)  
+	*/  
+	@Override
+	public String listFeedBack(Integer adminloginid,  Boolean check, Integer type, Integer limit, Integer offset) throws Exception {
+		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
+		if (adminlogininfo==null) {
+			return DataResult.error("该管理员账号不存在");
+		}
+		int pageNo = 1;
+		if (offset != 0) {
+			pageNo = offset / limit + 1;
+		}
+		PageHelper.startPage(pageNo, limit);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("type", type);
+		map.put("check", check);
+		List<Feedback> list = 	feedbackMapperCustom.selectByTypeAndCheck(map);
+		PageInfo<Feedback> pageInfo = new PageInfo<Feedback>(list);
+		if (pageInfo != null && !pageInfo.getList().isEmpty()) {
+			Map<String, Object> data = new HashMap<String, Object>();
+			data.put("rows", pageInfo.getList());
+			// 总共页数
+			data.put("total", pageInfo.getTotal());
+			return DataResult.success("获取成功", data);
+		} else {
+			return DataResult.success("获取成功", null);
+		}
+	}
+
+	@Override
+	public String updateFeedBackToCheck(Integer adminloginid, Integer feedbackid) throws Exception {
+		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
+		if (adminlogininfo==null) {
+			return DataResult.error("该管理员账号不存在");
+		}
+		Feedback feedback = new Feedback();
+		feedback.setFeedbackid(feedbackid);
+		feedback.setFeedbackischeck(true);
+		feedback.setFeedbackchecktime(new Date());
+		boolean result = feedbackMapper.updateByPrimaryKeySelective(feedback)>0;
+		if (result) {
+			return DataResult.success("操作成功");
+		} else {
+			return DataResult.error("操作失败");
+		}
+			
+		
+	}
 
 	
 

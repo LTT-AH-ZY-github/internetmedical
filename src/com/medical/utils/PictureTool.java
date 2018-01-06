@@ -42,6 +42,7 @@ public class PictureTool {
 				fileName += path;
 			}
 		}
+		System.out.println("路径"+fileName);
 		return fileName;
 	}
 	

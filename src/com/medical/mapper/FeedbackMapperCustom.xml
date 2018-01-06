@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.FeedbackMapperCustom" >
+ 	
+  <select id="selectByType" parameterType="java.util.Map" resultType="com.medical.po.Feedback">
+  	select * 
+  	from feedback 
+  	where feedBackType = #{type} 
+  	<if test="check!=null">
+  	 and feedBackIsCheck =#{check}
+  	</if>
+  	order by feedBackTime desc
+  </select>
+  
+</mapper>

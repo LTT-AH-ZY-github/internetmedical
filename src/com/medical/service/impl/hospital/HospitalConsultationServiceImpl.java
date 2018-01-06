@@ -49,7 +49,7 @@ import com.medical.utils.result.DataResult;
 import com.medical.utils.result.DataResult2;
 import com.pay.alipay.AliPayNotify;
 import com.pay.alipay.AlipayConfig;
-import com.pay.alipay.GetSign;
+import com.pay.alipay.MyAliPay;
 import com.pay.alipay.MakeOrderNum;
 import com.pay.wxpay.ConfigUtil;
 import com.pay.wxpay.MyWXPay;
@@ -199,12 +199,12 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		}
 		String alipayaccount = doctorinfo.getDocalipayaccount();
 		String alipayname = doctorinfo.getDocalipayname();
-		if (StringUtils.isBlank(alipayaccount)) {
-			return DataResult.error("该医生绑定的支付宝账号为空,不可进行该操作");
-		}
-		if (StringUtils.isBlank(alipayname)) {
-			return DataResult.error("该医生绑定的支付宝账号姓名为空,不可进行该操作");
-		}
+//		if (StringUtils.isBlank(alipayaccount)) {
+//			return DataResult.error("该医生绑定的支付宝账号为空,不可进行该操作");
+//		}
+//		if (StringUtils.isBlank(alipayname)) {
+//			return DataResult.error("该医生绑定的支付宝账号姓名为空,不可进行该操作");
+//		}
 		Hosporder hosporder = new Hosporder();
 		hosporder.setDoctorid(docloginid);
 		hosporder.setOrderabs(orderabs);
@@ -474,7 +474,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		String outTradeNo = MakeOrderNum.getTradeNo(prefix);
 		// 回调地址
 		String notifyUrl = AlipayConfig.WEB_HSOP_NOTIFY_URL;
-		String result = GetSign.webGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
+		String result = MyAliPay.webGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
 		String hospname = hospinfoMapperCustom.selectByHospLoginId(hosploginid).getHospname();
 		//支付记录
 		String payresult  = payService.updatePayRecordToCreat(hosploginid, hospname, hosporder.getOrdertotaldoctorprice(), hosporder.getDoctorid(), doctorinfo.getDocname(), 

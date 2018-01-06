@@ -1,4 +1,3 @@
-
 package com.medical.utils;
 
 import java.util.ArrayList;
@@ -6,16 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.context.support.StaticApplicationContext;
 
 /**
  * @ClassName: KeyWords.java
- * @Description: TODO(用一句话描述该文件做什么)
+ * @Description: 病情关键字
  * @author xyh
  * @version V1.0
  * @Date 2017年12月22日 下午2:39:40
  */
-public class KeyWords {
+public class SickKeyWords {
 
 	public static Map<Integer, List<String>> initWords() {
 		Map<Integer, List<String>> map = new HashMap<>();

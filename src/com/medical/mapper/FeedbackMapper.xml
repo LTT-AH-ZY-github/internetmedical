@@ -6,6 +6,8 @@
     <result column="feedBackIdea" property="feedbackidea" jdbcType="VARCHAR" />
     <result column="feedBackTime" property="feedbacktime" jdbcType="TIMESTAMP" />
     <result column="feedBackIsCheck" property="feedbackischeck" jdbcType="BIT" />
+    <result column="feedBackType" property="feedbacktype" jdbcType="INTEGER" />
+    <result column="feedBackCheckTime" property="feedbackchecktime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -66,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    feedBackId, feedBackIdea, feedBackTime, feedBackIsCheck
+    feedBackId, feedBackIdea, feedBackTime, feedBackIsCheck, feedBackType, feedBackCheckTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.FeedbackExample" >
     select
@@ -100,9 +102,11 @@
   </delete>
   <insert id="insert" parameterType="com.medical.po.Feedback" >
     insert into feedback (feedBackId, feedBackIdea, feedBackTime, 
-      feedBackIsCheck)
+      feedBackIsCheck, feedBackType, feedBackCheckTime
+      )
     values (#{feedbackid,jdbcType=INTEGER}, #{feedbackidea,jdbcType=VARCHAR}, #{feedbacktime,jdbcType=TIMESTAMP}, 
-      #{feedbackischeck,jdbcType=BIT})
+      #{feedbackischeck,jdbcType=BIT}, #{feedbacktype,jdbcType=INTEGER}, #{feedbackchecktime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Feedback" >
     insert into feedback
@@ -119,6 +123,12 @@
       <if test="feedbackischeck != null" >
         feedBackIsCheck,
       </if>
+      <if test="feedbacktype != null" >
+        feedBackType,
+      </if>
+      <if test="feedbackchecktime != null" >
+        feedBackCheckTime,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="feedbackid != null" >
@@ -132,6 +142,12 @@
       </if>
       <if test="feedbackischeck != null" >
         #{feedbackischeck,jdbcType=BIT},
+      </if>
+      <if test="feedbacktype != null" >
+        #{feedbacktype,jdbcType=INTEGER},
+      </if>
+      <if test="feedbackchecktime != null" >
+        #{feedbackchecktime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -156,6 +172,12 @@
       <if test="record.feedbackischeck != null" >
         feedBackIsCheck = #{record.feedbackischeck,jdbcType=BIT},
       </if>
+      <if test="record.feedbacktype != null" >
+        feedBackType = #{record.feedbacktype,jdbcType=INTEGER},
+      </if>
+      <if test="record.feedbackchecktime != null" >
+        feedBackCheckTime = #{record.feedbackchecktime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -166,7 +188,9 @@
     set feedBackId = #{record.feedbackid,jdbcType=INTEGER},
       feedBackIdea = #{record.feedbackidea,jdbcType=VARCHAR},
       feedBackTime = #{record.feedbacktime,jdbcType=TIMESTAMP},
-      feedBackIsCheck = #{record.feedbackischeck,jdbcType=BIT}
+      feedBackIsCheck = #{record.feedbackischeck,jdbcType=BIT},
+      feedBackType = #{record.feedbacktype,jdbcType=INTEGER},
+      feedBackCheckTime = #{record.feedbackchecktime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -183,6 +207,12 @@
       <if test="feedbackischeck != null" >
         feedBackIsCheck = #{feedbackischeck,jdbcType=BIT},
       </if>
+      <if test="feedbacktype != null" >
+        feedBackType = #{feedbacktype,jdbcType=INTEGER},
+      </if>
+      <if test="feedbackchecktime != null" >
+        feedBackCheckTime = #{feedbackchecktime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where feedBackId = #{feedbackid,jdbcType=INTEGER}
   </update>
@@ -190,7 +220,9 @@
     update feedback
     set feedBackIdea = #{feedbackidea,jdbcType=VARCHAR},
       feedBackTime = #{feedbacktime,jdbcType=TIMESTAMP},
-      feedBackIsCheck = #{feedbackischeck,jdbcType=BIT}
+      feedBackIsCheck = #{feedbackischeck,jdbcType=BIT},
+      feedBackType = #{feedbacktype,jdbcType=INTEGER},
+      feedBackCheckTime = #{feedbackchecktime,jdbcType=TIMESTAMP}
     where feedBackId = #{feedbackid,jdbcType=INTEGER}
   </update>
 </mapper>

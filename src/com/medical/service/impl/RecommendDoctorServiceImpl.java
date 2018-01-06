@@ -25,7 +25,7 @@ import com.medical.po.Doctorinfo;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Preorder;
 import com.medical.service.iface.RecommendDoctorService;
-import com.medical.utils.KeyWords;
+import com.medical.utils.SickKeyWords;
 
 
 /**
@@ -54,7 +54,7 @@ public class RecommendDoctorServiceImpl implements RecommendDoctorService {
 			List<Doctorinfo> list = getByKeyWord(keyWord);
 			if (list!=null && list.size()>0) {
 				for (int i = 0; i < list.size(); i++) {
-					addPreOrder(list.get(i).getDocloginid(), usersickid);
+					addPreOrder(userloginid,list.get(i).getDocloginid(), usersickid);
 					if (i==10) {
 						break;
 					}
@@ -64,7 +64,7 @@ public class RecommendDoctorServiceImpl implements RecommendDoctorService {
 			List<Doctorinfo> list = getByDept(primaryDept, secondDept);
 			if (list!=null && list.size()>0) {
 				for (int i = 0; i < list.size(); i++) {
-					addPreOrder(list.get(i).getDocloginid(), usersickid);
+					addPreOrder(userloginid,list.get(i).getDocloginid(), usersickid);
 					if (i==10) {
 						break;
 					}
@@ -73,7 +73,7 @@ public class RecommendDoctorServiceImpl implements RecommendDoctorService {
 				List<Doctorinfo> lists = getByKeyWord(keyWord);
 				if (lists!=null && lists.size()>0) {
 					for (int i = 0; i < lists.size(); i++) {
-						addPreOrder(lists.get(i).getDocloginid(), usersickid);
+						addPreOrder(userloginid,lists.get(i).getDocloginid(), usersickid);
 						if (i==10) {
 							break;
 						}
@@ -89,7 +89,7 @@ public class RecommendDoctorServiceImpl implements RecommendDoctorService {
 	public List<Doctorinfo> getByKeyWord(String keyWord) throws Exception {
 		String primaryDept = "内科";
 		String secondDept = null;
-		Map<Integer, List<String>> map = KeyWords.initWords();
+		Map<Integer, List<String>> map = SickKeyWords.initWords();
 		Iterator<Entry<Integer, List<String>>> it = map.entrySet().iterator();
 		int hospdeptid = 0;
 	    outer:  while (it.hasNext()) {
@@ -99,7 +99,7 @@ public class RecommendDoctorServiceImpl implements RecommendDoctorService {
 		   for (String string : list) {
 			 //这里查找str中是否存在"cd"字符串，如果存在则会返回大于等于0的数，如果不存在，则返回-1
 			  if(keyWord.indexOf(string)>=0){
-			      System.out.println("找到了");
+			     // System.out.println("找到了");
 			      hospdeptid= entry.getKey();
 			      break outer;
 			   }
@@ -129,7 +129,7 @@ public class RecommendDoctorServiceImpl implements RecommendDoctorService {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	public boolean addPreOrder(Integer docloginid, Integer usersickid) throws Exception {
+	public boolean addPreOrder(Integer userloginid,Integer docloginid, Integer usersickid) throws Exception {
 		Preorder preorder = new Preorder();
 		preorder.setPreorderdocloginid(docloginid);
 		preorder.setUsersickid(usersickid);

@@ -11,6 +11,10 @@ public class Feedback {
 
     private Boolean feedbackischeck;
 
+    private Integer feedbacktype;
+
+    private Date feedbackchecktime;
+
     public Integer getFeedbackid() {
         return feedbackid;
     }
@@ -41,5 +45,21 @@ public class Feedback {
 
     public void setFeedbackischeck(Boolean feedbackischeck) {
         this.feedbackischeck = feedbackischeck;
+    }
+
+    public Integer getFeedbacktype() {
+        return feedbacktype;
+    }
+
+    public void setFeedbacktype(Integer feedbacktype) {
+        this.feedbacktype = feedbacktype;
+    }
+
+    public Date getFeedbackchecktime() {
+        return feedbackchecktime;
+    }
+
+    public void setFeedbackchecktime(Date feedbackchecktime) {
+        this.feedbackchecktime = feedbackchecktime;
     }
 }

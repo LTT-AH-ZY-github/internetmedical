@@ -50,6 +50,6 @@
     select a.hosploginid,a.hospname,a.hospGrade as hosplevelname
  	from hospinfo as a 
  			
-    where a.hospName like #{0} and a.hospAlipayAccount!='' and a.hospAlipayName!=''
+    where a.hospName like #{0} 
   </select>
 </mapper>

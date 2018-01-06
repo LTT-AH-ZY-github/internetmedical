@@ -81,6 +81,30 @@ public interface AdminFunctionService {
 	 */
 	String listFirstDept(Integer adminloginid) throws Exception;
 	
+	/**
+	 * @Title: listFeedBack
+	 * @Description: TODO
+	 * @param adminloginid
+	 * @param check 
+	 * @param type
+	 * @param limit
+	 * @param offset
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String listFeedBack(Integer adminloginid, Boolean check, Integer type, Integer limit, Integer offset) throws Exception;
+	/**
+	 * @Title: updateFeedBackToCheck
+	 * @Description: TODO
+	 * @param adminloginid
+	 * @param feedbackid
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String updateFeedBackToCheck(Integer adminloginid, Integer feedbackid) throws Exception;
+	
 	
 	
 	

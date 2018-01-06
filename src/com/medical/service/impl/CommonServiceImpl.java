@@ -472,11 +472,13 @@ public class CommonServiceImpl implements CommonService {
 	}
 
 	@Override
-	public String addFeedBack(String feedbackidea) throws Exception{
+	public String addFeedBack(Integer type,String feedbackidea) throws Exception{
 		Feedback feedback = new Feedback();
 		feedback.setFeedbackidea(feedbackidea);
 		feedback.setFeedbacktime(new Date());
 		feedback.setFeedbackischeck(false);
+		feedback.setFeedbacktype(type);
+		feedback.setFeedbackchecktime(new Date());
 		boolean result = feedbackMapper.insertSelective(feedback) > 0;
 		if (result) {
 			return DataResult.success("添加成功");
@@ -509,7 +511,7 @@ public class CommonServiceImpl implements CommonService {
 	* @see com.medical.service.iface.CommonService#uploadAndroidApp(java.lang.Integer, org.springframework.web.multipart.MultipartFile, java.lang.String)  
 	*/  
 	@Override
-	public String uploadAndroidApp(Integer type, MultipartFile app, String version) throws Exception {
+	public String uploadAndroidApp(Integer type, MultipartFile app, String version, String description) throws Exception {
 		//type为1是病人端
 		String name = null;
 		if (type==1) {
@@ -527,6 +529,7 @@ public class CommonServiceImpl implements CommonService {
 		appversion.setApppublishtime(new Date());
 		appversion.setAppversion(version);
 		appversion.setApptype(type);
+		appversion.setDescription(description);
 		appversion.setAppurl("http://118.89.172.204:8080/download/"+file);
 		//1为安卓
 		appversion.setSystemtype(1);

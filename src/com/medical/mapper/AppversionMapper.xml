@@ -8,6 +8,7 @@
     <result column="appType" property="apptype" jdbcType="INTEGER" />
     <result column="appUrl" property="appurl" jdbcType="VARCHAR" />
     <result column="systemType" property="systemtype" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    Id, appVersion, appPublishTime, appType, appUrl, systemType
+    Id, appVersion, appPublishTime, appType, appUrl, systemType, description
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.AppversionExample" >
     select
@@ -102,11 +103,11 @@
   </delete>
   <insert id="insert" parameterType="com.medical.po.Appversion" >
     insert into appversion (Id, appVersion, appPublishTime, 
-      appType, appUrl, systemType
-      )
+      appType, appUrl, systemType, 
+      description)
     values (#{id,jdbcType=INTEGER}, #{appversion,jdbcType=VARCHAR}, #{apppublishtime,jdbcType=TIMESTAMP}, 
-      #{apptype,jdbcType=INTEGER}, #{appurl,jdbcType=VARCHAR}, #{systemtype,jdbcType=INTEGER}
-      )
+      #{apptype,jdbcType=INTEGER}, #{appurl,jdbcType=VARCHAR}, #{systemtype,jdbcType=INTEGER}, 
+      #{description,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Appversion" >
     insert into appversion
@@ -129,6 +130,9 @@
       <if test="systemtype != null" >
         systemType,
       </if>
+      <if test="description != null" >
+        description,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -148,6 +152,9 @@
       </if>
       <if test="systemtype != null" >
         #{systemtype,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -178,6 +185,9 @@
       <if test="record.systemtype != null" >
         systemType = #{record.systemtype,jdbcType=INTEGER},
       </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -190,7 +200,8 @@
       appPublishTime = #{record.apppublishtime,jdbcType=TIMESTAMP},
       appType = #{record.apptype,jdbcType=INTEGER},
       appUrl = #{record.appurl,jdbcType=VARCHAR},
-      systemType = #{record.systemtype,jdbcType=INTEGER}
+      systemType = #{record.systemtype,jdbcType=INTEGER},
+      description = #{record.description,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -213,6 +224,9 @@
       <if test="systemtype != null" >
         systemType = #{systemtype,jdbcType=INTEGER},
       </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
     </set>
     where Id = #{id,jdbcType=INTEGER}
   </update>
@@ -222,7 +236,8 @@
       appPublishTime = #{apppublishtime,jdbcType=TIMESTAMP},
       appType = #{apptype,jdbcType=INTEGER},
       appUrl = #{appurl,jdbcType=VARCHAR},
-      systemType = #{systemtype,jdbcType=INTEGER}
+      systemType = #{systemtype,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR}
     where Id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -150,9 +150,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		String prefix = "df";
 		String out_biz_no = MakeOrderNum.getTradeNo(prefix);
 		String amount = accountAmount+"";
-		String  payer_show_name = doctorinfo.getDocname()+"账户余额提现"; 
-		
-		String remark=payer_show_name;
+		String  payer_show_name = "合肥顶岭医疗科技开发有限公司"; 
+		String remark=doctorinfo.getDocname()+"账户余额提现";
 		AlipayFundTransToaccountTransferResponse response = null;
 		try {
 			response = AlipayFund.doFund(out_biz_no, payee_account, amount, payer_show_name, payee_real_name, remark);
@@ -244,8 +243,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 			return DataResult.error("该医院支付宝账号对应姓名为空");
 		}
 		String amount = accountAmount+"";
-		String  payer_show_name = hospinfo.getHospname()+"账户余额提现"; 
-		String remark=payer_show_name;
+		String  payer_show_name = "合肥顶岭医疗科技开发有限公司"; 
+		String remark=hospinfo.getHospname()+"账户余额提现";
 		AlipayFundTransToaccountTransferResponse response = null;
 		try {
 			response = AlipayFund.doFund(out_biz_no, payee_account, amount, payer_show_name, payee_real_name, remark);
@@ -453,8 +452,8 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		}
 		String amount = surplus+"";
 		//String  payer_show_name = userorder.getFamilyname()+"订单结算"; 
-		String  payer_show_name = "订单结算";
-		String remark=payer_show_name;
+		String  payer_show_name = "合肥顶岭医疗科技开发有限公司";
+		String remark="订单结算";
 		System.out.println("病人姓名"+userorder.getFamilyname());
 		AlipayFundTransToaccountTransferResponse response = null;
 		try {
