@@ -42,7 +42,10 @@ public class HospitalPurseServiceImpl implements HospitalPurseService{
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public synchronized String updateBalance(Integer hosploginid,Integer type,BigDecimal amount,String remark,Integer payid) throws Exception {
+	public  String updateBalance(Integer hosploginid,Integer type,BigDecimal amount,String remark,Integer payid) throws Exception {
+		//对象
+		synchronized (hosploginid) {
+			
 		Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(hosploginid);
 		if (hospinfo == null) {
 			return DataResult.error("用户不存在");
@@ -103,7 +106,7 @@ public class HospitalPurseServiceImpl implements HospitalPurseService{
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return DataResult.error("账户金额变动失败");
 		}
-		
+	}
 	}
 	@Override
 	public String getBalance(Integer hosploginid) throws Exception {

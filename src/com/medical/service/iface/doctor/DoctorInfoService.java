@@ -1,5 +1,8 @@
 package com.medical.service.iface.doctor;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.springframework.web.multipart.MultipartFile;
 import com.medical.po.Doctoraddress;
 import com.medical.po.Doctorcalendar;
@@ -174,7 +177,7 @@ public interface DoctorInfoService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	String addCalendar(Doctorcalendar doctorcalendar) throws Exception;
+	//String addCalendar(Doctorcalendar doctorcalendar) throws Exception;
 	
 	/**
 	 * @Title: updateCalendar
@@ -241,6 +244,42 @@ public interface DoctorInfoService {
 	 * @return: String
 	 */
 	String getReviewInfo(Integer docloginid)throws Exception;
+
+	/**
+	 * @Title: updateFee
+	 * @Description: 设置出诊总费用
+	 * @param docloginid
+	 * @param docfee
+	 * @return
+	 * @return: String
+	 */
+	String updateFee(Integer docloginid, BigDecimal docfee) throws Exception;
+
+	/**
+	 * @Title: getFee
+	 * @Description: 获取出诊总费用
+	 * @param docloginid
+	 * @return
+	 * @return: String
+	 */
+	String getFee(Integer docloginid) throws Exception;
+
+	/**
+	 * @Title: addCalendar
+	 * @Description: TODO
+	 * @param docloginid
+	 * @param doccalendarday
+	 * @param doccalendarprice
+	 * @param doccalendaraffair2 
+	 * @param doccalendaradressid
+	 * @param doccalendarmorning
+	 * @param doccalendarafternoon
+	 * @param doccalendarnight
+	 * @return
+	 * @return: String
+	 */
+	String addCalendar(Integer docloginid, Date[] doccalendarday, BigDecimal doccalendarprice, String doccalendaraffair2, Integer doccalendaradressid,
+			String doccalendarmorning, String doccalendarafternoon, String doccalendarnight) throws Exception;
 
 	
 

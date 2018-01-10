@@ -80,6 +80,8 @@ public class Doctorinfo {
 
     private String docalipayname;
 
+    private BigDecimal docprice;
+
     public Integer getDocid() {
         return docid;
     }
@@ -382,5 +384,13 @@ public class Doctorinfo {
 
     public void setDocalipayname(String docalipayname) {
         this.docalipayname = docalipayname == null ? null : docalipayname.trim();
+    }
+
+    public BigDecimal getDocprice() {
+        return docprice;
+    }
+
+    public void setDocprice(BigDecimal docprice) {
+        this.docprice = docprice;
     }
 }

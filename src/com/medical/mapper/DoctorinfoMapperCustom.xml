@@ -11,14 +11,43 @@
 	  	Order by a.docPurseBalance DESC
   	</select>
 	<!--管理员查询医生列表  -->
-  	<select id="selectByDocLoginTypeInAdmin" parameterType="java.lang.Integer" resultType="map">
+  	<select id="selectByParamsInAdmin" parameterType="map" resultType="map">
   		select a.docloginid,b.dochuanxinaccount,b.docloginpix,b.docloginphone,a.docname,a.docmale,a.doctitle,a.dochosp,b.doclogintype,c.accounttypename as doclogintypename
   		from doctorinfo as a 
   			left join  doctorlogininfo as b on a.docloginid= b.docloginid
   			left join accounttype as c on c.accounttypeid =b.docLoginType
-  		<if test="param1!=null">
-	  		where	b.doclogintype = #{0}
-	  	</if>
+  		<where>
+  			<if test="type!=null and type!=0">
+	  			and	b.doclogintype = #{type}
+	  	    </if>
+		  	<if test="doctitle!=null and doctitle!=''">
+		  		and	a.doctitle = #{doctitle}
+		  	</if>
+		  	<if test="docage!=null and docage!=0">
+		  		and	a.docage = #{docage}
+		  	</if>
+		  	<if test="docloginphone!=null and docloginphone!=''">
+		  		and	b.docloginphone = #{docloginphone}
+		  	</if>
+		  	<if test="dochosplevel!=null and dochosplevel!=''">
+		  	and	a.dochosplevel = #{dochosplevel}
+		  	</if>
+		  	<if test="dochospfdept!=null and  dochospfdept!=0">
+		  		and	a.docPrimaryDept = #{dochospfdept}
+		  	</if>
+		  	<if test="dochospsdept!=null and dochospsdept!=0">
+		  		and	a.docSecondDept = #{dochospsdept}
+		  	</if>
+		  	<if test="startdatetime!=null and startdatetime!=''">
+		  		<if test="enddatetime!=null and enddatetime!=''">
+		  	
+		  		and	 date_format(b.hospLoginSubCheckTime,'%Y-%m-%d')<![CDATA[ >= ]]>#{startdatetime} 
+		  			 and date_format(b.hospLoginSubCheckTime,'%Y-%m-%d')<![CDATA[ <= ]]>#{enddatetime}
+		  	</if>
+		  	</if>
+  		</where>
+  		
+  		
 	  	Order by b.docLoginSubCheckTime DESC
   	</select>
   	
@@ -35,7 +64,7 @@
 	</select>
   	
 	<!-- 病人端医生信息列表查询 -->
- 	<select id="findDoctorInfoInList" parameterType="com.medical.po.DoctorSearch" 
+ 	<select id="findDoctorsInList" parameterType="com.medical.po.DoctorSearch" 
   						resultType="map">
   		 SELECT	a.docloginid,e.dochuanxinaccount,e.docloginpix,a.docname,a.doctitle,a.dochosp,a.hosplevel,a.docprimarydept,a.docseconddept,
   					a.docallday,a.docexpert,a.docaddresslocation,a.docaddressprovince,a.docaddresscity,a.docaddressarea,a.docaddressother,

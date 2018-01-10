@@ -3,9 +3,17 @@ package com.medical.service.iface.admin;
 public interface AdminFunctionService {
 	/**
 	 * 管理获取不同类型的用户
+	 * @param usermale 
+	 * @param enddatetime 
+	 * @param startdatetime 
+	 * @param userloginphone 
+	 * @param userage 
+	 * @param useradrarea 
+	 * @param useradrcity 
+	 * @param useradrprovince 
 	 * @param 
 	 * */
-	String listUser(Integer adminloginid, Integer limit, Integer offset, Integer type) throws Exception;
+	String listUser(Integer adminloginid, Integer limit, Integer offset, Integer type, Integer useradrprovince, Integer useradrcity, Integer useradrarea, Integer userage, String userloginphone, String startdatetime, String enddatetime, String usermale) throws Exception;
 	/**
 	 * 管理获取用户详细信息
 	 * @param 
@@ -19,9 +27,17 @@ public interface AdminFunctionService {
 	String updateUserType(Integer adminloginid, Integer userloginid, Boolean type, String idea) throws Exception;
 	/**
 	 * 管理员获取不同类型的医生
+	 * @param enddatetime 
+	 * @param startdatetime 
+	 * @param dochospsdept 
+	 * @param dochospfdept 
+	 * @param dochosplevel 
+	 * @param docloginphone 
+	 * @param docage 
+	 * @param doctitle 
 	 * @param 
 	 * */
-	String listDoctor(Integer adminloginid, Integer limit, Integer offset, Integer type) throws Exception;
+	String listDoctor(Integer adminloginid, Integer limit, Integer offset, Integer type, String doctitle, Integer docage, String docloginphone, String dochosplevel, Integer dochospfdept, Integer dochospsdept, String startdatetime, String enddatetime) throws Exception;
 	/**
 	 * 管理获取医生详细信息
 	 * @param 
@@ -35,9 +51,16 @@ public interface AdminFunctionService {
 	String updateDoctorType(Integer adminloginid, Integer docloginid, Boolean type, String idea)throws Exception;
 	/**
 	 * 管理获取医生列表信息
+	 * @param enddatetime 
+	 * @param startdatetime 
+	 * @param hosploginphone 
+	 * @param hosplevel 
+	 * @param hospadrarea 
+	 * @param hospadrcity 
+	 * @param hospadrprovince 
 	 * @param 
 	 * */
-	String listHospital(Integer adminloginid, Integer limit, Integer offset, Integer type)throws Exception;
+	String listHospital(Integer adminloginid, Integer limit, Integer offset, Integer type, Integer hospadrprovince, Integer hospadrcity, Integer hospadrarea, String hosplevel, String hosploginphone, String startdatetime, String enddatetime)throws Exception;
 	/**
 	 * 管理获取医生详细信息
 	 * @param 

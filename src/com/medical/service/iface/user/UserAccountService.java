@@ -11,9 +11,8 @@ public interface UserAccountService {
 
 	/**
 	 * @Title: findAccountExit
-	 * @Description: 查找账号是否注册
-	 * @param phone
-	 * @return
+	 * @Description: 判断手机号码是否注册
+	 * @param phone 手机号码
 	 * @return: String
 	 */
 	String findAccountExit(String phone) throws Exception;;

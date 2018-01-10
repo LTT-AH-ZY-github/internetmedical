@@ -1,10 +1,9 @@
 package com.medical.service.iface.user;
 
-import com.medical.po.DoctorSearch;
 
 /**
  * @ClassName: UserHomeService.java
- * @Description: TODO(用一句话描述该文件做什么)
+ * @Description: 用户主页功能
  * @author xyh
  * @version V1.0
  * @Date 2017年12月7日 下午8:58:32
@@ -12,17 +11,25 @@ import com.medical.po.DoctorSearch;
 public interface UserHomeService {
 
 	/**
-	 * @Title: listDoctor
-	 * @Description: 获取医生
-	 * @param doctorSearch
+	 * @Title: listDoctorsInList
+	 * @Description: 列表获取医生
+	 * @param page
+	 * @param userloginlon
+	 * @param userloginlat
+	 * @param dochospprovince
+	 * @param dochospcity
+	 * @param dochosparea
+	 * @param docprimarydept
+	 * @param docseconddept
+	 * @param type
 	 * @return
-	 * @throws Exception
 	 * @return: String
 	 */
-	String listDoctor(DoctorSearch doctorSearch) throws Exception;
+	String listDoctorsInList(Integer page, String userloginlon, String userloginlat, String dochospprovince,
+			String dochospcity, String dochosparea, String docprimarydept, String docseconddept, Integer type)throws Exception;
 
 	/**
-	 * @Title: findDoctorsInMap
+	 * @Title: listDoctorsInMap
 	 * @Description: 地图模式获取医生
 	 * @param userloginlat
 	 *            纬度
@@ -32,10 +39,10 @@ public interface UserHomeService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	String findDoctorsInMap(String userloginlat, String userloginlon) throws Exception;
+	String listDoctorsInMap(String userloginlat, String userloginlon) throws Exception;
 
 	/**
-	 * @Title: findDoctorDetail
+	 * @Title: getDoctorDetail
 	 * @Description: 获取医生详情
 	 * @param docloginid
 	 *            医生登录id
@@ -44,10 +51,10 @@ public interface UserHomeService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	String findDoctorDetail(Integer docloginid, Integer userloginid) throws Exception;
+	String getDoctorDetail(Integer docloginid, Integer userloginid) throws Exception;
 
 	/**
-	 * @Title: listCalendar
+	 * @Title: listCalendars
 	 * @Description: 获取医生当天30天内日程
 	 * @param docloginid
 	 *            医生登录id
@@ -55,10 +62,10 @@ public interface UserHomeService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	String listCalendar(Integer docloginid) throws Exception;
+	String listCalendars(Integer docloginid) throws Exception;
 
 	/**
-	 * @Title: getEvaluation
+	 * @Title: listEvaluations
 	 * @Description: 获取评价
 	 * @param docloginid
 	 *            医生登录id
@@ -67,6 +74,8 @@ public interface UserHomeService {
 	 * @return
 	 * @return: String
 	 */
-	String getEvaluation(Integer docloginid, Integer pageNo) throws Exception;
+	String listEvaluations(Integer docloginid, Integer pageNo) throws Exception;
+
+	
 
 }

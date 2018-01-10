@@ -60,7 +60,7 @@ public interface UserInfoService {
 	String updateUserPixAndUserName(MultipartFile pictureFile, Integer userloginid, String username) throws Exception;
 
 	/**
-	 * @Title: findUserInfo
+	 * @Title: getUserDetail
 	 * @Description: 获取用户信息
 	 * @param userloginid
 	 *            用户登录id
@@ -68,7 +68,7 @@ public interface UserInfoService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	String findUserInfo(Integer userloginid) throws Exception;
+	String getUserDetail(Integer userloginid) throws Exception;
 
 	/**
 	 * @Title: updateUserInfo
@@ -113,7 +113,7 @@ public interface UserInfoService {
 	String updateInfoToReview(Integer userloginid) throws Exception;
 
 	/**
-	 * @Title: findFamily
+	 * @Title: listFamily
 	 * @Description: 查询亲属信息
 	 * @param userloginid
 	 *            用户登录id
@@ -121,7 +121,7 @@ public interface UserInfoService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	String findFamily(Integer userloginid) throws Exception;
+	String listFamily(Integer userloginid) throws Exception;
 
 	/**
 	 * @Title: addFamily
@@ -167,11 +167,15 @@ public interface UserInfoService {
 
 	/**
 	 * @Title: getReviewInfo
-	 * @Description: TODO
+	 * @Description: 获取审核信息
 	 * @param userloginid
 	 * @return
 	 * @return: String
 	 */
 	String getReviewInfo(Integer userloginid) throws Exception;
+
+	
+
+	
 
 }

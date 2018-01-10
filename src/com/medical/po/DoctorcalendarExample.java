@@ -1,5 +1,6 @@
 package com.medical.po;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -319,6 +320,76 @@ public class DoctorcalendarExample {
 
         public Criteria andDoccalendartimeNotBetween(String value1, String value2) {
             addCriterion("docCalendarTime not between", value1, value2, "doccalendartime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendartimeintervalIsNull() {
+            addCriterion("docCalendarTimeInterval is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendartimeintervalIsNotNull() {
+            addCriterion("docCalendarTimeInterval is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendartimeintervalEqualTo(String value) {
+            addCriterion("docCalendarTimeInterval =", value, "doccalendartimeinterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendartimeintervalNotEqualTo(String value) {
+            addCriterion("docCalendarTimeInterval <>", value, "doccalendartimeinterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendartimeintervalGreaterThan(String value) {
+            addCriterion("docCalendarTimeInterval >", value, "doccalendartimeinterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendartimeintervalGreaterThanOrEqualTo(String value) {
+            addCriterion("docCalendarTimeInterval >=", value, "doccalendartimeinterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendartimeintervalLessThan(String value) {
+            addCriterion("docCalendarTimeInterval <", value, "doccalendartimeinterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendartimeintervalLessThanOrEqualTo(String value) {
+            addCriterion("docCalendarTimeInterval <=", value, "doccalendartimeinterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendartimeintervalLike(String value) {
+            addCriterion("docCalendarTimeInterval like", value, "doccalendartimeinterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendartimeintervalNotLike(String value) {
+            addCriterion("docCalendarTimeInterval not like", value, "doccalendartimeinterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendartimeintervalIn(List<String> values) {
+            addCriterion("docCalendarTimeInterval in", values, "doccalendartimeinterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendartimeintervalNotIn(List<String> values) {
+            addCriterion("docCalendarTimeInterval not in", values, "doccalendartimeinterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendartimeintervalBetween(String value1, String value2) {
+            addCriterion("docCalendarTimeInterval between", value1, value2, "doccalendartimeinterval");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendartimeintervalNotBetween(String value1, String value2) {
+            addCriterion("docCalendarTimeInterval not between", value1, value2, "doccalendartimeinterval");
             return (Criteria) this;
         }
 
@@ -1059,6 +1130,66 @@ public class DoctorcalendarExample {
 
         public Criteria andDocaddresslatNotBetween(String value1, String value2) {
             addCriterion("docAddressLat not between", value1, value2, "docaddresslat");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendarpriceIsNull() {
+            addCriterion("docCalendarPrice is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendarpriceIsNotNull() {
+            addCriterion("docCalendarPrice is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendarpriceEqualTo(BigDecimal value) {
+            addCriterion("docCalendarPrice =", value, "doccalendarprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendarpriceNotEqualTo(BigDecimal value) {
+            addCriterion("docCalendarPrice <>", value, "doccalendarprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendarpriceGreaterThan(BigDecimal value) {
+            addCriterion("docCalendarPrice >", value, "doccalendarprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendarpriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("docCalendarPrice >=", value, "doccalendarprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendarpriceLessThan(BigDecimal value) {
+            addCriterion("docCalendarPrice <", value, "doccalendarprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendarpriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("docCalendarPrice <=", value, "doccalendarprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendarpriceIn(List<BigDecimal> values) {
+            addCriterion("docCalendarPrice in", values, "doccalendarprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendarpriceNotIn(List<BigDecimal> values) {
+            addCriterion("docCalendarPrice not in", values, "doccalendarprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendarpriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("docCalendarPrice between", value1, value2, "doccalendarprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoccalendarpriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("docCalendarPrice not between", value1, value2, "doccalendarprice");
             return (Criteria) this;
         }
     }

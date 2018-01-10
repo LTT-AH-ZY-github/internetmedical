@@ -44,7 +44,7 @@ public class UserHomeController {
 	
 	@RequestMapping(value = "/listdoctors", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取医生列表模式", httpMethod = "POST", consumes = "multipart/form-data", notes = "获取医生列表模式")
-	public @ResponseBody String findDoctors(
+	public @ResponseBody String listDoctorsInList(
 			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page,
 			@ApiParam(name = "userloginlon", value = "经度") @RequestParam(value = "userloginlon") String userloginlon,
 			@ApiParam(name = "userloginlat", value = "纬度") @RequestParam(value = "userloginlat") String userloginlat,
@@ -68,23 +68,12 @@ public class UserHomeController {
 		if (StringUtils.isBlank(userloginlon)) {
 			return DataResult.error("经度为空");
 		}
-		DoctorSearch doctorSearch = new DoctorSearch();
-		doctorSearch.setPageNo(page);
-		doctorSearch.setPageSize(10);
-		doctorSearch.setLat(userloginlat);
-		doctorSearch.setLon(userloginlon);
-		doctorSearch.setProvince(dochospprovince);
-		doctorSearch.setCity(dochospcity);
-		doctorSearch.setArea(dochosparea);
-		doctorSearch.setPrimaryDept(docprimarydept);
-		doctorSearch.setSecondDept(docseconddept);
-		doctorSearch.setType(type);
-		return userHomeService.listDoctor(doctorSearch);
+		return userHomeService.listDoctorsInList(page,userloginlon,userloginlat,dochospprovince,dochospcity,dochosparea,docprimarydept,docseconddept,type);
 	}
 
 	@RequestMapping(value = "/mapdoctors", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取医生地图模式", httpMethod = "POST", notes = "获取医生地图模式")
-	public @ResponseBody String findDoctorInMap(
+	public  String listDoctorsInMap(
 			@ApiParam(name = "userloginlon", value = "精度") @RequestParam(value = "userloginlon") String userloginlon,
 			@ApiParam(name = "userloginlat", value = "纬度") @RequestParam(value = "userloginlat") String userloginlat)
 			throws Exception {
@@ -94,13 +83,13 @@ public class UserHomeController {
 		if (StringUtils.isBlank(userloginlat)) {
 			return DataResult.error("纬度为空");
 		}
-		return userHomeService.findDoctorsInMap(userloginlat, userloginlon);
+		return userHomeService.listDoctorsInMap(userloginlat, userloginlon);
 
 	}
 
 	@RequestMapping(value = "/doctorinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取医生详细信息", httpMethod = "POST", notes = "获取医生详细信息")
-	public String findDoctor(
+	public String getDoctorDetail(
 			@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid) throws Exception {
 		if (docloginid == null) {
@@ -109,25 +98,25 @@ public class UserHomeController {
 		if (userloginid == null) {
 			return DataResult.error("用户登录id为空");
         }
-		return userHomeService.findDoctorDetail(docloginid,userloginid);
+		return userHomeService.getDoctorDetail(docloginid,userloginid);
 	}
 
 	
 	@RequestMapping(value = "/getcalendar", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取医生当天后30天内日程", httpMethod = "POST", notes = "获取医生当天后30天内日程", produces = "application/json")
-	public String getCalendarbymonth(
+	public String listCalendars(
 			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid
 			) throws Exception {
 		if (docloginid==null) {
 			return DataResult.error("医生登录id为空");
 		}
-		return userHomeService.listCalendar(docloginid);
+		return userHomeService.listCalendars(docloginid);
 	}
 
 	
 	@RequestMapping(value = "/getevaluation", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取医生评价", httpMethod = "POST", notes = "获取医生评价")
-	public String getEvaluation(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
+	public String listEvaluations(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
 			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page,
 			HttpServletRequest request) throws Exception {
 		if (docloginid==null) {
@@ -136,7 +125,7 @@ public class UserHomeController {
 		if (!CheckUtils.isPageLegal(page)) {
 			return DataResult.error("当前页有误");
 		}
-		return userHomeService.getEvaluation(docloginid, page);
+		return userHomeService.listEvaluations(docloginid, page);
 	}
 	
 }

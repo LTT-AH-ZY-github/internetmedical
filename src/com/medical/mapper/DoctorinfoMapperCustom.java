@@ -32,14 +32,13 @@ public interface DoctorinfoMapperCustom {
 	Doctorinfo selectByDocLoginId(Integer docloginid);
 	
 	/**
-	 * @Title: findDoctorInfoInList
+	 * @Title: findDoctorsInList
 	 * @Description: 病人端医生信息列表模式
-	 * @param doctorSearch
+	 * @param map
 	 * @return
-	 * @throws Exception
 	 * @return: List<Map<String,Object>>
 	 */
-	List<Map<String, Object>> findDoctorInfoInList(DoctorSearch doctorSearch)throws Exception;
+	List<Map<String, Object>> findDoctorsInList(Map<String, Object> map);
 	
 	/**
 	 * @Title: findDoctorInfoInMap
@@ -125,14 +124,7 @@ public interface DoctorinfoMapperCustom {
 	
 	
 	
-	/**
-	 * @Title: selectByDocLoginTypeInAdmin
-	 * @Description: 管理员获取医生列表
-	 * @param type 用户账号类型
-	 * @return
-	 * @return: List<Map<String,Object>>
-	 */
-	List<Map<String, Object>> selectByDocLoginTypeInAdmin(Integer type,Integer key);
+	
 	
 	/**
 	 * @Title: selectInfoByDocLoginIdInAdmin
@@ -142,4 +134,13 @@ public interface DoctorinfoMapperCustom {
 	 * @return: Map<String,Object>
 	 */
 	Map<String, Object>selectInfoByDocLoginIdInAdmin(Integer docloginid);
+	/**
+	 * @Title: selectByParamsInAdmin
+	 * @Description: TODO
+	 * @param map
+	 * @return
+	 * @return: List<Map<String,Object>>
+	 */
+	List<Map<String, Object>> selectByParamsInAdmin(Map<String, Object> map);
+	
 }

@@ -4,12 +4,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.validation.constraints.Null;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.mapper.AdminexamineMapper;
 import com.medical.mapper.AdminlogininfoMapper;
+import com.medical.mapper.CityMapper;
 import com.medical.mapper.DoctoraddressMapper;
 import com.medical.mapper.DoctoraddressMapperCustom;
 import com.medical.mapper.DoctorinfoMapperCustom;
@@ -26,6 +30,8 @@ import com.medical.mapper.UserinfoMapperCustom;
 import com.medical.mapper.UserlogininfoMapper;
 import com.medical.po.Adminexamine;
 import com.medical.po.Adminlogininfo;
+import com.medical.po.City;
+import com.medical.po.CityExample;
 import com.medical.po.Doctoraddress;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
@@ -85,10 +91,14 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	private FeedbackMapperCustom feedbackMapperCustom;
 	@Autowired
 	private FeedbackMapper feedbackMapper;
+	@Autowired
+	private CityMapper cityMapper;
 	
 	//管理员根据用户账号类型查询用户 
 	@Override
-	public String listUser(Integer adminloginid,Integer limit,Integer offset,Integer type) throws Exception{
+	public String listUser(Integer adminloginid,Integer limit,Integer offset,Integer type,
+			Integer useradrprovince, Integer useradrcity, Integer useradrarea, Integer userage, String userloginphone,
+			String startdatetime, String enddatetime, String usermale) throws Exception{
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo==null) {
 			return DataResult.error("该管理员账号不存在");
@@ -98,7 +108,35 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 			pageNo =  offset/limit+1;
 		}
 		PageHelper.startPage(pageNo, limit);
-		List<Map<String, Object>> list = userinfoMapperCustom.selectByUserLoginTypeInAdmin(type,0);
+		Map<String, Object> map = new HashMap<>();
+		map.put("type", type);
+		map.put("useradrprovince", null);
+		if (useradrprovince!=null && useradrprovince!=0) {
+			City province = cityMapper.selectByPrimaryKey(useradrprovince+"");
+			if (province!=null) {
+				map.put("useradrprovince", province.getCityname());
+			}
+		}
+		map.put("useradrcity", null);
+		if (useradrcity!=null && useradrcity!=0) {
+			City city = cityMapper.selectByPrimaryKey(useradrcity+"");
+			if (city!=null) {
+				map.put("useradrcity", city.getCityname());
+			}
+		}
+		map.put("useradrarea", null);
+		if (useradrarea!=null && useradrarea!=0) {
+			City area = cityMapper.selectByPrimaryKey(useradrarea+"");
+			if (area!=null) {
+				map.put("useradrarea", area.getCityname());
+			}
+		}
+		map.put("userage", userage);
+		map.put("userloginphone", userloginphone);
+		map.put("startdatetime", startdatetime);
+		map.put("enddatetime", enddatetime);
+		map.put("usermale", usermale);
+		List<Map<String, Object>> list = userinfoMapperCustom.selectByParmasInAdmin(map);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
 		if (pageInfo != null && !pageInfo.getList().isEmpty()) {
 			Map<String, Object> data = new HashMap<String, Object>();
@@ -199,7 +237,8 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 
 	// 管理员根据用户账号类型查询医生
 	@Override
-	public String listDoctor(Integer adminloginid, Integer limit, Integer offset, Integer type) throws Exception {
+	public String listDoctor(Integer adminloginid, Integer limit, Integer offset, Integer type, 
+			String doctitle, Integer docage, String docloginphone, String dochosplevel, Integer dochospfdept, Integer dochospsdept, String startdatetime, String enddatetime) throws Exception {
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo == null) {
 			return DataResult.error("该管理员账号不存在");
@@ -209,7 +248,29 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 			pageNo = offset / limit + 1;
 		}
 		PageHelper.startPage(pageNo, limit);
-		List<Map<String, Object>> list = doctorinfoMapperCustom.selectByDocLoginTypeInAdmin(type,0);
+		Map<String, Object> map = new HashMap<>();
+		map.put("type", type);
+		map.put("doctitle", doctitle);
+		map.put("docage", docage);
+		map.put("docloginphone", docloginphone);
+		map.put("dochosplevel", dochosplevel);
+		map.put("dochospfdept", null);
+		if (dochospfdept!=null && dochospfdept!=0) {
+			Hospitaldept hospitalfatherdept = hospitaldeptMapper.selectByPrimaryKey(dochospfdept);
+			if (hospitalfatherdept!=null) {
+				map.put("dochospfdept", hospitalfatherdept.getHospdeptname());
+			}
+		}
+		map.put("dochospsdept", null);
+		if (dochospsdept!=null && dochospsdept!=0) {
+			Hospitaldept hospitalsondept = hospitaldeptMapper.selectByPrimaryKey(dochospsdept);
+			if (hospitalsondept!=null) {
+				map.put("dochospsdept", hospitalsondept.getHospdeptname());
+			}
+		}
+		map.put("startdatetime", startdatetime);
+		map.put("enddatetime", enddatetime);
+		List<Map<String, Object>> list = doctorinfoMapperCustom.selectByParamsInAdmin(map);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
 		if (pageInfo != null && !pageInfo.getList().isEmpty()) {
 			Map<String, Object> data = new HashMap<String, Object>();
@@ -312,7 +373,8 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	
 	//获取医院列表信息
 	@Override
-	public String listHospital(Integer adminloginid, Integer limit, Integer offset, Integer type) throws Exception {
+	public String listHospital(Integer adminloginid, Integer limit, Integer offset, Integer type, 
+			Integer hospadrprovince, Integer hospadrcity, Integer hospadrarea, String hosplevel, String hosploginphone, String startdatetime, String enddatetime) throws Exception {
 		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
 		if (adminlogininfo == null) {
 			return DataResult.error("该管理员账号不存在");
@@ -322,7 +384,34 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 			pageNo = offset / limit + 1;
 		}
 		PageHelper.startPage(pageNo, limit);
-		List<Map<String, Object>> list = hospinfoMapperCustom.selectByHospTypeInAdmin(type,0);
+		Map<String, Object> map = new HashMap<>();
+		map.put("type", type);
+		map.put("hospadrprovince", null);
+		if (hospadrprovince!=null && hospadrprovince!=0) {
+			City province = cityMapper.selectByPrimaryKey(hospadrprovince+"");
+			if (province!=null) {
+				map.put("hospadrprovince", province.getCityname());
+			}
+		}
+		map.put("hospadrcity", null);
+		if (hospadrcity!=null && hospadrcity!=0) {
+			City city = cityMapper.selectByPrimaryKey(hospadrcity+"");
+			if (city!=null) {
+				map.put("hospadrcity", city.getCityname());
+			}
+		}
+		map.put("hospadrarea", null);
+		if (hospadrarea!=null && hospadrarea!=0) {
+			City area = cityMapper.selectByPrimaryKey(hospadrprovince+"");
+			if (area!=null) {
+				map.put("hospadrarea", area.getCityname());
+			}
+		}
+		map.put("hosplevel", hosplevel);
+		map.put("hosploginphone", hosploginphone);
+		map.put("startdatetime", startdatetime);
+		map.put("enddatetime", enddatetime);
+		List<Map<String, Object>> list = hospinfoMapperCustom.selectByParamsInAdmin(map);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
 		if (pageInfo != null && !pageInfo.getList().isEmpty()) {
 			Map<String, Object> data = new HashMap<String, Object>();

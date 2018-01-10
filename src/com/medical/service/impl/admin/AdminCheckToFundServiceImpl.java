@@ -35,9 +35,10 @@ import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.admin.AdminCheckToFundService;
 import com.medical.service.iface.doctor.DoctorPurseService;
 import com.medical.service.iface.hospital.HospitalPurseService;
+import com.medical.utils.MakeRandomNum;
 import com.medical.utils.result.DataResult;
 import com.pay.alipay.AlipayFund;
-import com.pay.alipay.MakeOrderNum;
+
 import net.sf.json.JSONObject;
 
 /**
@@ -148,7 +149,7 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 			return DataResult.error("退款中,请稍后重试");
 		}
 		String prefix = "df";
-		String out_biz_no = MakeOrderNum.getTradeNo(prefix);
+		String out_biz_no = MakeRandomNum.getTradeNo(prefix);
 		String amount = accountAmount+"";
 		String  payer_show_name = "合肥顶岭医疗科技开发有限公司"; 
 		String remark=doctorinfo.getDocname()+"账户余额提现";
@@ -232,7 +233,7 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 			return DataResult.error("退款中,请稍后重试");
 		}
 		String prefix = "hf";
-		String out_biz_no = MakeOrderNum.getTradeNo(prefix);
+		String out_biz_no = MakeRandomNum.getTradeNo(prefix);
 		String payee_account= hospinfo.getHospalipayaccount();
 		//String payee_account= "pwddhi8634@sandbox.com";
 		String  payee_real_name = hospinfo.getHospalipayname();
@@ -440,7 +441,7 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 			return DataResult.error("退款中,请稍后重试");
 		}
 		String prefix = "uf";
-		String out_biz_no = MakeOrderNum.getTradeNo(prefix);
+		String out_biz_no = MakeRandomNum.getTradeNo(prefix);
 		String payee_account= userinfo.getUseralipayaccount();
 		//String payee_account= "pwddhi8634@sandbox.com";
 		String  payee_real_name = userinfo.getUseralipayname();

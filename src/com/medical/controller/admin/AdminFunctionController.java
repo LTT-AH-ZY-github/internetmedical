@@ -39,7 +39,15 @@ public class AdminFunctionController {
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "limit", required = true, value = "每页多少数据") @RequestParam(value = "limit") Integer limit,
 			@ApiParam(name = "offset", required = true, value = "从第几条开始") @RequestParam(value = "offset") Integer offset,
-			@ApiParam(name = "type", value = "为0时获取全部用户，为1时获取未审核的用户，为2时获取待审核的用户，为3时获取审核通过的用户，为4时获取未通过审核的用户") @RequestParam(required=false) Integer type
+			@ApiParam(name = "type", value = "为0时获取全部用户，为1时获取未审核的用户，为2时获取待审核的用户，为3时获取审核通过的用户，为4时获取未通过审核的用户") @RequestParam(required=false) Integer type,
+			@ApiParam(name = "useradrprovince", value = "省，为空是0") @RequestParam(required=false) Integer useradrprovince,
+			@ApiParam(name = "useradrcity", value = "市，为空是0") @RequestParam(required=false) Integer useradrcity,
+			@ApiParam(name = "useradrarea", value = "区县，为空是0") @RequestParam(required=false) Integer useradrarea,
+			@ApiParam(name = "userage", value = "年龄，为空是0") @RequestParam(required=false) Integer userage,
+			@ApiParam(name = "userloginphone", value = "手机号码，为空是''") @RequestParam(required=false) String userloginphone,
+			@ApiParam(name = "startdatetime", value = "开始时间，为空是''") @RequestParam(required=false) String startdatetime,
+			@ApiParam(name = "enddatetime", value = "结束时间，为空是''") @RequestParam(required=false) String enddatetime,
+			@ApiParam(name = "usermale", value = "性别，为空是''") @RequestParam(required=false) String usermale
 			)throws Exception{
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
@@ -56,7 +64,7 @@ public class AdminFunctionController {
 		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
 			return DataResult.error("offset应为正整数");
 		}
-		return adminFunctionService.listUser(adminloginid, limit, offset, type);
+		return adminFunctionService.listUser(adminloginid, limit, offset, type,useradrprovince,useradrcity,useradrarea,userage,userloginphone,startdatetime,enddatetime,usermale);
 	}
 	
 	@RequestMapping(value="/getuserdetail", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -100,7 +108,15 @@ public class AdminFunctionController {
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "limit", required = true, value = "每页多少数据") @RequestParam(value = "limit") Integer limit,
 			@ApiParam(name = "offset", required = true, value = "从第几条开始") @RequestParam(value = "offset") Integer offset,
-			@ApiParam(name = "type", value = "为0时获取全部医生，为1时获取未审核的医生，为2时获取待审核的医生，为3时获取审核通过的医生，为4时获取未通过审核的医生") @RequestParam Integer type
+			@ApiParam(name = "type", value = "为0时获取全部医生，为1时获取未审核的医生，为2时获取待审核的医生，为3时获取审核通过的医生，为4时获取未通过审核的医生") @RequestParam Integer type,
+			@ApiParam(name = "doctitle",  value = "医生职称") @RequestParam(required=false) String doctitle,
+			@ApiParam(name = "docage", value = "医生年龄") @RequestParam(required=false) Integer docage,
+			@ApiParam(name = "docloginphone",  value = "手机号码") @RequestParam(required=false) String docloginphone,
+			@ApiParam(name = "dochosplevel",  value = "所在医院等级") @RequestParam(required=false) String dochosplevel,
+			@ApiParam(name = "dochospfdept",  value = "一级部门") @RequestParam(required=false) Integer dochospfdept,
+			@ApiParam(name = "dochospsdept",  value = "二级部门") @RequestParam(required=false) Integer dochospsdept,
+			@ApiParam(name = "startdatetime",  value = "开始时间") @RequestParam(required=false) String startdatetime,
+			@ApiParam(name = "enddatetime",  value = "结束时间") @RequestParam(required=false) String enddatetime
 			)throws Exception{
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
@@ -117,7 +133,7 @@ public class AdminFunctionController {
 		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
 			return DataResult.error("offset应为正整数");
 		}
-		return adminFunctionService.listDoctor(adminloginid, limit, offset, type);
+		return adminFunctionService.listDoctor(adminloginid, limit, offset, type,doctitle,docage,docloginphone,dochosplevel,dochospfdept,dochospsdept,startdatetime,enddatetime);
 	}
 	
 	@RequestMapping(value="/getdoctordetail", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -167,7 +183,14 @@ public class AdminFunctionController {
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
 			@ApiParam(name = "limit", required = true, value = "每页多少数据") @RequestParam(value = "limit") Integer limit,
 			@ApiParam(name = "offset", required = true, value = "从第几条开始") @RequestParam(value = "offset") Integer offset,
-			@ApiParam(name = "type", value = "为0时获取全部医院，为1时获取未审核的医院，为2时获取待审核的医院，为3时获取审核通过的医院，为4时获取未通过审核的医院") @RequestParam(required=false) Integer type
+			@ApiParam(name = "type", value = "为0时获取全部医院，为1时获取未审核的医院，为2时获取待审核的医院，为3时获取审核通过的医院，为4时获取未通过审核的医院") @RequestParam(required=false) Integer type,
+			@ApiParam(name = "hospadrprovince", value = "省") @RequestParam(required=false) Integer hospadrprovince,
+			@ApiParam(name = "hospadrcity",  value = "市") @RequestParam(required=false) Integer hospadrcity,
+			@ApiParam(name = "hospadrarea",  value = "区县") @RequestParam(required=false) Integer hospadrarea,
+			@ApiParam(name = "hosplevel",  value = "医院等级") @RequestParam(required=false) String hosplevel,
+			@ApiParam(name = "hosploginphone",  value = "医院手机号码") @RequestParam(required=false) String hosploginphone,
+			@ApiParam(name = "startdatetime",  value = "开始时间") @RequestParam(required=false) String startdatetime,
+			@ApiParam(name = "enddatetime",  value = "结束时间") @RequestParam(required=false) String enddatetime
 			)throws Exception{
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
@@ -184,7 +207,8 @@ public class AdminFunctionController {
 		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
 			return DataResult.error("offset应为正整数");
 		}
-		return adminFunctionService.listHospital(adminloginid, limit, offset, type);
+		return adminFunctionService.listHospital(adminloginid, limit, offset, type,hospadrprovince,hospadrcity,hospadrarea,hosplevel,hosploginphone,
+				startdatetime,enddatetime);
 	}
 	
 	@RequestMapping(value="/gethospitaldetail", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")

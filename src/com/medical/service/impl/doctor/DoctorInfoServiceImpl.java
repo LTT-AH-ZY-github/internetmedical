@@ -1,6 +1,7 @@
 package com.medical.service.impl.doctor;
 
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,6 +39,7 @@ import com.medical.utils.PictureTool;
 import com.medical.utils.TimeUtil;
 import com.medical.utils.result.DataResult;
 import com.medical.utils.result.DataResult2;
+import com.sun.org.apache.xpath.internal.operations.Lt;
 
 import net.sf.json.JSONObject;
 
@@ -639,74 +641,197 @@ public class DoctorInfoServiceImpl implements DoctorInfoService {
 	 * .Doctorcalendar)
 	 */
 	@Override
-	public String addCalendar(Doctorcalendar doctorcalendar) throws Exception {
+	public String addCalendar(Integer docloginid, Date[] doccalendarday,BigDecimal doccalendarprice, String doccalendaraffair,
+			Integer doccalendaradressid, String doccalendarmorning, String doccalendarafternoon,
+			String doccalendarnight) throws Exception {
 		// 医生是否存在
-		int docloginid = doctorcalendar.getDocloginid();
+		System.out.println("进入");
 		Doctorinfo doctor = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
 		if (doctor == null) {
 			return DataResult.error("账号不存在");
 		}
-		// 地址是否存在
-		int docaddressid = doctorcalendar.getDoccalendaradressid();
-		Doctoraddress doctoraddress = doctoraddressMapper.selectByPrimaryKey(docaddressid);
+		Doctoraddress doctoraddress = doctoraddressMapper.selectByPrimaryKey(doccalendaradressid);
 		if (doctoraddress == null) {
 			return DataResult.error("该地址不存在");
 		}
-		Date day = doctorcalendar.getDoccalendarday();
-		String time = doctorcalendar.getDoccalendartime();
-		CalendarParmas calendarParmas = new CalendarParmas();
-		calendarParmas.setId(docloginid);
-		calendarParmas.setTime(TimeUtil.dateToStrLong(day));
-		calendarParmas.setKey(time);
-		List<Doctorcalendar> lists = doctorcalendarMapperCustom.selectByDocloginidAndDayAndTimeInDoc(calendarParmas);
-		if (lists!=null && lists.size()>0) {
-			return DataResult.error("该时间段已添加日程");
-		}
-		int  timeResult =TimeUtil.compareDate(day,new Date());
-		if (timeResult==-1) {
-			return DataResult.error("不可设置历史日程");
-		}
-		boolean check = false;
-		if (timeResult==0) {
+		for (Date date : doccalendarday) {
+			String date2 = TimeUtil.dateToStrLong(date);
+			System.out.println("日期"+date);
+			int  timeResult =TimeUtil.compareDate(date,new Date());
+			if (timeResult==-1) {
+				return DataResult.error("不可设置历史日程"+date2);
+			}
+			//当前时段
 			String dateTime = TimeUtil.getDateSx();
-			if ("下午".equals(dateTime)) {
-				if ("上午".equals(time)) {
-					return DataResult.error("不可设置历史日程");
+			CalendarParmas calendarParmas = new CalendarParmas();
+			calendarParmas.setId(docloginid);
+			calendarParmas.setTime(TimeUtil.dateToStrLong(date));
+			if (StringUtils.isNotBlank(doccalendarmorning)) {
+				if (timeResult==0 &&( "下午".equals(dateTime)|| "晚上".equals(dateTime))) {
+					   return DataResult.error("不可设置历史日程"+date2+"上午 "+doccalendarmorning);
+				}
+				calendarParmas.setKey("上午");
+				List<Doctorcalendar> lists = doctorcalendarMapperCustom.selectByDocloginidAndDayAndTimeInDoc(calendarParmas);
+				if (lists!=null && lists.size()>0) {
+					return DataResult.error(date2+" 下午 "+doccalendarmorning+"该时间段已添加日程");
 				}
 			}
-			if ("晚上".equals(dateTime)) {
-				return DataResult.error("不可设置历史日程");
+			if (StringUtils.isNotBlank(doccalendarafternoon)) {
+				if (timeResult==0 && "晚上".equals(dateTime)) {
+					return DataResult.error("不可设置历史日程"+date2+" "+doccalendarafternoon);
+				}
+				calendarParmas.setKey("下午");
+				List<Doctorcalendar> lists = doctorcalendarMapperCustom.selectByDocloginidAndDayAndTimeInDoc(calendarParmas);
+				if (lists!=null && lists.size()>0) {
+					return DataResult.error(date2+" 下午 "+doccalendarafternoon+"该时间段已添加日程");
+				}
 			}
-			if (dateTime.equals(time)) {
-				check = true;
+			if (StringUtils.isNotBlank(doccalendarnight)) {
+				calendarParmas.setKey("晚上");
+				List<Doctorcalendar> lists = doctorcalendarMapperCustom.selectByDocloginidAndDayAndTimeInDoc(calendarParmas);
+				if (lists!=null && lists.size()>0) {
+					return DataResult.error(date2+" 晚上 "+doccalendarnight+"该时间段已添加日程");
+				}
+			}
+			
+		}
+		for (Date date : doccalendarday) {
+			int mooning = 0;
+			int afternoon = 0;
+			int night = 0;
+			Doctorcalendar record = new Doctorcalendar();
+			record.setDocloginid(docloginid);
+			record.setDocaddresslocation(doctoraddress.getDocaddresslocation());
+			record.setDocaddressprovince(doctoraddress.getDocaddressprovince());
+			record.setDocaddresscity(doctoraddress.getDocaddresscity());
+			record.setDocaddressarea(doctoraddress.getDocaddressarea());
+			record.setDocaddressother(doctoraddress.getDocaddressother());
+			record.setDocaddresslat(doctoraddress.getDocaddresslat());
+			record.setDocaddresslon(doctoraddress.getDocaddresslon());
+			record.setDoccalendaradressid(doccalendaradressid);
+			record.setDoccalendaraffair(doccalendaraffair);
+			record.setDoccalendarprice(doccalendarprice);
+			record.setDoccalendarday(date);
+			if (StringUtils.isNotBlank(doccalendarmorning)) {
+				record.setDoccalendartime("上午");
+				record.setDoccalendartimeinterval(doccalendarmorning);
+				record.setDoccalendarischeck(false);
+				int result =doctorcalendarMapperCustom.insertSelectiveReturnId(record);
+				mooning = record.getDoccalendarid();
+				if (result<=0) {
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					return DataResult.error("添加失败");
+				}
+			}
+			if (StringUtils.isNotBlank(doccalendarafternoon)) {
+				record.setDoccalendartime("下午");
+				record.setDoccalendartimeinterval(doccalendarafternoon);
+				record.setDoccalendarischeck(false);
+				int result =doctorcalendarMapperCustom.insertSelectiveReturnId(record);
+				afternoon = record.getDoccalendarid();
+				if (result<=0) {
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					return DataResult.error("添加失败");
+				}
+			}
+			if (StringUtils.isNotBlank(doccalendarnight)) {
+				record.setDoccalendartime("晚上");
+				record.setDoccalendartimeinterval(doccalendarnight);
+				record.setDoccalendarischeck(false);
+				int result =doctorcalendarMapperCustom.insertSelectiveReturnId(record);
+				night = record.getDoccalendarid();
+				if (result<=0) {
+					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+					return DataResult.error("添加失败");
+				}
+			}
+			//当天日程需修改定位
+			int  timeResult =TimeUtil.compareDate(date,new Date());
+			if (timeResult==0) {
+				//当前时段
+				String dateTime = TimeUtil.getDateSx();
+				if ("上午".equals(dateTime)) {
+					if (mooning!=0) {
+						Doctorcalendar doctorcalendar = doctorcalendarMapper.selectByPrimaryKey(mooning);
+						boolean calendar = updateCalenderToCheck(doctorcalendar);
+						if (!calendar) {
+							TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+							return DataResult.error("添加失败");
+						}
+					}
+				}
+				if ("下午".equals(dateTime)) {
+					if (afternoon!=0) {
+						Doctorcalendar doctorcalendar = doctorcalendarMapper.selectByPrimaryKey(afternoon);
+						boolean calendar = updateCalenderToCheck(doctorcalendar);
+						if (!calendar) {
+							TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+							return DataResult.error("添加失败");
+						}
+					}				
+				}
+				if ("晚上".equals(dateTime)) {
+					if (night!=0) {
+						Doctorcalendar doctorcalendar = doctorcalendarMapper.selectByPrimaryKey(night);
+						boolean calendar = updateCalenderToCheck(doctorcalendar);
+						if (!calendar) {
+							TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+							return DataResult.error("添加失败");
+						}
+					}	
+				}
 			}
 		}
-		
-		doctorcalendar.setDocaddresslocation(doctoraddress.getDocaddresslocation());
-		doctorcalendar.setDocaddressprovince(doctoraddress.getDocaddressprovince());
-		doctorcalendar.setDocaddresscity(doctoraddress.getDocaddresscity());
-		doctorcalendar.setDocaddressarea(doctoraddress.getDocaddressarea());
-		doctorcalendar.setDocaddressother(doctoraddress.getDocaddressother());
-		doctorcalendar.setDocaddresslat(doctoraddress.getDocaddresslat());
-		doctorcalendar.setDocaddresslon(doctoraddress.getDocaddresslon());
-		boolean result = doctorcalendarMapperCustom.insertSelectiveReturnId(doctorcalendar) > 0;
-		if (check) {
-			boolean calendar = updateCalenderToCheck(doctorcalendar);
-			if (!calendar) {
-				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-				return DataResult.error("新增失败");
-			}
-		}
-		if (result) {
-				Map<String, Object> map = doctorcalendarMapperCustom
-						.selectAllInfoByDocCalendarId(doctorcalendar.getDoccalendarid());
-				return DataResult2.success("新增成功", map);
-		} else {
-				return DataResult.error("新增失败");
-		}
-		
-
+		return DataResult.success("新增成功");
 	}
+	
+//	@Override
+//	public String addCalendar(Doctorcalendar doctorcalendar) throws Exception {
+//		
+//		// 地址是否存在
+//		int docaddressid = doctorcalendar.getDoccalendaradressid();
+//		Doctoraddress doctoraddress = doctoraddressMapper.selectByPrimaryKey(docaddressid);
+//		if (doctoraddress == null) {
+//			return DataResult.error("该地址不存在");
+//		}
+//		Date day = doctorcalendar.getDoccalendarday();
+//		String time = doctorcalendar.getDoccalendartime();
+//		CalendarParmas calendarParmas = new CalendarParmas();
+//		calendarParmas.setId(docloginid);
+//		calendarParmas.setTime(TimeUtil.dateToStrLong(day));
+//		calendarParmas.setKey(time);
+//		List<Doctorcalendar> lists = doctorcalendarMapperCustom.selectByDocloginidAndDayAndTimeInDoc(calendarParmas);
+//		if (lists!=null && lists.size()>0) {
+//			return DataResult.error("该时间段已添加日程");
+//		}
+//		
+//		
+//		
+//		doctorcalendar.setDocaddresslocation(doctoraddress.getDocaddresslocation());
+//		doctorcalendar.setDocaddressprovince(doctoraddress.getDocaddressprovince());
+//		doctorcalendar.setDocaddresscity(doctoraddress.getDocaddresscity());
+//		doctorcalendar.setDocaddressarea(doctoraddress.getDocaddressarea());
+//		doctorcalendar.setDocaddressother(doctoraddress.getDocaddressother());
+//		doctorcalendar.setDocaddresslat(doctoraddress.getDocaddresslat());
+//		doctorcalendar.setDocaddresslon(doctoraddress.getDocaddresslon());
+//		boolean result = doctorcalendarMapperCustom.insertSelectiveReturnId(doctorcalendar) > 0;
+//		if (check) {
+//			boolean calendar = updateCalenderToCheck(doctorcalendar);
+//			if (!calendar) {
+//				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+//				return DataResult.error("新增失败");
+//			}
+//		}
+//		if (result) {
+//				Map<String, Object> map = doctorcalendarMapperCustom
+//						.selectAllInfoByDocCalendarId(doctorcalendar.getDoccalendarid());
+//				return DataResult2.success("新增成功", map);
+//		} else {
+//				return DataResult.error("新增失败");
+//		}
+//		
+//
+//	}
 
 	/*
 	 * (非 Javadoc) <p>Title: updateCalendar</p> <p>Description: 修改日程</p>
@@ -739,18 +864,20 @@ public class DoctorInfoServiceImpl implements DoctorInfoService {
 			return DataResult2.error("账号信息不匹配");
 		}
 		// 地址是否存在
-		int docaddressid = doctorcalendar.getDoccalendaradressid();
-		Doctoraddress doctoraddress = doctoraddressMapper.selectByPrimaryKey(docaddressid);
-		if (doctoraddress == null) {
-			return DataResult.error("该地址不存在");
+		Integer docaddressid = doctorcalendar.getDoccalendaradressid();
+		if (docaddressid!=null) {
+			Doctoraddress doctoraddress = doctoraddressMapper.selectByPrimaryKey(docaddressid);
+			if (doctoraddress == null) {
+				return DataResult.error("该地址不存在");
+			}
+			doctorcalendar.setDocaddresslocation(doctoraddress.getDocaddresslocation());
+			doctorcalendar.setDocaddressprovince(doctoraddress.getDocaddressprovince());
+			doctorcalendar.setDocaddresscity(doctoraddress.getDocaddresscity());
+			doctorcalendar.setDocaddressarea(doctoraddress.getDocaddressarea());
+			doctorcalendar.setDocaddressother(doctoraddress.getDocaddressother());
+			doctorcalendar.setDocaddresslat(doctoraddress.getDocaddresslat());
+			doctorcalendar.setDocaddresslon(doctoraddress.getDocaddresslon());
 		}
-		doctorcalendar.setDocaddresslocation(doctoraddress.getDocaddresslocation());
-		doctorcalendar.setDocaddressprovince(doctoraddress.getDocaddressprovince());
-		doctorcalendar.setDocaddresscity(doctoraddress.getDocaddresscity());
-		doctorcalendar.setDocaddressarea(doctoraddress.getDocaddressarea());
-		doctorcalendar.setDocaddressother(doctoraddress.getDocaddressother());
-		doctorcalendar.setDocaddresslat(doctoraddress.getDocaddresslat());
-		doctorcalendar.setDocaddresslon(doctoraddress.getDocaddresslon());
 		int result = doctorcalendarMapper.updateByPrimaryKeySelective(doctorcalendar);
 		if (check) {
 			boolean calender = updateCalenderToCheck(doctorcalendar);
@@ -1043,5 +1170,51 @@ public class DoctorInfoServiceImpl implements DoctorInfoService {
 		}
 		return DataResult.success("获取成功", map);
 	}
+
+	/* (非 Javadoc)  
+	* <p>Title: updateFee</p>  
+	* <p>Description: </p>  
+	* @param docloginid
+	* @param docfee
+	* @return  
+	* @see com.medical.service.iface.doctor.DoctorInfoService#updateFee(java.lang.Integer, java.math.BigDecimal)  
+	*/  
+	@Override
+	public String updateFee(Integer docloginid, BigDecimal docprice) throws Exception{
+		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
+		if (doctorinfo==null) {
+			return DataResult.error("账户不存在");
+		}
+		Doctorinfo record = new Doctorinfo();
+		record.setDocid(doctorinfo.getDocid());
+		record.setDocprice(docprice);;
+		boolean result = doctorinfoMapper.updateByPrimaryKeySelective(record)>0;
+		if (result) {
+			return DataResult.success("设置成功");
+		}else {
+			return DataResult.error("设置失败");
+		}
+		
+	}
+
+	/* (非 Javadoc)  
+	* <p>Title: getFee</p>  
+	* <p>Description: </p>  
+	* @param docloginid
+	* @return
+	* @throws Exception  
+	* @see com.medical.service.iface.doctor.DoctorInfoService#getFee(java.lang.Integer)  
+	*/  
+	@Override
+	public String getFee(Integer docloginid) throws Exception {
+		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
+		if (doctorinfo==null) {
+			return DataResult.error("账户不存在");
+		}
+		return DataResult.success("获取成功", doctorinfo.getDocprice());
+	}
+
+	
+	
 
 }

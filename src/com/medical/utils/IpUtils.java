@@ -1,18 +1,10 @@
-/**  
-* @Title: IpUtils.java  
-* @Package com.medical.utils  
-* @Description: TODO(用一句话描述该文件做什么)  
-* @author xyh  
-* @date 2017年12月25日  
-* @version V1.0  
-*/  
 package com.medical.utils;
 
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * @ClassName:     IpUtils.java
- * @Description:   TODO(用一句话描述该文件做什么) 
+ * @Description:   ip工具类 
  * @author          xyh
  * @version         V1.0  
  * @Date           2017年12月25日 下午9:54:24 

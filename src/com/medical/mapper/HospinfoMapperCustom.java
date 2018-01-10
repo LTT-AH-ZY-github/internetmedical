@@ -17,7 +17,7 @@ public interface HospinfoMapperCustom {
 	 * @return
 	 * @return: List<Map<String,Object>>
 	 */
-	List<Map<String, Object>> selectByHospTypeInAdmin(Integer type,Integer key);
+	//List<Map<String, Object>> selectByHospTypeInAdmin(Integer type,Integer key);
 	/**
 	 * 管理员获取医院详细信息
 	 * @param 医院登录id
@@ -35,4 +35,12 @@ public interface HospinfoMapperCustom {
 	 * @return: Map<String,Object>
 	 */
 	Map<String, Object> selectAllInfoByHospLoginIdInDoctor(Integer hosploginid);
+	/**
+	 * @Title: selectByParamsInAdmin
+	 * @Description: TODO
+	 * @param map
+	 * @return
+	 * @return: List<Map<String,Object>>
+	 */
+	List<Map<String, Object>> selectByParamsInAdmin(Map<String, Object> map);
 }

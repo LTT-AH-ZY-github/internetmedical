@@ -44,13 +44,13 @@ import com.medical.service.iface.PayService;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.doctor.DoctorPurseService;
 import com.medical.service.iface.hospital.HospitalConsultationService;
+import com.medical.utils.MakeRandomNum;
 import com.medical.utils.TimeUtil;
 import com.medical.utils.result.DataResult;
 import com.medical.utils.result.DataResult2;
 import com.pay.alipay.AliPayNotify;
 import com.pay.alipay.AlipayConfig;
 import com.pay.alipay.MyAliPay;
-import com.pay.alipay.MakeOrderNum;
 import com.pay.wxpay.ConfigUtil;
 import com.pay.wxpay.MyWXPay;
 import net.sf.json.JSONObject;
@@ -63,6 +63,7 @@ import net.sf.json.JSONObject;
  * @version V1.0
  * @Date 2017年11月27日 下午3:17:20
  */
+
 class HospitalConsultationServiceImpl implements HospitalConsultationService {
 
 	@Autowired
@@ -370,7 +371,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		String subject = "缴纳" + doctorinfo.getDocname() + "医生会诊费用";
 		BigDecimal totalAmount = hosporder.getOrdertotaldoctorprice() ;
 		String prefix = "hd";
-		String outTradeNo = MakeOrderNum.getTradeNo(prefix);
+		String outTradeNo = MakeRandomNum.getTradeNo(prefix);
 		// 回调地址
 		String notifyUrl = ConfigUtil.WEB_HSOP_NOTIFY_URL;
 		String hospname = hospinfoMapperCustom.selectByHospLoginId(hosploginid).getHospname();
@@ -471,7 +472,7 @@ class HospitalConsultationServiceImpl implements HospitalConsultationService {
 		String subject = "缴纳" + doctorinfo.getDocname() + "医生会诊费用";
 		String totalAmount = hosporder.getOrdertotaldoctorprice() + "";
 		String prefix = "hd";
-		String outTradeNo = MakeOrderNum.getTradeNo(prefix);
+		String outTradeNo = MakeRandomNum.getTradeNo(prefix);
 		// 回调地址
 		String notifyUrl = AlipayConfig.WEB_HSOP_NOTIFY_URL;
 		String result = MyAliPay.webGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);

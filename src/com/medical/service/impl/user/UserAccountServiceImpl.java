@@ -45,19 +45,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 	@Autowired
 	private AccounttypeMapper accounttypeMapper;
 
-	/*
-	 * (非 Javadoc) <p>Title: findAccountExit</p> <p>Description: 查找账号是否注册</p>
-	 * 
-	 * @param phone
-	 * 
-	 * @return
-	 * 
-	 * @throws Exception
-	 * 
-	 * @see
-	 * com.medical.service.iface.user.UserAccountService#findAccountExit(java.lang.
-	 * String)
-	 */
+	//判断手机号码是否注册
 	@Override
 	public String findAccountExit(String phone) throws Exception {
 		// 查询用户登录表
@@ -69,23 +57,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		}
 	}
 
-	/*
-	 * (非 Javadoc) <p>Title: createUserAccount</p> <p>Description: 用户注册</p>
-	 * 
-	 * @param phone
-	 * 
-	 * @param password
-	 * 
-	 * @param code
-	 * 
-	 * @return
-	 * 
-	 * @throws Exception
-	 * 
-	 * @see
-	 * com.medical.service.iface.user.UserAccountService#createUserAccount(java.lang
-	 * .String, java.lang.String, java.lang.String)
-	 */
+	// 新增账号
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public String createUserAccount(String phone, String password, String code) throws Exception {
@@ -110,8 +82,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 		userlogininfoRecord.setUserlogintype(1);
 		// 默认头像
 		userlogininfoRecord.setUserloginpix("http://oytv6cmyw.bkt.clouddn.com/20171103064014944735.jpg");
-		String phoneNumber = phone.substring(0, 3) + "****" + phone.substring(7, phone.length());
-		userlogininfoRecord.setUserloginname(phoneNumber);
+		//String phoneNumber = phone.substring(0, 3) + "****" + phone.substring(7, phone.length());
+		userlogininfoRecord.setUserloginname("速递医运用户");
 		// 写入用户登录表
 		int result = userlogininfoMapperCustom.insertSelectiveReturnId(userlogininfoRecord);
 		Userinfo userinfoRecord = new Userinfo();
@@ -120,6 +92,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		// 用户信息表
 		int infoResult = userinfoMapper.insertSelective(userinfoRecord);
 		if (result > 0 && infoResult > 0) {
+			//注册环信账号
 			createHuanXinAccout(userlogininfoRecord.getUserloginid(), password);
 			return DataResult.success("注册成功");
 		} else {
@@ -128,23 +101,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		}
 	}
 
-	/*
-	 * (非 Javadoc) <p>Title: updateUserToNormalLogin</p> <p>Description: 普通登录</p>
-	 * 
-	 * @param userloginphone
-	 * 
-	 * @param userloginpwd
-	 * 
-	 * @param userlogindev
-	 * 
-	 * @return
-	 * 
-	 * @throws Exception
-	 * 
-	 * @see
-	 * com.medical.service.iface.user.UserAccountService#updateUserToNormalLogin(
-	 * java.lang.String, java.lang.String, java.lang.Integer)
-	 */
+	//普通登录
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public String updateUserToNormalLogin(String userloginphone, String userloginpwd, Integer userlogindev)
@@ -199,25 +156,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		}
 	}
 
-	/*
-	 * (非 Javadoc) <p>Title: updateUserToAutoLogin</p> <p>Description: 自动登录</p>
-	 * 
-	 * @param userloginphone
-	 * 
-	 * @param userloginpwd
-	 * 
-	 * @param userlogintoken
-	 * 
-	 * @param userlogindev
-	 * 
-	 * @return
-	 * 
-	 * @throws Exception
-	 * 
-	 * @see
-	 * com.medical.service.iface.user.UserAccountService#updateUserToAutoLogin(java.
-	 * lang.String, java.lang.String, java.lang.String, java.lang.Integer)
-	 */
+	//自动登录
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public String updateUserToAutoLogin(String userloginphone, String userloginpwd, String userlogintoken,
@@ -275,19 +214,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 	}
 
-	/*
-	 * (非 Javadoc) <p>Title: updateUserToExit</p> <p>Description:用户退出登录 </p>
-	 * 
-	 * @param userloginid
-	 * 
-	 * @return
-	 * 
-	 * @throws Exception
-	 * 
-	 * @see
-	 * com.medical.service.iface.user.UserAccountService#updateUserToExit(java.lang.
-	 * Integer)
-	 */
+	//退出登录
 	@Override
 	public String updateUserToExit(Integer userloginid) throws Exception {
 		Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
@@ -299,23 +226,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		}
 	}
 
-	/*
-	 * (非 Javadoc) <p>Title: updatePassword</p> <p>Description: 修改密码</p>
-	 * 
-	 * @param phone
-	 * 
-	 * @param password
-	 * 
-	 * @param code
-	 * 
-	 * @return
-	 * 
-	 * @throws Exception
-	 * 
-	 * @see
-	 * com.medical.service.iface.user.UserAccountService#updatePassword(java.lang.
-	 * String, java.lang.String, java.lang.String)
-	 */
+	//修改密码
 	@Override
 	public String updatePassword(String phone, String password, String code) throws Exception {
 		boolean msgResult = MsgCode.checkMsg(phone, code);
@@ -343,21 +254,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 	}
 
-	/*
-	 * (非 Javadoc) <p>Title: addHuanXinAccout</p> <p>Description: 注册环信</p>
-	 * 
-	 * @param userloginid
-	 * 
-	 * @param password
-	 * 
-	 * @return
-	 * 
-	 * @throws Exception
-	 * 
-	 * @see
-	 * com.medical.service.iface.user.UserAccountService#addHuanXinAccout(java.lang.
-	 * Integer, java.lang.String)
-	 */
+	//注册环信账号
 	@Override
 	public String createHuanXinAccout(Integer userloginid, String password) throws Exception {
 		boolean registerResult = UserManger.register("user_" + userloginid, password);

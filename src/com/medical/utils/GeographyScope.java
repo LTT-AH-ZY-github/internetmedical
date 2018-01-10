@@ -3,22 +3,23 @@ package com.medical.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
- * 经纬度工具类
- * @ClassName: GeographyScope 
- * @Description: TODO
- * @author: wh
- * @date: 2017年7月31日 下午4:31:46
+ * @ClassName:     GeographyScope.java
+ * @Description:   经纬度工具类
+ * @author          xyh
+ * @version         V1.0  
+ * @Date           2018年1月10日 下午6:09:58 
  */
 public class GeographyScope {
 
    /**
-    * 根据经纬度和半径算出极点
+    * 
     * @Title: getAround 
-    * @Description: TODO
-    * @param lat
-    * @param lon
-    * @param raidus
+    * @Description: 根据经纬度和半径算出极点
+    * @param lat 纬度
+    * @param lon 经度
+    * @param raidus 半径
     * @return
     * @return: Map<String,Object>
     */

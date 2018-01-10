@@ -1,5 +1,9 @@
 package com.medical.controller.doctor;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -45,7 +49,7 @@ public class DoctorInfoController {
 	@ApiOperation(value = "更新channelId", httpMethod = "POST", notes = "更新channelId")
 	public String updateChannelId(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
 			@ApiParam(name = "channelid", value = "channelid") @RequestParam String channelid) throws Exception {
-        if (docloginid == null) {
+		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
 		if (StringUtils.isBlank(channelid)) {
@@ -94,10 +98,10 @@ public class DoctorInfoController {
 		if (StringUtils.isBlank(docexpert) && StringUtils.isBlank(docabs)) {
 			return DataResult.error("所填信息为空");
 		}
-		if (StringUtils.isNotBlank(docexpert) && StringTools.strLength(docexpert)>200) {
+		if (StringUtils.isNotBlank(docexpert) && StringTools.strLength(docexpert) > 200) {
 			return DataResult.error("擅长输入过长");
 		}
-		if (StringUtils.isNotBlank(docabs) && StringTools.strLength(docabs)>200) {
+		if (StringUtils.isNotBlank(docabs) && StringTools.strLength(docabs) > 200) {
 			return DataResult.error("个人简介输入过长");
 		}
 		return doctorInfoService.updateAbsAndExpert(docloginid, docexpert, docabs);
@@ -148,35 +152,35 @@ public class DoctorInfoController {
 			@ApiImplicitParam(name = "docseconddept", required = false, value = "二级部门", dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "doctitle", required = false, value = "医生职称", dataType = "String", paramType = "query") })
 	public String updateFirstInfo(@ApiIgnore Doctorinfo doctorinfo) throws Exception {
-		
+
 		Integer docloginid = doctorinfo.getDocloginid();
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
 		String docname = doctorinfo.getDocname();
-		System.out.println("姓名"+docname);
-		if (docname!=null && !CheckUtils.isChineseNameLegal(docname)) {
+		System.out.println("姓名" + docname);
+		if (docname != null && !CheckUtils.isChineseNameLegal(docname)) {
 			return DataResult.error("姓名输入有误");
 		}
 		String doccardnum = doctorinfo.getDoccardnum();
-		if (doccardnum!=null && doccardnum.length()!=18) {
+		if (doccardnum != null && doccardnum.length() != 18) {
 			return DataResult.error("身份证输入不合法");
 		}
 		String docmale = doctorinfo.getDocmale();
-		System.out.println("性别"+docmale);
-		if (docmale!=null && !CheckUtils.isSexLegal(docmale)) {
+		System.out.println("性别" + docmale);
+		if (docmale != null && !CheckUtils.isSexLegal(docmale)) {
 			return DataResult.error("性别输入不合法");
 		}
 		Integer docage = doctorinfo.getDocage();
-		System.out.println("年龄"+docage);
-		if (docage!=null && !CheckUtils.isAgeLegal(docage)) {
+		System.out.println("年龄" + docage);
+		if (docage != null && !CheckUtils.isAgeLegal(docage)) {
 			return DataResult.error("年龄输入不合法");
 		}
 		String dochosp = doctorinfo.getDochosp();
-		if (dochosp!=null && dochosp.trim().length()==0) {
+		if (dochosp != null && dochosp.trim().length() == 0) {
 			return DataResult.error("医院名为空");
 		}
-		if (dochosp!=null && StringTools.strLength(dochosp)>50) {
+		if (dochosp != null && StringTools.strLength(dochosp) > 50) {
 			return DataResult.error("医院名超出范围");
 		}
 		return doctorInfoService.updateNormalInfo(doctorinfo);
@@ -200,7 +204,7 @@ public class DoctorInfoController {
 			return DataResult.error("type值不合法");
 		}
 		return doctorInfoService.updateSomePicture(docloginid, type, oldpicture, picture);
-	} 
+	}
 
 	@RequestMapping(value = "/cancelreview", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "撤销审核", httpMethod = "POST", notes = "撤销审核")
@@ -221,7 +225,7 @@ public class DoctorInfoController {
 		}
 		return doctorInfoService.updateInfoToReview(docloginid);
 	}
-	
+
 	@RequestMapping(value = "/getreviewinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取账户状态", httpMethod = "POST", notes = "获取账户状态")
 	public String getreviewInfo(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid)
@@ -370,24 +374,60 @@ public class DoctorInfoController {
 		return doctorInfoService.listCalendarsByMonth(docloginid, year, month);
 	}
 
-	@RequestMapping(value = "/addcalendar", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+//	@RequestMapping(value = "/addcalendar", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+//	@ApiOperation(value = "设置日程表", httpMethod = "POST", notes = "设置日程表", produces = "application/json")
+//	@ApiImplicitParams({
+//			@ApiImplicitParam(name = "docloginid", required = true, value = "医生登录id", dataType = "int", paramType = "query"),
+//			@ApiImplicitParam(name = "doccalendarday", required = true, value = "时间(格式如2017-01-02)", dataType = "Date", paramType = "query"),
+//			@ApiImplicitParam(name = "doccalendartime", required = true, value = "上午或者下午", dataType = "String", paramType = "query"),
+//			@ApiImplicitParam(name = "doccalendaraffair", required = false, value = "事件", dataType = "String", paramType = "query"),
+//			@ApiImplicitParam(name = "doccalendaradressid", required = true, value = "地址id", dataType = "int", paramType = "query"), })
+//	public String addCalendar(@ApiIgnore @Validated(Add.class) Doctorcalendar doctorcalendar,
+//			BindingResult bindingResult) throws Exception {
+//		if (bindingResult.hasErrors()) {
+//			return DataResult.error(bindingResult.getAllErrors().get(0).getDefaultMessage());
+//		}
+//		String doccalendaraffair = doctorcalendar.getDoccalendaraffair();
+//		if (doccalendaraffair != null && StringTools.strLength(doccalendaraffair) > 200) {
+//			DataResult.error("事件超出长度限制");
+//		}
+//		return doctorInfoService.addCalendar(doctorcalendar);
+//	}
+	
+	@RequestMapping(value = "/addcalendar ", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "设置日程表", httpMethod = "POST", notes = "设置日程表", produces = "application/json")
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "docloginid", required = true, value = "医生登录id", dataType = "int", paramType = "query"),
-			@ApiImplicitParam(name = "doccalendarday", required = true, value = "时间(格式如2017-01-02)", dataType = "Date", paramType = "query"),
-			@ApiImplicitParam(name = "doccalendartime", required = true, value = "上午或者下午", dataType = "String", paramType = "query"),
-			@ApiImplicitParam(name = "doccalendaraffair", required = false, value = "事件", dataType = "String", paramType = "query"),
-			@ApiImplicitParam(name = "doccalendaradressid", required = true, value = "地址id", dataType = "int", paramType = "query"), })
-	public String addCalendar(@ApiIgnore @Validated(Add.class) Doctorcalendar doctorcalendar,
-			BindingResult bindingResult) throws Exception {
-		if (bindingResult.hasErrors()) {
-			return DataResult.error(bindingResult.getAllErrors().get(0).getDefaultMessage());
+	public String addCalendar(
+			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam Integer docloginid,
+			@ApiParam(name = "doccalendarday", value = "时间数组(格式如2017-01-02)") @RequestParam Date[] doccalendarday,
+			@ApiParam(name = "doccalendarprice", value = "出诊价格") @RequestParam(required = false) BigDecimal doccalendarprice,
+			@ApiParam(name = "doccalendaraffair", value = "备注") @RequestParam(required = false) String doccalendaraffair,
+			@ApiParam(name = "doccalendaradressid", value = "地址id") @RequestParam Integer doccalendaradressid,
+			@ApiParam(name = "doccalendarmorning", value = "上午时间段，没有则为空") @RequestParam(required = false) String doccalendarmorning,
+			@ApiParam(name = "doccalendarafternoon", value = "下午时间段，没有则为空") @RequestParam(required = false) String doccalendarafternoon,
+			@ApiParam(name = "doccalendarnight", value = "晚上时间段，没有则为空") @RequestParam(required = false) String doccalendarnight
+			) throws Exception {
+		if (docloginid==null) {
+			return DataResult.error("医生登录id为空");
 		}
-		String doccalendaraffair = doctorcalendar.getDoccalendaraffair();
-		if (doccalendaraffair!=null && StringTools.strLength(doccalendaraffair)>200) {
+		if (doccalendarday==null || doccalendarday.length==0) {
+			return DataResult.error("时间为空");
+		}
+		if (doccalendaradressid==null) {
+			return DataResult.error("地址为空");
+		}
+		if (StringUtils.isBlank(doccalendarmorning) && StringUtils.isBlank(doccalendarafternoon) && StringUtils.isBlank(doccalendarnight)) {
+			DataResult.error("时间段不可全为空");
+		}
+		if (doccalendaraffair != null && StringTools.strLength(doccalendaraffair) > 200) {
 			DataResult.error("事件超出长度限制");
 		}
-		return doctorInfoService.addCalendar(doctorcalendar);
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟  
+		String dstr="2018-01-10";  
+		String dstr2="2018-4-25";
+		String dstr3="2018-4-26";
+		String dstr4="2018-4-27";
+		 Date[] day = {sdf.parse(dstr),sdf.parse(dstr2),sdf.parse(dstr3),sdf.parse(dstr4)};
+		return doctorInfoService.addCalendar(docloginid,day,doccalendarprice,doccalendaraffair,doccalendaradressid,doccalendarmorning,doccalendarafternoon,doccalendarnight);
 	}
 
 	// 修改日程
@@ -395,17 +435,19 @@ public class DoctorInfoController {
 	@ApiOperation(value = "修改日程", httpMethod = "POST", notes = "修改日程", produces = "application/json")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "docloginid", required = true, value = "医生登录id", dataType = "int", paramType = "query"),
+			@ApiImplicitParam(name = "doccalendarid", required = true, value = "日程id", dataType = "int", paramType = "query"),
 			@ApiImplicitParam(name = "doccalendarday", required = false, value = "时间(格式如2017-01-02)", dataType = "Date", paramType = "query"),
-			@ApiImplicitParam(name = "doccalendartime", required = false, value = "上午或者下午", dataType = "String", paramType = "query"),
+			@ApiImplicitParam(name = "doccalendartimeinterval", required = false, value = "时间区间", dataType = "String", paramType = "query"),
 			@ApiImplicitParam(name = "doccalendaraffair", required = false, value = "事件", dataType = "String", paramType = "query"),
-			@ApiImplicitParam(name = "doccalendaradressid", required = false, value = "地址id", dataType = "int", paramType = "query"), })
+			@ApiImplicitParam(name = "doccalendaradressid", required = false, value = "地址id", dataType = "int", paramType = "query"), 
+			@ApiImplicitParam(name = "doccalendarprice", required = false, value = "出诊费用", dataType = "BigDecimal", paramType = "query"),})
 	public String editCalendar(@ApiIgnore @Validated(Update.class) Doctorcalendar doctorcalendar,
 			BindingResult bindingResult) throws Exception {
 		if (bindingResult.hasErrors()) {
 			return DataResult.error(bindingResult.getAllErrors().get(0).getDefaultMessage());
 		}
 		String doccalendaraffair = doctorcalendar.getDoccalendaraffair();
-		if (doccalendaraffair!=null && StringTools.strLength(doccalendaraffair)>200) {
+		if (doccalendaraffair != null && StringTools.strLength(doccalendaraffair) > 200) {
 			DataResult.error("事件超出长度限制");
 		}
 		return doctorInfoService.updateCalendar(doctorcalendar);
@@ -439,18 +481,45 @@ public class DoctorInfoController {
 			@ApiParam(name = "primarydept", value = "一级部门") @RequestParam(required = false) String primarydept,
 			@ApiParam(name = "seconddept", value = "二级部门") @RequestParam(required = false) String seconddept)
 			throws Exception {
-		if (primarydept!=null && primarydept.trim().length()==0) {
+		if (primarydept != null && primarydept.trim().length() == 0) {
 			DataResult.error("一级部门不可为空格");
 		}
-		if (primarydept!=null && StringTools.strLength(primarydept)>20) {
+		if (primarydept != null && StringTools.strLength(primarydept) > 20) {
 			DataResult.error("一级部门超出长度限制");
 		}
-		if (seconddept!=null && seconddept.trim().length()==0) {
+		if (seconddept != null && seconddept.trim().length() == 0) {
 			DataResult.error("二级部门不可为空格");
 		}
-		if (seconddept!=null && StringTools.strLength(seconddept)>20) {
+		if (seconddept != null && StringTools.strLength(seconddept) > 20) {
 			DataResult.error("二级部门超出长度限制");
 		}
 		return commonService.addDept(docloginid, primarydept, seconddept);
+	}
+
+	@RequestMapping(value = "/updateprice", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "设置医生出诊总价", httpMethod = "POST", notes = "设置医生出诊总价")
+	public String updateFee(
+			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid,
+			@ApiParam(name = "docprice", required = true, value = "医生出诊总价") @RequestParam(required = true) BigDecimal docprice)
+			throws Exception {
+		if (docloginid == null) {
+			DataResult.error("医生登录id为空");
+		}
+		if (docprice == null) {
+			DataResult.error("医生出诊总价为空");
+		}
+
+		return doctorInfoService.updateFee(docloginid, docprice);
+	}
+
+	@RequestMapping(value = "/getprice", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取医生出诊总价", httpMethod = "POST", notes = "获取医生出诊总价")
+	public String getfee(
+			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid)
+			throws Exception {
+		if (docloginid == null) {
+			DataResult.error("医生登录id为空");
+		}
+		return doctorInfoService.getFee(docloginid);
 	}
 }

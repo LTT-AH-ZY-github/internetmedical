@@ -5,14 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.medical.po.Familyinfo;
 import com.medical.service.iface.user.UserInfoService;
 import com.medical.utils.CheckUtils;
-import com.medical.utils.StringTools;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -31,28 +28,17 @@ public class UserInfoController {
 	@Autowired
 	private UserInfoService userInfoService;
 
-	/**
-	 * @Title: updateLocation
-	 * @Description: 更新用户位置信息
-	 * @param userloginid
-	 * @param userloginlon
-	 * @param userloginlat
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
 	@RequestMapping(value = "/updatelocation", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "更新用户位置信息", httpMethod = "POST", notes = "更新用户位置信息")
 	public String updateLocation(
-			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam(value = "userloginid") Integer userloginid,
+			@ApiParam(name = "userloginid",value = "用户登录id") @RequestParam Integer userloginid,
 			@ApiParam(name = "userloginlon", value = "精度") @RequestParam String userloginlon,
 			@ApiParam(name = "userloginlat", value = "纬度") @RequestParam String userloginlat,
 			@ApiParam(name = "userloginprovince", value = "省") @RequestParam(required=false) String userloginprovince,
 			@ApiParam(name = "userlogincity", value = "市") @RequestParam(required=false)  String userlogincity,
 			@ApiParam(name = "userloginarea", value = "区县") @RequestParam(required=false)  String userloginarea,
 			@ApiParam(name = "userloginother", value = "具体地址") @RequestParam(required=false)  String userloginother
-			)
-			throws Exception {
+			) throws Exception {
 		if (userloginid == null) {
 			return DataResult.error("用户登陆id为空");
 		}
@@ -65,15 +51,7 @@ public class UserInfoController {
 		return userInfoService.updateLocation(userloginid, userloginlon, userloginlat,userloginprovince,userlogincity,userloginarea,userloginother);
 	}
 
-	/**
-	 * @Title: updateChannelId
-	 * @Description: 更新channelId
-	 * @param userloginid
-	 * @param channelid
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	//更新channelId
 	@RequestMapping(value = "/updatechannelid", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "更新channelId", httpMethod = "POST", notes = "更新channelId")
 	public String updateChannelId(@ApiParam(name = "userloginid", value = "病人登录id") @RequestParam Integer userloginid,
@@ -87,19 +65,10 @@ public class UserInfoController {
 		return userInfoService.updateChannelId(userloginid, channelid);
 	}
 
-	/**
-	 * @Title: addUserInfo
-	 * @Description:修改用户头像和昵称
-	 * @param pictureFile
-	 * @param userloginname
-	 * @param userloginid
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	//修改用户头像和昵称
 	@RequestMapping(value = "/updateinfo", method = RequestMethod.POST, consumes = "multipart/form-data", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "修改用户头像和昵称", httpMethod = "POST", consumes = "multipart/form-data", notes = "修改用户头像和昵称")
-	public String addUserInfo(
+	public String updateUserPixAndUserName(
 			@ApiParam(name = "pictureFile", required = false, value = "图片") @RequestParam(required = false) MultipartFile pictureFile,
 			@ApiParam(name = "userloginname", required = false, value = "昵称") @RequestParam(required = false) String userloginname,
 			@ApiParam(name = "userloginid", required = true, value = "登录id") @RequestParam  Integer userloginid)
@@ -110,51 +79,31 @@ public class UserInfoController {
 		if (StringUtils.isBlank(userloginname) && (pictureFile == null || pictureFile.isEmpty())) {
 			return DataResult.error("头像和昵称不可同时为空");
 		}
-		if (StringUtils.isNotEmpty(userloginname) && StringTools.strLength(userloginname)>10) {
+		if (userloginname!=null && userloginname.trim().length()==0) {
+			return DataResult.error("昵称不可只为空格");
+		}
+		if (StringUtils.isNotEmpty(userloginname) && userloginname.length()>10) {
 			return DataResult.error("昵称过长");
 		}
 		return userInfoService.updateUserPixAndUserName(pictureFile, userloginid, userloginname);
 	}
 
-	/**
-	 * @Title: findUserInfo
-	 * @Description: 获取用户信息
-	 * @param userloginid
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	//获取用户信息
 	@RequestMapping(value = "/getinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取用户信息", httpMethod = "POST", notes = "获取用户信息")
-	public String findUserInfo(
+	public String getUserDetail(
 			@ApiParam(name = "userloginid", required = true, value = "登录id") @RequestParam(value = "userloginid") Integer userloginid)
 			throws Exception {
 		if (userloginid == null) {
 			return DataResult.error("登录id为空");
 		}
-		return userInfoService.findUserInfo(userloginid);
+		return userInfoService.getUserDetail(userloginid);
 	}
 
-	/**
-	 * @Title: editUserInfo
-	 * @Description: 修改用户信息
-	 * @param pictureFile
-	 * @param username
-	 * @param usermale
-	 * @param usercardnum
-	 * @param useradrprovince
-	 * @param useradrcity
-	 * @param useradrarea
-	 * @param useradrother
-	 * @param userage
-	 * @param userloginid
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	//修改用户信息
 	@RequestMapping(value = "/editinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "修改用户信息", httpMethod = "POST", consumes = "multipart/form-data", notes = "修改用户信息")
-	public String editUserInfo(
+	public String updateUserInfo(
 			@ApiParam(name = "usercardphoto", value = "图片数组") @RequestParam(value = "usercardphoto", required = false) MultipartFile[] pictureFile,
 			@ApiParam(name = "username", value = "姓名") @RequestParam(required = false) String username,
 			@ApiParam(name = "usermale", value = "性别") @RequestParam(required = false) String usermale,
@@ -184,7 +133,7 @@ public class UserInfoController {
 		if (useradrother!=null && useradrother.trim().length()==0) {
 			return DataResult.error("详细地址不可只为空格");
 		}
-		if (useradrarea!=null && StringTools.strLength(useradrarea)>60) {
+		if (useradrarea!=null && useradrarea.length()>60) {
 			return DataResult.error("详细地址过长");
 		}
 		return userInfoService.updateUserInfo(userloginid, username, usermale, usercardnum, useradrprovince,
@@ -192,17 +141,10 @@ public class UserInfoController {
 
 	}
 
-	/**
-	 * @Title: reviewInfo
-	 * @Description: 提交审核
-	 * @param userloginid
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	//提交审核
 	@RequestMapping(value = "/reviewinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "提交审核", httpMethod = "POST", notes = "提交审核")
-	public String reviewInfo(
+	public String updateInfoToReview(
 			@ApiParam(name = "userloginid", value = "登录id") @RequestParam(required = true) Integer userloginid)
 			throws Exception {
 		if (userloginid == null) {
@@ -233,39 +175,22 @@ public class UserInfoController {
 		return userInfoService.updateInfoToCancelReview(userloginid);
 	}
 
-	/**
-	 * @Title: findFamily
-	 * @Description: 查询亲属信息
-	 * @param userloginid
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	//查询亲属信息
 	@RequestMapping(value = "/findfamily", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "查询亲属信息", httpMethod = "POST", notes = "查询亲属信息")
-	public String findFamily(@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid)
+	public String listFamily(@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid)
 			throws Exception {
 		if (userloginid == null) {
 			return DataResult.error("id为空");
 		}
-		return userInfoService.findFamily(userloginid);
+		return userInfoService.listFamily(userloginid);
 
 	}
 
-	/**
-	 * @Title: addFamily
-	 * @Description: 添加亲属信息
-	 * @param userloginid
-	 * @param familyname
-	 * @param familymale
-	 * @param familyage
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	//添加亲属信息
 	@RequestMapping(value = "/addfamily", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "添加亲属信息", httpMethod = "POST", notes = "添加亲属信息")
-	public @ResponseBody String addFamily(
+	public  String addFamily(
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
 			@ApiParam(name = "familyname", value = "姓名") @RequestParam String familyname,
 			@ApiParam(name = "familymale", value = "性别") @RequestParam String familymale,
@@ -292,21 +217,10 @@ public class UserInfoController {
 
 	}
 
-	/**
-	 * @Title: editFamily
-	 * @Description: 修改亲属信息
-	 * @param userloginid
-	 * @param familyid
-	 * @param familyname
-	 * @param familymale
-	 * @param familyage
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	//修改亲属信息
 	@RequestMapping(value = "/editfamily", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "修改亲属信息", httpMethod = "POST", notes = "修改亲属信息")
-	public @ResponseBody String editFamily(
+	public  String updateFamily(
 			@ApiParam(name = "userloginid", value = "登录id") @RequestParam Integer userloginid,
 			@ApiParam(name = "familyid", value = "亲属id") @RequestParam Integer familyid,
 			@ApiParam(name = "familyname", value = "姓名") @RequestParam(required = false) String familyname,
@@ -341,15 +255,7 @@ public class UserInfoController {
 
 	// 待修改
 
-	/**
-	 * @Title: deleteFamily
-	 * @Description: 刪除亲属信息
-	 * @param userloginid
-	 * @param familyid
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	//刪除亲属信息
 	@RequestMapping(value = "/deletefamily", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "删除亲属信息", httpMethod = "POST", notes = "删除亲属信息")
 	public String deleteFamily(

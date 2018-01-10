@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 常量字符串
+ * 
  * @ClassName: Global 
- * @Description: TODO
+ * @Description:常量字符串
  * @author: xyh
  * @date: 2017年11月2日 下午3:52:14
  */

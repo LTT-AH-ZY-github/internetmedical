@@ -49,7 +49,7 @@ public class PushToUserInAndroid {
 
 			PushMsgToSingleDeviceRequest request = new PushMsgToSingleDeviceRequest().addChannelId(channelId)
 					.addMsgExpires(new Integer(3600)). // message有效时间
-					addMessageType(1).// 1：通知,0:透传消息. 默认为0 注：IOS只有通知.
+					addMessageType(0).// 1：通知,0:透传消息. 默认为0 注：IOS只有通知.
 					addMessage(notification.toString()).addDeviceType(3);// deviceType => 3:android, 4:ios
 			// 5. http request
 			PushMsgToSingleDeviceResponse response = pushClient.pushMsgToSingleDevice(request);

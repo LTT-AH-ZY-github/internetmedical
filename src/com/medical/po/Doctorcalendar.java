@@ -1,5 +1,6 @@
 package com.medical.po;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.validation.constraints.NotNull;
@@ -24,8 +25,9 @@ public class Doctorcalendar {
     @NotNull(message="地址id为空",groups= {Add.class})
     private Integer doccalendaradressid;
     @NotNull(message="医生登录id为空",groups= {Update.class,Update.class,Get.class})
-    private Integer docloginid;
 
+    private Integer docloginid;
+    private String doccalendartimeinterval;
     private Boolean doccalendarischeck;
 
     private String docaddresslocation;
@@ -41,6 +43,8 @@ public class Doctorcalendar {
     private String docaddresslon;
 
     private String docaddresslat;
+
+    private BigDecimal doccalendarprice;
 
     public Integer getDoccalendarid() {
         return doccalendarid;
@@ -64,6 +68,14 @@ public class Doctorcalendar {
 
     public void setDoccalendartime(String doccalendartime) {
         this.doccalendartime = doccalendartime == null ? null : doccalendartime.trim();
+    }
+
+    public String getDoccalendartimeinterval() {
+        return doccalendartimeinterval;
+    }
+
+    public void setDoccalendartimeinterval(String doccalendartimeinterval) {
+        this.doccalendartimeinterval = doccalendartimeinterval == null ? null : doccalendartimeinterval.trim();
     }
 
     public String getDoccalendaraffair() {
@@ -152,5 +164,13 @@ public class Doctorcalendar {
 
     public void setDocaddresslat(String docaddresslat) {
         this.docaddresslat = docaddresslat == null ? null : docaddresslat.trim();
+    }
+
+    public BigDecimal getDoccalendarprice() {
+        return doccalendarprice;
+    }
+
+    public void setDoccalendarprice(BigDecimal doccalendarprice) {
+        this.doccalendarprice = doccalendarprice;
     }
 }

@@ -31,7 +31,7 @@
  
   <!--查询日程及地址信息  -->
   <select id="selectAllInfoByDocloginid" resultType="map" parameterType="com.medical.po.custom.CalendarParmas" >
-    select a.doccalendarid,a.doccalendarday,a.doccalendartime,a.doccalendaraffair,a.doccalendaradressid,
+    select a.doccalendarid,a.doccalendarday,a.doccalendartime,a.doccalendartimeinterval,a.doccalendarprice,a.doccalendaraffair,a.doccalendaradressid,
     	a.docaddresslocation,a.docaddressprovince,a.docaddresscity,a.docaddressarea,a.docaddressother,a.docaddresslon,a.docaddresslat
    	from doctorcalendar as a 
    		left join doctoraddress as b on a.docCalendarAdressId = b.docAddressId 
@@ -41,7 +41,7 @@
    	</if> 
   </select>
    <select id="selectAllInfoByDocCalendarId" resultType="map" parameterType="java.lang.Integer" >
-    select a.doccalendarid,a.doccalendarday,a.doccalendartime,a.doccalendaraffair,a.doccalendaradressid,
+    select a.doccalendarid,a.doccalendarday,a.doccalendartime,a.doccalendartimeinterval,a.doccalendarprice,a.doccalendaraffair,a.doccalendaradressid,
     	a.docaddresslocation,a.docaddressprovince,a.docaddresscity,a.docaddressarea,a.docaddressother,a.docaddresslon,a.docaddresslat
    	from doctorcalendar as a 
    		left join doctoraddress as b on a.docCalendarAdressId = b.docAddressId 
@@ -56,7 +56,7 @@
    	
  </select>
  <select id="selectAllInfoByDocloginidInUser" resultType="map" parameterType="java.lang.Integer" >
-    select a.doccalendarid,a.doccalendarday,a.doccalendartime,a.doccalendaraffair,a.doccalendaradressid,
+    select a.doccalendarid,a.doccalendarday,a.doccalendartime,a.doccalendartimeinterval,a.doccalendarprice,a.doccalendaraffair,a.doccalendaradressid,
     	a.docaddresslocation,a.docaddressprovince,a.docaddresscity,a.docaddressarea,a.docaddressother,a.docaddresslon,a.docaddresslat
    	from doctorcalendar as a 
    		left join doctoraddress as b on a.docCalendarAdressId = b.docAddressId 
@@ -64,7 +64,7 @@
     ORDER BY a.docCalendarDay ASC
     </select>
  <insert id="insertSelectiveReturnId" useGeneratedKeys="true" keyProperty="doccalendarid" parameterType="com.medical.po.Doctorcalendar" >
-    insert into doctorcalendar
+     insert into doctorcalendar
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="doccalendarid != null" >
         docCalendarId,
@@ -74,6 +74,9 @@
       </if>
       <if test="doccalendartime != null" >
         docCalendarTime,
+      </if>
+      <if test="doccalendartimeinterval != null" >
+        docCalendarTimeInterval,
       </if>
       <if test="doccalendaraffair != null" >
         docCalendarAffair,
@@ -108,6 +111,9 @@
       <if test="docaddresslat != null" >
         docAddressLat,
       </if>
+      <if test="doccalendarprice != null" >
+        docCalendarPrice,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="doccalendarid != null" >
@@ -118,6 +124,9 @@
       </if>
       <if test="doccalendartime != null" >
         #{doccalendartime,jdbcType=CHAR},
+      </if>
+      <if test="doccalendartimeinterval != null" >
+        #{doccalendartimeinterval,jdbcType=VARCHAR},
       </if>
       <if test="doccalendaraffair != null" >
         #{doccalendaraffair,jdbcType=VARCHAR},
@@ -151,6 +160,9 @@
       </if>
       <if test="docaddresslat != null" >
         #{docaddresslat,jdbcType=VARCHAR},
+      </if>
+      <if test="doccalendarprice != null" >
+        #{doccalendarprice,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>

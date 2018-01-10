@@ -2732,6 +2732,66 @@ public class DoctorinfoExample {
             addCriterion("docAlipayName not between", value1, value2, "docalipayname");
             return (Criteria) this;
         }
+
+        public Criteria andDocpriceIsNull() {
+            addCriterion("docPrice is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpriceIsNotNull() {
+            addCriterion("docPrice is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpriceEqualTo(BigDecimal value) {
+            addCriterion("docPrice =", value, "docprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpriceNotEqualTo(BigDecimal value) {
+            addCriterion("docPrice <>", value, "docprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpriceGreaterThan(BigDecimal value) {
+            addCriterion("docPrice >", value, "docprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("docPrice >=", value, "docprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpriceLessThan(BigDecimal value) {
+            addCriterion("docPrice <", value, "docprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("docPrice <=", value, "docprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpriceIn(List<BigDecimal> values) {
+            addCriterion("docPrice in", values, "docprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpriceNotIn(List<BigDecimal> values) {
+            addCriterion("docPrice not in", values, "docprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("docPrice between", value1, value2, "docprice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDocpriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("docPrice not between", value1, value2, "docprice");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

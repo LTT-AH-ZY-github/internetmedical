@@ -6,6 +6,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.validation.constraints.Null;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -494,9 +497,10 @@ public class CommonServiceImpl implements CommonService {
 			Map<String, Object> map = new HashMap<>();
 			map.put("version", list.get(0).getAppversion());
 			map.put("url", list.get(0).getAppurl());
+			map.put("description", list.get(0).getDescription());
 			return DataResult.success("获取成功",map);
 		} else {
-			return DataResult.error("获取失败");
+			return DataResult.success("数据为空",null);
 		}
 	}
 

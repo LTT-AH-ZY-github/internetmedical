@@ -30,18 +30,10 @@ public class UserAccountController {
 	@Autowired
 	private UserAccountService userAccountService;
 
-	/**
-	 * @Title: phoneTest
-	 * @Description: 手机号码判断是否注册
-	 * @param userloginphone
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
 	@RequestMapping(value = "/phonetest", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "验证手机号码是否注册", httpMethod = "POST", notes = "验证手机号码是否注册", produces = "application/json")
 	public String phoneTest(
-			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam(value = "userloginphone") String userloginphone)
+			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam String userloginphone)
 			throws Exception {
 		if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
 			return Result.error("手机号码输入有误");
@@ -49,14 +41,6 @@ public class UserAccountController {
 		return userAccountService.findAccountExit(userloginphone);
 	}
 
-	/**
-	 * @Title: getCode
-	 * @Description: 获取短信验证码
-	 * @param userloginphone
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
 	@RequestMapping(value = "/getcode", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取短信验证码", httpMethod = "POST", notes = "获取短信验证码", produces = "application/json")
 	public String getCode(
@@ -68,21 +52,11 @@ public class UserAccountController {
 		return commonService.getMsgCode(userloginphone);
 	}
 
-	/**
-	 * @Title: userRegister
-	 * @Description: 用户注册
-	 * @param userloginphone
-	 * @param userloginpwd
-	 * @param code
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "用户注册", httpMethod = "POST", notes = "用户注册")
 	public String userRegister(
-			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam(value = "userloginphone") String userloginphone,
-			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam(value = "userloginpwd") String userloginpwd,
+			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam String userloginphone,
+			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam String userloginpwd,
 			@ApiParam(name = "code", required = true, value = "短信验证码") @RequestParam String code) throws Exception {
 		if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
 			return Result.error("手机号码有误");
@@ -97,20 +71,11 @@ public class UserAccountController {
 
 	}
 
-	/**
-	 * @Title: huanXinRegister
-	 * @Description: 环信注册
-	 * @param userloginid
-	 * @param userloginpwd
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
 	@RequestMapping(value = "/huanxinregister", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "环信注册", httpMethod = "POST", consumes = "application/x-www-form-urlencoded", notes = "环信注册")
 	public String huanXinRegister(
-			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam(value = "userloginid") Integer userloginid,
-			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam(value = "userloginpwd") String userloginpwd)
+			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam Integer userloginid,
+			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam String userloginpwd)
 			throws Exception {
 		if (userloginid == null) {
 			return DataResult.error("用户登录id为空");
@@ -121,22 +86,11 @@ public class UserAccountController {
 		return userAccountService.createHuanXinAccout(userloginid, userloginpwd);
 	}
 
-	/**
-	 * @Title: userLogin
-	 * @Description: 用户登录
-	 * @param userloginphone
-	 * @param userloginpwd
-	 * @param userlogindev
-	 * @param userlogintoken
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "用户登录", httpMethod = "POST", consumes = "application/x-www-form-urlencoded", notes = "用户登录")
 	public String userLogin(
-			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam(value = "userloginphone") String userloginphone,
-			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam(value = "userloginpwd") String userloginpwd,
+			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam String userloginphone,
+			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam String userloginpwd,
 			@ApiParam(name = "userlogindev", value = "登录设备，1为安卓设置，2为IOS设备") @RequestParam(required = false) Integer userlogindev,
 			@ApiParam(name = "userlogintoken", value = "token") @RequestParam(required = false) String userlogintoken)
 			throws Exception {
@@ -150,24 +104,19 @@ public class UserAccountController {
 			return DataResult.error("登录设备有误");
 		}
 		if (StringUtils.isBlank(userlogintoken)) {
+			//为普通登录
 			return userAccountService.updateUserToNormalLogin(userloginphone, userloginpwd, userlogindev);
 		} else {
+			//token不为空，为自动登录
 			return userAccountService.updateUserToAutoLogin(userloginphone, userloginpwd, userlogintoken, userlogindev);
 		}
 	}
 
-	/**
-	 * @Title: exitUserLoginInfo
-	 * @Description: 用户退出登陆
-	 * @param userloginid
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	
 	@RequestMapping(value = "/exit", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "用户退出登陆", httpMethod = "POST", consumes = "application/x-www-form-urlencoded", notes = "用户退出登陆")
 	public String exitUserLoginInfo(
-			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam(value = "userloginid") Integer userloginid)
+			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam Integer userloginid)
 			throws Exception {
 		if (userloginid == null) {
 			return DataResult.error("id为空");
@@ -175,21 +124,11 @@ public class UserAccountController {
 		return userAccountService.updateUserToExit(userloginid);
 	}
 
-	/**
-	 * @Title: editPassword
-	 * @Description: 修改密码
-	 * @param userloginphone
-	 * @param userloginpwd
-	 * @param code
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
 	@RequestMapping(value = "/editpassword", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "修改密码", httpMethod = "POST", notes = "修改密码")
 	public String editPassword(
-			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam(value = "userloginphone") String userloginphone,
-			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam(value = "userloginpwd") String userloginpwd,
+			@ApiParam(name = "userloginphone", required = true, value = "手机号码") @RequestParam String userloginphone,
+			@ApiParam(name = "userloginpwd", required = true, value = "密码") @RequestParam String userloginpwd,
 			@ApiParam(name = "code", required = true, value = "短信验证码") @RequestParam String code) throws Exception {
 		if (!CheckUtils.isChinaPhoneLegal(userloginphone)) {
 			return Result.error("手机号码有误");

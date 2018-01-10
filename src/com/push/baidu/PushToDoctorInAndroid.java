@@ -13,7 +13,25 @@ import com.baidu.yun.push.model.PushMsgToSingleDeviceResponse;
 import net.sf.json.JSONObject;
 
 public class PushToDoctorInAndroid {
-	
+	public static void main(String[] args) {
+		JSONObject notification = new JSONObject();
+		notification.put("title", "12");
+		notification.put("description", "msg");
+		notification.put("notification_builder_id", 1);
+		notification.put("notification_basic_style", 4);
+		notification.put("open_type", 2);
+		System.out.println("1223");
+		System.out.println("123"+notification.toString());
+		try {
+			pushMsgToSingleDeviceInAndroid("4345462790363541415", "1", "123");
+		} catch (PushClientException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (PushServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public static boolean pushMsgToSingleDeviceInAndroid(String channelid, String title, String msg)
 			throws PushClientException, PushServerException {
 		// 1. get apiKey and secretKey from developer console
@@ -47,7 +65,7 @@ public class PushToDoctorInAndroid {
 
 			PushMsgToSingleDeviceRequest request = new PushMsgToSingleDeviceRequest().addChannelId(channelid)
 					.addMsgExpires(new Integer(3600)). // message有效时间
-					addMessageType(1).// 1：通知,0:透传消息. 默认为0 注：IOS只有通知.
+					addMessageType(0).// 1：通知,0:透传消息. 默认为0 注：IOS只有通知.
 					addMessage(notification.toString()).addDeviceType(3);// deviceType => 3:android, 4:ios
 			// 5. http request
 			PushMsgToSingleDeviceResponse response = pushClient.pushMsgToSingleDevice(request);

@@ -27,7 +27,7 @@ public class PictureTool {
 		}
 		String fileName = "";
 		for (int i = 0; i < pictureFile.length; i++) {
-			String name = CommonUtils.randomFileName();
+			String name = MakeRandomNum.randomFileName();
 			// 获取文件名
 			String oriName = pictureFile[i].getOriginalFilename();
 			// 获取图片后缀
@@ -83,7 +83,7 @@ public class PictureTool {
 			return null;
 		}
 
-		String name = CommonUtils.randomFileName();
+		String name = MakeRandomNum.randomFileName();
 		// 获取文件名
 		String oriName = pictureFile.getOriginalFilename();
 		// 获取图片后缀

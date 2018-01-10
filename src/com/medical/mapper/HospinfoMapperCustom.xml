@@ -10,15 +10,40 @@
         order by a.hospPurseBalance desc 
    </select>
 	<!--管理员获取医院列表信息  -->
-    <select id="selectByHospTypeInAdmin" resultType="map" parameterType="java.lang.Integer" >
+    <select id="selectByParamsInAdmin" resultType="map" parameterType="java.lang.Integer" >
 	    select a.hosploginid,c.hosphuanxinaccount,c.hosploginpix,c.hosplogintype,d.accounttypename as hosplogintypename,
 	   		c.hosploginphone,a.hospname,a.hospGrade as hosplevelname
 	 	from hospinfo as a 
 	 			left join hosplogininfo as c on a.hosploginid = c.hosploginid
 	 			left join accounttype as d on c.hospLoginType= d.accounttypeid
-	 	<if test="param1 != null">
-            where c.hospLoginType = #{0} 
-        </if>
+	 	<where>
+	 		<if test="type != null">
+            	and c.hospLoginType = #{type} 
+        	</if>
+        	<if test="hospadrprovince != null">
+            	and a.hospAdrProvince = #{hospadrprovince} 
+        	</if>
+        	<if test="hospadrcity != null">
+            	and c.hospadrcity = #{hospadrcity} 
+        	</if>
+        	<if test="hospadrarea != null">
+            	and c.hospadrarea = #{hospadrarea} 
+        	</if>
+        	<if test="hosplevel != null">
+            	and c.hospGrade = #{hosplevel} 
+        	</if>
+        	<if test="hosploginphone != null">
+            	and a.hosploginphone = #{hosploginphone} 
+        	</if>
+        	<if test="startdatetime != null">
+            	<if test="enddatetime != null">
+            		
+		  		and	 date_format(b.docLoginSubCheckTime,'%Y-%m-%d')<![CDATA[ >= ]]>#{startdatetime} 
+		  			 and date_format(b.docLoginSubCheckTime,'%Y-%m-%d')<![CDATA[ <= ]]>#{enddatetime}
+        		</if>
+        	</if>
+	 	</where>
+	 	
    </select>
    <!--管理员获取医院详细信息  -->
    <select id="selectInfoByHospLoginIdInAdmin" resultType="map" parameterType="java.lang.Integer" >

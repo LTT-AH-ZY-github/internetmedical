@@ -13,14 +13,14 @@ public interface UserinfoMapperCustom {
     Map<String,Object>  findUserInfoByLoginId(int userloginid);
     Userinfo selectByLoginId(int userloginid) throws Exception;
     
-    /**
-     * @Title: selectByUserLoginType
-     * @Description: 管理员根据用户账号类型查询用户  
-     * @param userlogintype
-     * @return
-     * @return: List<Map<String,Object>>
-     */
-    List<Map<String, Object>> selectByUserLoginTypeInAdmin(Integer userlogintype,Integer key);
+//    /**
+//     * @Title: selectByUserLoginType
+//     * @Description: 管理员根据用户账号类型查询用户  
+//     * @param userlogintype
+//     * @return
+//     * @return: List<Map<String,Object>>
+//     */
+//    List<Map<String, Object>> selectByUserLoginTypeInAdmin(Integer userlogintype,Integer key);
     
     /**
      * @Title: selectInfoByLoginId
@@ -30,4 +30,12 @@ public interface UserinfoMapperCustom {
      * @return: Map<String,Object>
      */
     Map<String,Object>  selectInfoByLoginIdInAdmin(Integer userloginid) ;
+	/**
+	 * @Title: selectByParmasInAdmin
+	 * @Description: TODO
+	 * @param map
+	 * @return
+	 * @return: List<Map<String,Object>>
+	 */
+	List<Map<String, Object>> selectByParmasInAdmin(Map<String, Object> map);
 }

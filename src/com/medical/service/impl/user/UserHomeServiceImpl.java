@@ -3,6 +3,7 @@ package com.medical.service.impl.user;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import com.medical.mapper.DoctorcommentMapperCustom;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.PreorderMapperCustom;
 import com.medical.mapper.UsersickMapperCustom;
-import com.medical.po.DoctorSearch;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Preorder;
 import com.medical.po.Usersick;
@@ -43,24 +43,22 @@ public class UserHomeServiceImpl implements UserHomeService {
 	@Autowired
 	private PreorderMapperCustom preorderMapperCustom;
 
-	/*
-	 * (非 Javadoc) <p>Title: listDoctor</p> <p>Description: 获取医生 列表模式</p>
-	 * 
-	 * @param doctorSearch
-	 * 
-	 * @return
-	 * 
-	 * @throws Exception
-	 * 
-	 * @see
-	 * com.medical.service.iface.user.UserHomeService#listDoctor(com.medical.po.
-	 * DoctorSearch)
-	 */
+	//列表获取医生
 	@Override
-	public String listDoctor(DoctorSearch doctorSearch) throws Exception {
-		Integer type = doctorSearch.getType();
-		PageHelper.startPage(doctorSearch.getPageNo(), doctorSearch.getPageSize());
-		List<Map<String, Object>> list = doctorinfoMapperCustom.findDoctorInfoInList(doctorSearch);
+	public String listDoctorsInList(Integer page, String userloginlon, String userloginlat, String dochospprovince,
+			String dochospcity, String dochosparea, String docprimarydept, String docseconddept, Integer type) throws Exception {
+		
+		PageHelper.startPage(page, 10);
+		Map<String, Object> map = new HashMap<>();
+		map.put("lon", userloginlon);
+		map.put("lat", userloginlat);
+		map.put("province", dochospprovince);
+		map.put("city", dochospcity);
+		map.put("area", dochosparea);
+		map.put("primarydept", docprimarydept);
+		map.put("seconddept", docseconddept);
+		map.put("type", type);
+		List<Map<String, Object>> list = doctorinfoMapperCustom.findDoctorsInList(map);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
 		if (type == null) {
 			return DataResult.success("获取推荐医生成功", pageInfo.getList());
@@ -72,23 +70,9 @@ public class UserHomeServiceImpl implements UserHomeService {
 
 	}
 
-	/*
-	 * (非 Javadoc) <p>Title: findDoctorsInMap</p> <p>Description: 地图模式获取医生信息</p>
-	 * 
-	 * @param userloginlat
-	 * 
-	 * @param userloginlon
-	 * 
-	 * @return
-	 * 
-	 * @throws Exception
-	 * 
-	 * @see
-	 * com.medical.service.iface.user.UserHomeService#findDoctorsInMap(java.lang.
-	 * String, java.lang.String)
-	 */
+	//地图获取医生
 	@Override
-	public String findDoctorsInMap(String userloginlat, String userloginlon) throws Exception {
+	public String listDoctorsInMap(String userloginlat, String userloginlon) throws Exception {
 		double latitude = Double.parseDouble(userloginlat);
 		double longitude = Double.parseDouble(userloginlon);
 		// 500千米距离
@@ -99,21 +83,9 @@ public class UserHomeServiceImpl implements UserHomeService {
 		return DataResult.success("获取成功", list);
 	}
 
-	/*
-	 * (非 Javadoc) <p>Title: findDoctorDetail</p> <p>Description: 获取医生信息</p>
-	 * 
-	 * @param docloginid
-	 * 
-	 * @return
-	 * 
-	 * @throws Exception
-	 * 
-	 * @see
-	 * com.medical.service.iface.user.UserHomeService#findDoctorDetail(java.lang.
-	 * Integer)
-	 */
+	//获取医生详情
 	@Override
-	public String findDoctorDetail(Integer docloginid, Integer userloginid) throws Exception {
+	public String getDoctorDetail(Integer docloginid, Integer userloginid) throws Exception {
 		Map<String, Object> map = doctorinfoMapperCustom.findDoctorByDocLoginId(docloginid);
 		if (map != null && !map.isEmpty()) {
 			List<Usersick> list = usersickMapperCustom.selectByUserLoginIdAndState(userloginid, 2);
@@ -133,20 +105,9 @@ public class UserHomeServiceImpl implements UserHomeService {
 		}
 	}
 
-	/*
-	 * (非 Javadoc) <p>Title: listCalendar</p> <p>Description: 获取医生日程</p>
-	 * 
-	 * @param docloginid
-	 * 
-	 * @return
-	 * 
-	 * @throws Exception
-	 * 
-	 * @see com.medical.service.iface.user.UserHomeService#listCalendar(java.lang.
-	 * Integer)
-	 */
+	//获取医生日程
 	@Override
-	public String listCalendar(Integer docloginid) throws Exception {
+	public String listCalendars(Integer docloginid) throws Exception {
 		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
 		if (doctorinfo==null) {
 			return DataResult2.error("该医生不存在");
@@ -182,30 +143,12 @@ public class UserHomeServiceImpl implements UserHomeService {
 				list.remove(map);
 			}
 		}
-		/*// 1 使用Iterator提供的remove方法，用于删除当前元素  
-		 for (Iterator<Map<String, Object>> it = list.iterator(); it.hasNext();) {  
-		     Map<String, Object> value = it.next();  
-		      if (value.equals( "3")) {  
-		          it.remove();  // ok  
-		     }  
-		} */
 		return DataResult2.success("获取成功", list);
 	}
 
-	/*
-	 * (非 Javadoc) <p>Title: getEvaluation</p> <p>Description: 获取对医生评价</p>
-	 * 
-	 * @param docloginid
-	 * 
-	 * @param pageNo
-	 * 
-	 * @return
-	 * 
-	 * @see com.medical.service.iface.user.UserHomeService#getEvaluation(java.lang.
-	 * Integer, java.lang.Integer)
-	 */
+	//获取医生评价
 	@Override
-	public String getEvaluation(Integer docloginid, Integer pageNo) throws Exception{
+	public String listEvaluations(Integer docloginid, Integer pageNo) throws Exception{
 		PageHelper.startPage(pageNo, 5);
 		List<Map<String, Object>> list = doctorcommentMapperCustom.selectByDocLoginId(docloginid);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
