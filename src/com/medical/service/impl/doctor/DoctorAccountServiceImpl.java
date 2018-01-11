@@ -349,7 +349,7 @@ public class DoctorAccountServiceImpl implements DoctorAccountService {
 			if (StringUtils.isBlank(huanxin)) {
 				return DataResult.error("环信账号未注册");
 			}
-			boolean registerResult = UserManger.register(doctorlogininfo.getDochuanxinaccount(), password);
+			boolean registerResult = UserManger.updatePassword(doctorlogininfo.getDochuanxinaccount(), password);
 			if (registerResult) {
 				return DataResult.success("修改成功");
 			} else {

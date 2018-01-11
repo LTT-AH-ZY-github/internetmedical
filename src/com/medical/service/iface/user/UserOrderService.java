@@ -18,7 +18,7 @@ public interface UserOrderService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	String createOrder(Integer docloginid, Integer userloginid, String userorderappointment) throws Exception;
+	String createOrder(Integer docloginid, Integer userloginid, Integer doccalendarid) throws Exception;
 	
 	/**
 	 * @Title: updateOrderStateToCancel
@@ -32,7 +32,7 @@ public interface UserOrderService {
 	String updateOrderStateToCancel(Integer userorderid, Integer userloginid) throws Exception;
 	
 	/**
-	 * @Title: listOrders
+	 * @Title: listOrder
 	 * @Description: 获取不同类型订单
 	 * @param userloginid 用户登录id
 	 * @param page 当前页
@@ -41,7 +41,7 @@ public interface UserOrderService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	String listOrders(Integer userloginid, Integer page, Integer type)throws Exception;
+	String listOrder(Integer userloginid, Integer page, Integer type)throws Exception;
 	/**
 	 * 获取订单详情
 	 * */
@@ -53,9 +53,9 @@ public interface UserOrderService {
 	 * */
 	String updateOrderStateToConfirm(Integer userloginid, Integer userorderid, Integer type, String ip) throws Exception;
 	/**
-	 * 支付医生费用
-	 * */
-	String updateOrderStatePayDoctorByAliPay(Userorder userorder) throws Exception;
+//	 * 支付医生费用
+//	 * */
+//	String updateOrderStatePayDoctorByAliPay(Userorder userorder) throws Exception;
 	/**
 	 * 支付医生费用完成后回调
 	 * @throws Exception 
@@ -104,7 +104,7 @@ public interface UserOrderService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	String updateOrderStatePayDoctorByWXPay(Userorder userorder, String ip) throws Exception;
+	//String updateOrderStatePayDoctorByWXPay(Userorder userorder, String ip) throws Exception;
 
 	/**
 	 * @Title: updateOrderStatePayDoctorFinishByWXPay
@@ -136,6 +136,18 @@ public interface UserOrderService {
 	 * @return: String
 	 */
 	String updateOrderStatePayHospitalFinishByWXPay(HttpServletRequest request) throws Exception;
+
+	/**
+	 * @Title: createQuickOrder
+	 * @Description: TODO
+	 * @param docloginid
+	 * @param userloginid
+	 * @param doccanlendarid
+	 * @param paytype
+	 * @return
+	 * @return: String
+	 */
+	String createQuickOrder(Integer docloginid, Integer userloginid, Integer doccanlendarid, Integer paytype,String ip) throws Exception;
 	
 	
 	

@@ -3,6 +3,7 @@ package com.medical.controller.user;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Null;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,21 +31,12 @@ public class UserOrderController {
 	@Autowired
 	private UserOrderService userOrderService;
 
-	/**
-	 * @Title: createOrder
-	 * @Description: 生成订单
-	 * @param docloginid
-	 * @param userloginid
-	 * @param userorderappointment
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	//生成订单
 	@RequestMapping(value = "/createorder", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "生成订单", httpMethod = "POST", notes = "生成订单")
 	public String createOrder(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
-			@ApiParam(name = "userorderappointment", value = "预约时间") @RequestParam String userorderappointment)
+			@ApiParam(name = "doccalendarid", value = "日程id") @RequestParam Integer doccalendarid)
 			throws Exception {
 		if (userloginid == null) {
 			return DataResult.error("用户登录id为空");
@@ -52,12 +44,37 @@ public class UserOrderController {
 		if (docloginid == null) {
 			return DataResult.error("医生登录id为空");
 		}
-		if (StringUtils.isBlank(userorderappointment)) {
+		if (doccalendarid==null) {
 			return DataResult.error("预约时间为空");
 		}
-		return userOrderService.createOrder(docloginid, userloginid, userorderappointment);
+		return userOrderService.createOrder(docloginid, userloginid, doccalendarid);
 	}
-
+	
+	@RequestMapping(value = "/createquickorder", produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "生成需要支付的订单", httpMethod = "POST", notes = "生成需要支付的订单")
+	public String createQuickOrder(
+			@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
+			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
+			@ApiParam(name = "doccalendarid", value = "预约时间") @RequestParam Integer doccalendarid,
+			@ApiParam(name = "paytype", value = "支付类型，1为支付宝支付，2为微信支付") @RequestParam Integer paytype,
+			HttpServletRequest request)
+			throws Exception {
+		if (userloginid == null) {
+			return DataResult.error("用户登录id为空");
+		}
+		if (docloginid == null) {
+			return DataResult.error("医生登录id为空");
+		}
+		if (doccalendarid==null) {
+			return DataResult.error("预约时间为空");
+		}
+		if (paytype!=1 && paytype!=2) {
+			return DataResult.error("支付类型错误");
+		}
+		String ip = IpUtils.getIpAddr(request);
+		return userOrderService.createQuickOrder(docloginid, userloginid, doccalendarid,paytype,ip);
+	}
+	
 	/**
 	 * @Title: cancleOrder
 	 * @Description: 取消订单
@@ -106,7 +123,7 @@ public class UserOrderController {
 		if (type != null && (type < 1 || type > 4)) {
 			return DataResult.error("type超出范围");
 		}
-		return userOrderService.listOrders(userloginid, page, type);
+		return userOrderService.listOrder(userloginid, page, type);
 	}
 
 	/**
@@ -131,7 +148,7 @@ public class UserOrderController {
 			return DataResult.error("page为空");
 		}
 
-		return userOrderService.listOrders(userloginid, page, 5);
+		return userOrderService.listOrder(userloginid, page, 5);
 	}
 
 	/**

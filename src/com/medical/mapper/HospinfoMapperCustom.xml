@@ -18,28 +18,28 @@
 	 			left join accounttype as d on c.hospLoginType= d.accounttypeid
 	 	<where>
 	 		<if test="type != null">
-            	and c.hospLoginType = #{type} 
+            	and d.hospLoginType = #{type} 
         	</if>
         	<if test="hospadrprovince != null">
             	and a.hospAdrProvince = #{hospadrprovince} 
         	</if>
         	<if test="hospadrcity != null">
-            	and c.hospadrcity = #{hospadrcity} 
+            	and a.hospadrcity = #{hospadrcity} 
         	</if>
         	<if test="hospadrarea != null">
-            	and c.hospadrarea = #{hospadrarea} 
+            	and a.hospadrarea = #{hospadrarea} 
         	</if>
-        	<if test="hosplevel != null">
-            	and c.hospGrade = #{hosplevel} 
+        	<if test="hosplevel != null and hosplevel != ''">
+            	and a.hospGrade = #{hosplevel} 
         	</if>
-        	<if test="hosploginphone != null">
-            	and a.hosploginphone = #{hosploginphone} 
+        	<if test="hosploginphone != null and  hosploginphone != ''">
+            	and c.hosploginphone = #{hosploginphone} 
         	</if>
-        	<if test="startdatetime != null">
-            	<if test="enddatetime != null">
+        	<if test="startdatetime != null and  startdatetime != ''">
+            	<if test="enddatetime != null and  enddatetime != ''">
             		
-		  		and	 date_format(b.docLoginSubCheckTime,'%Y-%m-%d')<![CDATA[ >= ]]>#{startdatetime} 
-		  			 and date_format(b.docLoginSubCheckTime,'%Y-%m-%d')<![CDATA[ <= ]]>#{enddatetime}
+		  		and	 date_format(c.hospLoginSubCheckTime,'%Y-%m-%d')<![CDATA[ >= ]]>#{startdatetime} 
+		  			 and date_format(c.hospLoginSubCheckTime,'%Y-%m-%d')<![CDATA[ <= ]]>#{enddatetime}
         		</if>
         	</if>
 	 	</where>

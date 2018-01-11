@@ -84,12 +84,12 @@ public class UserSickServiceImpl implements UserSickService {
 		}
 		String alipayaccount = userinfo.getUseralipayaccount();
 		String alipayname = userinfo.getUseralipayname();
-		if (StringUtils.isBlank(alipayaccount)) {
-			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
-		}
-		if (StringUtils.isBlank(alipayname)) {
-			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
-		}
+//		if (StringUtils.isBlank(alipayaccount)) {
+//			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
+//		}
+//		if (StringUtils.isBlank(alipayname)) {
+//			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
+//		}
 		//获取对应亲属信息
 		Familyinfo familyinfo = familyinfoMapper.selectByPrimaryKey(usersickCustom.getFamilyid());
 		if (familyinfo==null) {

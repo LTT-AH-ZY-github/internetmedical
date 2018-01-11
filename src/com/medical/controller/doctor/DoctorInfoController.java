@@ -421,13 +421,13 @@ public class DoctorInfoController {
 		if (doccalendaraffair != null && StringTools.strLength(doccalendaraffair) > 200) {
 			DataResult.error("事件超出长度限制");
 		}
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟  
-		String dstr="2018-01-10";  
-		String dstr2="2018-4-25";
-		String dstr3="2018-4-26";
-		String dstr4="2018-4-27";
-		 Date[] day = {sdf.parse(dstr),sdf.parse(dstr2),sdf.parse(dstr3),sdf.parse(dstr4)};
-		return doctorInfoService.addCalendar(docloginid,day,doccalendarprice,doccalendaraffair,doccalendaradressid,doccalendarmorning,doccalendarafternoon,doccalendarnight);
+//		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟  
+//		String dstr="2018-01-10";  
+//		String dstr2="2018-4-25";
+//		String dstr3="2018-4-26";
+//		String dstr4="2018-4-27";
+//		 Date[] day = {sdf.parse(dstr),sdf.parse(dstr2),sdf.parse(dstr3),sdf.parse(dstr4)};
+		return doctorInfoService.addCalendar(docloginid,doccalendarday,doccalendarprice,doccalendaraffair,doccalendaradressid,doccalendarmorning,doccalendarafternoon,doccalendarnight);
 	}
 
 	// 修改日程

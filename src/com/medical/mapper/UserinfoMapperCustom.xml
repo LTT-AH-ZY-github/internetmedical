@@ -34,19 +34,16 @@
 	  		<if test="userage!=null and userage!=0">
 	  			and	a.userage = #{userage}
 	  		</if>
-	  		<if test="useradrarea!=null ">
-	  			and	a.useradrarea = #{useradrarea}
-	  		</if>
-	  		<if test="userloginphone!=null">
+	  		<if test="userloginphone!=null and userloginphone!=''">
 	  			and	b.userloginphone = #{userloginphone}
 	  		</if>
-	  		<if test="usermale!=null ">
+	  		<if test="usermale!=null and usermale!=''">
 	  			and	a.usermale = #{usermale}
 	  		</if>	
 	  		<if test="startdatetime!=null and startdatetime!='' ">
 	  			<if test="enddatetime!=null and enddatetime!='' ">
-	  			and	 date_format(b.docLoginSubCheckTime,'%Y-%m-%d')<![CDATA[ >= ]]>#{startdatetime} 
-		  			 and date_format(b.docLoginSubCheckTime,'%Y-%m-%d')<![CDATA[ <= ]]>#{enddatetime}
+	  			and	 date_format(b.userLoginSubCheckTime,'%Y-%m-%d')<![CDATA[ >= ]]>#{startdatetime} 
+		  			 and date_format(b.userLoginSubCheckTime,'%Y-%m-%d')<![CDATA[ <= ]]>#{enddatetime}
 	  		</if>
 	  		</if>			
   		</where>

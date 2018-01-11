@@ -18,7 +18,7 @@ import com.medical.utils.result.DataResult;
 public class MyWXPay {
 	
 	public static void main(String[] args) {
-		System.out.println(wxPrePay("测试", "测试", new BigDecimal(0.01), "http://test.letiantian.me/wxpay/notify", "201701017496748980290321", "123.12.12.123", "APP"));
+		System.out.println(wxPrePay("测试", "测试", new BigDecimal(0.01), "http://test.letiantian.me/wxpay/notify", "201701017496748980290321-2150", "123.12.12.123", "APP"));
 	}
 	/**
 	 * 微信统一下单接口

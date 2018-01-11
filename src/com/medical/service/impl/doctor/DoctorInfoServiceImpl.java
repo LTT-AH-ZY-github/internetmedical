@@ -234,13 +234,13 @@ public class DoctorInfoServiceImpl implements DoctorInfoService {
 			return DataResult.error("账号不存在");
 		}
 
-		int doclogintype = doctorlogininfo.getDoclogintype();
-		if (doclogintype == 2) {
-			return DataResult.error("已提交审核,个人信息无法修改");
-		}
-		if (doclogintype == 3) {
-			return DataResult.error("已被审核,个人信息无法修改");
-		}
+		//int doclogintype = doctorlogininfo.getDoclogintype();
+//		if (doclogintype == 2) {
+//			return DataResult.error("已提交审核,个人信息无法修改");
+//		}
+//		if (doclogintype == 3) {
+//			return DataResult.error("已被审核,个人信息无法修改");
+//		}
 		String cardPhotoPath = PictureTool.SavePictures(picture);
 		if (StringUtils.isNotBlank(oldpicture)) {
 			if (StringUtils.isNotBlank(cardPhotoPath)) {
@@ -718,6 +718,7 @@ public class DoctorInfoServiceImpl implements DoctorInfoService {
 				record.setDoccalendarischeck(false);
 				int result =doctorcalendarMapperCustom.insertSelectiveReturnId(record);
 				mooning = record.getDoccalendarid();
+				record.setDoccalendarid(null);
 				if (result<=0) {
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 					return DataResult.error("添加失败");
@@ -729,6 +730,7 @@ public class DoctorInfoServiceImpl implements DoctorInfoService {
 				record.setDoccalendarischeck(false);
 				int result =doctorcalendarMapperCustom.insertSelectiveReturnId(record);
 				afternoon = record.getDoccalendarid();
+				record.setDoccalendarid(null);
 				if (result<=0) {
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 					return DataResult.error("添加失败");
@@ -740,6 +742,7 @@ public class DoctorInfoServiceImpl implements DoctorInfoService {
 				record.setDoccalendarischeck(false);
 				int result =doctorcalendarMapperCustom.insertSelectiveReturnId(record);
 				night = record.getDoccalendarid();
+				record.setDoccalendarid(null);
 				if (result<=0) {
 					TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 					return DataResult.error("添加失败");
