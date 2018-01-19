@@ -108,14 +108,7 @@ public interface HospitalConsultationService {
 	 */
 	String listConsultation(Integer hosploginid, Integer offset, Integer limit, Integer type) throws Exception;
 
-	/**
-	 * @Title: listCalendar
-	 * @Description: TODO
-	 * @param docloginid
-	 * @return
-	 * @return: String
-	 */
-	String listCalendar(Integer docloginid)throws Exception; 
+	
 
 	/**
 	 * @Title: listDoctor
@@ -146,6 +139,17 @@ public interface HospitalConsultationService {
 	 * @return: String
 	 */
 	String updateStatePayDoctorFinishByWXPay(HttpServletRequest request) throws Exception;
+
+	/**
+	 * @Title: getPaySate
+	 * @Description: TODO
+	 * @param docloginid
+	 * @param payid
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String getPaySate(Integer hosploginid, Integer payid) throws Exception;
 
 	
 

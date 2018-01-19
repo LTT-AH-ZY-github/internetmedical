@@ -148,6 +148,17 @@ public interface UserOrderService {
 	 * @return: String
 	 */
 	String createQuickOrder(Integer docloginid, Integer userloginid, Integer doccanlendarid, Integer paytype,String ip) throws Exception;
+
+	/**
+	 * @Title: updateToRefund
+	 * @Description: TODO
+	 * @param userorderid
+	 * @param userloginid
+	 * @param cancelreason 
+	 * @return
+	 * @return: String
+	 */
+	String updateToRefund(Integer userorderid, Integer userloginid, String cancelreason)  throws Exception;
 	
 	
 	

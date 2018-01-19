@@ -34,16 +34,15 @@ public interface PayService {
 	 * @param paymodeid 支付方式1为支付宝支付2为微信支付
 	 * @return
 	 * @throws Exception
-	 * @return: String
+	 * @return: int
 	 */
-	String updatePayRecordToCreat(Integer senderid, String sendername, BigDecimal totalAmount, Integer receiveid,
-			String receivename, Integer orderid, Integer ordertype, Integer type, String outtradeno, Integer payway)
+	int updatePayRecordToCreat(Integer senderid, String sendername, BigDecimal totalAmount, Integer receiveid,
+			String receivename, Integer orderid, Integer ordertype, Integer type, String outtradeno, Integer paymodeid)
 			throws Exception;
 
 	/**
 	 * @Title: updateAlipayRecordToFinish
 	 * @Description: TODO
-	 * @param out_trade_no 本地生成的订单号
 	 * @param payid 支付id 
 	 * @param trade_no 支付宝单号
 	 * @param buyer_logon_id 付款者支付宝账号 
@@ -54,16 +53,15 @@ public interface PayService {
      * @param paymodeid paymodeid 支付方式1为支付宝支付2为微信支付
 	 * @return
 	 * @throws Exception
-	 * @return: String
+	 * @return: boolean
 	 */
-	String updatePayRecordToFinish(String out_trade_no, Integer payid, String trade_no, String buyer_logon_id,
-			String seller_email, String info, BigDecimal receiptamount, Integer stateid, Integer paymodeid)
+	boolean updatePayRecordToFinish(Integer payid, String trade_no, String buyer_logon_id,
+			String seller_email, String info, BigDecimal receiptamount)
 			throws Exception;
 
 	/**
 	 * @Title: updatePayRecordToCancle
 	 * @Description: TODO
-	 * @param out_trade_no 本地生成的订单号
 	 * @param payid 支付id 
 	 * @param trade_no 支付宝单号
 	 * @param buyer_logon_id 付款者支付宝账号 
@@ -75,8 +73,8 @@ public interface PayService {
 	 * @throws Exception
 	 * @return: String
 	 */
-	String updatePayRecordToCancle(String out_trade_no, Integer payid, String trade_no, String buyer_logon_id,
-			String seller_email, String info, String payremark, Integer paymodeid) throws Exception;
+	boolean updatePayRecordToCancle(Integer payid, String trade_no, String buyer_logon_id,
+			String seller_email, String info, String payremark) throws Exception;
 
 	
 	

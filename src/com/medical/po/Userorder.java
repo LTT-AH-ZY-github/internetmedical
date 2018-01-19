@@ -92,6 +92,10 @@ public class Userorder {
 
     private String docaddresslat;
 
+    private String cancelreason;
+
+    private String auditopinion;
+
     public Integer getUserorderid() {
         return userorderid;
     }
@@ -442,5 +446,21 @@ public class Userorder {
 
     public void setDocaddresslat(String docaddresslat) {
         this.docaddresslat = docaddresslat == null ? null : docaddresslat.trim();
+    }
+
+    public String getCancelreason() {
+        return cancelreason;
+    }
+
+    public void setCancelreason(String cancelreason) {
+        this.cancelreason = cancelreason == null ? null : cancelreason.trim();
+    }
+
+    public String getAuditopinion() {
+        return auditopinion;
+    }
+
+    public void setAuditopinion(String auditopinion) {
+        this.auditopinion = auditopinion == null ? null : auditopinion.trim();
     }
 }

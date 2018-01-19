@@ -138,6 +138,17 @@ public interface DoctorOrderService {
 	 * @return: String
 	 */
 	String listHistoryOrder(Integer docloginid, Integer page) throws Exception;
+
+	/**
+	 * @Title: updateToRefund
+	 * @Description: TODO
+	 * @param userorderid
+	 * @param cancelreason 
+	 * @param userloginid
+	 * @return
+	 * @return: String
+	 */
+	String updateToRefund(Integer userorderid, Integer docloginid, String cancelreason)throws Exception;
 	
 	
 	

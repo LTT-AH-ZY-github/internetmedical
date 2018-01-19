@@ -144,4 +144,14 @@ public interface CommonService {
 	 */
 	String uploadAndroidApp(Integer type, MultipartFile app, String version, String description)throws Exception;
 
+	/**
+	 * @Title: listDcotorCalendar
+	 * @Description: 获取医生近30天日程
+	 * @param docloginid
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String listDcotorCalendar(Integer docloginid) throws Exception;
+
 }

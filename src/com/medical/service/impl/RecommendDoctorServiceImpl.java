@@ -1,11 +1,3 @@
-/**  
-* @Title: RecommendDoctorServiceImpl.java  
-* @Package com.medical.service.impl  
-* @Description: TODO(用一句话描述该文件做什么)  
-* @author xyh  
-* @date 2017年12月21日  
-* @version V1.0  
-*/  
 package com.medical.service.impl;
 
 
@@ -30,7 +22,7 @@ import com.medical.utils.SickKeyWords;
 
 /**
  * @ClassName:     RecommendDoctorServiceImpl.java
- * @Description:   TODO(用一句话描述该文件做什么) 
+ * @Description:   根据病情推荐医生
  * @author          xyh
  * @version         V1.0  
  * @Date           2017年12月21日 下午6:33:46 

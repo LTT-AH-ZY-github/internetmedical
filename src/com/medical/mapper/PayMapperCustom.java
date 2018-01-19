@@ -14,4 +14,5 @@ public interface PayMapperCustom {
     List<Map<String, Object>> selectByLoginIdAndType(Integer loginid,Integer type);
     List<Map<String, Object>> selectByLoginIdAndTypeAndOrderId(Integer loginid,Integer type, Integer userorderid);
     List<Map<String, Object>> selectByLoginIdAndTypeAndHospOrderId(Integer loginid,Integer type, Integer hosporderid);
+    List<Pay> selectByParamsInAdmin(Map<String, Object> map);
 }

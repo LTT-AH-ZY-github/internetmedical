@@ -12,5 +12,9 @@
       select * from city
       where cityLevel = #{level}
    </select>
+    <select id="selectByCityName" resultType="com.medical.po.City" parameterType="String" >
+      select * from city
+      where cityName = #{level}
+   </select>
   
 </mapper>

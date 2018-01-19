@@ -648,4 +648,41 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		return DataResult.success("获取成功", pageInfo.getList());
    }
 
+	//申请退款
+	@Override
+	public String updateToRefund(Integer userorderid, Integer docloginid, String cancelreason) throws Exception {
+		Doctorlogininfo doctorlogininfo = doctorlogininfoMapper.selectByPrimaryKey(docloginid);
+		if (doctorlogininfo==null) {
+			return DataResult.error("账号不存在");
+		}
+		Userorder order = userorderMapperCustom.selectByDocLoginIdAndUserOrderId(docloginid, userorderid);
+		if (order == null) {
+			return DataResult.error("订单不存在");
+		}
+		int doctor = order.getUserorderdocloginid();
+		if (docloginid!=doctor) {
+			return DataResult.error("账号订单不匹配");
+		}
+		int stateid  = order.getUserorderstateid();
+		if (stateid!=4) {
+			return DataResult.error("该订单不支持退款");
+		}
+		Userorder userorder = new Userorder();
+		userorder.setUserorderid(userorderid);	
+		userorder.setUserorderstateid(18);
+		userorder.setCancelreason(cancelreason);
+		userorder.setUserorderetime(new Date());
+		boolean result = userorderMapper.updateByPrimaryKeySelective(userorder)>0;
+		if (result) {
+			JSONObject jsonCustormCont = new JSONObject();
+			jsonCustormCont.put("order_id", userorderid);
+			jsonCustormCont.put("type", "5");
+			senderNotificationService.createMsgDoctorToUser(docloginid, order.getUserloginid(), "通知消息",
+					"申请取消订单，等待管理员审核退款", jsonCustormCont);
+			return DataResult.success("申请成功");
+		}else {
+			return DataResult.success("申请失败");
+		}
+	}
+
 }

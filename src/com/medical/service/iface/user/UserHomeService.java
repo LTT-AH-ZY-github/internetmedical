@@ -53,16 +53,7 @@ public interface UserHomeService {
 	 */
 	String getDoctorDetail(Integer docloginid, Integer userloginid) throws Exception;
 
-	/**
-	 * @Title: listCalendars
-	 * @Description: 获取医生当天30天内日程
-	 * @param docloginid
-	 *            医生登录id
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
-	String listCalendars(Integer docloginid) throws Exception;
+	
 
 	/**
 	 * @Title: listEvaluations

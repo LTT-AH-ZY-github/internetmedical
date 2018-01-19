@@ -260,8 +260,25 @@ public class DoctorOrderController {
 		}
 		return doctorOrderService.updateOrderTofinish(docloginid, userorderid, userorderhstate,
 					userorderhospid);
-			
-		
+	}
+	
+	@RequestMapping(value = "/applyorderrefund", produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "申请订单退款", httpMethod = "POST", notes = "申请订单退款")
+	public String applyorderrefund(
+			@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
+			@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
+			@ApiParam(name = "cancelreason", value = "取消理由") @RequestParam(required=false) String cancelreason
+			)throws Exception {
+		if (docloginid == null) {
+			return DataResult.error("医生登录id为空");
+		}
+		if (userorderid == null) {
+			return DataResult.error("订单id为空");
+		}
+		if (cancelreason!=null && cancelreason.length()>250) {
+			return DataResult.error("取消理由过多");
+		}
+		return doctorOrderService.updateToRefund(userorderid, docloginid,cancelreason);
 	}
 
 }

@@ -137,6 +137,12 @@
       <if test="docaddresslat != null" >
         docAddressLat,
       </if>
+      <if test="cancelreason != null" >
+        cancelReason,
+      </if>
+      <if test="auditopinion != null" >
+        auditOpinion,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userorderid != null" >
@@ -270,6 +276,12 @@
       </if>
       <if test="docaddresslat != null" >
         #{docaddresslat,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelreason != null" >
+        #{cancelreason,jdbcType=VARCHAR},
+      </if>
+      <if test="auditopinion != null" >
+        #{auditopinion,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -533,7 +545,7 @@
 		  <if test="param2==5">
 		  	and a.userOrderStateId=9
 		  </if>
-		  order by a.userorderchosehosptime asc
+		  order by a.userorderchosehosptime desc
 	</select>
 	<select id="listOrderToFundInAdmin" parameterType="int" resultType="map">
 		  select  a.userorderid,a.userorderchosehosptime,a.userorderhospconfirmtime,a.userorderleavehosptime,
@@ -549,5 +561,32 @@
 	  			left join familyinfo as e on e.familyId = d.familyId
 	  			left join actualhospitalizationstate as f on a.userorderactualhospitalizationid=f.ActualHospitalizationStateId
 		  where  a.userOrderStateId = 8 
+	</select>
+	<select id="listDoctorOrderToReFundInAdmin" parameterType="map" resultType="map">
+		  select  a.userorderid,a.userorderstateid,c.userorderstatename,
+		  		a.userorderptime,a.userorderetime,a.userorderprice,
+		  		b.docname,b.doctitle,b.dochosp,
+		  		a.usersickpic,a.familyname,a.familymale,a.familyage,a.cancelreason
+		  		
+		   from userorder as a
+		  		left join doctorinfo as b on a.userOrderDocLoginId=b.docLoginId 
+		  		left join userorderstate as c on a.userOrderStateId = c.userOrderStateId
+		  		left join usersick as d on a.userSickId = d.userSickId
+	  			left join familyinfo as e on e.familyId = d.familyId
+	  			
+		  where  
+		  <if test="type==0">
+		  a.userOrderStateId = 17 or   a.userOrderStateId = 18 or a.userOrderStateId = 19 
+		  </if>
+		  <if test="type==1">
+		  a.userOrderStateId = 17 
+		  </if>
+		  <if test="type==2">
+		   a.userOrderStateId = 18  
+		  </if>
+		  <if test="type==3">
+		   a.userOrderStateId = 19 
+		  </if>
+		  order by a.userorderetime desc
 	</select>
 </mapper>

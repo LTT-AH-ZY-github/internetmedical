@@ -31,19 +31,7 @@ public class UserPurseServiceImpl implements UserPurseService {
 	@Autowired
 	private UserinfoMapper userinfoMapper;
 
-	/*
-	 * (非 Javadoc) <p>Title: getAliPayAccount</p> <p>Description: 获取用户绑定的支付宝账号</p>
-	 * 
-	 * @param userloginid
-	 * 
-	 * @return
-	 * 
-	 * @throws Exception
-	 * 
-	 * @see
-	 * com.medical.service.iface.user.UserPurseService#getAliPayAccount(java.lang.
-	 * Integer)
-	 */
+	//获取用户绑定的支付宝账号
 	@Override
 	public String getAliPayAccount(Integer userloginid) throws Exception {
 		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userloginid);
@@ -56,22 +44,7 @@ public class UserPurseServiceImpl implements UserPurseService {
 		return DataResult.success("获取成功",map);
 	}
 
-	/*
-	 * (非 Javadoc) <p>Title: updateAliPayAccount</p> <p>Description:
-	 * 更新用户绑定的支付宝账号</p>
-	 * 
-	 * @param userloginid
-	 * 
-	 * @param alipayaccount
-	 * 
-	 * @return
-	 * 
-	 * @throws Exception
-	 * 
-	 * @see
-	 * com.medical.service.iface.user.UserPurseService#addAliPayAccount(java.lang.
-	 * Integer, java.lang.String)
-	 */
+	//更新支付宝信息
 	@Override
 	public String updateAliPayAccount(Integer userloginid, String alipayaccount,String alipayname) throws Exception {
 		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userloginid);
@@ -84,9 +57,9 @@ public class UserPurseServiceImpl implements UserPurseService {
 		record.setUseralipayname(alipayname);
 		boolean result = userinfoMapper.updateByPrimaryKeySelective(record) > 0;
 		if (result) {
-			return DataResult.success("添加成功");
+			return DataResult.success("更新成功");
 		} else {
-			return DataResult.error("添加失败");
+			return DataResult.error("更新失败");
 		}
 
 	}
@@ -130,7 +103,8 @@ public class UserPurseServiceImpl implements UserPurseService {
 		}
 
 	}
-
+	
+	//获取交易记录
 	@Override
 	public String listTradeRecord(Integer userloginid, Integer page) throws Exception {
 		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userloginid);
@@ -140,12 +114,10 @@ public class UserPurseServiceImpl implements UserPurseService {
 		PageHelper.startPage(page, 5);
 		List<Map<String, Object>> list = payMapperCustom.selectByLoginIdAndType(userloginid, 1);
 		PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
-		if (pageInfo != null && !pageInfo.getList().isEmpty()) {
-			return DataResult.success("获取数据成功", pageInfo.getList());
-		} else {
-			return DataResult.success("获取数据为空", null);
-		}
+		return DataResult.success("获取成功", pageInfo.getList());
 	}
+	
+	//按订单获取交易记录
 	@Override
 	public String listTradeRecordByOrder(Integer userloginid,Integer userorderid) throws Exception {
 		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userloginid);
@@ -153,6 +125,6 @@ public class UserPurseServiceImpl implements UserPurseService {
 			return DataResult.error("账户不存在");
 		}
 		List<Map<String, Object>> list = payMapperCustom.selectByLoginIdAndTypeAndOrderId(userloginid,1,userorderid);
-		return DataResult.success("获取数据成功", list);
+		return DataResult.success("获取成功", list);
 	}
 }

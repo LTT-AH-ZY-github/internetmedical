@@ -74,6 +74,7 @@ public class UserPursueController {
 		
 
 	}
+	
 	@RequestMapping(value = "/updatealipayaccount", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "更新用户绑定的支付宝账号", httpMethod = "POST", notes = "更新用户绑定的支付宝账号", produces = "application/json")
 	public String updatealipayaccount(
@@ -95,10 +96,11 @@ public class UserPursueController {
 		}
 		return userPursueService.updateAliPayAccount(userloginid, alipayaccount,alipayname);
 	}
+	
 	@RequestMapping(value = "/listtraderecord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取交易记录", httpMethod = "POST", notes = "获取交易记录", produces = "application/json")
 	public String listTradeRecord(
-			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam(value = "userloginid") Integer userloginid,
+			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam Integer userloginid,
 			@ApiParam(name = "page", required = true, value = "当前页") @RequestParam Integer page
 	) throws Exception{
 		if (userloginid == null) {
@@ -108,16 +110,15 @@ public class UserPursueController {
 			return DataResult.error("当前页有误");
 		}
 		return userPursueService.listTradeRecord(userloginid, page);
-		// TODO Auto-generated method stub
+		
 
 	}
 	
 	@RequestMapping(value = "/listtraderecordbyorder", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "根据订单获取交易记录", httpMethod = "POST", notes = "根据订单获取交易记录", produces = "application/json")
 	public String listTradeRecordByOrder(
-			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam(value = "userloginid") Integer userloginid,
+			@ApiParam(name = "userloginid", required = true, value = "用户登录id") @RequestParam Integer userloginid,
 			@ApiParam(name = "userorderid", required = true, value = "订单id") @RequestParam Integer userorderid
-			
 	) throws Exception{
 		if (userloginid == null) {
 			return DataResult.error("用户登录id为空");
@@ -126,8 +127,6 @@ public class UserPursueController {
 			return DataResult.error("订单id为空");
 		}
 		return userPursueService.listTradeRecordByOrder(userloginid, userorderid);
-		// TODO Auto-generated method stub
-
 	}
 	
 }

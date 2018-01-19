@@ -1,6 +1,8 @@
 package com.medical.service.impl;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +20,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.mapper.AppversionMapper;
 import com.medical.mapper.AppversionMapperCustom;
+import com.medical.mapper.DoctorcalendarMapperCustom;
+import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapperCustom;
 import com.medical.mapper.FeedbackMapper;
 import com.medical.mapper.HospitaldeptMapper;
@@ -27,11 +31,15 @@ import com.medical.mapper.NotificationMapperCustom;
 
 import com.medical.mapper.UserlogininfoMapperCustom;
 import com.medical.po.Appversion;
+import com.medical.po.Doctorinfo;
 import com.medical.po.Feedback;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Notification;
 import com.medical.service.iface.CommonService;
+import com.medical.utils.Global;
+import com.medical.utils.TimeUtil;
 import com.medical.utils.result.DataResult;
+import com.medical.utils.result.DataResult2;
 import com.netease.utils.MsgCode;
 
 public class CommonServiceImpl implements CommonService {
@@ -53,6 +61,10 @@ public class CommonServiceImpl implements CommonService {
 	private AppversionMapperCustom appversionMapperCustom;
 	@Autowired
 	private AppversionMapper appversionMapper;
+	@Autowired
+	private DoctorinfoMapperCustom doctorinfoMapperCustom;
+	@Autowired
+	private DoctorcalendarMapperCustom doctorcalendarMapperCustom;
 
 	Logger logger = Logger.getLogger(CommonService.class);
 
@@ -534,7 +546,7 @@ public class CommonServiceImpl implements CommonService {
 		appversion.setAppversion(version);
 		appversion.setApptype(type);
 		appversion.setDescription(description);
-		appversion.setAppurl("http://118.89.172.204:8080/download/"+file);
+		appversion.setAppurl(Global.APP_DOWLOAD_URL+file);
 		//1为安卓
 		appversion.setSystemtype(1);
 		boolean result = appversionMapper.insertSelective(appversion)>0;
@@ -545,4 +557,50 @@ public class CommonServiceImpl implements CommonService {
 		}
 		
 	}
+	//获取医生日程
+	@Override
+	public String listDcotorCalendar(Integer docloginid) throws Exception {
+			Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(docloginid);
+			if (doctorinfo==null) {
+				return DataResult2.error("该医生不存在");
+			}
+			BigDecimal docprice =  doctorinfo.getDocprice();
+			List<Map<String, Object>> list = doctorcalendarMapperCustom.selectAllInfoByDocloginidInUser(docloginid);
+			List<Map<String, Object>> list2 = new ArrayList<>();
+			if (list!=null && list.size()>0) {
+				//设置日期格式
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				String day = df.format(new Date());
+				String time = TimeUtil.getDateSx();
+				System.out.println("大小"+list.size());
+				for (Map<String, Object> map : list) {
+					//修改出诊价格 
+					BigDecimal price = (BigDecimal) map.get("doccalendarprice");
+					if (price.compareTo(BigDecimal.ZERO)==0) {
+						map.put("doccalendarprice", docprice);
+					}
+					String day2= df.format((Date) map.get("doccalendarday"));
+					String time2= (String) map.get("doccalendartime");
+					if (day.equals(day2)) {
+						if ("下午".equals(time)) {
+							if ("上午".equals(time2)) {
+								list2.add(map);
+							}
+						}
+						if ("晚上".equals(time)) {
+							if ("上午".equals(time2)) {
+								list2.add(map);
+							}
+							if ("下午".equals(time2)) {
+								list2.add(map);
+							}
+						}
+					}
+				}
+				for (Map<String, Object> map : list2) {
+					list.remove(map);
+				}
+			}
+			return DataResult2.success("获取成功", list);
+		}
 }

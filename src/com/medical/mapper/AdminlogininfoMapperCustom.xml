@@ -19,5 +19,13 @@
     from adminlogininfo
     where adminLoginName = #{0}
   </select>
-  
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select *
+    from adminlogininfo
+    where 1=1
+    <if test="adminloginname!=null">
+    	 and adminLoginName = #{adminloginname}
+    </if>
+    order by registrationTime desc
+  </select>
 </mapper>

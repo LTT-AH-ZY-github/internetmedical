@@ -126,5 +126,7 @@ public class DoctorConsultationController {
 		return doctorConsultationService.updateConsultationToCancel(docloginid, hosporderid);
 
 	}
+	
+	
 
 }

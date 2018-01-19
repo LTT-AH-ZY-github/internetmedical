@@ -1,5 +1,6 @@
 package com.medical.service.impl.admin;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -9,11 +10,14 @@ import javax.validation.constraints.Null;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.medical.mapper.AdminexamineMapper;
 import com.medical.mapper.AdminlogininfoMapper;
 import com.medical.mapper.CityMapper;
+import com.medical.mapper.CityMapperCustom;
 import com.medical.mapper.DoctoraddressMapper;
 import com.medical.mapper.DoctoraddressMapperCustom;
 import com.medical.mapper.DoctorinfoMapperCustom;
@@ -26,6 +30,8 @@ import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.HospitaldeptMapper;
 import com.medical.mapper.HospitaldeptMapperCustom;
 import com.medical.mapper.HosplogininfoMapper;
+import com.medical.mapper.RefundrateMapper;
+import com.medical.mapper.RefundrateMapperCustom;
 import com.medical.mapper.UserinfoMapperCustom;
 import com.medical.mapper.UserlogininfoMapper;
 import com.medical.po.Adminexamine;
@@ -39,11 +45,14 @@ import com.medical.po.Familyinfo;
 import com.medical.po.Feedback;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Hosplogininfo;
+import com.medical.po.Refundrate;
 import com.medical.po.Userinfo;
 import com.medical.po.Userlogininfo;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.admin.AdminFunctionService;
 import com.medical.utils.result.DataResult;
+import com.wordnik.swagger.annotations.ApiParam;
+
 import net.sf.json.JSONObject;
 
 
@@ -93,6 +102,12 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	private FeedbackMapper feedbackMapper;
 	@Autowired
 	private CityMapper cityMapper;
+	@Autowired
+	private RefundrateMapper refundrateMapper;
+	@Autowired
+	private RefundrateMapperCustom refundrateMapperCustom;
+	@Autowired
+	private CityMapperCustom cityMapperCustom;
 	
 	//管理员根据用户账号类型查询用户 
 	@Override
@@ -158,6 +173,9 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		}
 		Map<String, Object> map = userinfoMapperCustom.selectInfoByLoginIdInAdmin(userloginid);
 		if (map != null && !map.isEmpty()) {
+			map.put("useradrprovinceid", getCityCode((String)map.get("useradrprovince")));
+			map.put("useradrcityid", getCityCode((String)map.get("useradrcity")));
+			map.put("useradrareaid", getCityCode((String)map.get("useradrarea")));
 			return DataResult.success("获取成功", map);
 		}else {
 			return DataResult.error("该用户不存在");
@@ -292,6 +310,13 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		}
 		Map<String, Object> map = doctorinfoMapperCustom.selectInfoByDocLoginIdInAdmin(docloginid);
 		if (map != null && !map.isEmpty()) {
+			map.put("dochospprovinceid", getCityCode((String)map.get("dochospprovince")));
+			map.put("dochospcityid", getCityCode((String)map.get("dochospcity")));
+			map.put("dochospareaid", getCityCode((String)map.get("dochosparea")));
+			map.put("dochospprovinceid", getCityCode((String)map.get("dochospprovince")));
+			String fatherid = getDeptCode((String)map.get("docprimarydeptid"),"0");
+			map.put("docprimarydeptid", fatherid);
+			map.put("docseconddeptid", getDeptCode((String)map.get("docseconddeptid"),fatherid));
 			return DataResult.success("获取成功", map);
 		}else {
 			return DataResult.success("获取成功", null);
@@ -433,6 +458,9 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		}
 		Map<String, Object> map = hospinfoMapperCustom.selectInfoByHospLoginIdInAdmin(hosploginid);
 		if (map != null && !map.isEmpty()) {
+			map.put("hospadrprovinceid", getCityCode((String)map.get("hospadrprovince")));
+			map.put("hospadrcityid", getCityCode((String)map.get("hospadrcity")));
+			map.put("hospadrareaid", getCityCode((String)map.get("hospadrarea")));
 			return DataResult.success("获取成功", map);
 		}else {
 			return DataResult.success("获取成功", null);
@@ -632,6 +660,62 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		
 	}
 
+	//更新提现扣费利率
+	@Override
+	public String updateRefundRate(Integer adminloginid, BigDecimal docfefundrate, BigDecimal hospfefundrate)
+			throws Exception {
+		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
+		if (adminlogininfo==null) {
+			return DataResult.error("该管理员账号不存在");
+		}
+		Refundrate refundrate = new Refundrate();
+		refundrate.setAdminloginid(adminloginid);
+		refundrate.setUpdatetime(new Date());
+		refundrate.setDocfefundrate(docfefundrate);
+		refundrate.setHospfefundrate(hospfefundrate);
+		boolean result = refundrateMapper.insertSelective(refundrate)>0;
+		if (result) {
+			return DataResult.success("更新成功");
+		}else {
+			return DataResult.error("更新失败");
+		}
+	}
+
+	//获取扣费利率
+	@Override
+	public String getRefundRate(Integer adminloginid) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		List<Refundrate> list = refundrateMapperCustom.selectOrderById();
+		if (list!=null && list.size()>0) {
+			map.put("docfefundrate", list.get(0).getDocfefundrate());
+			map.put("hospfefundrate", list.get(0).getHospfefundrate());
+		}
+		return DataResult.success("获取成功", map);
+	}
+
+	
+	private String getCityCode(String  name) {
+		if (StringUtils.isBlank(name)) {
+			return "";
+		} 
+		List<City> city = cityMapperCustom.selectByCityName(name);
+		if (city==null || city.size()>0) {
+			return "";
+		}
+		return city.get(0).getCitycode();
+
+	}
+	private String getDeptCode(String  name,String fatherid) {
+		if (StringUtils.isBlank(name)) {
+			return "";
+		} 
+		List<Hospitaldept> dept = hospitaldeptMapperCustom.selectByDeptNameAndFatherId(name, fatherid);
+		if (dept==null || dept.size()>0) {
+			return "";
+		}
+		return dept.get(0).getHospdeptid()+"";
+
+	}
 	
 
 }

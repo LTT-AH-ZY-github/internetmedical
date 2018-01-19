@@ -19,6 +19,8 @@ public class CommonTradeServiceImpl implements CommonTradeService {
 	public static Map<String, Object> HospitalFundMap = new HashMap<String, Object>();
 	public static Map<String, Object> UserOrderMap = new HashMap<String, Object>();
 	public static Map<String, Object> HospitalOrderMap = new HashMap<String, Object>();
+	//过期时间 30秒
+	public static int EXPIRATION_TIME = 30000;
 	public static boolean count = true;
 	public static void main(String[] args) {
 	   
@@ -78,7 +80,7 @@ public class CommonTradeServiceImpl implements CommonTradeService {
 					System.out.println(id);;
 					
 				}
-			}, 120000);//2分钟
+			}, EXPIRATION_TIME);
 			
 		}
 		return false;
@@ -103,7 +105,7 @@ public class CommonTradeServiceImpl implements CommonTradeService {
 					System.out.println(id);;
 					
 				}
-			}, 120000);//2分钟
+			}, EXPIRATION_TIME);
 			
 		}
 		return false;
@@ -129,7 +131,7 @@ public class CommonTradeServiceImpl implements CommonTradeService {
 					System.out.println(id);;
 					
 				}
-			}, 120000);//2分钟
+			}, EXPIRATION_TIME);
 			
 		}
 		return false;
@@ -155,7 +157,7 @@ public class CommonTradeServiceImpl implements CommonTradeService {
 					System.out.println(id);;
 					
 				}
-			}, 120000);//2分钟
+			}, EXPIRATION_TIME);
 			
 		}
 		return false;
@@ -185,8 +187,7 @@ public class CommonTradeServiceImpl implements CommonTradeService {
 					System.out.println(id);;
 					
 				}
-			}, 120000);//2分钟
-			
+			}, EXPIRATION_TIME);
 		}
 		return false;
 	}

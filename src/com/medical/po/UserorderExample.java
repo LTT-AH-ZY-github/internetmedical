@@ -2905,6 +2905,146 @@ public class UserorderExample {
             addCriterion("docAddressLat not between", value1, value2, "docaddresslat");
             return (Criteria) this;
         }
+
+        public Criteria andCancelreasonIsNull() {
+            addCriterion("cancelReason is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCancelreasonIsNotNull() {
+            addCriterion("cancelReason is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCancelreasonEqualTo(String value) {
+            addCriterion("cancelReason =", value, "cancelreason");
+            return (Criteria) this;
+        }
+
+        public Criteria andCancelreasonNotEqualTo(String value) {
+            addCriterion("cancelReason <>", value, "cancelreason");
+            return (Criteria) this;
+        }
+
+        public Criteria andCancelreasonGreaterThan(String value) {
+            addCriterion("cancelReason >", value, "cancelreason");
+            return (Criteria) this;
+        }
+
+        public Criteria andCancelreasonGreaterThanOrEqualTo(String value) {
+            addCriterion("cancelReason >=", value, "cancelreason");
+            return (Criteria) this;
+        }
+
+        public Criteria andCancelreasonLessThan(String value) {
+            addCriterion("cancelReason <", value, "cancelreason");
+            return (Criteria) this;
+        }
+
+        public Criteria andCancelreasonLessThanOrEqualTo(String value) {
+            addCriterion("cancelReason <=", value, "cancelreason");
+            return (Criteria) this;
+        }
+
+        public Criteria andCancelreasonLike(String value) {
+            addCriterion("cancelReason like", value, "cancelreason");
+            return (Criteria) this;
+        }
+
+        public Criteria andCancelreasonNotLike(String value) {
+            addCriterion("cancelReason not like", value, "cancelreason");
+            return (Criteria) this;
+        }
+
+        public Criteria andCancelreasonIn(List<String> values) {
+            addCriterion("cancelReason in", values, "cancelreason");
+            return (Criteria) this;
+        }
+
+        public Criteria andCancelreasonNotIn(List<String> values) {
+            addCriterion("cancelReason not in", values, "cancelreason");
+            return (Criteria) this;
+        }
+
+        public Criteria andCancelreasonBetween(String value1, String value2) {
+            addCriterion("cancelReason between", value1, value2, "cancelreason");
+            return (Criteria) this;
+        }
+
+        public Criteria andCancelreasonNotBetween(String value1, String value2) {
+            addCriterion("cancelReason not between", value1, value2, "cancelreason");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditopinionIsNull() {
+            addCriterion("auditOpinion is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditopinionIsNotNull() {
+            addCriterion("auditOpinion is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditopinionEqualTo(String value) {
+            addCriterion("auditOpinion =", value, "auditopinion");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditopinionNotEqualTo(String value) {
+            addCriterion("auditOpinion <>", value, "auditopinion");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditopinionGreaterThan(String value) {
+            addCriterion("auditOpinion >", value, "auditopinion");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditopinionGreaterThanOrEqualTo(String value) {
+            addCriterion("auditOpinion >=", value, "auditopinion");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditopinionLessThan(String value) {
+            addCriterion("auditOpinion <", value, "auditopinion");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditopinionLessThanOrEqualTo(String value) {
+            addCriterion("auditOpinion <=", value, "auditopinion");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditopinionLike(String value) {
+            addCriterion("auditOpinion like", value, "auditopinion");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditopinionNotLike(String value) {
+            addCriterion("auditOpinion not like", value, "auditopinion");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditopinionIn(List<String> values) {
+            addCriterion("auditOpinion in", values, "auditopinion");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditopinionNotIn(List<String> values) {
+            addCriterion("auditOpinion not in", values, "auditopinion");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditopinionBetween(String value1, String value2) {
+            addCriterion("auditOpinion between", value1, value2, "auditopinion");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditopinionNotBetween(String value1, String value2) {
+            addCriterion("auditOpinion not between", value1, value2, "auditopinion");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

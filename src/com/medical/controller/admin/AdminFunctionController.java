@@ -3,6 +3,8 @@
  */
 package com.medical.controller.admin;
 
+import java.math.BigDecimal;
+
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.taglibs.standard.lang.jstl.NullLiteral;
@@ -338,5 +340,45 @@ public class AdminFunctionController {
 			return DataResult.error("意见id为空");
 		}
 		return adminFunctionService.updateFeedBackToCheck(adminloginid, feedbackid);
+	}
+	public static void main(String[] args) {
+		BigDecimal low = new BigDecimal("0.001");
+		System.out.println(low.scale());
+	}
+	@RequestMapping(value = "/updaterefundrate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "更新提现扣费利率", httpMethod = "POST", notes = "更新提现利率")
+	public String updateDoctorRefundRate(
+			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
+			@ApiParam(name = "docfefundrate", value = "医生提现扣费利率") @RequestParam BigDecimal docfefundrate,
+			@ApiParam(name = "hospfefundrate", value = "医院提现扣费利率") @RequestParam BigDecimal hospfefundrate
+			) throws Exception{
+		if (adminloginid==null) {
+			return DataResult.error("管理员id为空");
+		}
+		BigDecimal high = new BigDecimal("1");
+		BigDecimal low = new BigDecimal("0.01");
+		if (docfefundrate!=null && docfefundrate.scale()>2) {
+			return DataResult.error("医生提现扣费利率应精确两位小数");
+		}
+		if (hospfefundrate!=null && hospfefundrate.scale()>2) {
+			return DataResult.error("医院提现扣费利率应精确两位小数");
+		}
+		if (docfefundrate!=null && (docfefundrate.compareTo(high)>0 || docfefundrate.compareTo(low)<0)) {
+			return DataResult.error("医生提现扣费利率超出有效范围");
+		}
+		if (hospfefundrate!=null && (hospfefundrate.compareTo(high)>0 || hospfefundrate.compareTo(low)<0)) {
+			return DataResult.error("医院提现费用超出有效范围");
+		}
+		return adminFunctionService.updateRefundRate(adminloginid,docfefundrate,hospfefundrate); 
+	}
+	
+	@RequestMapping(value = "/getrefundrate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取提现扣费利率", httpMethod = "POST", notes = "获取提现扣费利率")
+	public String getrefundrate(
+			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid) throws Exception{
+		if (adminloginid==null) {
+			return DataResult.error("管理员id为空");
+		}
+		return adminFunctionService.getRefundRate(adminloginid); 
 	}
 }

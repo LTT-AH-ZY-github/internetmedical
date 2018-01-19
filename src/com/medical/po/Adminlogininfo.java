@@ -23,6 +23,12 @@ public class Adminlogininfo {
 
     private String adminloginip;
 
+    private String adminloginsalt;
+
+    private Integer roleid;
+
+    private Date registrationtime;
+
     public Integer getAdminloginid() {
         return adminloginid;
     }
@@ -101,5 +107,29 @@ public class Adminlogininfo {
 
     public void setAdminloginip(String adminloginip) {
         this.adminloginip = adminloginip == null ? null : adminloginip.trim();
+    }
+
+    public String getAdminloginsalt() {
+        return adminloginsalt;
+    }
+
+    public void setAdminloginsalt(String adminloginsalt) {
+        this.adminloginsalt = adminloginsalt == null ? null : adminloginsalt.trim();
+    }
+
+    public Integer getRoleid() {
+        return roleid;
+    }
+
+    public void setRoleid(Integer roleid) {
+        this.roleid = roleid;
+    }
+
+    public Date getRegistrationtime() {
+        return registrationtime;
+    }
+
+    public void setRegistrationtime(Date registrationtime) {
+        this.registrationtime = registrationtime;
     }
 }

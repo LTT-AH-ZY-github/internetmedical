@@ -24,4 +24,49 @@ public interface AdminAccountService {
 	 */
 	String updateAccountStateToLogin(String adminloginname, String adminloginpwd) throws Exception;
 
+	/**
+	 * @Title: addAdminAccount
+	 * @Description: TODO
+	 * @param adminloginid
+	 * @param adminloginname
+	 * @param adminloginpwd
+	 * @return
+	 * @return: String
+	 */
+	String addAdminAccount(Integer adminloginid, String adminloginname, String adminloginpwd)throws Exception;
+
+	/**
+	 * @Title: updateAdminAccountRole
+	 * @Description: TODO
+	 * @param adminloginid
+	 * @param lowadminloginid
+	 * @param roleid
+	 * @return
+	 * @return: String
+	 */
+	String updateAdminAccountRole(Integer adminloginid, Integer lowadminloginid, Integer roleid)throws Exception;
+
+	/**
+	 * @Title: getMenu
+	 * @Description: TODO
+	 * @param adminloginid
+	 * @return
+	 * @return: String
+	 */
+	String getMenu(Integer adminloginid) throws Exception;
+
+	
+
+	/**
+	 * @Title: listAdminAccount
+	 * @Description: TODO
+	 * @param adminloginid
+	 * @param limit
+	 * @param offset
+	 * @return
+	 * @throws Exception
+	 * @return: String
+	 */
+	String listAdminAccount(Integer adminloginid, Integer limit, Integer offset) throws Exception;
+
 }

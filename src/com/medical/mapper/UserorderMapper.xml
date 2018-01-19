@@ -46,6 +46,8 @@
     <result column="docAddressOther" property="docaddressother" jdbcType="VARCHAR" />
     <result column="docAddressLon" property="docaddresslon" jdbcType="VARCHAR" />
     <result column="docAddressLat" property="docaddresslat" jdbcType="VARCHAR" />
+    <result column="cancelReason" property="cancelreason" jdbcType="VARCHAR" />
+    <result column="auditOpinion" property="auditopinion" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -114,7 +116,8 @@
     userOrderAPrice, userOrderEPriceType, userOrderEPrice, userOrderPrice, userSickId, 
     userLoginId, userOrderFinishTime, userSickDesc, userSickPic, userSickPrimaryDept, 
     userSickSecondDept, familyName, familyMale, familyAge, docAddressLocation, docAddressProvince, 
-    docAddressCity, docAddressArea, docAddressOther, docAddressLon, docAddressLat
+    docAddressCity, docAddressArea, docAddressOther, docAddressLon, docAddressLat, cancelReason, 
+    auditOpinion
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.UserorderExample" >
     select
@@ -163,7 +166,8 @@
       userSickSecondDept, familyName, familyMale, 
       familyAge, docAddressLocation, docAddressProvince, 
       docAddressCity, docAddressArea, docAddressOther, 
-      docAddressLon, docAddressLat)
+      docAddressLon, docAddressLat, cancelReason, 
+      auditOpinion)
     values (#{userorderid,jdbcType=INTEGER}, #{userorderstateid,jdbcType=INTEGER}, #{userorderptime,jdbcType=TIMESTAMP}, 
       #{userorderdocloginid,jdbcType=INTEGER}, #{userorderrecdocloginid,jdbcType=INTEGER}, 
       #{userorderrtime,jdbcType=TIMESTAMP}, #{userorderdprice,jdbcType=DECIMAL}, #{userorderappointment,jdbcType=VARCHAR}, 
@@ -180,7 +184,8 @@
       #{usersickseconddept,jdbcType=VARCHAR}, #{familyname,jdbcType=VARCHAR}, #{familymale,jdbcType=VARCHAR}, 
       #{familyage,jdbcType=INTEGER}, #{docaddresslocation,jdbcType=VARCHAR}, #{docaddressprovince,jdbcType=VARCHAR}, 
       #{docaddresscity,jdbcType=VARCHAR}, #{docaddressarea,jdbcType=VARCHAR}, #{docaddressother,jdbcType=VARCHAR}, 
-      #{docaddresslon,jdbcType=VARCHAR}, #{docaddresslat,jdbcType=VARCHAR})
+      #{docaddresslon,jdbcType=VARCHAR}, #{docaddresslat,jdbcType=VARCHAR}, #{cancelreason,jdbcType=VARCHAR}, 
+      #{auditopinion,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Userorder" >
     insert into userorder
@@ -317,6 +322,12 @@
       <if test="docaddresslat != null" >
         docAddressLat,
       </if>
+      <if test="cancelreason != null" >
+        cancelReason,
+      </if>
+      <if test="auditopinion != null" >
+        auditOpinion,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userorderid != null" >
@@ -450,6 +461,12 @@
       </if>
       <if test="docaddresslat != null" >
         #{docaddresslat,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelreason != null" >
+        #{cancelreason,jdbcType=VARCHAR},
+      </if>
+      <if test="auditopinion != null" >
+        #{auditopinion,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -594,6 +611,12 @@
       <if test="record.docaddresslat != null" >
         docAddressLat = #{record.docaddresslat,jdbcType=VARCHAR},
       </if>
+      <if test="record.cancelreason != null" >
+        cancelReason = #{record.cancelreason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.auditopinion != null" >
+        auditOpinion = #{record.auditopinion,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -644,7 +667,9 @@
       docAddressArea = #{record.docaddressarea,jdbcType=VARCHAR},
       docAddressOther = #{record.docaddressother,jdbcType=VARCHAR},
       docAddressLon = #{record.docaddresslon,jdbcType=VARCHAR},
-      docAddressLat = #{record.docaddresslat,jdbcType=VARCHAR}
+      docAddressLat = #{record.docaddresslat,jdbcType=VARCHAR},
+      cancelReason = #{record.cancelreason,jdbcType=VARCHAR},
+      auditOpinion = #{record.auditopinion,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -781,6 +806,12 @@
       <if test="docaddresslat != null" >
         docAddressLat = #{docaddresslat,jdbcType=VARCHAR},
       </if>
+      <if test="cancelreason != null" >
+        cancelReason = #{cancelreason,jdbcType=VARCHAR},
+      </if>
+      <if test="auditopinion != null" >
+        auditOpinion = #{auditopinion,jdbcType=VARCHAR},
+      </if>
     </set>
     where userOrderId = #{userorderid,jdbcType=INTEGER}
   </update>
@@ -828,7 +859,9 @@
       docAddressArea = #{docaddressarea,jdbcType=VARCHAR},
       docAddressOther = #{docaddressother,jdbcType=VARCHAR},
       docAddressLon = #{docaddresslon,jdbcType=VARCHAR},
-      docAddressLat = #{docaddresslat,jdbcType=VARCHAR}
+      docAddressLat = #{docaddresslat,jdbcType=VARCHAR},
+      cancelReason = #{cancelreason,jdbcType=VARCHAR},
+      auditOpinion = #{auditopinion,jdbcType=VARCHAR}
     where userOrderId = #{userorderid,jdbcType=INTEGER}
   </update>
 </mapper>

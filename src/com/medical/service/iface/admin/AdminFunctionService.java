@@ -1,5 +1,7 @@
 package com.medical.service.iface.admin;
 
+import java.math.BigDecimal;
+
 public interface AdminFunctionService {
 	/**
 	 * 管理获取不同类型的用户
@@ -127,6 +129,24 @@ public interface AdminFunctionService {
 	 * @return: String
 	 */
 	String updateFeedBackToCheck(Integer adminloginid, Integer feedbackid) throws Exception;
+	/**
+	 * @Title: updateRefundRate
+	 * @Description: TODO
+	 * @param adminloginid
+	 * @param docfefundrate
+	 * @param hospfefundrate
+	 * @return
+	 * @return: String
+	 */
+	String updateRefundRate(Integer adminloginid, BigDecimal docfefundrate, BigDecimal hospfefundrate)throws Exception;
+	/**
+	 * @Title: getRefundRate
+	 * @Description: TODO
+	 * @param adminloginid
+	 * @return
+	 * @return: String
+	 */
+	String getRefundRate(Integer adminloginid)throws Exception;
 	
 	
 	

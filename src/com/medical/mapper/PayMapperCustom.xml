@@ -148,18 +148,18 @@
     	left join paymode as b on a.payModeId= b.payModeId
     	left join paytype as c on a.payTypeId =c.payTypeId
     	left join paystate as d on a.payStateId= d.payStateId
-    where  (a.payStateId=2 or a.payStateId=3 or a.payStateId=4) and 
+    where  (a.payStateId=2 or a.payStateId=3 ) and 
     <!-- 用户 -->
     <if test="param2==1">
-    	 (a.paySenderId=#{0} and a.payTypeId=1) or (a.paySenderId=#{0} and a.payTypeId=2) or (a.payReceiverId=#{0} and a.payTypeId=4) 
+    	 ((a.paySenderId=#{0} and a.payTypeId=1) or (a.paySenderId=#{0} and a.payTypeId=2) or (a.payReceiverId=#{0} and a.payTypeId=4) )
     </if>
     <!-- 医生 -->
     <if test="param2==2">
-    (a.payReceiverId=#{0} and a.payTypeId=1) or (a.payReceiverId=#{0} and a.payTypeId=3) or (a.payReceiverId=#{0} and a.payTypeId=5) 
+    ((a.payReceiverId=#{0} and a.payTypeId=1) or (a.payReceiverId=#{0} and a.payTypeId=3) or (a.payReceiverId=#{0} and a.payTypeId=5) )
     </if>
     <!-- 医院 -->
     <if test="param2==3">
-    	 (a.paySenderId=#{0} and a.payTypeId=3) or (a.payReceiverId=#{0} and a.payTypeId=2) or (a.payReceiverId=#{0} and a.payTypeId=6 ) or (a.paySenderId=#{0} and a.payTypeId=4 )
+    	 ((a.paySenderId=#{0} and a.payTypeId=3) or (a.payReceiverId=#{0} and a.payTypeId=2) or (a.payReceiverId=#{0} and a.payTypeId=6 ) or (a.paySenderId=#{0} and a.payTypeId=4 ))
     </if>
     order by a.payCreatTime desc
   </select>
@@ -172,7 +172,7 @@
     	left join paytype as c on a.payTypeId =c.payTypeId
     	left join paystate as d on a.payStateId= d.payStateId
     where  
-    	(a.payStateId=3 or a.payStateId=4) and a.payOrderId = #{2} and a.payOrderTypeId=1
+    	(a.payStateId=3 ) and a.payOrderId = #{2} and a.payOrderTypeId=1
     <!-- 用户 -->
     <if test="param2==1">
     	and ((a.paySenderId=#{0} and a.payTypeId=1) or (a.paySenderId=#{0} and a.payTypeId=2) or (a.payReceiverId=#{0} and a.payTypeId=4) )
@@ -197,7 +197,7 @@
     	left join paytype as c on a.payTypeId =c.payTypeId
     	left join paystate as d on a.payStateId= d.payStateId
     where  
-    	(a.payStateId=3 or a.payStateId=4) and a.payOrderId = #{2} and a.payOrderTypeId=2
+    	(a.payStateId=3 ) and a.payOrderId = #{2} and a.payOrderTypeId=2
     <!-- 医生 -->
     <if test="param2==2">
        and (a.payReceiverId=#{0} and a.payTypeId=3)
@@ -207,5 +207,12 @@
     	and (a.paySenderId=#{0} and a.payTypeId=3)
     </if>
     order by a.payCreatTime desc
+  </select>
+   <select id="selectByParamsInAdmin" resultType="com.medical.po.Pay" parameterType="java.lang.Integer" >
+    select *
+    from pay 
+    where  payOrderId=#{orderid} and payOrderTypeId=1  and payStateId=3
+    	
+    
   </select>
 </mapper>

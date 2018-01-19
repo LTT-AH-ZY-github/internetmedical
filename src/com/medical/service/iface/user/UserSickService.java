@@ -1,21 +1,23 @@
 package com.medical.service.iface.user;
 
 import org.springframework.web.multipart.MultipartFile;
-import com.medical.po.UsersickCustom;
 
 public interface UserSickService {
 
 	/**
 	 * @Title: addSick
-	 * @Description: 新增病情
+	 * @Description:  新增病情
+	 * @param userloginid
+	 * @param familyid
+	 * @param usersickdesc
+	 * @param usersickprimarydept
+	 * @param usersickseconddept
 	 * @param pictureFile
-	 *            图片
-	 * @param usersickCustom
 	 * @return
-	 * @throws Exception
 	 * @return: String
 	 */
-	String addSick(MultipartFile[] pictureFile, UsersickCustom usersickCustom) throws Exception;
+	String addSick(Integer userloginid, Integer familyid, String usersickdesc, String usersickprimarydept,
+			String usersickseconddept, MultipartFile[] pictureFile) throws Exception;
 
 	/**
 	 * @Title: listSicks
@@ -29,7 +31,7 @@ public interface UserSickService {
 	 * @return
 	 * @return: String
 	 */
-	String listSicks(Integer userloginid, Integer type, Integer page) throws Exception;
+	String listSick(Integer userloginid, Integer type, Integer page) throws Exception;
 
 	/**
 	 * @Title: getSickDetail
@@ -59,14 +61,19 @@ public interface UserSickService {
 	/**
 	 * @Title: editSick
 	 * @Description: 修改病情
+	 * @param usersickid
+	 * @param userloginid
+	 * @param familyid
+	 * @param usersickdesc
+	 * @param usersickprimarydept
+	 * @param usersickseconddept
 	 * @param pictureFile
-	 *            病情图片
-	 * @param usersickCustom
+	 * @param usersickpic 
 	 * @return
-	 * @throws Exception
 	 * @return: String
 	 */
-	String editSick(MultipartFile[] pictureFile, UsersickCustom usersickCustom) throws Exception;
+	String editSick(Integer usersickid, Integer userloginid, Integer familyid, String usersickdesc,
+			String usersickprimarydept, String usersickseconddept, MultipartFile[] pictureFile, String usersickpic) throws Exception;
 
 	/**
 	 * @Title: updateSickStateToPublish
@@ -121,5 +128,9 @@ public interface UserSickService {
 	 * @return: String
 	 */
 	String addRelatedDoctor(Integer docloginid, Integer userloginid) throws Exception;
+
+	
+
+	
 
 }

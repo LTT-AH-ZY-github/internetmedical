@@ -87,5 +87,7 @@ public interface UserorderMapperCustom {
 	 * @return: List<Map<String,Object>>
 	 */
 	List<Map<String, Object>> listOrderToFundInAdmin();
+	
+	List<Map<String, Object>>  listDoctorOrderToReFundInAdmin(Map<String, Integer> map);
 
 }

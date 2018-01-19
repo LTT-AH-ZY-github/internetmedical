@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.github.wxpay.sdk.WXPay;
 import com.github.wxpay.sdk.WXPayUtil;
 
@@ -50,11 +53,21 @@ public class WXPayExample {
 		}
 		return null;
 	}
-
-	public Map<String, String> doOrderQuery() {
+	
+	/**
+	 * @Title: doOrderQuery
+	 * @Description: TODO
+	 * @param out_trade_no 本地生成的订单号
+	 * @return
+	 * @return: Map<String,String>
+	 */
+	public Map<String, String> doOrderQuery(String out_trade_no,String trade_no) {
 		Map<String, String> data = new HashMap<String, String>();
-		data.put("out_trade_no", "2016090910595900000012");
-
+		if (StringUtils.isNotBlank(out_trade_no)) {
+			data.put("out_trade_no", out_trade_no);
+		}else {
+			data.put("transaction_id", trade_no);
+		}
 		try {
 			Map<String, String> resp = wxpay.orderQuery(data);
 			System.out.println(resp);
@@ -63,6 +76,51 @@ public class WXPayExample {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	/**
+	 * @Title: refunQuery
+	 * @Description: TODO
+	 * @return: void
+	 */
+	public  Map<String, String> refundQuery(String out_trade_no,String trade_no,String out_refund_no,String refund_id) {
+		
+
+        Map<String, String> data = new HashMap<String, String>();
+        if (StringUtils.isNotBlank(refund_id)) {
+        	data.put("refund_id", refund_id);
+		}else if (StringUtils.isNotBlank(out_refund_no)) {
+			data.put("out_refund_no", out_refund_no);
+		}else if (StringUtils.isNotBlank(trade_no)) {
+			data.put("transaction_id", trade_no);
+		}else {
+			data.put("out_trade_no", out_trade_no);
+		}
+        try {
+            Map<String, String> resp = wxpay.refundQuery(data);
+            return resp;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+	}
+	
+	public  Map<String, String> refund(String trade_no,String out_refund_no,BigDecimal total_fee,BigDecimal refund_fee,String refund_desc) {
+		int total_fee100 = total_fee.multiply(new BigDecimal(100)).intValue();
+		int refund_fee100 = refund_fee.multiply(new BigDecimal(100)).intValue();
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("out_refund_no", out_refund_no);
+		data.put("transaction_id", trade_no);
+		data.put("total_fee", String.valueOf(total_fee100));
+		data.put("refund_fee", String.valueOf(refund_fee100));
+		data.put("refund_desc", refund_desc);
+		try {
+            Map<String, String> resp = wxpay.refund(data);
+            return resp;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
 	}
 
 	public Map<String, String> wxNotify(HttpServletRequest request) throws Exception {
@@ -95,4 +153,25 @@ public class WXPayExample {
 		}
 		return null;
 	}
+	/**
+	 * @Title: downloadBill
+	 * @Description: TODO
+	 * @return: void
+	 */
+	public Map<String, String> downloadBill(String billdate,String billtype) {
+		Map<String, String> data = new HashMap<String, String>();
+		data.put("bill_date", billdate);
+		data.put("bill_type", billtype);
+		try {
+	         Map<String, String> resp = wxpay.downloadBill(data);
+	         System.out.println(resp);
+	         return resp;
+	     } catch (Exception e) {
+	         e.printStackTrace();
+	     }
+		return null;
+		
+
+	}
+	 
 }

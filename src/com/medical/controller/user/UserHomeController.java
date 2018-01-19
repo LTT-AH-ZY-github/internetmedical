@@ -110,7 +110,7 @@ public class UserHomeController {
 		if (docloginid==null) {
 			return DataResult.error("医生登录id为空");
 		}
-		return userHomeService.listCalendars(docloginid);
+		return commonService.listDcotorCalendar(docloginid);
 	}
 
 	

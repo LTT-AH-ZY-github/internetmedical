@@ -27,12 +27,15 @@ import com.medical.po.Preorder;
 import com.medical.po.Userinfo;
 import com.medical.po.Userlogininfo;
 import com.medical.po.Usersick;
-import com.medical.po.UsersickCustom;
+import com.medical.service.iface.CommonService;
 import com.medical.service.iface.DeleteFileService;
 import com.medical.service.iface.RecommendDoctorService;
+import com.medical.service.iface.user.UserHomeService;
 import com.medical.service.iface.user.UserSickService;
 import com.medical.utils.PictureTool;
 import com.medical.utils.result.DataResult;
+
+import net.sf.json.JSONObject;
 
 
 public class UserSickServiceImpl implements UserSickService {
@@ -59,19 +62,15 @@ public class UserSickServiceImpl implements UserSickService {
 	private RecommendDoctorService recommendDoctorService;
 	@Autowired
 	private DoctorinfoMapperCustom doctorinfoMapperCustom;
+	@Autowired
+	private UserHomeService userHomeService;
+	@Autowired
+	private CommonService commonService;
 	
-	/* (非 Javadoc)  
-	* <p>Title: addSick</p>  
-	* <p>Description: 插入病情信息</p>  
-	* @param pictureFile
-	* @param usersickCustom
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.user.UserSickService#addSick(org.springframework.web.multipart.MultipartFile[], com.medical.po.UsersickCustom)  
-	*/  
+	//新增病情 
 	@Override
-	public String addSick(MultipartFile[] pictureFile, UsersickCustom usersickCustom) throws Exception {
-		int userloginid = usersickCustom.getUserloginid();
+	public String addSick(Integer userloginid, Integer familyid, String usersickdesc, String usersickprimarydept,
+			String usersickseconddept, MultipartFile[] pictureFile) throws Exception {
 		Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
 		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userloginid);
 		if (user == null || userinfo==null) {
@@ -82,29 +81,21 @@ public class UserSickServiceImpl implements UserSickService {
 		if (type!=3) {
 			return DataResult.error("账号未审核,不可发布病情");
 		}
-		String alipayaccount = userinfo.getUseralipayaccount();
-		String alipayname = userinfo.getUseralipayname();
-//		if (StringUtils.isBlank(alipayaccount)) {
-//			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
-//		}
-//		if (StringUtils.isBlank(alipayname)) {
-//			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
-//		}
 		//获取对应亲属信息
-		Familyinfo familyinfo = familyinfoMapper.selectByPrimaryKey(usersickCustom.getFamilyid());
+		Familyinfo familyinfo = familyinfoMapper.selectByPrimaryKey(familyid);
 		if (familyinfo==null) {
 			return DataResult.error("亲属不存在");
 		}
 		usersick.setFamilymale(familyinfo.getFamilymale());
 		usersick.setFamilyname(familyinfo.getFamilyname());
 		usersick.setFamilyage(familyinfo.getFamilyage());
-		usersick.setFamilyid(usersickCustom.getFamilyid());
+		usersick.setFamilyid(familyid);
 		//病情图片
 		usersick.setUsersickpic(PictureTool.SavePictures(pictureFile));
 		usersick.setUserloginid(user.getUserloginid());
-		usersick.setUsersickprimarydept(usersickCustom.getUsersickprimarydept());
-		usersick.setUsersickseconddept(usersickCustom.getUsersickseconddept());
-		usersick.setUsersickdesc(usersickCustom.getUsersickdesc());
+		usersick.setUsersickprimarydept(usersickprimarydept);
+		usersick.setUsersickseconddept(usersickseconddept);
+		usersick.setUsersickdesc(usersickdesc);
 		//病情创建时间
 		usersick.setUsersicktime(new Date());
 		boolean result = usersickMapperCustom.insertSelectiveReturnId(usersick) > 0;
@@ -116,17 +107,9 @@ public class UserSickServiceImpl implements UserSickService {
 
 	}
 
-	/* (非 Javadoc)  
-	* <p>Title: listSicks</p>  
-	* <p>Description: 按type获取病情</p>  
-	* @param userloginid
-	* @param type
-	* @param page
-	* @return  
-	* @see com.medical.service.iface.user.UserSickService#listSicks(java.lang.Integer, java.lang.Integer, java.lang.Integer)  
-	*/  
+	//获取病情
 	@Override
-	public String listSicks(Integer userloginid, Integer type,Integer page) throws Exception{
+	public String listSick(Integer userloginid, Integer type,Integer page) throws Exception{
 		Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
 		if (user == null) {
 			return DataResult.error("账号不存在");
@@ -138,14 +121,7 @@ public class UserSickServiceImpl implements UserSickService {
 	}
 	
 	
-	/* (非 Javadoc)  
-	* <p>Title: getSickDetail</p>  
-	* <p>Description: 获取病情详情</p>  
-	* @param userloginid
-	* @param usersickid
-	* @return  
-	* @see com.medical.service.iface.user.UserSickService#getSickDetail(java.lang.Integer, java.lang.Integer)  
-	*/  
+	//获取病情详情
 	@Override
 	public String getSickDetail(Integer userloginid,Integer usersickid) throws Exception{
 		Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
@@ -160,15 +136,7 @@ public class UserSickServiceImpl implements UserSickService {
 		}
 	}
 
-	/* (非 Javadoc)  
-	* <p>Title: deleteSick</p>  
-	* <p>Description: 删除病情信息</p>  
-	* @param userloginid
-	* @param usersickid
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.user.UserSickService#deleteSick(java.lang.Integer, java.lang.Integer)  
-	*/  
+	//删除病情信息 
 	@Override
 	public String deleteSick(Integer userloginid, Integer usersickid) throws Exception {
 		/*Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
@@ -207,13 +175,12 @@ public class UserSickServiceImpl implements UserSickService {
 	
 	// 修改病情信息
 	@Override
-	public String editSick(MultipartFile[] pictureFile, UsersickCustom usersickCustom) throws Exception {
-		int userloginid = usersickCustom.getUserloginid();
+	public String editSick(Integer usersickid, Integer userloginid, Integer familyid, String usersickdesc,
+			String usersickprimarydept, String usersickseconddept, MultipartFile[] pictureFile, String usersickpic) throws Exception {
 		Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
 		if (user == null) {
 			return DataResult.error("账号不存在");
 		}
-		int usersickid = usersickCustom.getUsersickid();
 		Usersick sick = usersickMapper.selectByPrimaryKey(usersickid);
 		// id对应病情不为空
 		if (sick == null) {
@@ -225,7 +192,7 @@ public class UserSickServiceImpl implements UserSickService {
 		}
 		int userSickStateId = sick.getUsersickstateid();
 		if (userSickStateId == 1 || userSickStateId == 4) {
-			String oldpath = usersickCustom.getUsersickpic();
+			String oldpath = usersickpic;
 			String path = PictureTool.SavePictures(pictureFile);
 			if (StringUtils.isNotBlank(oldpath)) {
 				if (StringUtils.isNotBlank(path)) {
@@ -237,10 +204,10 @@ public class UserSickServiceImpl implements UserSickService {
 			Usersick usersick = new Usersick();
 			usersick.setUsersickid(usersickid);
 			usersick.setUsersickpic(oldpath);
-			usersick.setFamilyid(usersickCustom.getFamilyid());
-			usersick.setUsersickprimarydept(usersickCustom.getUsersickprimarydept());
-			usersick.setUsersickseconddept(usersickCustom.getUsersickseconddept());
-			usersick.setUsersickdesc(usersickCustom.getUsersickdesc());
+			usersick.setFamilyid(familyid);
+			usersick.setUsersickprimarydept(usersickprimarydept);
+			usersick.setUsersickseconddept(usersickseconddept);
+			usersick.setUsersickdesc(usersickdesc);
 			usersick.setUsersicktime(new Date());
 			boolean result=  usersickMapper.updateByPrimaryKeySelective(usersick) > 0;
 			if (result) {
@@ -253,18 +220,8 @@ public class UserSickServiceImpl implements UserSickService {
 			return DataResult.error("该病情状态不支持修改");
 		}
 	}
-	//待修改
-	 
 	
-	/* (非 Javadoc)  
-	* <p>Title: updateSickStateToPublish</p>  
-	* <p>Description: 发布病情</p>  
-	* @param userloginid
-	* @param usersickid
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.user.UserSickService#updateSickStateToPublish(java.lang.Integer, java.lang.Integer)  
-	*/  
+	//发布病情 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public String updateSickStateToPublish(Integer userloginid, Integer usersickid) throws Exception {
@@ -282,9 +239,8 @@ public class UserSickServiceImpl implements UserSickService {
 		}
 		List<Map<String, Object>> maps = usersickMapperCustom.selectAllInfoByUserLoginId(userloginid, null);
 		for (Map<String, Object> map : maps) {
-			if ((int) map.get("usersickstateid") == 2) {
-				return DataResult.error("只可同时发布一个病情");
-			} else if ((int) map.get("usersickstateid") == 3) {
+			int usersickstateid = (int) map.get("usersickstateid");
+			if (usersickstateid == 2 || usersickstateid==3) {
 				return DataResult.error("只可同时发布一个病情");
 			}
 		}
@@ -313,15 +269,7 @@ public class UserSickServiceImpl implements UserSickService {
 
 	}
 
-	/* (非 Javadoc)  
-	* <p>Title: updateSickStateToCancel</p>  
-	* <p>Description: 取消发布</p>  
-	* @param userloginid
-	* @param userSickId
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.user.UserSickService#updateSickStateToCancel(java.lang.Integer, java.lang.Integer)  
-	*/  
+	//取消发布病情
 	@Override
 	public String updateSickStateToCancel(Integer userloginid, Integer userSickId) throws Exception {
 		Usersick usersick = usersickMapper.selectByPrimaryKey(userSickId);
@@ -351,16 +299,7 @@ public class UserSickServiceImpl implements UserSickService {
 
 	}
 
-	/* (非 Javadoc)  
-	* <p>Title: listRelatedDoctor</p>  
-	* <p>Description: 获取病情医生</p>  
-	* @param userloginid
-	* @param preordertype
-	* @param page
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.user.UserSickService#listRelatedDoctor(java.lang.Integer, java.lang.Integer, java.lang.Integer)  
-	*/  
+	//获取病情相关医生  
 	@Override
 	public  String listRelatedDoctor(Integer userloginid, Integer preordertype,Integer page) throws Exception {
 		List<Usersick> count = usersickMapperCustom.selectByUserLoginIdAndState(userloginid, 2);
@@ -369,11 +308,7 @@ public class UserSickServiceImpl implements UserSickService {
 			PageHelper.startPage(page, 5);
 			List<Map<String, Object>> list =   preorderMapperCustom.selectByUserSickId(userSickId, preordertype);
 			PageInfo<Map<String, Object>> pageInfo = new PageInfo<Map<String, Object>>(list);
-			if (pageInfo!=null && pageInfo.getTotal() > 0) {
-				return DataResult.success("获取数据成功", pageInfo.getList());
-			} else {
-				return DataResult.success("获取数据为空",null);
-			}
+			return DataResult.success("获取成功", pageInfo.getList());
 		} else {
 			if (count.size() > 1) {
 				return DataResult.error("系统错误，发布的病情超过一个");
@@ -384,15 +319,7 @@ public class UserSickServiceImpl implements UserSickService {
 		}
 	}
 
-	/* (非 Javadoc)  
-	* <p>Title: addRelatedDoctor</p>  
-	* <p>Description: 预选医生</p>  
-	* @param docloginid
-	* @param userloginid
-	* @return
-	* @throws Exception  
-	* @see com.medical.service.iface.user.UserSickService#addRelatedDoctor(java.lang.Integer, java.lang.Integer)  
-	*/  
+	//添加预选医生
 	@Override
 	public String addRelatedDoctor(Integer docloginid, Integer userloginid) throws Exception {
 		Userlogininfo user = userlogininfoMapper.selectByPrimaryKey(userloginid);
@@ -404,14 +331,15 @@ public class UserSickServiceImpl implements UserSickService {
 		if (doctorlogininfo == null ||doctorinfo==null ) {
 			return DataResult.error("该医生不存在");
 		}
-		String alipayaccount = doctorinfo.getDocalipayaccount();
-		String alipayname = doctorinfo.getDocalipayname();
-//		if (StringUtils.isBlank(alipayaccount)) {
-//			return DataResult.error("绑定的支付宝账号为空,不可进行该操作");
-//		}
-//		if (StringUtils.isBlank(alipayname)) {
-//			return DataResult.error("绑定的支付宝账号姓名为空,不可进行该操作");
-//		}
+		String calendar = commonService.listDcotorCalendar(docloginid);
+		JSONObject jsonObject =JSONObject.fromObject(calendar);
+		if ("200".equals(jsonObject.get("code").toString())) {
+			return calendar;
+		}
+		List<Map<String, Object>> data = (List<Map<String, Object>>) jsonObject.get("data");
+		if (data==null || data.size()==0) {
+			return DataResult.error("该医生暂无日程安排");
+		}
 		List<Usersick> count = usersickMapperCustom.selectByUserLoginIdAndState(userloginid, 2);
 		if (count.size() == 1) {
 			int usersickid = count.get(0).getUsersickid();

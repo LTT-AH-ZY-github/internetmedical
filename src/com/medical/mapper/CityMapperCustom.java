@@ -16,5 +16,14 @@ public interface CityMapperCustom {
      */
     List<City> selectByParentCode(String code);
     //List<City> selectByLevel(int level);
+
+	/**
+	 * @Title: selectByCityName
+	 * @Description: TODO
+	 * @param name
+	 * @return
+	 * @return: City
+	 */
+	List<City> selectByCityName(String name);
    
 }

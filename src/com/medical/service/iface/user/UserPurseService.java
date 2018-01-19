@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.medical.service.iface.user;
 
 /**

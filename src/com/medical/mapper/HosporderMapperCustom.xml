@@ -25,24 +25,24 @@
   	where a.DoctorId= #{0} 
   	<if test="param2==1">
   		and a.OrderState=1
-  		ORDER BY OrderPTime DESC
+  		ORDER BY a.OrderPTime DESC
   	</if>
   	<if test="param2==2">
   		and a.OrderState=2
-  		ORDER BY OrderRTime DESC
+  		ORDER BY a.OrderRTime DESC
   	</if>
   	
   	<if test="param2==3">
   		and a.OrderState<![CDATA[ > ]]>2 and a.OrderState<![CDATA[ < ]]>4
-  		ORDER BY OrderSTime ASC
+  		ORDER BY a.OrderSTime ASC
   	</if>
   	<if test="param2==4">
   		and a.OrderState=4
-  		ORDER BY OrderETime DESC
+  		ORDER BY a.OrderETime DESC
   	</if>
   	<if test="param2==5">
   		and a.OrderState<![CDATA[ >= ]]>4 
-  		ORDER BY OrderETime DESC
+  		ORDER BY a.OrderETime DESC
   	</if>
   	 
   </select>
@@ -85,19 +85,28 @@
   	 where a.HospId=#{0} 
   	 <if test="param2==1">
   	 	and a.OrderState=1
+  	 	order by a.OrderPTime desc
   	 </if>
   	 <if test="param2==2">
   	 	and a.OrderState=2
+  	 	order by a.OrderRTime desc
   	 </if>
   	 <if test="param2==3">
   	 	and a.OrderState=3
+  	 	order by a.OrderRTime desc
   	 </if>
   	 <if test="param2==4">
   	 	and a.OrderState=4
+  	 	order by a.OrderETime desc
   	 </if>
   	 <if test="param2==5">
   	 	and (a.OrderState=6 or a.OrderState=7) 
+  	 	order by a.OrderETime desc
   	 </if>
+  	  <if test="param2==null or param2=='' or param2==0">
+  		 order by a.OrderPTime desc
+  	 </if>
+  	 
   	</select>
   	 <insert id="insertSelectiveReturnId" useGeneratedKeys="true" keyProperty="hosporderid" parameterType="com.medical.po.Hosporder" >
     insert into hosporder

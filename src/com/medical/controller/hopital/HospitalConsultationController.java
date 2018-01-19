@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medical.po.HospSearchDocTerm;
+import com.medical.service.iface.CommonService;
 import com.medical.service.iface.hospital.HospitalConsultationService;
 import com.medical.utils.CheckUtils;
 import com.medical.utils.IpUtils;
@@ -36,6 +37,8 @@ import com.wordnik.swagger.annotations.ApiResponses;
 public class HospitalConsultationController {
 	@Autowired
 	private HospitalConsultationService hospitalConsultationService;
+	@Autowired
+	private CommonService commonService;
 
 	@RequestMapping(value = "/listdoctor", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "医院根据条件获取医生", httpMethod = "POST", notes = "医院根据条件获取医生", responseContainer = "Map", consumes = "multipart/form-data", produces = "application/json")
@@ -47,11 +50,10 @@ public class HospitalConsultationController {
 			@ApiParam(name = "doctortitle", required = false, value = "医生职称value") @RequestParam(value = "doctortitle", required = false) String doctortitle,
 			@ApiParam(name = "details", required = false, value = "描述") @RequestParam(value = "details", required = false) String details,
 			@ApiParam(name = "province_code", required = false, value = "省key") @RequestParam(required = false) Integer province_code,
-			@ApiParam(name = "city_code", required = false, value = "市key") @RequestParam( required = false) Integer city_code,
+			@ApiParam(name = "city_code", required = false, value = "市key") @RequestParam(required = false) Integer city_code,
 			@ApiParam(name = "area_code", required = false, value = "区县key") @RequestParam(required = false) Integer area_code,
-			@ApiParam(name = "One_level_dept", required = false, value = "一级部门key") @RequestParam( required = false) Integer One_level_dept,
-			@ApiParam(name = "Two_level_dept", required = false, value = "二级部门key") @RequestParam( required = false) Integer Two_level_dept
-			)
+			@ApiParam(name = "One_level_dept", required = false, value = "一级部门key") @RequestParam(required = false) Integer One_level_dept,
+			@ApiParam(name = "Two_level_dept", required = false, value = "二级部门key") @RequestParam(required = false) Integer Two_level_dept)
 			throws Exception {
 
 		if (hosploginid == null) {
@@ -61,25 +63,25 @@ public class HospitalConsultationController {
 			return DataResult.error("当前页为空");
 		}
 		if (StringUtils.isBlank(hosplevel)) {
-			hosplevel=null;
+			hosplevel = null;
 		}
 		if (StringUtils.isBlank(doctortitle)) {
-			doctortitle=null;
+			doctortitle = null;
 		}
-		if (province_code!=null && province_code==0) {
-			province_code=null;
+		if (province_code != null && province_code == 0) {
+			province_code = null;
 		}
-		if (city_code!=null && city_code==0) {
-			city_code=null;
+		if (city_code != null && city_code == 0) {
+			city_code = null;
 		}
-		if (area_code!=null && area_code==0) {
-			area_code=null;
+		if (area_code != null && area_code == 0) {
+			area_code = null;
 		}
-		if (One_level_dept!=null && One_level_dept==0) {
-			One_level_dept=null;
+		if (One_level_dept != null && One_level_dept == 0) {
+			One_level_dept = null;
 		}
-		if (Two_level_dept!=null && Two_level_dept==0) {
-			Two_level_dept=null;
+		if (Two_level_dept != null && Two_level_dept == 0) {
+			Two_level_dept = null;
 		}
 		Integer pageSize = 6;
 		HospSearchDocTerm hospSearchDocTerm = new HospSearchDocTerm();
@@ -91,17 +93,23 @@ public class HospitalConsultationController {
 		hospSearchDocTerm.setOne_level_dept(One_level_dept);
 		hospSearchDocTerm.setProvince_code(province_code);
 		hospSearchDocTerm.setTwo_level_dept(Two_level_dept);
-		return hospitalConsultationService.listDoctor(page, pageSize,province_code,city_code,area_code,details,doctortitle,hosplevel,One_level_dept,Two_level_dept);
+		return hospitalConsultationService.listDoctor(page, pageSize, province_code, city_code, area_code, details,
+				doctortitle, hosplevel, One_level_dept, Two_level_dept);
 
 	}
+
 	@RequestMapping(value = "/getcalendar", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取医生当天后30天内日程", httpMethod = "POST", notes = "获取医生当天后30天内日程", produces = "application/json")
 	public String getCalendarbymonth(
 			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam(required = true) Integer docloginid
 
 	) throws Exception {
-		return hospitalConsultationService.listCalendar(docloginid);
+		if (docloginid==null) {
+			return DataResult.error("医生id为空");
+		}
+		return commonService.listDcotorCalendar(docloginid);
 	}
+
 	// 创建会诊
 	@RequestMapping(value = "/PreOrderRequest", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "创建会诊", httpMethod = "POST", notes = "创建会诊")
@@ -133,19 +141,20 @@ public class HospitalConsultationController {
 				orderhospepricetype, orderhospeprice);
 
 	}
-	//获取会诊信息
+
+	// 获取会诊信息
 	@RequestMapping(value = "/listconsultation", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取会诊信息", httpMethod = "POST", notes = "获取会诊信息")
 	public String listConsultation(
 			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid,
-			@ApiParam(name = "type", value = "为空时获取全部数据，为1时获取等待医生确认，为2时获取等待医院确认，3为获取付款完成的，4为订单完成，6为取消的订单") @RequestParam(required=false) Integer type,
+			@ApiParam(name = "type", value = "为空时获取全部数据，为1时获取等待医生确认，为2时获取等待医院确认，3为获取付款完成的，4为订单完成，6为取消的订单") @RequestParam(required = false) Integer type,
 			@ApiParam(name = "limit", required = true, value = "每页多少数据") @RequestParam(value = "limit") Integer limit,
 			@ApiParam(name = "offset", required = true, value = "每页多少数据") @RequestParam(value = "offset") Integer offset)
 			throws Exception {
 
-		/*if (type == null) {
-			return DataResult.error("会诊订单id为空");
-		}*/
+		/*
+		 * if (type == null) { return DataResult.error("会诊订单id为空"); }
+		 */
 		if (hosploginid == null) {
 			return DataResult.error("医院id为空");
 		}
@@ -155,9 +164,10 @@ public class HospitalConsultationController {
 		if (!CheckUtils.isPositiveIntegerLegal(offset)) {
 			return DataResult.error("offset应为正整数");
 		}
-		return hospitalConsultationService.listConsultation(hosploginid,limit,offset,type);
+		return hospitalConsultationService.listConsultation(hosploginid, limit, offset, type);
 
 	}
+
 	// 取消会诊
 	@RequestMapping(value = "/refusepreorderrequest", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "取消会诊", httpMethod = "POST", notes = "取消会诊")
@@ -183,9 +193,8 @@ public class HospitalConsultationController {
 	public String paydoctor(
 			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid,
 			@ApiParam(name = "hosporderid", required = true, value = "会诊订单id") @RequestParam Integer hosporderid,
-			@ApiParam(name = "type", required = true, value = "支付方式1为支付宝2为微信支付") @RequestParam(defaultValue="1") Integer type,
-			HttpServletRequest request)
-			throws Exception {
+			@ApiParam(name = "type", required = true, value = "支付方式1为支付宝2为微信支付") @RequestParam(defaultValue = "1") Integer type,
+			HttpServletRequest request) throws Exception {
 
 		if (hosporderid == null) {
 			return DataResult.error("会诊订单id为空");
@@ -194,11 +203,10 @@ public class HospitalConsultationController {
 			return DataResult.error("医院id为空");
 		}
 		String ip = IpUtils.getIpAddr(request);
-		return hospitalConsultationService.updateStatePayDoctor(hosploginid, hosporderid,type,ip);
+		return hospitalConsultationService.updateStatePayDoctor(hosploginid, hosporderid, type, ip);
 
 	}
 
-	
 	@RequestMapping(value = "/paydoctorfinishbyalipay", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "支付宝回调", httpMethod = "POST", notes = "支付宝回调")
 	public String paydoctorfinishbyalipay(HttpServletRequest request)
@@ -215,18 +223,19 @@ public class HospitalConsultationController {
 		}
 
 	}
-	
+
 	@RequestMapping(value = "/paydoctorfinishbywxpay", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "微信回调", httpMethod = "POST", notes = "微信回调")
 	public String payDoctorFinishByWXPay(HttpServletRequest request) throws Exception {
 		String result = hospitalConsultationService.updateStatePayDoctorFinishByWXPay(request);
 		net.sf.json.JSONObject json = net.sf.json.JSONObject.fromObject(result);
-		if ("100".equals(json.get("code"))) {
-			return DataResult.xml("SUCCESS", null);
+		if ("100".equals(json.get("code").toString())) {
+			return DataResult.xml("SUCCESS", "OK");
 		} else {
 			return DataResult.xml("FAIL", json.get("msg").toString());
 		}
 	}
+
 	// 会诊完成
 	@RequestMapping(value = "/finishpreorderrequest", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "会诊完成", httpMethod = "POST", notes = "会诊完成")
@@ -245,4 +254,18 @@ public class HospitalConsultationController {
 
 	}
 
+	@RequestMapping(value = "/getpaystate", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "获取支付状态", httpMethod = "POST", notes = "获取支付状态")
+	public String getpaystate(
+			@ApiParam(name = "hosploginid", required = true, value = "医院登陆id") @RequestParam Integer hosploginid,
+			@ApiParam(name = "payid", required = true, value = "支付id") @RequestParam Integer payid) throws Exception {
+		if (hosploginid == null) {
+			return DataResult.error("医院登录id为空");
+		}
+		if (payid == null) {
+			return DataResult.error("支付id为空");
+		}
+		return hospitalConsultationService.getPaySate(hosploginid, payid);
+
+	}
 }

@@ -12,6 +12,9 @@
     <result column="adminLoginBVer" property="adminloginbver" jdbcType="VARCHAR" />
     <result column="adminLoginMac" property="adminloginmac" jdbcType="VARCHAR" />
     <result column="adminLoginIp" property="adminloginip" jdbcType="VARCHAR" />
+    <result column="adminLoginSalt" property="adminloginsalt" jdbcType="VARCHAR" />
+    <result column="roleId" property="roleid" jdbcType="INTEGER" />
+    <result column="registrationTime" property="registrationtime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -73,7 +76,8 @@
   </sql>
   <sql id="Base_Column_List" >
     adminLoginId, adminLoginName, adminLoginPwd, adminLoginPix, adminLoginToken, adminLoginTime, 
-    adminLoginLoc, adminLoginBVer, adminLoginMac, adminLoginIp
+    adminLoginLoc, adminLoginBVer, adminLoginMac, adminLoginIp, adminLoginSalt, roleId, 
+    registrationTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.medical.po.AdminlogininfoExample" >
     select
@@ -109,11 +113,13 @@
     insert into adminlogininfo (adminLoginId, adminLoginName, adminLoginPwd, 
       adminLoginPix, adminLoginToken, adminLoginTime, 
       adminLoginLoc, adminLoginBVer, adminLoginMac, 
-      adminLoginIp)
+      adminLoginIp, adminLoginSalt, roleId, 
+      registrationTime)
     values (#{adminloginid,jdbcType=INTEGER}, #{adminloginname,jdbcType=VARCHAR}, #{adminloginpwd,jdbcType=VARCHAR}, 
       #{adminloginpix,jdbcType=VARCHAR}, #{adminlogintoken,jdbcType=VARCHAR}, #{adminlogintime,jdbcType=TIMESTAMP}, 
       #{adminloginloc,jdbcType=VARCHAR}, #{adminloginbver,jdbcType=VARCHAR}, #{adminloginmac,jdbcType=VARCHAR}, 
-      #{adminloginip,jdbcType=VARCHAR})
+      #{adminloginip,jdbcType=VARCHAR}, #{adminloginsalt,jdbcType=VARCHAR}, #{roleid,jdbcType=INTEGER}, 
+      #{registrationtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.medical.po.Adminlogininfo" >
     insert into adminlogininfo
@@ -148,6 +154,15 @@
       <if test="adminloginip != null" >
         adminLoginIp,
       </if>
+      <if test="adminloginsalt != null" >
+        adminLoginSalt,
+      </if>
+      <if test="roleid != null" >
+        roleId,
+      </if>
+      <if test="registrationtime != null" >
+        registrationTime,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="adminloginid != null" >
@@ -179,6 +194,15 @@
       </if>
       <if test="adminloginip != null" >
         #{adminloginip,jdbcType=VARCHAR},
+      </if>
+      <if test="adminloginsalt != null" >
+        #{adminloginsalt,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null" >
+        #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="registrationtime != null" >
+        #{registrationtime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -221,6 +245,15 @@
       <if test="record.adminloginip != null" >
         adminLoginIp = #{record.adminloginip,jdbcType=VARCHAR},
       </if>
+      <if test="record.adminloginsalt != null" >
+        adminLoginSalt = #{record.adminloginsalt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roleid != null" >
+        roleId = #{record.roleid,jdbcType=INTEGER},
+      </if>
+      <if test="record.registrationtime != null" >
+        registrationTime = #{record.registrationtime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -237,7 +270,10 @@
       adminLoginLoc = #{record.adminloginloc,jdbcType=VARCHAR},
       adminLoginBVer = #{record.adminloginbver,jdbcType=VARCHAR},
       adminLoginMac = #{record.adminloginmac,jdbcType=VARCHAR},
-      adminLoginIp = #{record.adminloginip,jdbcType=VARCHAR}
+      adminLoginIp = #{record.adminloginip,jdbcType=VARCHAR},
+      adminLoginSalt = #{record.adminloginsalt,jdbcType=VARCHAR},
+      roleId = #{record.roleid,jdbcType=INTEGER},
+      registrationTime = #{record.registrationtime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,6 +308,15 @@
       <if test="adminloginip != null" >
         adminLoginIp = #{adminloginip,jdbcType=VARCHAR},
       </if>
+      <if test="adminloginsalt != null" >
+        adminLoginSalt = #{adminloginsalt,jdbcType=VARCHAR},
+      </if>
+      <if test="roleid != null" >
+        roleId = #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="registrationtime != null" >
+        registrationTime = #{registrationtime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where adminLoginId = #{adminloginid,jdbcType=INTEGER}
   </update>
@@ -285,7 +330,10 @@
       adminLoginLoc = #{adminloginloc,jdbcType=VARCHAR},
       adminLoginBVer = #{adminloginbver,jdbcType=VARCHAR},
       adminLoginMac = #{adminloginmac,jdbcType=VARCHAR},
-      adminLoginIp = #{adminloginip,jdbcType=VARCHAR}
+      adminLoginIp = #{adminloginip,jdbcType=VARCHAR},
+      adminLoginSalt = #{adminloginsalt,jdbcType=VARCHAR},
+      roleId = #{roleid,jdbcType=INTEGER},
+      registrationTime = #{registrationtime,jdbcType=TIMESTAMP}
     where adminLoginId = #{adminloginid,jdbcType=INTEGER}
   </update>
 </mapper>

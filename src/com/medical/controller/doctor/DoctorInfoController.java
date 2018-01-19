@@ -2,7 +2,9 @@ package com.medical.controller.doctor;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import com.medical.service.iface.CommonService;
 import com.medical.service.iface.doctor.DoctorInfoService;
 import com.medical.utils.CheckUtils;
 import com.medical.utils.StringTools;
+import com.medical.utils.TimeUtil;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiImplicitParam;
 import com.wordnik.swagger.annotations.ApiImplicitParams;
@@ -398,7 +401,8 @@ public class DoctorInfoController {
 	@ApiOperation(value = "设置日程表", httpMethod = "POST", notes = "设置日程表", produces = "application/json")
 	public String addCalendar(
 			@ApiParam(name = "docloginid", required = true, value = "医生登录id") @RequestParam Integer docloginid,
-			@ApiParam(name = "doccalendarday", value = "时间数组(格式如2017-01-02)") @RequestParam Date[] doccalendarday,
+			@ApiParam(name = "doccalendarday", value = "时间数组(格式如2017-01-02)") @RequestParam(required = false) Date[] doccalendarday,
+			@ApiParam(name = "doccalendardays", value = "时间数组(格式如2017-01-02)") @RequestParam(required = false) String doccalendardays,
 			@ApiParam(name = "doccalendarprice", value = "出诊价格") @RequestParam(required = false) BigDecimal doccalendarprice,
 			@ApiParam(name = "doccalendaraffair", value = "备注") @RequestParam(required = false) String doccalendaraffair,
 			@ApiParam(name = "doccalendaradressid", value = "地址id") @RequestParam Integer doccalendaradressid,
@@ -409,8 +413,19 @@ public class DoctorInfoController {
 		if (docloginid==null) {
 			return DataResult.error("医生登录id为空");
 		}
-		if (doccalendarday==null || doccalendarday.length==0) {
+		boolean DataIsEmpty = doccalendarday==null || doccalendarday.length==0;
+		boolean DataIsEmpty2 = StringUtils.isBlank(doccalendardays);
+		if (DataIsEmpty && DataIsEmpty2) {
 			return DataResult.error("时间为空");
+		}
+		if (DataIsEmpty && !DataIsEmpty2) {
+			List<Date> list = new ArrayList<Date>();  
+	        String [] doccalendardayStr = doccalendardays.split(",");
+			for (String string : doccalendardayStr) {
+				list.add(TimeUtil.strLongToDate(string));
+			}
+			int size = list.size();
+			doccalendarday = (Date[]) list.toArray( new Date[size]);
 		}
 		if (doccalendaradressid==null) {
 			return DataResult.error("地址为空");

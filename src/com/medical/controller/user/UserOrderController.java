@@ -1,17 +1,14 @@
 package com.medical.controller.user;
 
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Null;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.medical.service.iface.user.UserOrderService;
 import com.medical.utils.IpUtils;
 import com.medical.utils.result.DataResult;
@@ -31,13 +28,13 @@ public class UserOrderController {
 	@Autowired
 	private UserOrderService userOrderService;
 
-	//生成订单
+
 	@RequestMapping(value = "/createorder", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "生成订单", httpMethod = "POST", notes = "生成订单")
 	public String createOrder(@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
-			@ApiParam(name = "doccalendarid", value = "日程id") @RequestParam Integer doccalendarid)
-			throws Exception {
+			@ApiParam(name = "doccalendarid", value = "日程id") @RequestParam Integer doccalendarid
+			) throws Exception {
 		if (userloginid == null) {
 			return DataResult.error("用户登录id为空");
 		}
@@ -75,19 +72,13 @@ public class UserOrderController {
 		return userOrderService.createQuickOrder(docloginid, userloginid, doccalendarid,paytype,ip);
 	}
 	
-	/**
-	 * @Title: cancleOrder
-	 * @Description: 取消订单
-	 * @param userorderid
-	 * @param userloginid
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	
 	@RequestMapping(value = "/cancelorder", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "取消订单", httpMethod = "POST", notes = "取消订单")
-	public String cancleOrder(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
-			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid) throws Exception {
+	public String cancleOrder(
+			@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
+			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid
+			) throws Exception {
 		if (userorderid == null) {
 			return DataResult.error("订单id为空");
 		}
@@ -98,16 +89,6 @@ public class UserOrderController {
 
 	}
 
-	/**
-	 * @Title: order
-	 * @Description: 获取订单
-	 * @param userloginid
-	 * @param page
-	 * @param type
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
 	@RequestMapping(value = "/getorder", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取订单", httpMethod = "POST", notes = "获取订单")
 	public String order(@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
@@ -126,40 +107,22 @@ public class UserOrderController {
 		return userOrderService.listOrder(userloginid, page, type);
 	}
 
-	/**
-	 * @Title: gethistoryorder
-	 * @Description: 获取历史订单
-	 * @param userloginid
-	 * @param page
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
 	@RequestMapping(value = "/gethistoryorder", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取历史订单", httpMethod = "POST", notes = "获取历史订单")
-	public String gethistoryorder(@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
-			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page)
-
-			throws Exception {
+	public String gethistoryorder(
+			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
+			@ApiParam(name = "page", value = "当前页") @RequestParam Integer page
+			) throws Exception {
 		if (userloginid == null) {
 			return DataResult.error("用户登录id为空");
 		}
 		if (page == null) {
 			return DataResult.error("page为空");
 		}
-
 		return userOrderService.listOrder(userloginid, page, 5);
 	}
 
-	/**
-	 * @Title: orderDetail
-	 * @Description: 获取订单详细信息
-	 * @param userorderid
-	 * @param userloginid
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	
 	@RequestMapping(value = "/orderdetail", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "获取订单详细信息", httpMethod = "POST", notes = "获取订单详细信息")
 	public String orderDetail(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
@@ -173,15 +136,7 @@ public class UserOrderController {
 		return userOrderService.getOrderDetail(userloginid, userorderid);
 	}
 
-	/**
-	 * @Title: confirmOrder
-	 * @Description: 确认订单
-	 * @param userorderid
-	 * @param userloginid
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	
 	@RequestMapping(value = "/confirmorder", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "确认订单", httpMethod = "POST", notes = "确认订单")
 	public String confirmOrder(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
@@ -199,25 +154,10 @@ public class UserOrderController {
 		
 	}
 
-
-
-	
-
-	
-
-	/**
-	 * @Title: payDoctorFinishByAliPay
-	 * @Description: 支付医生费用回调
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
 	@RequestMapping(value = "/paydoctorfinishbyalipay", method=RequestMethod.POST,produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "支付宝支付医生费用回调", httpMethod = "POST", notes = "支付宝支付医生费用回调")
 	public String payDoctorFinishByAliPay(HttpServletRequest request) throws Exception {
 		Map requestParams = request.getParameterMap();
-		System.out.println("回调" + requestParams + "hhtp" + request);
 		String result = userOrderService.updateOrderStatePayDoctorFinishByAliPay(requestParams);
 		net.sf.json.JSONObject json = net.sf.json.JSONObject.fromObject(result);
 		System.out.println("结果"+json.toString());
@@ -227,28 +167,19 @@ public class UserOrderController {
 			return "false";
 		}
 	}
+	
 	@RequestMapping(value = "/paydoctorfinishbywxpay", method=RequestMethod.POST,produces = "application/json;charset=UTF-8")
-	@ApiOperation(value = "支付宝支付医生费用回调", httpMethod = "POST", notes = "支付宝支付医生费用回调")
+	@ApiOperation(value = "微信支付医生费用回调", httpMethod = "POST", notes = "支付宝支付医生费用回调")
 	public String payDoctorFinishByWXPay(HttpServletRequest request) throws Exception {
-		System.out.println("hhtp" + request);
 		String result = userOrderService.updateOrderStatePayDoctorFinishByWXPay(request);
 		net.sf.json.JSONObject json = net.sf.json.JSONObject.fromObject(result);
-		System.out.println("结果"+json.toString());
 		if ("100".equals(json.get("code").toString())) {
 			return "success";
 		} else {
 			return "false";
 		}
 	}
-	/**
-	 * @Title: payhospital
-	 * @Description: 支付医院押金
-	 * @param userorderid
-	 * @param userloginid
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
+	
 	@RequestMapping(value = "/payhospital", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "支付医院押金", httpMethod = "POST", notes = "支付医院押金")
 	public String payhospital(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
@@ -266,14 +197,6 @@ public class UserOrderController {
 		return userOrderService.updateOrderStatePayHospital(userloginid, userorderid,type);
 	}
 
-	/**
-	 * @Title: payhospitalfinish
-	 * @Description: 支付医院押金回调
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
 	@RequestMapping(value = "/payhospitalfinishbyalipay", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "支付医院押金回调", httpMethod = "POST", notes = "支付医院押金回调")
 	public String payhospitalfinish(HttpServletRequest request) throws Exception {
@@ -287,16 +210,19 @@ public class UserOrderController {
 			return "false";
 		}
 	}
+	
+	@RequestMapping(value = "/payhospitalfinishbywxpay", produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "支付医院押金微信回调", httpMethod = "POST", notes = "支付医院押金微信回调")
+	public String payHospitalFinishByWXPay(HttpServletRequest request) throws Exception {
+		String result = userOrderService.updateOrderStatePayHospitalFinishByWXPay(request);
+		net.sf.json.JSONObject json = net.sf.json.JSONObject.fromObject(result);
+		if ("100".equals(json.get("code").toString())) {
+			return "success";
+		} else {
+			return "false";
+		}
+	}
 
-	/**
-	 * @Title: cancelhospital
-	 * @Description: 取消住院
-	 * @param userorderid
-	 * @param userloginid
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
 	@RequestMapping(value = "/cancelhospital", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "取消住院", httpMethod = "POST", notes = "取消住院")
 	public String cancelhospital(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
@@ -310,23 +236,6 @@ public class UserOrderController {
 		return userOrderService.updateOrderStateToCancelHospital(userloginid, userorderid);
 	}
 
-	/**
-	 * @Title: evaluate
-	 * @Description: 评价
-	 * @param userorderid
-	 * @param userloginid
-	 * @param doccommentservicelevel
-	 * @param doccommentprofessionallevel
-	 * @param doccommentpricelevel
-	 * @param doccommentwords
-	 * @param hospcommentservicelevel
-	 * @param hospcommentenvironmenlevel
-	 * @param hospcommentpricelevel
-	 * @param hospcommentwords
-	 * @return
-	 * @throws Exception
-	 * @return: String
-	 */
 	@RequestMapping(value = "/evaluate", produces = "application/json;charset=UTF-8")
 	@ApiOperation(value = "对订单进行评价", httpMethod = "POST", notes = "对订单进行评价")
 	public String evaluate(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
@@ -349,5 +258,24 @@ public class UserOrderController {
 		return userOrderService.insertEvaluate(userorderid, userloginid, doccommentservicelevel,
 				doccommentprofessionallevel, doccommentpricelevel, doccommentwords, hospcommentservicelevel,
 				hospcommentenvironmenlevel, hospcommentpricelevel, hospcommentwords);
+	}
+	
+	@RequestMapping(value = "/applyorderrefund", produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "申请订单退款", httpMethod = "POST", notes = "申请订单退款")
+	public String applyorderrefund(
+			@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
+			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
+			@ApiParam(name = "cancelreason", value = "取消理由") @RequestParam(required=false) String cancelreason
+			)throws Exception {
+		if (userloginid == null) {
+			return DataResult.error("用户登录id为空");
+		}
+		if (userorderid == null) {
+			return DataResult.error("订单id为空");
+		}
+		if (cancelreason!=null && cancelreason.length()>250) {
+			return DataResult.error("取消理由过多");
+		}
+		return userOrderService.updateToRefund(userorderid, userloginid,cancelreason);
 	}
 }
