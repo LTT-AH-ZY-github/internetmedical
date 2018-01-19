@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.medical.mapper.AdminrolemenuMapperCustom" >
+  
+  <select id="selectByParams" resultType="com.medical.po.Adminrolemenu" parameterType="map" >
+    select *
+     from adminrolemenu
+    <where>
+    	<if test="roleid!=null">
+    		and roleId = #{roleid,jdbcType=INTEGER}
+    	</if>
+    	<if test="menuid!=null">
+    		and menuId = #{menuid,jdbcType=INTEGER}
+    	</if>
+    </where>
+    
+  </select>
+  <select id="selectAllInfoByParams" resultType="map" parameterType="map" >
+    select a.rolemenuid,b.menuid,b.menuname,b.menufatherid,b.menuurl,c.roleid,c.rolename,c.roledescription
+     from adminrolemenu as a 
+     left join adminmenu as b on a.menuId= b.menuId
+     left join adminrole as c on a.roleId = c.roleId
+    <where>
+    	<if test="roleid!=null">
+    		and a.roleId = #{roleid,jdbcType=INTEGER}
+    	</if>
+    	<if test="menuid!=null">
+    		and a.menuId = #{menuid,jdbcType=INTEGER}
+    	</if>
+    </where>
+    
+  </select>
+</mapper>
