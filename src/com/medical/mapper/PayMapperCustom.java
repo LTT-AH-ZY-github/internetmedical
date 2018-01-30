@@ -15,4 +15,5 @@ public interface PayMapperCustom {
     List<Map<String, Object>> selectByLoginIdAndTypeAndOrderId(Integer loginid,Integer type, Integer userorderid);
     List<Map<String, Object>> selectByLoginIdAndTypeAndHospOrderId(Integer loginid,Integer type, Integer hosporderid);
     List<Pay> selectByParamsInAdmin(Map<String, Object> map);
+    List<Map<String, Object>> selectByParamsInAdminForExcel(Map<String, Object> map);
 }

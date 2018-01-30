@@ -108,11 +108,11 @@
 		  		   </if>
   		   		</if>
   		   		<if test="type==1">
-	  		   		<if test="primaryDept!=null">
-		  		   	  and a.docPrimaryDept=#{primaryDept}
+	  		   		<if test="primarydept!=null">
+		  		   	 	 and a.docPrimaryDept=#{primarydept}
 			  	     </if>
-			  		 <if test="secondDept!=null">
-			  		   	  and a.docSecondDept=#{secondDept}
+			  		 <if test="seconddept!=null">
+			  		   	  and a.docSecondDept=#{seconddept}
 			  		</if>
   		   		</if>
 	  		 </where>

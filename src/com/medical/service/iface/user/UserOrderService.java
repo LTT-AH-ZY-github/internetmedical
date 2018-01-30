@@ -91,7 +91,7 @@ public interface UserOrderService {
 	 * @return: String
 	 * @throws Exception 
 	 */
-	String updateOrderStatePayHospital(Integer userloginid, Integer userorderid, Integer type) throws Exception;
+	String updateOrderStatePayHospital(Integer userloginid, Integer userorderid, Integer type,String ip) throws Exception;
 
 	
 

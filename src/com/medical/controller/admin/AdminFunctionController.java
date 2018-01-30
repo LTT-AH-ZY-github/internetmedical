@@ -4,6 +4,7 @@
 package com.medical.controller.admin;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.medical.po.Doctorinfo;
+import com.medical.po.Hospinfo;
+import com.medical.po.Userinfo;
 import com.medical.service.iface.admin.AdminFunctionService;
 import com.medical.utils.CheckUtils;
 import com.medical.utils.StringTools;
@@ -355,7 +359,7 @@ public class AdminFunctionController {
 		if (adminloginid==null) {
 			return DataResult.error("管理员id为空");
 		}
-		BigDecimal high = new BigDecimal("1");
+		BigDecimal high = new BigDecimal("100");
 		BigDecimal low = new BigDecimal("0.01");
 		if (docfefundrate!=null && docfefundrate.scale()>2) {
 			return DataResult.error("医生提现扣费利率应精确两位小数");
@@ -380,5 +384,147 @@ public class AdminFunctionController {
 			return DataResult.error("管理员id为空");
 		}
 		return adminFunctionService.getRefundRate(adminloginid); 
+	}
+	@RequestMapping(value = "/editdoctorinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "修改医生资料", httpMethod = "POST", notes = "修改医生资料")
+	public String editdoctorinfo(
+			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
+			@ApiParam(name = "docloginid", value = "医生登录id") @RequestParam Integer docloginid,
+			@ApiParam(name = "docname", value = "医生姓名") @RequestParam(required=false) String docname,
+			@ApiParam(name = "docmale", value = "医生性别") @RequestParam(required=false)  String docmale,
+			@ApiParam(name = "doctitle", value = "医生职称") @RequestParam(required=false)  String doctitle,
+			@ApiParam(name = "doccardnum", value = "身份证号码") @RequestParam(required=false)  String doccardnum,
+			@ApiParam(name = "dochosp", value = "医院名") @RequestParam(required=false)  String dochosp,
+			@ApiParam(name = "hosplevel", value = "医院等级") @RequestParam(required=false)  String hosplevel,
+			@ApiParam(name = "docprimarydept", value = "一级部门") @RequestParam(required=false)  String docprimarydept,
+			@ApiParam(name = "docseconddept", value = "二级部门") @RequestParam(required=false)  String docseconddept,
+			@ApiParam(name = "dochospprovince", value = "省") @RequestParam(required=false)  String dochospprovince,
+			@ApiParam(name = "dochospcity", value = "市") @RequestParam(required=false)  String dochospcity,
+			@ApiParam(name = "dochosparea", value = "区县") @RequestParam(required=false)  String dochosparea,
+			@ApiParam(name = "dochospother", value = "详细地址") @RequestParam(required=false)  String dochospother,
+			@ApiParam(name = "dochosplon", value = "维度") @RequestParam(required=false)  String dochosplon,
+			@ApiParam(name = "dochosplat", value = "精度") @RequestParam(required=false)  String dochosplat) throws Exception{
+		if (adminloginid==null) {
+			return DataResult.error("管理员id为空");
+		}
+		if (docloginid==null) {
+			return DataResult.error("医生登录id为空");
+		}
+		Doctorinfo doctorinfo = new Doctorinfo();
+		doctorinfo.setDocloginid(docloginid);
+		doctorinfo.setDocname(docname);
+		doctorinfo.setDocmale(docmale);
+		doctorinfo.setDoctitle(doctitle);
+		doctorinfo.setDoccardnum(doccardnum);
+		doctorinfo.setDochosp(dochosp);
+		doctorinfo.setHosplevel(hosplevel);
+		doctorinfo.setDocprimarydept(docprimarydept);
+		doctorinfo.setDocseconddept(docseconddept);
+		doctorinfo.setDochospprovince(dochospprovince);
+		doctorinfo.setDochospcity(dochospcity);
+		doctorinfo.setDochosparea(dochosparea);
+		doctorinfo.setDochospother(dochospother);
+		doctorinfo.setDochosplat(dochosplat);
+		doctorinfo.setDochosplon(dochosplon);
+		return adminFunctionService.editDoctorInfo(adminloginid,doctorinfo); 
+	}
+	@RequestMapping(value = "/edithospitalinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "修改医院资料", httpMethod = "POST", notes = "修改医院资料")
+	public String edithospitalinfo(
+			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
+			@ApiParam(name = "hosploginid", value = "医院登录id") @RequestParam Integer hosploginid,
+			@ApiParam(name = "hospname", value = "医院名称") @RequestParam(required=false) String hospname,
+			@ApiParam(name = "hospregidcard", value = "医生姓名") @RequestParam(required=false) String hospregidcard,
+			@ApiParam(name = "hospphone", value = "医院电话") @RequestParam(required=false)  String hospphone,
+			@ApiParam(name = "hosplevelname", value = "医院等级") @RequestParam(required=false)  String hosplevelname,
+			@ApiParam(name = "hospabs", value = "医院简介") @RequestParam(required=false)  String hospabs,
+			@ApiParam(name = "hospfeature", value = "医院特色") @RequestParam(required=false)  String hospfeature,
+			@ApiParam(name = "hospadrprovince", value = "省") @RequestParam(required=false)  String hospadrprovince,
+			@ApiParam(name = "hospadrcity", value = "市") @RequestParam(required=false)  String hospadrcity,
+			@ApiParam(name = "hospadrarea", value = "区县") @RequestParam(required=false)  String hospadrarea,
+			@ApiParam(name = "hospadrother", value = "详细") @RequestParam(required=false)  String hospadrother,
+			@ApiParam(name = "hospadrlat", value = "详细") @RequestParam(required=false)  String hospadrlat,
+			@ApiParam(name = "hospadrlon", value = "详细") @RequestParam(required=false)  String hospadrlon) throws Exception{
+		if (adminloginid==null) {
+			return DataResult.error("管理员id为空");
+		}
+		if (hosploginid==null) {
+			return DataResult.error("医院登录id为空");
+		}
+		Hospinfo hospinfo = new Hospinfo();
+		hospinfo.setHosploginid(hosploginid);
+		hospinfo.setHospname(hospname);
+		hospinfo.setHospregidcard(hospregidcard);
+		hospinfo.setHospphone(hospphone);
+		hospinfo.setHospgrade(hosplevelname);
+		hospinfo.setHospabs(hospabs);
+		hospinfo.setHospfeature(hospfeature);
+		hospinfo.setHospadrprovince(hospadrprovince);
+		hospinfo.setHospadrcity(hospadrcity);
+		hospinfo.setHospadrarea(hospadrarea);
+		hospinfo.setHospadrother(hospadrother);
+		hospinfo.setHospadrlat(hospadrlat);
+		hospinfo.setHospadrlon(hospadrlon);
+		return adminFunctionService.editHospitalInfo(adminloginid,hospinfo);
+	}
+	
+	@RequestMapping(value = "/editpatientinfo", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "修改用户资料", httpMethod = "POST", notes = "修改用户资料")
+	public String editpatientinfo(
+			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
+			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
+			@ApiParam(name = "username", value = "姓名") @RequestParam(required=false) String username,
+			@ApiParam(name = "usermale", value = "性别") @RequestParam(required=false) String usermale,
+			@ApiParam(name = "usercardnum", value = "身份证号码") @RequestParam(required=false)  String usercardnum,
+			@ApiParam(name = "useradrprovince", value = "省") @RequestParam(required=false)  String useradrprovince,
+			@ApiParam(name = "useradrcity", value = "市") @RequestParam(required=false)  String useradrcity,
+			@ApiParam(name = "useradrarea", value = "区县") @RequestParam(required=false)  String useradrarea,
+			@ApiParam(name = "useradrother", value = "详细地址") @RequestParam(required=false)  String useradrother) throws Exception{
+		if (adminloginid==null) {
+			return DataResult.error("管理员id为空");
+		}
+		if (userloginid==null) {
+			return DataResult.error("用户登录id为空");
+		}
+		Userinfo userinfo = new Userinfo();
+		userinfo.setUserloginid(userloginid);
+		userinfo.setUsername(username);
+		userinfo.setUsermale(usermale);
+		userinfo.setUsercardnum(usercardnum);
+		userinfo.setUseradrprovince(useradrprovince);
+		userinfo.setUseradrcity(useradrcity);
+		userinfo.setUseradrarea(useradrarea);
+		userinfo.setUseradrother(useradrother);
+		return adminFunctionService.editUserInfo(adminloginid,userinfo);
+	}
+	@RequestMapping(value = "/gethospdept", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "修改用户资料", httpMethod = "POST", notes = "修改用户资料")
+	public String gethospdept(
+			@ApiParam(name = "hospdeptfatheridname", value = "") @RequestParam String hospdeptfatheridname
+			) throws Exception{
+		if (StringUtils.isBlank(hospdeptfatheridname)) {
+			return DataResult.error("部门名为空");
+		}
+		
+		return adminFunctionService.getHospDept(hospdeptfatheridname);
+	}
+	
+	@RequestMapping(value = "/getpayrecord", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "修改用户资料", httpMethod = "POST", notes = "修改用户资料")
+	public String getpayrecord(
+			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid,
+			@ApiParam(name = "starttime", value = "开始时间") @RequestParam Date starttime,
+			@ApiParam(name = "endtime", value = "开始时间") @RequestParam Date endtime
+			) throws Exception{
+		if (adminloginid==null) {
+			return DataResult.error("管理员id为空");
+		}
+		if (starttime==null) {
+			return DataResult.error("开始时间为空");
+		}
+		if (endtime==null) {
+			return DataResult.error("结束时间为空");
+		}
+		return adminFunctionService.getPayRecord(adminloginid,starttime,endtime);
 	}
 }

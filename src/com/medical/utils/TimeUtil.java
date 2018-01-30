@@ -22,6 +22,7 @@ public class TimeUtil {
 		String dateString = formatter.format(dateDate);
 		return dateString;
 	}
+	
 	public static Date strLongToDate(String str) {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		Date dt1 = null;

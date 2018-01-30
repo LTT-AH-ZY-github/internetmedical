@@ -18,7 +18,7 @@
 	 			left join accounttype as d on c.hospLoginType= d.accounttypeid
 	 	<where>
 	 		<if test="type != null">
-            	and d.hospLoginType = #{type} 
+            	and c.hospLoginType = #{type} 
         	</if>
         	<if test="hospadrprovince != null">
             	and a.hospAdrProvince = #{hospadrprovince} 

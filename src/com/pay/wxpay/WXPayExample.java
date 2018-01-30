@@ -30,13 +30,13 @@ public class WXPayExample {
 		wxpay = new WXPay(config);
 	}
 
-	public Map<String, String> doUnifiedOrder(String boby, String out_trade_no, BigDecimal price,
+	public Map<String, String> doUnifiedOrder(String boby,String attach ,String out_trade_no, BigDecimal price,
 			String spbill_create_ip, String notify_url, String trade_type) {
 		int price100 = price.multiply(new BigDecimal(100)).intValue();
 		Map<String, String> data = new HashMap<String, String>();
 		data.put("body", boby);
 		data.put("out_trade_no", out_trade_no);
-		// data.put("device_info", "");
+		data.put("attach", attach);
 		data.put("fee_type", "CNY");
 		data.put("total_fee", String.valueOf(price100));
 		data.put("spbill_create_ip", spbill_create_ip);

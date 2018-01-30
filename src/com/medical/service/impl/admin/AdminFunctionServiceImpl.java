@@ -1,6 +1,7 @@
 package com.medical.service.impl.admin;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,18 +21,22 @@ import com.medical.mapper.CityMapper;
 import com.medical.mapper.CityMapperCustom;
 import com.medical.mapper.DoctoraddressMapper;
 import com.medical.mapper.DoctoraddressMapperCustom;
+import com.medical.mapper.DoctorinfoMapper;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.DoctorlogininfoMapper;
 import com.medical.mapper.FamilyinfoMapper;
 import com.medical.mapper.FamilyinfoMapperCustom;
 import com.medical.mapper.FeedbackMapper;
 import com.medical.mapper.FeedbackMapperCustom;
+import com.medical.mapper.HospinfoMapper;
 import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.HospitaldeptMapper;
 import com.medical.mapper.HospitaldeptMapperCustom;
 import com.medical.mapper.HosplogininfoMapper;
+import com.medical.mapper.PayMapperCustom;
 import com.medical.mapper.RefundrateMapper;
 import com.medical.mapper.RefundrateMapperCustom;
+import com.medical.mapper.UserinfoMapper;
 import com.medical.mapper.UserinfoMapperCustom;
 import com.medical.mapper.UserlogininfoMapper;
 import com.medical.po.Adminexamine;
@@ -43,6 +48,7 @@ import com.medical.po.Doctorinfo;
 import com.medical.po.Doctorlogininfo;
 import com.medical.po.Familyinfo;
 import com.medical.po.Feedback;
+import com.medical.po.Hospinfo;
 import com.medical.po.Hospitaldept;
 import com.medical.po.Hosplogininfo;
 import com.medical.po.Refundrate;
@@ -50,6 +56,9 @@ import com.medical.po.Userinfo;
 import com.medical.po.Userlogininfo;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.admin.AdminFunctionService;
+import com.medical.utils.CreateSimpleExcelToDisk;
+import com.medical.utils.Global;
+import com.medical.utils.TimeUtil;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiParam;
 
@@ -108,6 +117,15 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 	private RefundrateMapperCustom refundrateMapperCustom;
 	@Autowired
 	private CityMapperCustom cityMapperCustom;
+	@Autowired
+	private DoctorinfoMapper doctorinfoMapper;
+	@Autowired
+	private HospinfoMapper hospinfoMapper;
+	@Autowired
+	private UserinfoMapper userinfoMapper;
+	@Autowired
+	private PayMapperCustom payMapperCustom;
+	
 	
 	//管理员根据用户账号类型查询用户 
 	@Override
@@ -715,6 +733,112 @@ public class AdminFunctionServiceImpl implements AdminFunctionService{
 		}
 		return dept.get(0).getHospdeptid()+"";
 
+	}
+
+	@Override
+	public String editDoctorInfo(Integer adminloginid, Doctorinfo doctorinfo) throws Exception {
+		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
+		if (adminlogininfo==null) {
+			return DataResult.error("该管理员账号不存在");
+		}
+		Doctorinfo doctor = doctorinfoMapperCustom.selectByDocLoginId(doctorinfo.getDocloginid());
+		if (doctor==null) {
+			return DataResult.error("该医生不存在");
+		}
+		doctorinfo.setDocid(doctor.getDocid());
+		boolean result = doctorinfoMapper.updateByPrimaryKeySelective(doctorinfo)>0;
+		if (result) {
+			return DataResult.success("修改成功");
+		}else {
+			return DataResult.error("修改失败");
+		}
+		
+	}
+
+	@Override
+	public String editHospitalInfo(Integer adminloginid, Hospinfo hospinfo) throws Exception {
+		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
+		if (adminlogininfo==null) {
+			return DataResult.error("该管理员账号不存在");
+		}
+		Hospinfo hosp = hospinfoMapperCustom.selectByHospLoginId(hospinfo.getHosploginid());
+		if (hosp==null) {
+			return DataResult.error("该医院不存在");
+		}
+		hospinfo.setHospid(hosp.getHospid());
+		boolean result = hospinfoMapper.updateByPrimaryKeySelective(hospinfo)>0;
+		if (result) {
+			return DataResult.success("修改成功");
+		}else {
+			return DataResult.error("修改失败");
+		}
+	}
+
+	@Override
+	public String editUserInfo(Integer adminloginid, Userinfo userinfo) throws Exception {
+		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
+		if (adminlogininfo==null) {
+			return DataResult.error("该管理员账号不存在");
+		}
+		Userinfo user = userinfoMapperCustom.selectByLoginId(userinfo.getUserloginid());
+		if (user==null) {
+			return DataResult.error("该用户不存在");
+		}
+		userinfo.setUserid(user.getUserid());
+		boolean result = userinfoMapper.updateByPrimaryKeySelective(userinfo)>0;
+		if (result) {
+			return DataResult.success("修改成功");
+		}else {
+			return DataResult.error("修改失败");
+		}
+	}
+
+	@Override
+	public String getHospDept(String hospdeptfatheridname) throws Exception {
+		List<Hospitaldept> list = hospitaldeptMapperCustom.selectByDeptNameAndFatherId(hospdeptfatheridname, "0");
+		if (list!=null && list.size()==1) {
+			List<Hospitaldept> sonlist = hospitaldeptMapperCustom.selectByFatherId(list.get(0).getHospdeptid());
+			if (sonlist!=null && sonlist.size()>0) {
+				List<Map<String, Object>> son = new ArrayList<>();
+				for (Hospitaldept hospitaldept : sonlist) {
+					Map<String, Object> map = new HashMap<>();
+					map.put("hospdeptid", hospitaldept.getHospdeptid());
+					map.put("hospdeptname", hospitaldept.getHospdeptname());
+					son.add(map);
+				}
+				return DataResult.success("获取成功", son);
+				
+				
+			}else {
+				return DataResult.success("获取成功", null);
+			}
+		}else {
+			return DataResult.error("该一级部门不存在");
+		}
+		
+	}
+
+	@Override
+	public String getPayRecord(Integer adminloginid, Date starttime, Date endtime) throws Exception {
+		Adminlogininfo adminlogininfo = adminlogininfoMapper.selectByPrimaryKey(adminloginid);
+		if (adminlogininfo==null) {
+			return DataResult.error("该管理员账号不存在");
+		}
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("starttime", TimeUtil.dateToStrLong(starttime));
+		map.put("endtime", TimeUtil.dateToStrLong(endtime));
+		List<Map<String, Object>> list = payMapperCustom.selectByParamsInAdminForExcel(map);
+		if (list!=null && list.size()>0) {
+			String name = CreateSimpleExcelToDisk.creat(list);
+			if (StringUtils.isNotBlank(name)) {
+				String path = Global.APP_DOWLOAD_URL+"excel/"+name;
+				return DataResult.success("获取成功", path);
+			}
+		}else {
+			return DataResult.error("记录不存在");
+		}
+		return DataResult.error("获取失败");
 	}
 	
 

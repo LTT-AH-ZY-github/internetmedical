@@ -241,6 +241,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 			return result;
 		}
 	}
+	
 	//生成待付款的订单
 	@Override
 	public String createQuickOrder(Integer docloginid, Integer userloginid, Integer doccalendarid, Integer paytype,String ip)
@@ -454,7 +455,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 		if (doctorinfo == null) {
 			return DataResult.error("医生不存在");
 		}
-		String boby = "速递医运病人费用缴纳";
+		String boby = "速递医运-用户缴纳医生费用";
 		String subject = "缴纳" + doctorinfo.getDocname() + "医生费用";
 		BigDecimal totalAmount = userorder.getUserorderprice();
 		String prefix = "wud";
@@ -475,7 +476,28 @@ public class UserOrderServiceImpl implements UserOrderService {
 		}
 		return result;
 	}
-	
+	// 支付宝支付医生费用
+		@Transactional(rollbackFor = Exception.class)
+		private String updateOrderStatePayDoctorByAliPay(Userorder userorder) throws Exception {
+			Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(userorder.getUserorderdocloginid());
+			if (doctorinfo==null) {
+				return DataResult.error("医生不存在");
+			}
+			String boby = "速递医运-用户缴纳医生费用";
+			String subject = "缴纳" + doctorinfo.getDocname() + "医生费用";
+			String totalAmount = userorder.getUserorderprice() + "";
+			String prefix = "aud";
+			String outTradeNo = MakeRandomNum.getTradeNo(prefix);
+			// 回调地址
+			String notifyUrl = AlipayConfig.DOCTOR_NOTIFY_URL;
+			int payid  = payService.updatePayRecordToCreat(userorder.getUserloginid(), userorder.getFamilyname(), userorder.getUserorderprice(), userorder.getUserorderdocloginid(), doctorinfo.getDocname(), userorder.getUserorderid(), 1, 1, outTradeNo,1);
+			if (payid==0) {
+				return DataResult.error("异常错误");
+			}
+			String result = MyAliPay.appGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
+			return DataResult.success("获取成功", result); 
+			
+		}
 	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public String updateOrderStatePayDoctorFinishByWXPay(HttpServletRequest request) throws Exception {
@@ -511,7 +533,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 			}
 
 		}
-		return afterPaySuccessForDoctor(pay, params, "Wxpay");
+		return updateAfterPaySuccessForDoctor(pay, params, "Wxpay");
 //		
 //		// 付款金额
 //		String receipt = (String) params.get("total_fee");
@@ -577,28 +599,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 //			return DataResult.success("已支付");
 //		}
 	}
-	// 支付宝支付医生费用
-	@Transactional(rollbackFor = Exception.class)
-	private String updateOrderStatePayDoctorByAliPay(Userorder userorder) throws Exception {
-		Doctorinfo doctorinfo = doctorinfoMapperCustom.selectByDocLoginId(userorder.getUserorderdocloginid());
-		if (doctorinfo==null) {
-			return DataResult.error("医生不存在");
-		}
-		String boby = "速递医运病人费用缴纳";
-		String subject = "缴纳" + doctorinfo.getDocname() + "医生费用";
-		String totalAmount = userorder.getUserorderprice() + "";
-		String prefix = "aud";
-		String outTradeNo = MakeRandomNum.getTradeNo(prefix);
-		// 回调地址
-		String notifyUrl = AlipayConfig.DOCTOR_NOTIFY_URL;
-		int payid  = payService.updatePayRecordToCreat(userorder.getUserloginid(), userorder.getFamilyname(), userorder.getUserorderprice(), userorder.getUserorderdocloginid(), doctorinfo.getDocname(), userorder.getUserorderid(), 1, 1, outTradeNo,1);
-		if (payid==0) {
-			return DataResult.error("异常错误");
-		}
-		String result = MyAliPay.appGetSign(boby, subject, totalAmount, outTradeNo, notifyUrl);
-		return DataResult.success("获取成功", result); 
-		
-	}
+	
 	
 	@Transactional(rollbackFor = Exception.class)
 	@Override
@@ -622,7 +623,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 		}
 		if ("TRADE_FINISHED".equals(params.get("trade_status")) || "TRADE_SUCCESS".equals(params.get("trade_status"))) {  
             // 支付成功后执行相关业务  
-            return afterPaySuccessForDoctor(pay, params, "Alipay");  
+            return updateAfterPaySuccessForDoctor(pay, params, "Alipay");  
         
 		}  else if ("TRADE_CLOSED".equals(params.get("trade_status"))){
         	boolean payresult = payService.updatePayRecordToCancle( pay.getPayid(), trade_no,
@@ -704,7 +705,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 //			return DataResult.success("已支付");
 //		}
 	}
-	public String afterPaySuccessForDoctor(Pay pay,Map<String, String> params,String payMethod) throws Exception{  
+	public String updateAfterPaySuccessForDoctor(Pay pay,Map<String, String> params,String payMethod) throws Exception{  
 		
 		String trade_no = null;
 		// 付款金额
@@ -753,14 +754,13 @@ public class UserOrderServiceImpl implements UserOrderService {
 			boolean payResult = payService.updatePayRecordToFinish( pay.getPayid(), trade_no,
 					buyer_logon_id, seller_email, params.toString(), new BigDecimal(receip_tamount));
 			String name = pay.getPaysendername();
-			// 金额记录
-			String purseResult = doctorPurseService.updateBalance(order.getUserorderdocloginid(), 1,
-					new BigDecimal(total_amount), "收到病人" + name + "付款", pay.getPayid());
-			JSONObject purseObject = JSONObject.fromObject(purseResult);
+			// 医生金额记录
+//			String purseResult = doctorPurseService.updateBalance(order.getUserorderdocloginid(), 1,
+//					new BigDecimal(total_amount), "收到病人" + name + "付款", pay.getPayid());
+//			JSONObject purseObject = JSONObject.fromObject(purseResult);
 			// 解除订单锁
 			commonTradeService.queryUserOrderForFinish(pay.getPayorderid());
-			if (payResult && "100".equals(purseObject.get("code").toString())
-					&& orderresult) {
+			if (payResult && orderresult) {
 				JSONObject jsonCustormCont = new JSONObject();
 				jsonCustormCont.put("user_id", order.getUserloginid());
 				jsonCustormCont.put("order_id", order.getUserorderid());
@@ -799,7 +799,7 @@ public class UserOrderServiceImpl implements UserOrderService {
     }  
 	
 	@Override
-	public String updateOrderStatePayHospital(Integer userloginid, Integer userorderid, Integer type) throws Exception {
+	public String updateOrderStatePayHospital(Integer userloginid, Integer userorderid, Integer type,String ip) throws Exception {
 		//订单锁
 		boolean tradestate = commonTradeService.queryUserOrderForCreat(userorderid);
 		if (tradestate) {
@@ -848,7 +848,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 			if (type == 1) {
 				return updateOrderStatePayHospitalByAlipay(order);
 			} else {
-				return updateOrderStatePayHospitalByAlipay(order);
+				return updateOrderStatePayHospitalByWXPay(order,ip);
 			}
 
 		
@@ -920,7 +920,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 			}
 
 		}
-		return afterPaySuccessForHosp(pay, params, "WXpay");
+		return updateAfterPaySuccessForHosp(pay, params, "WXpay");
 //		// 付款金额
 //		String receipt = (String) params.get("total_fee");
 //		String receiptamount = new BigDecimal(receipt).divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP).toString();
@@ -1060,7 +1060,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 			}
 	
 		}
-		return afterPaySuccessForHosp(pay, params, "Alipay");
+		return updateAfterPaySuccessForHosp(pay, params, "Alipay");
 //		int userorderid = pay.getPayorderid();
 //		Userorder order = userorderMapper.selectByPrimaryKey(userorderid);
 //		if (order == null) {
@@ -1141,12 +1141,12 @@ public class UserOrderServiceImpl implements UserOrderService {
 
 	}
 	/**
-	 * @Title: afterPaySuccessForHosp
+	 * @Title: updateAfterPaySuccessForHosp
 	 * @Description: TODO
 	 * @return: void
 	 * @throws Exception 
 	 */
-	private String afterPaySuccessForHosp(Pay pay,Map<String, String> params,String payMethod) throws Exception {
+	private String updateAfterPaySuccessForHosp(Pay pay,Map<String, String> params,String payMethod) throws Exception {
 		
 		String trade_no = null;
 		// 付款金额
@@ -1202,8 +1202,8 @@ public class UserOrderServiceImpl implements UserOrderService {
 			String sickname = pay.getPaysendername();
 			boolean payresult  = payService.updatePayRecordToFinish( pay.getPayid(), trade_no, buyer_logon_id,
 					seller_email, params.toString(), new BigDecimal(receip_tamount));
-			String purseresult = hospitalPurseService.updateBalance(pay.getPayreceiverid(), 1, new BigDecimal(total_amount), "收到病人"+sickname+"押金", pay.getPayid());
-			JSONObject purseObject = JSONObject.fromObject(purseresult);
+//			String purseresult = hospitalPurseService.updateBalance(pay.getPayreceiverid(), 1, new BigDecimal(total_amount), "收到病人"+sickname+"押金", pay.getPayid());
+//			JSONObject purseObject = JSONObject.fromObject(purseresult);
 	       //押金记录表
 			Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(order.getUserorderhospid());
 			Hosptitaldeposit hosptitaldeposit = new Hosptitaldeposit();
@@ -1215,7 +1215,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 			boolean depositresult = hosptitaldepositMapper.insertSelective(hosptitaldeposit)>0;
 			//解除订单锁
 			commonTradeService.queryUserOrderForFinish(pay.getPayorderid());
-			if (payresult && "100".equals(purseObject.get("code").toString()) && orderresult && depositresult) {
+			if (payresult && orderresult && depositresult) {
 				JSONObject jsonCustormCont = new JSONObject();
 				jsonCustormCont.put("order_id", order.getUserorderid());
 				jsonCustormCont.put("type", "5");

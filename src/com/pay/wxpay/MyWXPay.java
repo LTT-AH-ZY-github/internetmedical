@@ -38,10 +38,10 @@ import okio.Utf8;
  */
 public class MyWXPay {
 	
-public static void main(String[] args) {
-		
-		System.out.println(wxPrePay("测试", "测试", new BigDecimal("1"), "http://test.letiantian.me/wxpay/notify", "12305600122D", "123.12.12.123", "APP"));
-	}
+//public static void main(String[] args) {
+//		
+//		System.out.println(wxPrePay("测试", "测试", new BigDecimal("1"), "http://test.letiantian.me/wxpay/notify", "12305600122D", "123.12.12.123", "APP"));
+//	}
 	
 	/**
 	 * @Title: wxPrePay
@@ -61,7 +61,7 @@ public static void main(String[] args) {
 		WXPayExample wxPayExample;
 		try {
 			wxPayExample = new WXPayExample();
-			Map<String, String> map=  wxPayExample.doUnifiedOrder(boby, out_trade_no, price, ip, notify_url, trade_type);
+			Map<String, String> map=  wxPayExample.doUnifiedOrder(boby,attach, out_trade_no, price, ip, notify_url, trade_type);
 			if ("FAIL".equals(map.get("return_code"))) {
 				return DataResult.error("通信异常");
 			}
@@ -85,8 +85,13 @@ public static void main(String[] args) {
 		    String mySign = createSign(characterEncoding,data);   
 		    data.put("sign",mySign);  
 		    System.out.println("我 的签名是："+mySign);   
+		    if ("APP".equals(trade_type)) {
+		    	return DataResult.success("获取成功", data);
+			}else {
+				return DataResult.success("获取成功", map);
+			}
 		    //data.put("key", "q7uv1349nx0da2pto9cmo8gku3zs6nx9"); 
-			return DataResult.success("获取成功", data);
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -174,6 +179,9 @@ public static void main(String[] args) {
 		}
 		return null;
 
+	}
+	public static void main(String[] args) {
+		System.out.println(doRefund("4200000064201801207692897485", "1225522", new BigDecimal("0.01"), new BigDecimal("0.01"), "退款"));;
 	}
 	/**
 	 * @Title: getRefundQuery

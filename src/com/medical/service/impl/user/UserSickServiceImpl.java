@@ -79,7 +79,7 @@ public class UserSickServiceImpl implements UserSickService {
 		Usersick usersick = new Usersick();
 		int type = user.getUserlogintype();
 		if (type!=3) {
-			return DataResult.error("账号未审核,不可发布病情");
+			return DataResult.error("账号未审核,不可添加病情");
 		}
 		//获取对应亲属信息
 		Familyinfo familyinfo = familyinfoMapper.selectByPrimaryKey(familyid);

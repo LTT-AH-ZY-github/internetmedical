@@ -148,7 +148,7 @@
     	left join paymode as b on a.payModeId= b.payModeId
     	left join paytype as c on a.payTypeId =c.payTypeId
     	left join paystate as d on a.payStateId= d.payStateId
-    where  (a.payStateId=2 or a.payStateId=3 ) and 
+    where  (a.payStateId=3 ) and 
     <!-- 用户 -->
     <if test="param2==1">
     	 ((a.paySenderId=#{0} and a.payTypeId=1) or (a.paySenderId=#{0} and a.payTypeId=2) or (a.payReceiverId=#{0} and a.payTypeId=4) )
@@ -212,6 +212,16 @@
     select *
     from pay 
     where  payOrderId=#{orderid} and payOrderTypeId=1  and payStateId=3
+    	
+    
+  </select>
+    <select id="selectByParamsInAdminForExcel" resultType="map" parameterType="map" >
+    select a.paytradeno,b.paymodename,a.payalipaytradeno,a.paywxtradeno,a.paytotalamount,a.payreceiptamount,
+    	a.paycreattime,a.payendtime,a.paysendername,a.paysenderaccount,a.payreceivername ,a.payreceiveraccount,c.paytypename
+    from pay as a 
+    left join paymode as b on a.payModeId=b.payModeId
+    left join paytype as c on a.payTypeId =c.payTypeId
+    where  payStateId=3 and date_format(a.payCreatTime,'%Y-%m-%d')<![CDATA[ >=]]>#{starttime} and  date_format(a.payCreatTime,'%Y-%m-%d')<![CDATA[ <=]]>#{endtime}
     	
     
   </select>

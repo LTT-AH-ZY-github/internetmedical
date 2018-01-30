@@ -24,6 +24,7 @@ import com.medical.po.Userorder;
 import com.medical.po.Usersick;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.hospital.HospitalOrderService;
+import com.medical.service.iface.hospital.HospitalPurseService;
 import com.medical.utils.result.DataResult;
 import net.sf.json.JSONObject;
 
@@ -44,6 +45,8 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 	private HospitalberthMapper hospitalberthMapper;
 	@Autowired 
 	private SenderNotificationService senderNotificationService;
+	@Autowired
+	private HospitalPurseService hospitalPurseService;
 
 /*	@Override
 	public String listDoctor(Integer pageNo, Integer pageSize, HospSearchDocTerm hospSearchDocTerm) throws Exception {
@@ -302,7 +305,9 @@ public class HospitalOrderServiceImpl implements HospitalOrderService {
 				usersick.setUsersickid(order.getUsersickid());
 				usersick.setUsersickstateid(4);
 				boolean sickResult = usersickMapper.updateByPrimaryKeySelective(usersick) > 0;
-				if (!sickResult) {
+				String purseresult = hospitalPurseService.updateBalance(order.getUserorderhospid(), 1, userorderhprice, "收到用户"+order.getFamilyname()+"押金", 0);
+				JSONObject purseObject = JSONObject.fromObject(purseresult);
+				if (!sickResult && "200".equals(purseObject.get("code").toString())) {
 					return DataResult.error("操作失败");
 				}
 			}else {

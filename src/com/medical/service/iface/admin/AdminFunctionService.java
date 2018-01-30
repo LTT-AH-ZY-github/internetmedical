@@ -1,6 +1,11 @@
 package com.medical.service.iface.admin;
 
 import java.math.BigDecimal;
+import java.util.Date;
+
+import com.medical.po.Doctorinfo;
+import com.medical.po.Hospinfo;
+import com.medical.po.Userinfo;
 
 public interface AdminFunctionService {
 	/**
@@ -147,6 +152,11 @@ public interface AdminFunctionService {
 	 * @return: String
 	 */
 	String getRefundRate(Integer adminloginid)throws Exception;
+	String editDoctorInfo(Integer adminloginid, Doctorinfo doctorinfo)throws Exception;
+	String editHospitalInfo(Integer adminloginid, Hospinfo hospinfo)throws Exception;
+	String editUserInfo(Integer adminloginid, Userinfo userinfo)throws Exception;
+	String getHospDept(String hospdeptfatheridname)throws Exception;
+	String getPayRecord(Integer adminloginid, Date starttime, Date endtime)throws Exception;
 	
 	
 	

@@ -4,6 +4,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Null;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -150,6 +151,9 @@ public class UserOrderController {
 			return DataResult.error("订单id为空");
 		}
 		String ip = IpUtils.getIpAddr(request);
+		if (StringUtils.isBlank(ip)) {
+			return DataResult.error("ip为空");
+		}
 		return userOrderService.updateOrderStateToConfirm(userloginid, userorderid, type,ip);
 		
 	}
@@ -184,17 +188,23 @@ public class UserOrderController {
 	@ApiOperation(value = "支付医院押金", httpMethod = "POST", notes = "支付医院押金")
 	public String payhospital(@ApiParam(name = "userorderid", value = "订单id") @RequestParam Integer userorderid,
 			@ApiParam(name = "userloginid", value = "用户登录id") @RequestParam Integer userloginid,
-			@ApiParam(name = "type", value = "支付方式为1时为支付宝支付2为微信支付") @RequestParam Integer type) throws Exception {
+			@ApiParam(name = "type", value = "支付方式为1时为支付宝支付2为微信支付") @RequestParam Integer type,
+			HttpServletRequest request) throws Exception {
 		if (userloginid == null) {
 			return DataResult.error("用户登录id为空");
 		}
 		if (userorderid == null) {
 			return DataResult.error("订单id为空");
 		}
-		if (type==null) {
-			type=1;
+		if (type!=1 && type!=2) {
+			return DataResult.error("支付类型错误");
 		}
-		return userOrderService.updateOrderStatePayHospital(userloginid, userorderid,type);
+		System.out.println("支付类型"+type);
+		String ip = IpUtils.getIpAddr(request);
+		if (StringUtils.isBlank(ip)) {
+			return DataResult.error("ip为空");
+		}
+		return userOrderService.updateOrderStatePayHospital(userloginid, userorderid,type,ip);
 	}
 
 	@RequestMapping(value = "/payhospitalfinishbyalipay", produces = "application/json;charset=UTF-8")

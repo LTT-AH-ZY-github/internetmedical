@@ -40,7 +40,7 @@ public class AdminAccountController {
 		}
 		return adminAccountService.updateAccountStateToLogin(adminloginname,adminloginpwd);
 	}
-	@RequestMapping(value="/getmenu", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value="/getadminrolemenu", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiOperation(value="管理员登录时获取菜单",httpMethod="POST",notes="管理员登录时获取菜单")
 	public String getmenu(
 			@ApiParam(name = "adminloginid", value = "管理员登录id") @RequestParam Integer adminloginid

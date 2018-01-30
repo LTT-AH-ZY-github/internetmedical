@@ -21,6 +21,7 @@ import com.medical.mapper.AdminlogininfoMapper;
 import com.medical.mapper.DoctorinfoMapperCustom;
 import com.medical.mapper.HospinfoMapperCustom;
 import com.medical.mapper.PayMapperCustom;
+import com.medical.mapper.RefundrateMapperCustom;
 import com.medical.mapper.UserinfoMapperCustom;
 import com.medical.mapper.UserorderMapper;
 import com.medical.mapper.UserorderMapperCustom;
@@ -29,6 +30,7 @@ import com.medical.po.Adminlogininfo;
 import com.medical.po.Doctorinfo;
 import com.medical.po.Hospinfo;
 import com.medical.po.Pay;
+import com.medical.po.Refundrate;
 import com.medical.po.Userinfo;
 import com.medical.po.Userorder;
 import com.medical.po.Usersick;
@@ -36,12 +38,14 @@ import com.medical.service.iface.CommonTradeService;
 import com.medical.service.iface.PayService;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.admin.AdminCheckToFundService;
+import com.medical.service.iface.admin.AdminFunctionService;
 import com.medical.service.iface.doctor.DoctorPurseService;
 import com.medical.service.iface.hospital.HospitalPurseService;
 import com.medical.utils.MakeRandomNum;
 import com.medical.utils.result.DataResult;
 import com.pay.alipay.MyAliPay;
 import com.pay.wxpay.MyWXPay;
+import com.sun.org.apache.xpath.internal.operations.Neg;
 
 import net.sf.json.JSONObject;
 
@@ -80,6 +84,10 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 	private HospitalPurseService hospiatlPurseService;
 	@Autowired
 	private PayService payService;
+	@Autowired
+	private HospitalPurseService hospitalPurseService;
+	@Autowired
+	private RefundrateMapperCustom refundrateMapperCustom;
 	
 	
 	/**
@@ -137,6 +145,17 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		if (accountAmount.compareTo(BigDecimal.ZERO) == 0) {
 			return DataResult.error("医生账户余额为零不可提现");
 		}
+		List<Refundrate> list = refundrateMapperCustom.selectOrderById();
+		
+		if (list==null || list.size()==0) {
+			return DataResult.error("先设置提现扣费利率");
+		}
+		//设置利率
+		BigDecimal rate = list.get(0).getDocfefundrate();
+		rate = rate.divide(new BigDecimal("100"),4);
+		BigDecimal  one = new BigDecimal("1.0000");
+		rate = one.subtract(rate);
+		accountAmount = accountAmount.multiply(rate).setScale(2,BigDecimal.ROUND_DOWN);
 		boolean tradestate = commonTradeService.queryDoctorFundForUpdate(docloginid);
 		if (tradestate) {
 			return DataResult.error("退款中,请稍后重试");
@@ -173,7 +192,19 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		}
 	}
 	
-	
+//	public static void main(String[] args) {
+//		BigDecimal accountAmount= new BigDecimal("5262.23").setScale(2);
+//		System.out.println(accountAmount);
+//		BigDecimal rate = new BigDecimal("0.02");
+//		System.out.println(rate);
+//		rate = rate.divide(new BigDecimal("100"));
+//		System.out.println(rate);
+//		BigDecimal  one = new BigDecimal("1.0000");
+//		rate = one.subtract(rate);
+//		accountAmount = accountAmount.multiply(rate).setScale(2,BigDecimal.ROUND_DOWN);
+//		System.out.println(accountAmount);
+//		System.out.println(accountAmount.setScale(2,BigDecimal.ROUND_DOWN));
+//	}
 	@Transactional(rollbackFor = Exception.class)
 	private boolean updateTransferToDoctorFinish(AlipayFundTransToaccountTransferResponse response,String out_biz_no,
 			String payee_account,Integer docloginid,Integer docid,String docname,Integer adminloginid,BigDecimal amount) throws Exception {
@@ -250,6 +281,17 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		if (accountAmount.compareTo(BigDecimal.ZERO) == 0) {
 			return DataResult.error("医院账户余额为零不可提现");
 		}
+		List<Refundrate> list = refundrateMapperCustom.selectOrderById();
+		
+		if (list==null || list.size()==0) {
+			return DataResult.error("先设置提现扣费利率");
+		}
+		//设置利率
+		BigDecimal rate = list.get(0).getHospfefundrate();
+		rate = rate.divide(new BigDecimal("100"),4);
+		BigDecimal  one = new BigDecimal("1.0000");
+		rate = one.subtract(rate);
+		accountAmount = accountAmount.multiply(rate).setScale(2,BigDecimal.ROUND_DOWN);
 		boolean tradestate = commonTradeService.queryHospitalFundForUpdate(hosploginid);
 		if (tradestate) {
 			return DataResult.error("退款中,请稍后重试");
@@ -381,9 +423,9 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		//需要退的金额
 		BigDecimal surplus = totaldeposit.subtract(actualprice);
 		BigDecimal hospAmount = hospinfo.getHosppursebalance();
-		if (surplus.compareTo(hospAmount)>0) {
-			return DataResult.error("医院余额不足");
-		}
+//		if (surplus.compareTo(hospAmount)>0) {
+//			return DataResult.error("医院余额不足");
+//		}
 		Userinfo userinfo = userinfoMapperCustom.selectByLoginId(userorder.getUserloginid());
 		if (userinfo==null) {
 			return DataResult.error("病人不存在");
@@ -419,7 +461,7 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		boolean result = updateTransferToUserFinish(response,out_biz_no,payee_account, adminloginid,
 				userorder.getUsersickid(),userorderid, userorder.getUserloginid(), userinfo.getUserid(),
 				userinfo.getUsername(), userorder.getFamilyname(), userorder.getUserorderhospid(), hospinfo.getHospid(),
-				hospinfo.getHospname(), surplus);
+				hospinfo.getHospname(), surplus,actualprice);
 		commonTradeService.queryUserFundForFinish(userorderid);
 		if (response.isSuccess()) {
 			if (result) {
@@ -437,7 +479,7 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	public boolean updateTransferToUserFinish(AlipayFundTransToaccountTransferResponse response,String out_biz_no,String payee_account,Integer adminloginid,Integer usersickid,Integer userorderid,Integer userloginid,Integer userid,String username,String famiyname,Integer hosploginid,Integer hospid,String hospname,BigDecimal amount) throws Exception {
+	public boolean updateTransferToUserFinish(AlipayFundTransToaccountTransferResponse response,String out_biz_no,String payee_account,Integer adminloginid,Integer usersickid,Integer userorderid,Integer userloginid,Integer userid,String username,String famiyname,Integer hosploginid,Integer hospid,String hospname,BigDecimal amount,BigDecimal actualprice) throws Exception {
 		Pay pay = payMapperCustom.selectByPayTradeNo(out_biz_no);
 		if (pay == null) {
 			return false;
@@ -445,10 +487,7 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		if (response.isSuccess()) {
 			
 			boolean payresult  = payService.updatePayRecordToFinish(pay.getPayid(), response.getOrderId(), null, payee_account,
-					response.getParams().toString(), amount);
-			
-			String purseresult  = hospiatlPurseService.updateBalance(hosploginid, 2, amount, famiyname+"病人退款", pay.getPayid());
-			JSONObject purseObject = JSONObject.fromObject(purseresult);
+				response.getParams().toString(), amount);
 			//更新订单状态
 			Userorder userorderrecord = new Userorder();
 			userorderrecord.setUserorderid(userorderid);
@@ -462,6 +501,9 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 			//4病情结束
 			usersick.setUsersickstateid(4);
 			boolean sickresult = usersickMapper.updateByPrimaryKeySelective(usersick)>0;
+			
+			String purseresult = hospitalPurseService.updateBalance(hosploginid, 1, actualprice, "收到用户"+famiyname+"押金", 0);
+			JSONObject purseObject = JSONObject.fromObject(purseresult);
 			if (!payresult || "200".equals(purseObject.get("code").toString()) || !orderresult || !sickresult) {
 				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 				return false;
@@ -569,7 +611,7 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		}else {
 			String out_request_no = MakeRandomNum.getTradeNo("wur");
 			//微信支付
-			return WXPayToReFund(userorder, pay, pay.getPaytradeno(), pay.getPayalipaytradeno(), refund_amount, refund_reason, out_request_no, idea);
+			return WXPayToReFund(userorder, pay, pay.getPaytradeno(), pay.getPaywxtradeno(), refund_amount, refund_reason, out_request_no, idea);
 		}
 		
 	}
@@ -648,11 +690,12 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		}
 		Map<String, String> map = MyWXPay.doRefund(trade_no, out_request_no, new BigDecimal(refund_amount),
 				new BigDecimal(refund_amount), idea);
+		System.out.println("退款状态"+map);
 		if (map == null) {
 			return DataResult.error("异常错误");
 		}
 		if ("FAIL".equals(map.get("return_code"))) {
-			return DataResult.error("通信异常");
+			return DataResult.error(map.get("return_msg"));
 		}
 		if ("FAIL".equals(map.get("result_code"))) {
 			boolean payresult = payService.updatePayRecordToCancle(payid, pay.getPayid() + "",
@@ -744,7 +787,11 @@ public class AdminCheckToFundServiceImpl implements AdminCheckToFundService {
 		}
 		
 	}
+	//
 	
+	/* (non-Javadoc)
+	 * @see com.medical.service.iface.admin.AdminCheckToFundService#getWXpayRecord(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public String getWXpayRecord(String out_trade_no ,String trade_no) {
 		Map<String, String> response = MyWXPay.getOrderQuery(out_trade_no, trade_no);

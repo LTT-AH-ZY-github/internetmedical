@@ -26,6 +26,7 @@ import com.medical.po.Usersick;
 import com.medical.service.iface.CommonTradeService;
 import com.medical.service.iface.SenderNotificationService;
 import com.medical.service.iface.doctor.DoctorOrderService;
+import com.medical.service.iface.doctor.DoctorPurseService;
 import com.medical.utils.result.DataResult;
 import net.sf.json.JSONObject;
 
@@ -57,6 +58,8 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 	private SenderNotificationService senderNotificationService;
 	@Autowired
 	private CommonTradeService commonTradeService;
+	@Autowired
+	private DoctorPurseService doctorPurseService;
 
 
 	/* (非 Javadoc)  
@@ -562,6 +565,13 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 		if (userOrderStateId != 4) {
 			return DataResult.error("该状态不支持该操作");
 		}
+		// 医生金额记录
+		String purseResult = doctorPurseService.updateBalance(order.getUserorderdocloginid(), 1,
+				order.getUserorderprice(), "收到病人" + order.getFamilyname() + "付款",0);
+		JSONObject purseObject = JSONObject.fromObject(purseResult);
+		if ( "200".equals(purseObject.get("code").toString())) {
+			return DataResult.error("结束失败，请重试");
+		}
 		if (userorderhstate) {
 			Hospinfo hospinfo = hospinfoMapperCustom.selectByHospLoginId(userorderhospid);
 			if (hospinfo == null) {
@@ -597,6 +607,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 				senderNotificationService.createMsgDoctorToHospital(docloginid,userorderhospid,"通知消息","申请了一个住院订单", jsonCustormCont);
 				return DataResult.success("订单结束成功");
 			} else {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 				return DataResult.error("结束失败");
 			}
 		} else {
@@ -621,6 +632,7 @@ public class DoctorOrderServiceImpl implements DoctorOrderService {
 						"就诊已完成,等待评价该医生", jsonCustormCont);
 				return DataResult.success("订单结束成功");
 			} else {
+				TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 				return DataResult.error("结束失败");
 			}
 		}
