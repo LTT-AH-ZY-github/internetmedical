@@ -12,9 +12,9 @@ import org.springframework.core.convert.converter.Converter;
  * 
  * <p>Title: CustomDateConverter</p>
  * <p>Description:日期转换器 </p>
- * <p>Company: www.itcast.com</p> 
- * @author	传智.燕青
- * @date	2015-4-13下午5:49:14
+ * 
+ * @author	
+ * @date	
  * @version 1.0
  */
 
@@ -22,7 +22,6 @@ public class CustomDateConverter2 implements Converter<Date,Date>{
 
 	@Override
 	public Date convert(Date source) {
-		System.out.println("执行了");
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String dateString = formatter.format(source);
 		ParsePosition pos = new ParsePosition(8);

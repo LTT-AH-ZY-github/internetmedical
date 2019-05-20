@@ -12,15 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jdk.nashorn.internal.ir.annotations.Reference;
 
-/**
- * 
- * <p>Title: HandlerInterceptor1</p>
- * <p>Description:测试拦截器1 </p>
- * <p>Company: www.itcast.com</p> 
- * @author	传智.燕青
- * @date	2015-4-14下午4:45:47
- * @version 1.0
- */
+
 public class HandlerInterceptor1 implements HandlerInterceptor {
 
 	

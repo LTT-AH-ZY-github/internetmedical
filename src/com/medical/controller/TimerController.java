@@ -2,14 +2,10 @@ package com.medical.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
 import com.huanxin.utils.TokenManager;
-import com.huanxin.utils.UserManger;
-
 import com.medical.service.iface.doctor.DoctorInfoService;
 
 /**

@@ -7,15 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-/**
- * 
- * <p>Title: HandlerInterceptor1</p>
- * <p>Description:登陆认证拦截器 </p>
- * <p>Company: www.itcast.com</p> 
- * @author	传智.燕青
- * @date	2015-4-14下午4:45:47
- * @version 1.0
- */
+
 public class LoginInterceptor implements HandlerInterceptor {
 
 	

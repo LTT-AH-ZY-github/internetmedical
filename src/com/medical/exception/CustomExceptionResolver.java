@@ -13,8 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
  * <p>Description:全局异常处理器 </p>
  *
  * @author	
- * @date	2015-4-14上午11:57:09
- * @version 1.0
+ * @version V1.0
+ * @Date 2017年11月27日 上午10:49:05
  */
 public class CustomExceptionResolver implements HandlerExceptionResolver {
 

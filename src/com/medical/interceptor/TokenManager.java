@@ -1,12 +1,10 @@
 package com.medical.interceptor;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 
 /**
  * 对Token进行操作的接口
- * @author ScienJus
- * @date 2015/7/31.
+ * 
  */
 public interface TokenManager {
 

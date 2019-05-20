@@ -7,23 +7,14 @@ import java.util.Date;
 import org.springframework.core.convert.converter.Converter;
 
 
-/**
- * 
- * <p>Title: CustomDateConverter</p>
- * <p>Description:日期转换器 </p>
- * <p>Company: www.itcast.com</p> 
- * @author	传智.燕青
- * @date	2015-4-13下午5:49:14
- * @version 1.0
- */
+
 
 public class CustomDateConverter implements Converter<String,Date>{
 
 	@Override
 	public Date convert(String source) {
-		System.out.println("日期"+source);
-		//实现 将日期串转成日期类型(格式是yyyy-MM-dd)
 		
+		//实现 将日期串转成日期类型(格式是yyyy-MM-dd)
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
 		try {

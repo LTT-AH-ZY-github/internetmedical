@@ -3,18 +3,11 @@ package com.medical.interceptor;
 
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Component;
-
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-
-import javax.validation.constraints.Null;
 
 /**
  * 通过Redis存储和验证token的实现类

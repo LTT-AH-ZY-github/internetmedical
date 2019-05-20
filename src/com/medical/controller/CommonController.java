@@ -1,14 +1,4 @@
-/**  
-* @Title: CommonController.java  
-* @Package com.medical.controller  
-* @Description: TODO(用一句话描述该文件做什么)  
-* @author xyh  
-* @date 2017年12月18日  
-* @version V1.0  
-*/  
 package com.medical.controller;
-
-import static org.junit.Assert.fail;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.medical.service.iface.CommonService;
-import com.medical.utils.CheckUtils;
-import com.medical.utils.StringTools;
 import com.medical.utils.result.DataResult;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;

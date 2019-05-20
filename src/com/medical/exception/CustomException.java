@@ -4,10 +4,10 @@ package com.medical.exception;
  * 
  * <p>Title: CustomException</p>
  * <p>Description:系统 自定义异常类，针对预期的异常，需要在程序中抛出此类的异常 </p>
- * <p>Company: www.itcast.com</p> 
- * @author	传智.燕青
- * @date	2015-4-14上午11:52:02
- * @version 1.0
+ * 
+ * @author	xyh
+ * @version V1.0
+ * @Date 2017年11月27日 上午10:49:05
  */
 public class CustomException extends Exception {
 	
